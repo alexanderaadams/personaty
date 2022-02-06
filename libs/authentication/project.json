@@ -1,0 +1,42 @@
+{
+	"projectType": "library",
+	"root": "libs/authentication",
+	"sourceRoot": "libs/authentication/src",
+	"prefix": "march",
+	"targets": {
+		"build": {
+			"executor": "@nrwl/angular:ng-packagr-lite",
+			"outputs": ["dist/libs/authentication"],
+			"options": {
+				"project": "libs/authentication/ng-package.json"
+			},
+			"configurations": {
+				"production": {
+					"tsConfig": "libs/authentication/tsconfig.lib.prod.json"
+				},
+				"development": {
+					"tsConfig": "libs/authentication/tsconfig.lib.json"
+				}
+			},
+			"defaultConfiguration": "production"
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/authentication"],
+			"options": {
+				"jestConfig": "libs/authentication/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/authentication/src/**/*.ts",
+					"libs/authentication/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}

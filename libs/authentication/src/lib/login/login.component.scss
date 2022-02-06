@@ -1,0 +1,39 @@
+@mixin flex($flex-direction, $align-items) {
+	display: flex;
+	flex-direction: $flex-direction;
+	align-items: $align-items;
+}
+
+@media screen and (max-width: 777px) {
+	.auth--form {
+		@include flex(column, center);
+		margin-top: 3rem;
+	}
+
+	.form {
+		@include flex(column, center);
+	}
+
+	.form--submit {
+		width: 11rem;
+		border-radius: 0.5rem;
+		color: #2e2e2e;
+		font: 400 1rem roboto;
+		background: #fa8072;
+		padding: 0.7rem 2rem 0.7rem 2rem;
+		margin-top: 0.4rem;
+		border: 0 solid transparent;
+		text-align: center;
+	}
+
+	hr {
+		width: 10rem;
+		margin: 1rem;
+		border: 1px solid #e1e1e1;
+	}
+
+	.link-password {
+		color: #4682b4;
+		text-decoration: none;
+	}
+}

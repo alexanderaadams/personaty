@@ -1,0 +1,31 @@
+<div class="auth--form">
+	<form (ngSubmit)="onSubmit()" class="form" [formGroup]="authForm">
+		<lib-input
+			autocomplete="username"
+			inputType="text"
+			label="Username"
+			[control]="inputFormControl('username')"
+		></lib-input>
+
+		<lib-input
+			autocomplete="password"
+			inputType="password"
+			label="Password"
+			[control]="inputFormControl('password')"
+		></lib-input>
+
+		<div *ngIf="authForm.errors" class="form-errors">
+			<p *ngIf="authForm.errors?.['credentials']">
+				Invalid username or password
+			</p>
+		</div>
+
+		<div>
+			<button class="form--submit">Login</button>
+		</div>
+	</form>
+	<hr />
+	<a [routerLink]="['/auth/forgot-password']" class="link-password"
+		>Forgot password?</a
+	>
+</div>

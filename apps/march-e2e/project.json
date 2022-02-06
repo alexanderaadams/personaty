@@ -1,28 +1,28 @@
 {
-  "root": "apps/march-e2e",
-  "sourceRoot": "apps/march-e2e/src",
-  "projectType": "application",
-  "targets": {
-    "e2e": {
-      "executor": "@nrwl/cypress:cypress",
-      "options": {
-        "cypressConfig": "apps/march-e2e/cypress.json",
-        "devServerTarget": "march:serve:development"
-      },
-      "configurations": {
-        "production": {
-          "devServerTarget": "march:serve:production"
-        }
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["apps/march-e2e/**/*.{js,ts}"]
-      }
-    }
-  },
-  "tags": [],
-  "implicitDependencies": ["march"]
+	"root": "apps/march-e2e",
+	"sourceRoot": "apps/march-e2e/src",
+	"projectType": "application",
+	"targets": {
+		"e2e": {
+			"executor": "@nrwl/cypress:cypress",
+			"options": {
+				"cypressConfig": "apps/march-e2e/cypress.json",
+				"devServerTarget": "march:serve:development"
+			},
+			"configurations": {
+				"production": {
+					"devServerTarget": "march:serve:production"
+				}
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["apps/march-e2e/**/*.{js,ts}"]
+			}
+		}
+	},
+	"tags": [],
+	"implicitDependencies": ["march"]
 }
