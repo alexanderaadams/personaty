@@ -3,13 +3,11 @@ import {
 	ConflictException,
 	HttpException,
 	Injectable,
-	NotFoundException,
 } from '@nestjs/common';
 
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { catchError, from, map, Observable, of } from 'rxjs';
-import { User, UserDocument, UserModel, FindUser } from './users.model';
+import { User, UserDocument, UserModel } from './users.model';
 import { JWTService } from '../jwt/jwt.service';
 
 @Injectable()
@@ -19,95 +17,79 @@ export class UsersService {
 		private myJWTService: JWTService
 	) {}
 
-	createUser(user): Observable<UserModel> {
-		return from(this._userModel.create(user)).pipe(
-			map((user) => {
-				return user;
-			}),
-			catchError((err) => {
-				throw new ConflictException(err);
-			})
-		) as unknown as Observable<UserModel>;
+	async createUser(user): Promise<UserModel> {
+		try {
+			return (await this._userModel.create(
+				user
+			)) as unknown as Promise<UserModel>;
+		} catch (err) {
+			throw new ConflictException(err);
+		}
 	}
 
-	findAllUsers(): Observable<UserModel[]> {
-		return from(this._userModel.find()).pipe(
-			map((users) => {
-				if (!users) throw new HttpException('Content Not Found', 203);
-				return users;
-			}),
-			catchError(() => {
-				throw new HttpException('Content Not Found', 203);
-			})
-		) as unknown as Observable<UserModel[]>;
+	async findAllUsers(): Promise<UserModel[]> {
+		try {
+			const users = await this._userModel.find();
+
+			if (!users) throw new HttpException('Users Not Found', 203);
+
+			return users as unknown as Promise<UserModel[]>;
+		} catch (err) {
+			throw new HttpException('Users Not Found', err.status || 203);
+		}
 	}
 
-	findUser(id: string): Observable<UserModel> {
-		return from(this._userModel.findById(id)).pipe(
-			map((user) => {
-				if (!user) throw new NotFoundException('User Not Found');
+	async findOne(user): Promise<UserModel> {
+		try {
+			const newUser = await this._userModel.findOne(user);
 
-				return user;
-			}),
-			catchError(() => {
-				throw new HttpException('User Not Found', 404);
-			})
-		) as unknown as Observable<UserModel>;
+			if (!newUser) throw new HttpException('User Not Found', 203);
+
+			return newUser as unknown as Promise<UserModel>;
+		} catch (err) {
+			throw new HttpException('User Not Found', err.status || 203);
+		}
 	}
 
-	findOne(user: FindUser): Observable<UserModel> {
-		return from(this._userModel.findOne(user)).pipe(
-			map((user) => {
-				return user;
-			}),
-			catchError(() => {
-				throw new HttpException('Can Not Be Found', 404);
-			})
-		) as unknown as Observable<UserModel>;
-	}
-
-	updateUser(id: string, attrs): Observable<UserModel> {
-		return from(
-			this._userModel.findByIdAndUpdate(id, attrs, {
+	async updateUser(id: string, attrs): Promise<UserModel> {
+		try {
+			const user = await this._userModel.findByIdAndUpdate(id, attrs, {
 				new: true,
-			})
-		).pipe(
-			catchError((err) => {
-				throw new HttpException(
-					err.message || 'Something Went Wrong',
-					err.status || 500
-				);
-			})
-		) as unknown as Observable<UserModel>;
+			});
+
+			if (!user) throw new HttpException('Content Not Found', 203);
+
+			return user as unknown as Promise<UserModel>;
+		} catch (_) {
+			throw new BadGatewayException('Something Went Wrong');
+		}
 	}
 
-	deleteUser(id: string): Observable<null> {
-		return from(this._userModel.findByIdAndDelete(id)).pipe(
-			map(() => {
-				return null;
-			}),
-			catchError(() => {
-				throw new HttpException('Something Went Wrong', 500);
-			})
-		);
+	async deleteUser(id: string): Promise<null> {
+		try {
+			await this._userModel.findByIdAndDelete(id);
+
+			return null as unknown as Promise<null>;
+		} catch (_) {
+			throw new BadGatewayException('Something Went Wrong');
+		}
 	}
 
-	deleteAllUsers(): Observable<null> {
-		return from(this._userModel.deleteMany()).pipe(
-			map(() => {
-				return null;
-			}),
-			catchError(() => {
-				throw new HttpException('Something Went Wrong', 500);
-			})
-		);
+	async deleteAllUsers(): Promise<null> {
+		try {
+			await this._userModel.deleteMany();
+
+			return null;
+		} catch (_) {
+			throw new BadGatewayException('Something Went Wrong');
+		}
 	}
 
-	isVerified(jwt: string) {
-		return of(this.myJWTService.verifyToken(jwt)).pipe(
-			catchError(() => {
-				throw new BadGatewayException('Something Went Wrong');
-			})
-		);
+	async isVerified(jwt: string) {
+		try {
+			return await this.myJWTService.verifyToken(jwt);
+		} catch (_) {
+			throw new BadGatewayException('Something Went Wrong');
+		}
 	}
 }

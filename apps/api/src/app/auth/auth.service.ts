@@ -1,4 +1,3 @@
-import { catchError } from 'rxjs/operators';
 import { JWTService } from './../jwt/jwt.service';
 import {
 	Injectable,
@@ -6,16 +5,13 @@ import {
 	UnauthorizedException,
 	NotFoundException,
 	BadRequestException,
+	ConflictException,
+	BadGatewayException,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
-import { from, map, Observable, of, switchMap } from 'rxjs';
-import { FindUser, GoogleOauth2, UserModel } from '../users/users.model';
-// import * as bcrypt from 'bcrypt';
-// import { environment } from 'apps/api/src/environments/environment';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// const bcrypt = require('bcrypt');
+import { GoogleOauth2 } from '../users/users.model';
 
 const scrypt = promisify(_scrypt);
 
@@ -26,162 +22,167 @@ export class AuthService {
 		private myJWTService: JWTService
 	) {}
 
+	async hashingPassword(password: string) {
+		try {
+			// Hash the users password
+			// Generate a salt
+			const salt = randomBytes(32).toString('hex');
+			// Hash the salt and the password together
+			const hash = (await scrypt(password, salt, 32)) as Buffer;
+			// Join the hashed result and the salt together
+			return salt + '.' + hash.toString('hex');
+		} catch (_) {
+			throw new BadGatewayException('Something Went Wrong');
+		}
+	}
+
 	async signup(
 		username: string,
 		email: string,
 		password: string,
-		date: string
+		date: string | Date
 	) {
-		// const ISODate = date.split('-');
+		try {
+			const hashedPassword = await this.hashingPassword(password);
 
-		// Hash the users password
+			const user = await this.usersService.findOne({ username });
 
-		// Generate a salt
-		const salt = randomBytes(32).toString('hex');
+			if (user) throw new ConflictException('User already exists');
 
-		// Hash the salt and the password together
-		const hash = (await scrypt(password, salt, 32)) as Buffer;
-
-		// Join the hashed result and the salt together
-		const hashedPassword = salt + '.' + hash.toString('hex');
-
-		// Create a new user and save it
-		return from(
-			this.usersService.createUser({
+			const newUser = await this.usersService.createUser({
 				username,
 				email,
 				password: hashedPassword,
 				date,
-			})
-		).pipe(
-			map((user) => {
-				return {
-					user,
-					token: this.myJWTService.signToken(user.username),
-				};
-			}),
-			catchError((err: any) => {
-				throw new HttpException(
-					err?.response?.message || 'Something Went Wrong',
-					err?.response?.statusCode || 500
-				);
-			})
-		);
-	}
+			});
 
-	login(username: string, password: string) {
-		return from(this.usersService.findOne({ username })).pipe(
-			map(async (user) => {
-				if (!user) throw new BadRequestException('Wrong Username or Password');
-				const [salt, storedHash] = user.password.split('.');
-				const hash = (await scrypt(password, salt, 32)) as unknown as Buffer;
-				if (storedHash !== hash.toString('hex'))
-					throw new UnauthorizedException('bad password');
-
-				return {
-					user,
-					token: this.myJWTService.signToken(user.username),
-				};
-			}),
-			catchError((err: any) => {
-				throw new HttpException(
-					err?.response?.message || 'Something Went Wrong',
-					err?.response?.statusCode || 500
-				);
-			})
-		);
-	}
-
-	findOne(user: FindUser): Observable<UserModel> {
-		return this.usersService.findOne(user);
-	}
-
-	googleOauth2Login(googleUser: GoogleOauth2) {
-		if (!googleUser) {
-			throw new NotFoundException('Did not get any user from google');
+			return {
+				newUser,
+				token: this.myJWTService.signToken(user.username),
+			};
+		} catch (err: any) {
+			throw new HttpException(
+				err?.response?.message || 'Something Went Wrong',
+				err?.response?.statusCode || 500
+			);
 		}
-
-		return this.usersService.findOne({ email: googleUser.email }).pipe(
-			switchMap((user) => {
-				if (user) {
-					return of({
-						user,
-						token: this.myJWTService.signToken(user.username),
-					});
-				}
-				// Generate a salt to store default password after oauth20
-				const salt = randomBytes(32).toString('hex');
-
-				return this.usersService
-					.createUser({
-						...googleUser,
-						password: salt,
-						date: new Date(1970, 7, 7),
-					})
-					.pipe(
-						map((user) => {
-							return {
-								user,
-								token: this.myJWTService.signToken(user.username),
-							};
-						})
-					);
-			})
-		);
 	}
 
-	resetPassword(email: string) {
-		return this.usersService.findOne({ email }).pipe(
-			map((user) => {
-				if (!user) throw new NotFoundException();
-				const token = this.myJWTService.signToken(user.username, {
-					expiresIn: '15m',
-				});
+	async login(username: string, password: string) {
+		try {
+			const user = await this.usersService.findOne({ username });
 
-				console.log(user);
-				return `http://localhost:3333/api/v1/auth/reset-password/${user.username}/${token}`;
-			}),
-			catchError((err: any) => {
-				throw new HttpException(
-					err.response?.message || 'Something Went Wrong',
-					err?.response?.statusCode || 500
-				);
-			})
-		);
+			if (!user) throw new BadRequestException('Wrong Username or Password');
+
+			const [salt, storedHash] = user.password.split('.');
+
+			const hash = (await scrypt(password, salt, 32)) as unknown as Buffer;
+
+			if (storedHash !== hash.toString('hex'))
+				throw new UnauthorizedException('bad password');
+
+			return {
+				user,
+				token: this.myJWTService.signToken(user.username),
+			};
+		} catch (err: any) {
+			throw new HttpException(
+				err?.response?.message || 'Something Went Wrong',
+				err?.response?.statusCode || 500
+			);
+		}
 	}
 
-	verifyResetPassword(
-		username: string,
+	async findOne(user) {
+		return await this.usersService.findOne(user);
+	}
+
+	async googleOauth2Login(googleUser: GoogleOauth2) {
+		try {
+			if (!googleUser) {
+				throw new NotFoundException('Did not get any user from google');
+			}
+
+			const user = await this.usersService.findOne({ email: googleUser.email });
+			const token = this.myJWTService.signToken(user.username);
+
+			if (user)
+				return {
+					user,
+					token,
+				};
+
+			// Generate a salt to store default password after oauth20
+			const salt = randomBytes(32).toString('hex');
+
+			const newUser = await this.usersService.createUser({
+				...googleUser,
+				password: salt,
+				date: new Date(1970, 7, 7),
+			});
+
+			return {
+				newUser,
+				token,
+			};
+		} catch (err) {
+			throw new BadGatewayException();
+		}
+	}
+
+	async resetPassword(email: string) {
+		try {
+			const user = await this.usersService.findOne({ email });
+
+			if (!user) throw new NotFoundException();
+			const token = this.myJWTService.signToken(user.username, {
+				expiresIn: '15m',
+			});
+
+			// console.log(user);
+			return `http://localhost:3333/api/v1/auth/reset-password/${token}`;
+		} catch (err) {
+			throw new HttpException(
+				err.response?.message || 'Something Went Wrong',
+				err?.response?.statusCode || 500
+			);
+		}
+	}
+
+	async verifyResetPassword(
 		token: string,
 		passwords: { password: string; confirmPassword: string }
 	) {
-		const { password, confirmPassword } = passwords;
+		try {
+			const { password, confirmPassword } = passwords;
 
-		if (password !== confirmPassword)
-			throw new BadRequestException('Passwords Does Not Match');
+			if (password !== confirmPassword)
+				throw new BadRequestException('Passwords Does Not Match');
 
-		return of(this.myJWTService.verifyToken(token)).pipe(
-			switchMap((user: any) => {
-				return this.usersService.findOne({ username }).pipe(
-					switchMap((user) => {
-						if (!user) throw new NotFoundException();
-						return this.usersService.updateUser(user.id, { password }).pipe(
-							map((user) => {
-								return {
-									user,
-									token: this.myJWTService.signToken(user.username),
-								};
-							})
-						);
-					})
-				);
-			}),
-			catchError((err: any) => {
-				throw new HttpException(
-					err.response?.message || 'Something Went Wrong',
-					err?.response?.statusCode || 500
-				);
-			})
-		);
+			const verifyToken = await this.myJWTService.verifyToken(token);
+
+			const user = await this.usersService.findOne({
+				username: verifyToken.username,
+			});
+
+			if (!user) throw new BadGatewayException('User Can Not Be Found');
+
+			const signToken = await this.myJWTService.signToken(user.username);
+			const hashedPassword = await this.hashingPassword(password);
+
+			const updateUser = await this.usersService.updateUser(user.id, {
+				password: hashedPassword,
+			});
+
+			return {
+				updateUser,
+				token: signToken,
+			};
+		} catch (err) {
+			throw new HttpException(
+				err.response?.message || 'Something Went Wrong',
+				err?.response?.statusCode || 500
+			);
+		}
 	}
 }

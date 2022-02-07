@@ -6,7 +6,6 @@ import {
 	Post,
 	Req,
 	Res,
-	Query,
 	UseGuards,
 	Param,
 } from '@nestjs/common';
@@ -20,7 +19,6 @@ import {
 import { Response, Request } from 'express';
 import { AuthService } from './auth.service';
 import { Serialize } from '../users/interceptors/serialize.interceptor';
-import { map } from 'rxjs';
 
 @Controller('auth')
 export class AuthController {
@@ -29,113 +27,98 @@ export class AuthController {
 	@Post('signup')
 	@Serialize(UserSignupResponse)
 	async signup(
-		@Body() user: SignupUser,
+		@Body() signupUser: SignupUser,
 		@Res({ passthrough: true }) res: Response
 	) {
-		return (
-			await this.authService.signup(
-				user.username,
-				user.email,
-				user.password,
-				user.date
-			)
-		).pipe(
-			map((user) => {
-				res.cookie('token', user.token, {
-					maxAge: 3600000 * 24,
-					httpOnly: true,
-					sameSite: 'strict',
-					secure: false,
-				});
-				return { username: user.user.username, email: user.user.email };
-			})
+		const user = await this.authService.signup(
+			signupUser.username,
+			signupUser.email,
+			signupUser.password,
+			signupUser.date
 		);
+
+		res.cookie('token', user.token, {
+			maxAge: 3600000 * 24,
+			httpOnly: true,
+			sameSite: 'strict',
+			secure: false,
+		});
+		return user;
 	}
 
 	@Post('login')
 	@Serialize(UserSignupResponse)
-	login(@Body() user: LoginUser, @Res({ passthrough: true }) res: Response) {
-		return this.authService.login(user.username, user.password).pipe(
-			map(async (user) => {
-				res.cookie('token', (await user).token, {
-					maxAge: 3600000 * 24 * 7 * 12,
-					httpOnly: true,
-					sameSite: 'strict',
-					secure: false,
-				});
-				// console.log(request.cookies);
-				return {
-					username: (await user).user.username,
-					email: (await user).user.email,
-				};
-			})
+	async login(
+		@Body() loginUser: LoginUser,
+		@Res({ passthrough: true }) res: Response
+	) {
+		const user = await this.authService.login(
+			loginUser.username,
+			loginUser.password
 		);
+
+		res.cookie('token', user.token, {
+			maxAge: 3600000 * 24 * 7 * 12,
+			httpOnly: true,
+			sameSite: 'strict',
+			secure: false,
+		});
+
+		return user;
 	}
 
 	@Post('reset-password')
-	resetPassword(@Body() user: { email: string }) {
-		console.log(user);
-		return this.authService.resetPassword(user.email);
+	async resetPassword(@Body() resetPassword: { email: string }) {
+		return await this.authService.resetPassword(resetPassword.email);
 	}
 
-	@Post('reset-password/:username/:token')
-	verifyResetPassword(
-		@Param('username') username: string,
+	@Post('reset-password/:token')
+	async verifyResetPassword(
 		@Param('token') token: string,
 		@Body() passwords: { password: string; confirmPassword },
 		@Res({ passthrough: true }) res: Response
 	) {
-		console.log(username, token, passwords);
-		return this.authService
-			.verifyResetPassword(username, token, passwords)
-			.pipe(
-				map((user) => {
-					res.cookie('token', user.token, {
-						maxAge: 3600000 * 24 * 7 * 12,
-						httpOnly: true,
-						sameSite: 'strict',
-						secure: false,
-					});
-					return {
-						username: user.user.username,
-						email: user.user.email,
-						password: user.user.password,
-					};
-				})
-			);
+		const user = await this.authService.verifyResetPassword(token, passwords);
+
+		res.cookie('token', user.token, {
+			maxAge: 3600000 * 24 * 7 * 12,
+			httpOnly: true,
+			sameSite: 'strict',
+			secure: false,
+		});
+		return user;
 	}
 
 	@Post('user')
-	findOne(@Body() user: FindUser) {
-		return this.authService.findOne(user).pipe(
-			map((res) => {
-				if (res) return { available: false };
+	async findOne(@Body() findUser: FindUser) {
+		const user = await this.authService.findOne(findUser);
 
-				return { available: true };
-			})
-		);
+		if (user) return { available: false };
+
+		return { available: true };
 	}
+
 	@Get('login-with-google')
 	@UseGuards(AuthGuard('google'))
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	googleAuth() {}
+	async googleAuth() {}
 
 	@Get('redirect')
 	@UseGuards(AuthGuard('google'))
-	googleAuthRedirect(
+	async googleAuthRedirect(
 		@Req() req: Request,
 		@Res({ passthrough: true }) res: Response
 	) {
-		return this.authService.googleOauth2Login(req.user as GoogleOauth2).pipe(
-			map((user) => {
-				res.cookie('token', user.token, {
-					maxAge: 3600000 * 24 * 7 * 12,
-					httpOnly: true,
-					sameSite: 'strict',
-					secure: false,
-				});
-				return res.redirect('http://localhost:3333/api/v1');
-			})
+		const user = await this.authService.googleOauth2Login(
+			req.user as GoogleOauth2
 		);
+
+		res.cookie('token', user.token, {
+			maxAge: 3600000 * 24 * 7 * 12,
+			httpOnly: true,
+			sameSite: 'strict',
+			secure: false,
+		});
+		return res.redirect('http://localhost:3333/api/v1');
 	}
 }
