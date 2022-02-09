@@ -7,11 +7,12 @@ import {
 
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { FindUser, User, UserDocument, UserModel } from './users.model';
+import { User, UserDocument, UserModel } from './user.model';
 import { JWTService } from '../jwt/jwt.service';
+import { FindUser } from '../core/shared.model';
 
 @Injectable()
-export class UsersService {
+export class UserService {
 	constructor(
 		@InjectModel(User.name) private readonly userModel: Model<UserDocument>,
 		private myJWTService: JWTService

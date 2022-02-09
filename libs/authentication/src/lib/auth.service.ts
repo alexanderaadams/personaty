@@ -68,19 +68,20 @@ export class AuthService {
 	}
 
 	loginWithGoogle() {
-		const headers = new HttpHeaders();
-		headers.append('Access-Control-Allow-Origin', '*');
-		this.http
-			.get<any>(`${this.rootUrl}/auth/login-with-google`, {
-				headers,
-				withCredentials: true,
-			})
-			.pipe()
-			.subscribe((api) => {
-				console.log(api);
-
-				return this.router.navigate(api);
-			});
+		const newWindow = window.open(
+			`${this.rootUrl}/auth/login-with-google`,
+			'_blank',
+			'width=500,height=600'
+		);
+		if (newWindow) {
+			const timer = setInterval(() => {
+				if (newWindow.closed) {
+					this.router.navigateByUrl('home');
+					if (timer) clearInterval(timer);
+				}
+			}, 500);
+		}
+		// this.http.get<any>();
 	}
 
 	forgotPassword(email: { email: string }) {

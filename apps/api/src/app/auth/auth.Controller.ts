@@ -3,22 +3,23 @@ import {
 	Body,
 	Controller,
 	Get,
+	Param,
 	Post,
 	Req,
 	Res,
 	UseGuards,
-	Param,
 } from '@nestjs/common';
+import { Response, Request } from 'express';
+
+import { AuthService } from './auth.service';
+import { Serialize } from '../user/interceptors/serialize.interceptor';
 import {
-	FindUser,
 	GoogleOauth2,
 	LoginUser,
 	SignupUser,
 	UserSignupResponse,
-} from '../users/users.model';
-import { Response, Request } from 'express';
-import { AuthService } from './auth.service';
-import { Serialize } from '../users/interceptors/serialize.interceptor';
+} from './auth.model';
+import { FindUser } from '../core/shared.model';
 
 @Controller('auth')
 export class AuthController {
@@ -26,24 +27,34 @@ export class AuthController {
 
 	@Post('signup')
 	// @Serialize(UserSignupResponse)
-	async signup(
-		@Body() signupUser: SignupUser,
-		@Res({ passthrough: true }) res: Response
-	) {
-		const user = await this.authService.signup(
+	async signup(@Body() signupUser: SignupUser) {
+		const status = await this.authService.sendSignupEmail(
 			signupUser.username,
 			signupUser.email,
 			signupUser.password,
 			signupUser.date
 		);
 
-		res.cookie('token', user.token, {
-			maxAge: 3600000 * 24,
-			httpOnly: true,
-			sameSite: 'strict',
-			secure: false,
-		});
-		return user.newUser;
+		return status;
+	}
+
+	@Get('signup/:token')
+	// @Serialize(UserSignupResponse)
+	async signupToken(
+		@Param('token') token: string,
+		@Res({ passthrough: true }) res: Response
+	) {
+		const user = await this.authService.signupToken(token);
+
+		if (user) {
+			res.cookie('token', user.token, {
+				maxAge: 3600000 * 24,
+				httpOnly: true,
+				sameSite: 'strict',
+				secure: false,
+			});
+		}
+		return res.redirect('http://localhost:4200/home');
 	}
 
 	@Post('is-available')
@@ -73,15 +84,12 @@ export class AuthController {
 			secure: false,
 		});
 
-		return user.user;
+		return { user: user.user, Authenticated: true };
 	}
 
 	@Post('forgot-password')
-	async sendResetPasswordEmail(
-		@Body() resetPasswordEmail: { email: string },
-		@Res() res: Response
-	) {
-		console.log(resetPasswordEmail);
+	async sendResetPasswordEmail(@Body() resetPasswordEmail: { email: string }) {
+		// console.log(resetPasswordEmail);
 		await this.authService.sendResetPasswordEmail(resetPasswordEmail.email);
 		return { status: 'email has been send' };
 	}
@@ -92,33 +100,22 @@ export class AuthController {
 		credentials: { password: string; confirmPassword: string; token: string },
 		@Res({ passthrough: true }) res: Response
 	) {
-		console.log(credentials);
+		// console.log(credentials);
 		const user = await this.authService.verifyResetPassword(credentials);
 
 		res.cookie('token', user.token, {
-			maxAge: 3600000 * 24 * 7 * 12,
+			maxAge: 1000 * 60 * 60 * 24 * 7 * 12,
 			httpOnly: true,
 			sameSite: 'strict',
 			secure: false,
 		});
-		return user.updateUser;
-	}
-
-	@Post('verify-user')
-	async verifyUser(
-		@Body() verifyUser: { email: string },
-		@Res() res: Response
-	) {
-		// await this.authService.resetPassword(verifyUser.email);
-		return res.redirect('http://localhost:4200/auth/reset-password');
+		return { user: user.updateUser, updatedUser: true };
 	}
 
 	@Get('login-with-google')
 	@UseGuards(AuthGuard('google'))
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	async googleAuth() {
-		// return res.send;
-	}
+	async googleAuth() {}
 
 	@Get('redirect')
 	@UseGuards(AuthGuard('google'))
@@ -131,11 +128,11 @@ export class AuthController {
 		);
 		// console.log(user, req.user);
 		res.cookie('token', user.token, {
-			maxAge: 3600000 * 24 * 7 * 12,
+			maxAge: 1000 * 60 * 60 * 24 * 7 * 12,
 			httpOnly: true,
 			sameSite: 'strict',
 			secure: false,
 		});
-		return res.redirect('http://localhost:4200/home');
+		return res.redirect('http://localhost:4200/auth/success');
 	}
 }

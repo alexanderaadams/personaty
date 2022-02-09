@@ -8,8 +8,11 @@ import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 
 import { environment } from '../environments/environment';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './user/users.module';
 import { AuthModule } from './auth/auth.module';
+import { HomeModule } from './home/home.module';
+import { PostModule } from './post/post.module';
+
 @Module({
 	imports: [
 		MongooseModule.forRootAsync({
@@ -18,8 +21,7 @@ import { AuthModule } from './auth/auth.module';
 				uri: environment.DATABASE_CONNECTION,
 			}),
 		}),
-		UsersModule,
-		AuthModule,
+
 		PassportModule.registerAsync({
 			useFactory: () => ({ defaultStrategy: 'jwt' }),
 		}),
@@ -29,6 +31,10 @@ import { AuthModule } from './auth/auth.module';
 				limit: 25,
 			}),
 		}),
+		AuthModule,
+		UsersModule,
+		HomeModule,
+		PostModule,
 	],
 	controllers: [AppController],
 	providers: [

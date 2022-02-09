@@ -1,12 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-import * as url from './email';
+
+// import * as url from './email';
 
 @Injectable()
 export class NodemailerService {
 	constructor(private readonly mailerService: MailerService) {}
 
-	public sendEmail(to: string, tokenURL: string): void {
+	public sendEmail(
+		to: string,
+		subject: string,
+		text: string,
+		tokenURL: string
+	): void {
 		// url(tokenURL);
 
 		const html = `		<div
@@ -21,7 +27,7 @@ style="
 "
 >
 <div style="display: flex; justify-content: center">
-	<img src="" alt="image" />
+	<img src="test.jpeg" alt="image" />
 </div>
 <div>
 	<h3 style="color: rgb(80, 80, 80)">Confirm your email now !</h3>
@@ -48,15 +54,18 @@ style="
 			.sendMail({
 				to: to, // List of receivers email address
 				from: 'persona1335-613@hotmail.com', // Senders email address
-				subject: 'Testing Nest MailerModule ✔', // Subject line
-				text: 'welcome', // plaintext body
+				subject: subject, // Subject line
+				text: text, // plaintext body
 				html: html, // HTML body content
 			})
 			.then((success) => {
-				console.log(success);
+				// console.log(success);
 			})
 			.catch((err) => {
-				console.log(err);
+				throw new HttpException(
+					err?.message || err?.response?.message || 'Something Went Wrong',
+					err?.status || err?.response?.statusCode || 500
+				);
 			});
 	}
 }

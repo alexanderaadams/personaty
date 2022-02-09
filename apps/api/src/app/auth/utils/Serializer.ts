@@ -1,8 +1,7 @@
 import { PassportSerializer } from '@nestjs/passport';
-import { Inject, Injectable } from '@nestjs/common';
-import { UserModel } from '../../users/users.model';
+import { Injectable } from '@nestjs/common';
+import { UserModel } from '../../user/user.model';
 import { AuthService } from '../auth.service';
-import { tap } from 'rxjs';
 
 @Injectable()
 export class SessionSerializer extends PassportSerializer {
@@ -18,7 +17,7 @@ export class SessionSerializer extends PassportSerializer {
 		user: UserModel,
 		done: (err: Error, user: UserModel) => void
 	) {
-		const findUser = await this.authService.findOne({ _id: user.id });
+		const findUser = await this.authService.findOne({ id: user.id });
 
 		const data = findUser;
 

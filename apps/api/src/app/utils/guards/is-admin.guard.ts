@@ -5,12 +5,12 @@ import {
 	Logger,
 	UnauthorizedException,
 } from '@nestjs/common';
-import { catchError, map, of, switchMap } from 'rxjs';
-import { UsersService } from '../../users/users.service';
+
+import { UserService } from '../../user/user.service';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
-	constructor(private usersService: UsersService) {}
+	constructor(private usersService: UserService) {}
 
 	async canActivate(context: ExecutionContext) {
 		try {
@@ -25,6 +25,5 @@ export class AdminGuard implements CanActivate {
 		} catch (err) {
 			throw new UnauthorizedException('Try To Login');
 		}
-
 	}
 }

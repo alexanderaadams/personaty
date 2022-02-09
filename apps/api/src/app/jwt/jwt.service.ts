@@ -7,9 +7,9 @@ export class JWTService {
 
 	signToken(payload: object, options?: JwtSignOptions) {
 		try {
-			// if (options) return this.jwtService.sign({ username }, options);
+			if (options) return this.jwtService.sign(payload, options);
 
-			return this.jwtService.sign(payload, options);
+			return this.jwtService.sign(payload);
 		} catch (err) {
 			throw new UnauthorizedException();
 		}

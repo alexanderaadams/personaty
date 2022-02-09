@@ -1,14 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Expose } from 'class-transformer';
 import {
 	IsDate,
 	IsDateString,
 	IsEmail,
 	IsEnum,
-	IsOptional,
 	IsString,
 } from 'class-validator';
 import * as mongoose from 'mongoose';
+
+import { EmailVerified, Gender, Role } from '../core/shared.enum';
 
 export type UserDocument = User & Document;
 
@@ -91,88 +91,6 @@ export class User {
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-export enum Gender {
-	male = 'male',
-	female = 'female',
-	other = 'other',
-}
-
-export enum Role {
-	user = 'user',
-	admin = 'admin',
-}
-
-export enum EmailVerified {
-	true = 'true',
-	false = 'false',
-}
-
-export class LoginUser {
-	@IsString()
-	username: string;
-
-	@IsString()
-	password: string;
-}
-
-export class SignupUser {
-	@IsString()
-	username: string;
-
-	@IsEmail()
-	email: string;
-
-	@IsString()
-	password: string;
-
-	@IsDateString()
-	date: string;
-}
-
-export class UpdateUser {
-	@IsString()
-	@IsOptional()
-	username: string;
-
-	@IsEmail()
-	@IsOptional()
-	email: string;
-
-	@IsString()
-	@IsOptional()
-	password: string;
-
-	@IsEnum(Gender)
-	@IsOptional()
-	Gender: string;
-
-	@IsDateString()
-	@IsOptional()
-	date: string;
-
-	@IsString()
-	@IsOptional()
-	locale: string;
-
-	@IsString()
-	@IsOptional()
-	profilePicture: string;
-}
-
-export class UserSignupResponse {
-	@Expose()
-	username: string;
-
-	@Expose()
-	email: string;
-}
-
-export interface FindUser {
-	_id?: string;
-	username?: string;
-	email?: string;
-}
-
 export class UserModel extends mongoose.Document {
 	@IsString()
 	_id: string;
@@ -215,30 +133,4 @@ export class UserModel extends mongoose.Document {
 
 	@IsDate()
 	updatedAt: Date;
-}
-
-export class GoogleOauth2 {
-	@IsString()
-	_id: string;
-
-	@IsString()
-	username: string;
-
-	@IsString()
-	email: string;
-
-	@IsString()
-	locale: string;
-
-	@IsString()
-	fullName: string;
-
-	@IsString()
-	profilePicture: string;
-
-	@IsString()
-	accessToken: string;
-
-	@IsString()
-	refreshToken: string;
 }

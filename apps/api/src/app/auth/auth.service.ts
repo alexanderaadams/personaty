@@ -11,16 +11,16 @@ import {
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 
-import { UsersService } from '../users/users.service';
-import { GoogleOauth2 } from '../users/users.model';
+import { UserService } from '../user/user.service';
 import { NodemailerService } from './utils/mail/nodemailer.service';
+import { GoogleOauth2 } from './auth.model';
 
 const scrypt = promisify(_scrypt);
 
 @Injectable()
 export class AuthService {
 	constructor(
-		private readonly usersService: UsersService,
+		private readonly usersService: UserService,
 		private myJWTService: JWTService,
 		private readonly nodemailerService: NodemailerService
 	) {}
@@ -39,29 +39,64 @@ export class AuthService {
 		}
 	}
 
-	async signup(
+	async sendSignupEmail(
 		username: string,
 		email: string,
 		password: string,
-		date: string | Date
+		date: string
 	) {
 		try {
-			const hashedPassword = await this.hashingPassword(password);
+			const user = await this.usersService.findOne({ email, username });
 
+			if (user) throw new ConflictException();
+
+			const token = this.myJWTService.signToken(
+				{ username, email, password, date },
+				{
+					expiresIn: '15m',
+				}
+			);
+
+			const tokenURL = `http://localhost:3333/api/v1/auth/signup/${token}`;
+
+			this.nodemailerService.sendEmail(
+				email,
+				'Verify Your Email',
+				'Click On The Button To Verify Your Email',
+				tokenURL
+			);
+
+			return { status: 'Email Has Been Send, Check Your Email' };
+		} catch (err) {
+			throw new HttpException(
+				err?.message || err?.response?.message || 'Something Went Wrong',
+				err?.status || err?.response?.statusCode || 500
+			);
+		}
+	}
+
+	async signupToken(token: string) {
+		const { username, email, password, date } =
+			this.myJWTService.verifyToken(token);
+
+		try {
 			const user = await this.usersService.findOne({ username });
 
 			if (user) throw new ConflictException('User already exists');
+
+			const hashedPassword = await this.hashingPassword(password);
 
 			const newUser = await this.usersService.createUser({
 				username,
 				email,
 				password: hashedPassword,
 				date,
+				email_verified: true,
 			});
-			const token = this.myJWTService.signToken({ username });
+			const token = this.myJWTService.signToken({ id: newUser._id, username });
 
 			return {
-				newUser,
+				user: newUser,
 				token,
 			};
 		} catch (err) {
@@ -86,6 +121,7 @@ export class AuthService {
 				throw new UnauthorizedException('bad password');
 
 			const token = this.myJWTService.signToken({
+				id: user._id,
 				username,
 			});
 
@@ -110,14 +146,17 @@ export class AuthService {
 			if (!googleUser) {
 				throw new NotFoundException('Did not get any user from google');
 			}
-			console.log(googleUser);
+			// console.log(googleUser);
 
 			const user = await this.usersService.findOne({ email: googleUser.email });
 
 			if (user)
 				return {
 					user,
-					token: this.myJWTService.signToken({ username: user.username }),
+					token: this.myJWTService.signToken({
+						id: user._id,
+						username: user.username,
+					}),
 				};
 
 			// Generate a salt to store default password after oauth20
@@ -131,7 +170,10 @@ export class AuthService {
 
 			return {
 				newUser,
-				token: this.myJWTService.signToken({ username: newUser.username }),
+				token: this.myJWTService.signToken({
+					id: user._id,
+					username: newUser.username,
+				}),
 			};
 		} catch (err) {
 			throw new HttpException(
@@ -146,39 +188,22 @@ export class AuthService {
 			const user = await this.usersService.findOne({ email });
 
 			if (!user) throw new NotFoundException();
+
 			const token = this.myJWTService.signToken(
-				{ username: user.username },
+				{ id: user._id, username: user.username },
 				{
 					expiresIn: '15m',
 				}
 			);
 			const tokenURL = `http://localhost:4200/auth/reset-password/${token}`;
 			// console.log(user);
-			this.nodemailerService.sendEmail(email, tokenURL);
+			this.nodemailerService.sendEmail(
+				email,
+				'Reset Your Password',
+				'Click On Bhe Button To Reset Your Password',
+				tokenURL
+			);
 			return { status: 'Email has ben send' };
-		} catch (err) {
-			throw new HttpException(
-				err?.message || err?.response?.message || 'Something Went Wrong',
-				err?.status || err?.response?.statusCode || 500
-			);
-		}
-	}
-
-	async sendVerificationEmail(email: string) {
-		try {
-			const user = await this.usersService.findOne({ email });
-
-			if (!user || !user.email_verified)
-				throw new BadGatewayException('Something Went Wrong');
-
-			const token = this.myJWTService.signToken(
-				{ username: user.username, email_verified: true },
-				{
-					expiresIn: '15m',
-				}
-			);
-			// console.log(user);
-			return `http://localhost:4200/auth/reset-password/${token}`;
 		} catch (err) {
 			throw new HttpException(
 				err?.message || err?.response?.message || 'Something Went Wrong',
@@ -201,7 +226,7 @@ export class AuthService {
 			const verifyToken = await this.myJWTService.verifyToken(token);
 
 			const user = await this.usersService.findOne({
-				username: verifyToken.username,
+				id: verifyToken.id,
 			});
 
 			if (!user) throw new BadGatewayException('User Can Not Be Found');

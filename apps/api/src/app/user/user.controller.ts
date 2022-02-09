@@ -9,17 +9,17 @@ import {
 	UseGuards,
 } from '@nestjs/common';
 
-import { UsersService } from './users.service';
-import { UpdateUser } from './users.model';
+import { UserService } from './user.service';
 
 import { AdminGuard } from '../utils/guards/is-admin.guard';
+import { UpdateUser } from '../core/shared.model';
 // import { Serialize } from './interceptors/serialize.interceptor';
 
 @Controller('user')
 @UseGuards(AdminGuard)
 // @Serialize(UserDto)
-export class UsersController {
-	constructor(private usersService: UsersService) {}
+export class UserController {
+	constructor(private usersService: UserService) {}
 
 	@Get('getallusers')
 	async findAllUsers() {
@@ -28,7 +28,7 @@ export class UsersController {
 
 	@Get(':id')
 	async findUser(@Param('id') id: string) {
-		return await this.usersService.findOne({ _id: id });
+		return await this.usersService.findOne({ id: id });
 	}
 
 	@Get()

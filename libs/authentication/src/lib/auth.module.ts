@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { SignoutComponent } from './logout/logout.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { SuccessComponent } from './success/success.component';
 
 @NgModule({
 	declarations: [
@@ -15,7 +16,8 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 		LoginComponent,
 		SignoutComponent,
 		ResetPasswordComponent,
-  ForgotPasswordComponent,
+		ForgotPasswordComponent,
+		SuccessComponent,
 	],
 	imports: [
 		CommonModule,

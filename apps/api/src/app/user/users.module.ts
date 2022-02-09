@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
-import { User, UserSchema } from './users.model';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
+import { User, UserSchema } from './user.model';
 import { JWTModule } from '../jwt/jwt.module';
 
 @Module({
@@ -14,8 +14,8 @@ import { JWTModule } from '../jwt/jwt.module';
 		),
 		JWTModule,
 	],
-	controllers: [UsersController],
-	providers: [UsersService],
-	exports: [UsersService],
+	controllers: [UserController],
+	providers: [UserService],
+	exports: [UserService],
 })
 export class UsersModule {}
