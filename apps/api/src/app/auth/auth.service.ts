@@ -8,10 +8,12 @@ import {
 	ConflictException,
 	BadGatewayException,
 } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
+
+import { UsersService } from '../users/users.service';
 import { GoogleOauth2 } from '../users/users.model';
+import { NodemailerService } from './utils/mail/nodemailer.service';
 
 const scrypt = promisify(_scrypt);
 
@@ -19,7 +21,8 @@ const scrypt = promisify(_scrypt);
 export class AuthService {
 	constructor(
 		private readonly usersService: UsersService,
-		private myJWTService: JWTService
+		private myJWTService: JWTService,
+		private readonly nodemailerService: NodemailerService
 	) {}
 
 	async hashingPassword(password: string) {
@@ -55,15 +58,16 @@ export class AuthService {
 				password: hashedPassword,
 				date,
 			});
+			const token = this.myJWTService.signToken({ username });
 
 			return {
 				newUser,
-				token: this.myJWTService.signToken(user.username),
+				token,
 			};
-		} catch (err: any) {
+		} catch (err) {
 			throw new HttpException(
-				err?.response?.message || 'Something Went Wrong',
-				err?.response?.statusCode || 500
+				err?.message || err?.response?.message || 'Something Went Wrong',
+				err?.status || err?.response?.statusCode || 500
 			);
 		}
 	}
@@ -81,14 +85,18 @@ export class AuthService {
 			if (storedHash !== hash.toString('hex'))
 				throw new UnauthorizedException('bad password');
 
+			const token = this.myJWTService.signToken({
+				username,
+			});
+
 			return {
 				user,
-				token: this.myJWTService.signToken(user.username),
+				token,
 			};
-		} catch (err: any) {
+		} catch (err) {
 			throw new HttpException(
-				err?.response?.message || 'Something Went Wrong',
-				err?.response?.statusCode || 500
+				err?.message || err?.response?.message || 'Something Went Wrong',
+				err?.status || err?.response?.statusCode || 500
 			);
 		}
 	}
@@ -102,14 +110,14 @@ export class AuthService {
 			if (!googleUser) {
 				throw new NotFoundException('Did not get any user from google');
 			}
+			console.log(googleUser);
 
 			const user = await this.usersService.findOne({ email: googleUser.email });
-			const token = this.myJWTService.signToken(user.username);
 
 			if (user)
 				return {
 					user,
-					token,
+					token: this.myJWTService.signToken({ username: user.username }),
 				};
 
 			// Generate a salt to store default password after oauth20
@@ -123,38 +131,69 @@ export class AuthService {
 
 			return {
 				newUser,
-				token,
+				token: this.myJWTService.signToken({ username: newUser.username }),
 			};
 		} catch (err) {
-			throw new BadGatewayException();
-		}
-	}
-
-	async resetPassword(email: string) {
-		try {
-			const user = await this.usersService.findOne({ email });
-
-			if (!user) throw new NotFoundException();
-			const token = this.myJWTService.signToken(user.username, {
-				expiresIn: '15m',
-			});
-
-			// console.log(user);
-			return `http://localhost:3333/api/v1/auth/reset-password/${token}`;
-		} catch (err) {
 			throw new HttpException(
-				err.response?.message || 'Something Went Wrong',
-				err?.response?.statusCode || 500
+				err?.message || err?.response?.message || 'Something Went Wrong',
+				err?.status || err?.response?.statusCode || 500
 			);
 		}
 	}
 
-	async verifyResetPassword(
-		token: string,
-		passwords: { password: string; confirmPassword: string }
-	) {
+	async sendResetPasswordEmail(email: string) {
 		try {
-			const { password, confirmPassword } = passwords;
+			const user = await this.usersService.findOne({ email });
+
+			if (!user) throw new NotFoundException();
+			const token = this.myJWTService.signToken(
+				{ username: user.username },
+				{
+					expiresIn: '15m',
+				}
+			);
+			const tokenURL = `http://localhost:4200/auth/reset-password/${token}`;
+			// console.log(user);
+			this.nodemailerService.sendEmail(email, tokenURL);
+			return { status: 'Email has ben send' };
+		} catch (err) {
+			throw new HttpException(
+				err?.message || err?.response?.message || 'Something Went Wrong',
+				err?.status || err?.response?.statusCode || 500
+			);
+		}
+	}
+
+	async sendVerificationEmail(email: string) {
+		try {
+			const user = await this.usersService.findOne({ email });
+
+			if (!user || !user.email_verified)
+				throw new BadGatewayException('Something Went Wrong');
+
+			const token = this.myJWTService.signToken(
+				{ username: user.username, email_verified: true },
+				{
+					expiresIn: '15m',
+				}
+			);
+			// console.log(user);
+			return `http://localhost:4200/auth/reset-password/${token}`;
+		} catch (err) {
+			throw new HttpException(
+				err?.message || err?.response?.message || 'Something Went Wrong',
+				err?.status || err?.response?.statusCode || 500
+			);
+		}
+	}
+
+	async verifyResetPassword(passwords: {
+		password: string;
+		confirmPassword: string;
+		token: string;
+	}) {
+		try {
+			const { password, confirmPassword, token } = passwords;
 
 			if (password !== confirmPassword)
 				throw new BadRequestException('Passwords Does Not Match');
@@ -167,7 +206,9 @@ export class AuthService {
 
 			if (!user) throw new BadGatewayException('User Can Not Be Found');
 
-			const signToken = await this.myJWTService.signToken(user.username);
+			const signToken = await this.myJWTService.signToken({
+				username: user.username,
+			});
 			const hashedPassword = await this.hashingPassword(password);
 
 			const updateUser = await this.usersService.updateUser(user.id, {
@@ -180,8 +221,8 @@ export class AuthService {
 			};
 		} catch (err) {
 			throw new HttpException(
-				err.response?.message || 'Something Went Wrong',
-				err?.response?.statusCode || 500
+				err?.message || err?.response?.message || 'Something Went Wrong',
+				err?.status || err?.response?.statusCode || 500
 			);
 		}
 	}

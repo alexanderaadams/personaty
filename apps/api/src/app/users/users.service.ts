@@ -7,19 +7,19 @@ import {
 
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserDocument, UserModel } from './users.model';
+import { FindUser, User, UserDocument, UserModel } from './users.model';
 import { JWTService } from '../jwt/jwt.service';
 
 @Injectable()
 export class UsersService {
 	constructor(
-		@InjectModel(User.name) private readonly _userModel: Model<UserDocument>,
+		@InjectModel(User.name) private readonly userModel: Model<UserDocument>,
 		private myJWTService: JWTService
 	) {}
 
 	async createUser(user): Promise<UserModel> {
 		try {
-			return (await this._userModel.create(
+			return (await this.userModel.create(
 				user
 			)) as unknown as Promise<UserModel>;
 		} catch (err) {
@@ -29,7 +29,7 @@ export class UsersService {
 
 	async findAllUsers(): Promise<UserModel[]> {
 		try {
-			const users = await this._userModel.find();
+			const users = await this.userModel.find();
 
 			if (!users) throw new HttpException('Users Not Found', 203);
 
@@ -39,11 +39,11 @@ export class UsersService {
 		}
 	}
 
-	async findOne(user): Promise<UserModel> {
+	async findOne(user: FindUser): Promise<UserModel> {
 		try {
-			const newUser = await this._userModel.findOne(user);
+			const newUser = await this.userModel.findOne(user);
 
-			if (!newUser) throw new HttpException('User Not Found', 203);
+			if (!newUser) return null;
 
 			return newUser as unknown as Promise<UserModel>;
 		} catch (err) {
@@ -51,11 +51,15 @@ export class UsersService {
 		}
 	}
 
-	async updateUser(id: string, attrs): Promise<UserModel> {
+	async updateUser(id: string, attrs: object): Promise<UserModel> {
 		try {
-			const user = await this._userModel.findByIdAndUpdate(id, attrs, {
-				new: true,
-			});
+			const user = await this.userModel.findByIdAndUpdate(
+				id,
+				{ ...attrs, updatedAt: Date.now() },
+				{
+					new: true,
+				}
+			);
 
 			if (!user) throw new HttpException('Content Not Found', 203);
 
@@ -67,7 +71,7 @@ export class UsersService {
 
 	async deleteUser(id: string): Promise<null> {
 		try {
-			await this._userModel.findByIdAndDelete(id);
+			await this.userModel.findByIdAndDelete(id);
 
 			return null as unknown as Promise<null>;
 		} catch (_) {
@@ -77,7 +81,7 @@ export class UsersService {
 
 	async deleteAllUsers(): Promise<null> {
 		try {
-			await this._userModel.deleteMany();
+			await this.userModel.deleteMany();
 
 			return null;
 		} catch (_) {

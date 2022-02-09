@@ -18,12 +18,10 @@ export class SessionSerializer extends PassportSerializer {
 		user: UserModel,
 		done: (err: Error, user: UserModel) => void
 	) {
-		let data!: UserModel;
-		this.authService.findOne({ _id: user.id }).pipe(
-			tap((user) => {
-				data = user;
-			})
-		);
+		const findUser = await this.authService.findOne({ _id: user.id });
+
+		const data = findUser;
+
 		return data ? done(null, data) : done(null, null);
 	}
 }

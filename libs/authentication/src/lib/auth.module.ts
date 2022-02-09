@@ -6,12 +6,17 @@ import { SharedModule } from './shared/shared.module';
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import { SignoutComponent } from './logout/logout.component';
-import { AuthState } from './store/auth.state';
-import { NgxsModule } from '@ngxs/store';
-import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 @NgModule({
-	declarations: [SignupComponent, LoginComponent, SignoutComponent],
+	declarations: [
+		SignupComponent,
+		LoginComponent,
+		SignoutComponent,
+		ResetPasswordComponent,
+  ForgotPasswordComponent,
+	],
 	imports: [
 		CommonModule,
 		AuthRoutingModule,

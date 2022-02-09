@@ -25,7 +25,7 @@ export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
 	@Post('signup')
-	@Serialize(UserSignupResponse)
+	// @Serialize(UserSignupResponse)
 	async signup(
 		@Body() signupUser: SignupUser,
 		@Res({ passthrough: true }) res: Response
@@ -43,7 +43,16 @@ export class AuthController {
 			sameSite: 'strict',
 			secure: false,
 		});
-		return user;
+		return user.newUser;
+	}
+
+	@Post('is-available')
+	async findOne(@Body() findUser: FindUser) {
+		const user = await this.authService.findOne(findUser);
+
+		if (user) return { available: false };
+
+		return { available: true };
 	}
 
 	@Post('login')
@@ -64,21 +73,27 @@ export class AuthController {
 			secure: false,
 		});
 
-		return user;
+		return user.user;
 	}
 
-	@Post('reset-password')
-	async resetPassword(@Body() resetPassword: { email: string }) {
-		return await this.authService.resetPassword(resetPassword.email);
+	@Post('forgot-password')
+	async sendResetPasswordEmail(
+		@Body() resetPasswordEmail: { email: string },
+		@Res() res: Response
+	) {
+		console.log(resetPasswordEmail);
+		await this.authService.sendResetPasswordEmail(resetPasswordEmail.email);
+		return { status: 'email has been send' };
 	}
 
 	@Post('reset-password/:token')
 	async verifyResetPassword(
-		@Param('token') token: string,
-		@Body() passwords: { password: string; confirmPassword },
+		@Body()
+		credentials: { password: string; confirmPassword: string; token: string },
 		@Res({ passthrough: true }) res: Response
 	) {
-		const user = await this.authService.verifyResetPassword(token, passwords);
+		console.log(credentials);
+		const user = await this.authService.verifyResetPassword(credentials);
 
 		res.cookie('token', user.token, {
 			maxAge: 3600000 * 24 * 7 * 12,
@@ -86,22 +101,24 @@ export class AuthController {
 			sameSite: 'strict',
 			secure: false,
 		});
-		return user;
+		return user.updateUser;
 	}
 
-	@Post('user')
-	async findOne(@Body() findUser: FindUser) {
-		const user = await this.authService.findOne(findUser);
-
-		if (user) return { available: false };
-
-		return { available: true };
+	@Post('verify-user')
+	async verifyUser(
+		@Body() verifyUser: { email: string },
+		@Res() res: Response
+	) {
+		// await this.authService.resetPassword(verifyUser.email);
+		return res.redirect('http://localhost:4200/auth/reset-password');
 	}
 
 	@Get('login-with-google')
 	@UseGuards(AuthGuard('google'))
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	async googleAuth() {}
+	async googleAuth() {
+		// return res.send;
+	}
 
 	@Get('redirect')
 	@UseGuards(AuthGuard('google'))
@@ -112,13 +129,13 @@ export class AuthController {
 		const user = await this.authService.googleOauth2Login(
 			req.user as GoogleOauth2
 		);
-
+		// console.log(user, req.user);
 		res.cookie('token', user.token, {
 			maxAge: 3600000 * 24 * 7 * 12,
 			httpOnly: true,
 			sameSite: 'strict',
 			secure: false,
 		});
-		return res.redirect('http://localhost:3333/api/v1');
+		return res.redirect('http://localhost:4200/home');
 	}
 }

@@ -64,6 +64,16 @@ export class User {
 
 	@Prop({
 		type: String,
+		enum: {
+			values: ['true', 'false'],
+			message: 'Email Verified is either: true, false',
+		},
+		default: 'false',
+	})
+	email_verified: string;
+
+	@Prop({
+		type: String,
 		default: 'user',
 		enum: {
 			values: ['user', 'admin'],
@@ -90,6 +100,11 @@ export enum Gender {
 export enum Role {
 	user = 'user',
 	admin = 'admin',
+}
+
+export enum EmailVerified {
+	true = 'true',
+	false = 'false',
 }
 
 export class LoginUser {
@@ -188,6 +203,9 @@ export class UserModel extends mongoose.Document {
 
 	@IsEnum(Gender)
 	gender: ['male', 'female', 'other'];
+
+	@IsEnum(EmailVerified)
+	email_verified: ['true', 'false'];
 
 	@IsEnum(Role)
 	role: string;

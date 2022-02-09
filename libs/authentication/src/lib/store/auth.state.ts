@@ -1,41 +1,45 @@
 import { Injectable } from '@angular/core';
-import { tap } from 'rxjs';
+import { of, tap } from 'rxjs';
 import { AuthService } from '../auth.service';
-import { AuthStateModel, Login, Logout, Signup } from './auth.actions';
+import {
+	AuthStateModel,
+	Login,
+	Logout,
+	Signup,
+	ResetPassword,
+	ForgotPassword,
+	LoginWithGoogle,
+} from './auth.actions';
 import { Action, State, StateContext, Selector } from '@ngxs/store';
 import { CookieService } from 'ngx-cookie-service';
-import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @State<AuthStateModel>({
 	name: 'auth',
 	defaults: {
-		token: null,
+		status: null,
 		username: null,
 	},
 })
 @Injectable()
 export class AuthState {
 	@Selector()
-	static token(state: AuthStateModel): string | null {
-		return state.token;
-	}
-
-	@Selector()
 	static isAuthenticated(state: AuthStateModel): boolean {
-		return !!state.token;
+		return !!state.status;
 	}
 
 	constructor(
 		private authService: AuthService,
-		private cookieService: CookieService
+		private cookieService: CookieService,
+		private router: Router
 	) {}
 
 	@Action(Signup)
 	signup(ctx: StateContext<AuthStateModel>, action: Signup) {
 		return this.authService.signup(action.payload).pipe(
-			tap((result: { token: string }) => {
+			tap(() => {
 				ctx.setState({
-					token: result.token,
+					status: 'signed-up',
 					username: action.payload.username,
 				});
 			})
@@ -45,10 +49,45 @@ export class AuthState {
 	@Action(Login)
 	login(ctx: StateContext<AuthStateModel>, action: Login) {
 		return this.authService.login(action.payload).pipe(
-			tap((result: any) => {
+			tap(() => {
 				ctx.patchState({
-					token: result.token,
+					status: 'logged-in',
 					username: action.payload.username,
+				});
+			})
+		);
+	}
+
+	@Action(LoginWithGoogle)
+	loginWithGoogle(ctx: StateContext<AuthStateModel>, action: LoginWithGoogle) {
+		return of(this.authService.loginWithGoogle()).pipe(
+			tap((result: any) => {
+				console.log(result);
+				ctx.patchState({
+					status: 'logged-in-with-google',
+				});
+			})
+		);
+	}
+
+	@Action(ForgotPassword)
+	forgotPassword(ctx: StateContext<AuthStateModel>, action: ForgotPassword) {
+		return this.authService.forgotPassword(action.payload).pipe(
+			tap(() => {
+				ctx.patchState({
+					status: 'forgotPassword',
+				});
+			})
+		);
+	}
+
+	@Action(ResetPassword)
+	resetPassword(ctx: StateContext<AuthStateModel>, action: ResetPassword) {
+		console.log(action.payload);
+		return this.authService.resetPassword(action.payload).pipe(
+			tap(() => {
+				ctx.patchState({
+					status: 'reset-password',
 				});
 			})
 		);

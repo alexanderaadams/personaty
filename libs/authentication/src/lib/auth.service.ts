@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, catchError } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
+
 import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
 
 interface UserAvailableResponse {
 	available: boolean;
@@ -21,6 +22,11 @@ interface LoginCredentials {
 	username: string;
 	password: string;
 }
+interface ResetPasswordCredentials {
+	password: string;
+	confirmPassword: string;
+	token: string;
+}
 
 @Injectable({
 	providedIn: 'root',
@@ -31,7 +37,11 @@ export class AuthService {
 	username = '';
 	email = '';
 
-	constructor(private http: HttpClient, private cookieService: CookieService) {}
+	constructor(
+		private http: HttpClient,
+		private cookieService: CookieService,
+		private router: Router
+	) {}
 
 	userAvailable(value: UserAvailableRequest) {
 		return this.http.request<UserAvailableResponse>(
@@ -56,9 +66,40 @@ export class AuthService {
 			withCredentials: true,
 		});
 	}
+
+	loginWithGoogle() {
+		const headers = new HttpHeaders();
+		headers.append('Access-Control-Allow-Origin', '*');
+		this.http
+			.get<any>(`${this.rootUrl}/auth/login-with-google`, {
+				headers,
+				withCredentials: true,
+			})
+			.pipe()
+			.subscribe((api) => {
+				console.log(api);
+
+				return this.router.navigate(api);
+			});
+	}
+
+	forgotPassword(email: { email: string }) {
+		return this.http.post<any>(`${this.rootUrl}/auth/forgot-password`, email, {
+			withCredentials: true,
+		});
+	}
+	resetPassword(credentials: ResetPasswordCredentials) {
+		return this.http.post<any>(
+			`${this.rootUrl}/auth/reset-password/${credentials.token}`,
+			credentials,
+			{
+				withCredentials: true,
+			}
+		);
+	}
 	getAllUser() {
 		return this.http.get(`${this.rootUrl}/user/getallusers`);
 	}
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	logout(user: any) {}
+	// logout(user: any) {}
 }

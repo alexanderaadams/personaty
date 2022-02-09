@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { AuthService } from '../auth.service';
-import { Login, Signup } from '../store/auth.actions';
+import { Login, LoginWithGoogle } from '../store/auth.actions';
 
 @Component({
 	selector: 'lib-login',
@@ -11,6 +11,8 @@ import { Login, Signup } from '../store/auth.actions';
 	styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
+	googleApi = '';
+
 	authForm: FormGroup = new FormGroup({
 		username: new FormControl(''),
 
@@ -29,16 +31,33 @@ export class LoginComponent {
 
 		this.store.dispatch(new Login(this.authForm.value)).subscribe({
 			next: (response) => {
-				this.router.navigateByUrl('');
+				this.router.navigateByUrl('/home');
 			},
 			error: ({ error }) => {
-				this.authForm.setErrors({ credentials: true });
+				this.authForm.setErrors({ credentialsError: true });
+			},
+			complete() {
+				return;
 			},
 		});
-
-		this.authService.getAllUser();
 	}
+
 	inputFormControl(option: string): FormControl {
 		return this.authForm?.get(option) as FormControl;
+	}
+
+	lognWithGoogle() {
+		this.store.dispatch(new LoginWithGoogle()).subscribe({
+			next: (response) => {
+				console.log(response);
+				// this.router.navigate(response);
+			},
+			error: ({ error }) => {
+				this.authForm.setErrors({ credentialsError: true });
+			},
+			complete() {
+				return;
+			},
+		});
 	}
 }

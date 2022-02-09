@@ -16,7 +16,7 @@ const routes: Routes = [
 			import('@march/authentication').then((m) => m.AuthModule),
 	},
 	{
-		path: '',
+		path: 'home',
 		loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
 	},
 	{ path: '**', component: NotFoundComponent },

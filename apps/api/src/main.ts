@@ -13,6 +13,8 @@ async function bootstrap() {
 
 	const corsOptions = {
 		credentials: true, // This is important.
+		// methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH'],
+		allowedHeaders: ['Content-Type, Authorization, X-Requested-With'],
 		origin: (origin, callback) => {
 			// if (whitelist.includes(origin))
 			return callback(null, true);

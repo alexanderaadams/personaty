@@ -1,29 +1,19 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Component, OnInit } from '@angular/core';
-import {
-	AbstractControl,
-	FormControl,
-	FormGroup,
-	Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth.service';
-import { MatchPassword } from '../validators/match-password';
+
 import { UniqueEmail } from '../validators/unique-email';
 import { UniqueUser } from '../validators/unique-username';
-import { Select, Store } from '@ngxs/store';
-import { Login, Signup } from '../store/auth.actions';
-import { AuthState } from '../store/auth.state';
-import { Observable } from 'rxjs';
+import { Store } from '@ngxs/store';
+import { Signup } from '../store/auth.actions';
 
 @Component({
 	selector: 'lib-signup',
 	templateUrl: './signup.component.html',
 	styleUrls: ['./signup.component.scss'],
 })
-export class SignupComponent implements OnInit {
-	@Select(AuthState.token) token$!: Observable<string[]>;
-
+export class SignupComponent {
 	authForm: FormGroup = new FormGroup({
 		username: new FormControl(
 			'',
@@ -66,7 +56,7 @@ export class SignupComponent implements OnInit {
 		}
 		this.store.dispatch(new Signup(this.authForm.value)).subscribe({
 			next: (response) => {
-				this.router.navigateByUrl('');
+				this.router.navigateByUrl('/home');
 			},
 			error: (err) => {
 				if (!err.status) {
@@ -75,10 +65,11 @@ export class SignupComponent implements OnInit {
 					this.authForm.setErrors({ unknownError: true });
 				}
 			},
+			complete() {
+				return;
+			},
 		});
 	}
-	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-	ngOnInit(): void {}
 
 	inputFormControl(option: string): FormControl {
 		return this.authForm?.get(option) as FormControl;
