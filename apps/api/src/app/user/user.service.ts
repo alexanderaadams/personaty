@@ -28,18 +28,6 @@ export class UserService {
 		}
 	}
 
-	async findAllUsers(): Promise<UserModel[]> {
-		try {
-			const users = await this.userModel.find();
-
-			if (!users) throw new HttpException('Users Not Found', 203);
-
-			return users as unknown as Promise<UserModel[]>;
-		} catch (err) {
-			throw new HttpException('Users Not Found', err.status || 203);
-		}
-	}
-
 	async findOne(user: FindUser): Promise<UserModel> {
 		try {
 			const newUser = await this.userModel.findOne(user);
@@ -75,16 +63,6 @@ export class UserService {
 			await this.userModel.findByIdAndDelete(id);
 
 			return null as unknown as Promise<null>;
-		} catch (_) {
-			throw new BadGatewayException('Something Went Wrong');
-		}
-	}
-
-	async deleteAllUsers(): Promise<null> {
-		try {
-			await this.userModel.deleteMany();
-
-			return null;
 		} catch (_) {
 			throw new BadGatewayException('Something Went Wrong');
 		}

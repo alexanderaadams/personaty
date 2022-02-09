@@ -12,6 +12,7 @@ import { UsersModule } from './user/users.module';
 import { AuthModule } from './auth/auth.module';
 import { HomeModule } from './home/home.module';
 import { PostModule } from './post/post.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
 	imports: [
@@ -35,6 +36,7 @@ import { PostModule } from './post/post.module';
 		UsersModule,
 		HomeModule,
 		PostModule,
+		AdminModule,
 	],
 	controllers: [AppController],
 	providers: [
