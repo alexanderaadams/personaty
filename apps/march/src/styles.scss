@@ -1,6 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Chewy&display=swap');
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	vertical-align: baseline;
+	background: transparent;
+}
+
 body {
-	font-family: roboto, Verdana, Geneva, Tahoma, sans-serif;
+	font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial,
+		Lucida Grande, sans-serif;
+	font-size: 62.5%;
+	color: var(--btn-primary-dark-color);
 	box-sizing: border-box;
-	background-color: #fffafa;
+	background-color: #ffefed59;
+}
+
+:root {
+	--font-primary-dark-color: #1d2129;
+
+	--font-primary-color: #fff;
+
+	--font-primary-bg: #ff5757;
+
+	--font-hover-primary-color: #c6c6c6;
+
+	--font-hover-primary-bg: #b83d3d;
+
+	--border: #bcbcbc;
+
+	--box-shadow: #d7d7d780;
 }

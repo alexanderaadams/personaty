@@ -1,5 +1,5 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy } from 'passport-google-oauth20';
+import { Profile, Strategy } from 'passport-google-oauth20';
 import { Injectable } from '@nestjs/common';
 import { environment } from '../../../../environments/environment';
 
@@ -17,16 +17,17 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 	async validate(
 		accessToken: string,
 		refreshToken: string,
-		profile: any
+		profile: Profile
 	): Promise<any> {
-		const { id, displayName, emails, photos, _json } = profile;
+		const { id, username,emails, photos, _json,name } = profile;
 		console.log(profile);
 		const user = {
-			username: `${id}.${Date.now()}`,
+			googleId: id,
+			username: username,
 			email: emails[0].value || 'email Does Not Exist',
 			email_verified: emails[0].value || false,
 			locale: _json.locale || 'en',
-			fullName: displayName,
+			fullName: `${name.givenName} ${name.familyName}`,
 			profilePicture: photos[0].value || 'Profile Picture Does Not Exist',
 			accessToken: accessToken || 'Access Token Does Not Exist',
 			refreshToken: refreshToken || 'Refresh Token Does Not Exist',

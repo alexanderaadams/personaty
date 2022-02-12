@@ -10,27 +10,30 @@ $border-radius: 0.25rem !default;
 	border: 0.1rem solid $border;
 }
 
-@mixin flex($flex-direction, $align-items: center) {
+@mixin form-input-order($flex-direction, $align-items: center) {
 	display: flex;
 	flex-direction: $flex-direction;
 	align-items: $align-items;
 }
 
-.input-fields {
-	@include flex(column, flex-start);
-	padding-bottom: 1rem;
+@mixin flex(
+	$flex-direction,
+	$align-items,
+	$justify-content: 'center',
+	$align-content: 'center'
+) {
+	display: flex;
+	flex-direction: $flex-direction;
+	align-items: $align-items;
+	justify-content: $justify-content;
+	align-content: $align-content;
 }
 
-label {
-	padding: 0.4rem 0 0.5rem 0;
-	color: #2e2e2e;
-	font: 400 1.2rem roboto;
+.form--errors {
+	color: #d72714;
+	visibility: visible;
 }
-input {
-	@include input-border(0.4rem, rgba(215, 215, 215, 0.5));
-	padding-bottom: 1rem;
 
-	&:focus {
-		@include input-border(0.4rem, rgba(215, 215, 215, 0.5), #4682b4);
-	}
+.notVisible {
+	visibility: hidden;
 }

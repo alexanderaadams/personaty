@@ -32,7 +32,7 @@ export class UpdateUser {
 
 	@IsDateString()
 	@IsOptional()
-	date: string;
+	birthDate: string;
 
 	@IsString()
 	@IsOptional()

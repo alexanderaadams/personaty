@@ -23,16 +23,11 @@ export class UniqueEmail implements AsyncValidator {
 
 		return this.authService.userAvailable({ email: value }).pipe(
 			map((value) => {
-				if (value?.available) return null;
-
-				return of('Not Null');
+				return value;
 			}),
 			catchError((err) => {
-				if (err.error.username) {
-					return of({ nonUniqueUsername: true });
-				} else {
-					return of({ noConnection: true });
-				}
+				console.log(err);
+				return of({ noConnection: true });
 			})
 		);
 	};

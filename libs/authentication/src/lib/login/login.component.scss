@@ -1,39 +1,153 @@
-@mixin flex($flex-direction, $align-items) {
+// @import url('../shared/input/input.component.scss');
+
+$border-radius: 0.25rem !default;
+
+@mixin input-border(
+	$border-radius: $border-radius,
+	$shadow-color: rgba(215, 215, 215, 0.5),
+	$border: #bcbcbc
+) {
+	border-radius: $border-radius;
+	box-shadow: 0 0.5rem 1rem $shadow-color;
+	border: 0.1rem solid $border;
+}
+
+@mixin form-input-order($flex-direction, $align-items: center) {
 	display: flex;
 	flex-direction: $flex-direction;
 	align-items: $align-items;
 }
 
-@media screen and (max-width: 777px) {
-	.auth--form {
-		@include flex(column, center);
-		margin-top: 3rem;
-	}
+@mixin flex(
+	$flex-direction,
+	$align-items,
+	$justify-content: 'center',
+	$align-content: 'center'
+) {
+	display: flex;
+	flex-direction: $flex-direction;
+	align-items: $align-items;
+	justify-content: $justify-content;
+	align-content: $align-content;
+}
 
-	.form {
-		@include flex(column, center);
+:host {
+	@media screen and (max-width: 320px) {
+		@include flex(column, center, center, center);
+		margin-top: 5rem;
 	}
+}
 
-	.form--submit {
-		width: 11rem;
-		border-radius: 0.5rem;
-		color: #2e2e2e;
-		font: 400 1rem roboto;
-		background: #fa8072;
-		padding: 0.7rem 2rem 0.7rem 2rem;
+.form {
+	@media screen and (max-width: 320px) {
+		@include flex(column, center, center, center);
+	}
+}
+
+.form--btn__submit {
+	@media screen and (max-width: 320px) {
+		width: 14rem;
+		padding: 0.5rem;
 		margin-top: 0.4rem;
-		border: 0 solid transparent;
+		border: 0;
+		border-radius: 0.5rem;
+		font: 600 1.2rem roboto;
+		color: #2e2e2e;
+		background: #fa8072;
 		text-align: center;
 	}
-
-	hr {
-		width: 10rem;
-		margin: 1rem;
-		border: 1px solid #e1e1e1;
+	&:focus {
+		animation-duration: 0.5s;
+		animation-name: slideDown;
+		animation-iteration-count: 1;
 	}
+}
+@keyframes slideDown {
+	from {
+		background: #fa8072;
+		transform: translateY(0rem);
+	}
+	50% {
+		background: #c45c51;
+		transform: translateY(0.3rem);
+	}
+	to {
+		background: #fa8072;
+		transform: translateY(-0.3rem);
+	}
+}
+hr {
+	@media screen and (max-width: 320px) {
+		width: 40%;
+		margin: 1rem;
+		border: 1px solid #c3c3c3;
+	}
+}
 
-	.link-password {
+.btn--forgot {
+	@media screen and (max-width: 320px) {
 		color: #4682b4;
 		text-decoration: none;
 	}
+}
+
+.login-with-google {
+	@media screen and (max-width: 320px) {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		border: 0.1rem solid #4682b4;
+		border-radius: 0.4rem;
+		padding: 0.2rem;
+		width: 12.8rem;
+		padding: 0.4rem;
+		margin-bottom: 1rem;
+		background-color: #dcf4ff;
+
+		&:hover {
+			background-color: #e1e1e1;
+			cursor: pointer;
+		}
+	}
+}
+
+.btn--login-with-google {
+	@media screen and (max-width: 320px) {
+		color: #2e2e2e;
+		text-align: center;
+		font-weight: 600;
+
+		&:hover {
+			color: #171717;
+		}
+	}
+}
+
+.credentials_errors {
+	@media screen and (max-width: 320px) {
+		border: 0.1rem solid #fb5340 !important;
+		box-shadow: 0 0.2rem 0.4rem #febab3 !important;
+	}
+}
+
+.form--input {
+	@include form-input-order(column, flex-start);
+
+	margin-bottom: 1rem;
+
+	@include input-border(0.4rem, rgba(215, 215, 215, 0.5));
+	padding: 1rem 0.5rem 1rem 0.5rem;
+
+	&:focus {
+		@include input-border(0.4rem, rgba(215, 215, 215, 0.5), #4682b4);
+	}
+}
+
+.form--errors {
+	color: #d72714;
+	visibility: visible;
+}
+
+.notVisible {
+	visibility: hidden;
 }

@@ -6,6 +6,9 @@ export class GoogleOauth2 {
 	_id: string;
 
 	@IsString()
+	googleId: string;
+
+	@IsString()
 	username: string;
 
 	@IsString()
@@ -46,7 +49,7 @@ export class SignupUser {
 	password: string;
 
 	@IsDateString()
-	date: string;
+	birthDate: string;
 }
 
 export class UserSignupResponse {

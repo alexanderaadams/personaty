@@ -6,26 +6,28 @@ import { environment } from '../../../../environments/environment';
 
 @Module({
 	imports: [
-		MailerModule.forRoot({
-			transport: {
-				host: 'smtp.mailtrap.io',
-				port: 2525,
-				secure: false,
-				auth: {
-					user: '9063ef07a10237',
-					pass: '68c620d9e5780b',
+		MailerModule.forRootAsync({
+			useFactory: () => ({
+				transport: {
+					host: 'smtp.mailtrap.io',
+					port: 2525,
+					secure: false,
+					auth: {
+						user: '9063ef07a10237',
+						pass: '68c620d9e5780b',
+					},
 				},
-			},
-			defaults: {
-				from: '"nest-modules" <user@outlook.com>', // outgoing email ID
-			},
-			template: {
-				dir: __dirname,
-				adapter: new HandlebarsAdapter(), // or new PugAdapter()
-				options: {
-					strict: true,
+				defaults: {
+					from: '"nest-modules" <user@outlook.com>', // outgoing email ID
 				},
-			},
+				template: {
+					dir: __dirname,
+					adapter: new HandlebarsAdapter(), // or new PugAdapter()
+					options: {
+						strict: true,
+					},
+				},
+			}),
 		}),
 	],
 	controllers: [],

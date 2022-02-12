@@ -6,12 +6,14 @@ import { AdminService } from './admin.service';
 @UseGuards(AdminGuard)
 export class AdminController {
 	constructor(private adminService: AdminService) {}
-	@Get('getallusers')
-	async findAllUsers() {
-		return await this.adminService.findAllUsers();
+
+	@Get('get-all-users')
+	findAllUsers() {
+		return this.adminService.findAllUsers();
 	}
-	@Delete('deleteallusers')
-	async deleteAllUsers() {
-		return await this.adminService.deleteAllUsers();
+
+	@Delete('delete-all-users')
+	deleteAllUsers() {
+		return this.adminService.deleteAllUsers();
 	}
 }

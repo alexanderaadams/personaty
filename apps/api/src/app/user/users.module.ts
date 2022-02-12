@@ -18,4 +18,4 @@ import { JWTModule } from '../jwt/jwt.module';
 	providers: [UserService],
 	exports: [UserService],
 })
-export class UsersModule {}
+export class UserModule {}

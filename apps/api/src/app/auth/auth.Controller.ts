@@ -29,10 +29,9 @@ export class AuthController {
 	// @Serialize(UserSignupResponse)
 	async signup(@Body() signupUser: SignupUser) {
 		const status = await this.authService.sendSignupEmail(
-			signupUser.username,
 			signupUser.email,
 			signupUser.password,
-			signupUser.date
+			signupUser.birthDate
 		);
 
 		return status;
@@ -61,13 +60,13 @@ export class AuthController {
 	async findOne(@Body() findUser: FindUser) {
 		const user = await this.authService.findOne(findUser);
 
-		if (user) return { available: false };
+		if (user) return { notAvailable: true };
 
-		return { available: true };
+		return { notAvailable: false };
 	}
 
 	@Post('login')
-	@Serialize(UserSignupResponse)
+	// @Serialize(UserSignupResponse)
 	async login(
 		@Body() loginUser: LoginUser,
 		@Res({ passthrough: true }) res: Response

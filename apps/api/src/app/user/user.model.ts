@@ -14,7 +14,10 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-	@Prop({ type: String, required: true, unique: true })
+	@Prop({ type: String, unique: true })
+	googleId: string;
+
+	@Prop({ type: String, unique: true })
 	username: string;
 
 	@Prop({ type: String, required: true, unique: true })
@@ -50,7 +53,7 @@ export class User {
 	refreshToken: string;
 
 	@Prop({ type: String, required: true })
-	date: Date;
+	birthDate: Date;
 
 	@Prop({
 		type: String,
@@ -96,6 +99,9 @@ export class UserModel extends mongoose.Document {
 	_id: string;
 
 	@IsString()
+	googleId: string;
+
+	@IsString()
 	username: string;
 
 	@IsEmail()
@@ -117,7 +123,7 @@ export class UserModel extends mongoose.Document {
 	refreshToken: string;
 
 	@IsDateString()
-	date: Date;
+	birthDate: Date;
 
 	@IsEnum(Gender)
 	gender: ['male', 'female', 'other'];

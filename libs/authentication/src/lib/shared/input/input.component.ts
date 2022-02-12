@@ -7,14 +7,12 @@ import { FormControl } from '@angular/forms';
 	styleUrls: ['./input.component.scss'],
 })
 export class InputComponent {
-	@Input() label!: string;
-	@Input() autocomplete = 'on';
+	@Input() name!: string;
+	@Input() spellcheck!: string;
+	@Input() placeholder = '';
+	@Input() required = 'required';
+	@Input() autocomplete = 'off';
+	@Input() type!: string;
 	@Input() control!: FormControl;
-	@Input() inputType!: string;
 	@Input() controlType = 'input';
-
-	showErrors() {
-		const { dirty, touched, errors } = this.control;
-		return dirty && touched && errors;
-	}
 }

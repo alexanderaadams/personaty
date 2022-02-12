@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PRIV_KEY, PUB_KEY } from '@march/keys';
-import { JwtStrategy } from '../auth/utils/strategy/jwt.strategy';
+import { JwtStrategy } from './jwt.strategy';
 import { JWTService } from './jwt.service';
-
 
 @Module({
 	imports: [

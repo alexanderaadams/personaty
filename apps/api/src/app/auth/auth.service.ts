@@ -39,19 +39,14 @@ export class AuthService {
 		}
 	}
 
-	async sendSignupEmail(
-		username: string,
-		email: string,
-		password: string,
-		date: string
-	) {
+	async sendSignupEmail(email: string, password: string, birthDate: string) {
 		try {
-			const user = await this.usersService.findOne({ email, username });
+			const user = await this.usersService.findOne({ email });
 
 			if (user) throw new ConflictException();
 
-			const token = this.myJWTService.signToken(
-				{ username, email, password, date },
+			const token = await this.myJWTService.signToken(
+				{ email, password, birthDate },
 				{
 					expiresIn: '15m',
 				}
@@ -76,8 +71,8 @@ export class AuthService {
 	}
 
 	async signupToken(token: string) {
-		const { username, email, password, date } =
-			this.myJWTService.verifyToken(token);
+		const { username, email, password, birthDate } =
+			await this.myJWTService.verifyToken(token);
 
 		try {
 			const user = await this.usersService.findOne({ username });
@@ -90,10 +85,13 @@ export class AuthService {
 				username,
 				email,
 				password: hashedPassword,
-				date,
+				birthDate,
 				email_verified: true,
 			});
-			const token = this.myJWTService.signToken({ id: newUser._id, username });
+			const token = await this.myJWTService.signToken({
+				id: newUser._id,
+				username,
+			});
 
 			return {
 				user: newUser,
@@ -119,8 +117,8 @@ export class AuthService {
 
 			if (storedHash !== hash.toString('hex'))
 				throw new UnauthorizedException('bad password');
-
-			const token = this.myJWTService.signToken({
+			console.log(user);
+			const token = await this.myJWTService.signToken({
 				id: user._id,
 				username,
 			});
@@ -153,7 +151,7 @@ export class AuthService {
 			if (user)
 				return {
 					user,
-					token: this.myJWTService.signToken({
+					token: await this.myJWTService.signToken({
 						id: user._id,
 						username: user.username,
 					}),
@@ -165,12 +163,12 @@ export class AuthService {
 			const newUser = await this.usersService.createUser({
 				...googleUser,
 				password: salt,
-				date: new Date(1970, 7, 7),
+				birthDate: new Date(1970, 7, 7),
 			});
 
 			return {
 				newUser,
-				token: this.myJWTService.signToken({
+				token: await this.myJWTService.signToken({
 					id: user._id,
 					username: newUser.username,
 				}),

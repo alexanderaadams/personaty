@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of, tap } from 'rxjs';
 
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
@@ -40,13 +40,14 @@ export class AuthService {
 	constructor(
 		private http: HttpClient,
 		private cookieService: CookieService,
-		private router: Router
+		private router: Router,
+		private ngZone: NgZone
 	) {}
 
 	userAvailable(value: UserAvailableRequest) {
 		return this.http.request<UserAvailableResponse>(
 			'POST',
-			`${this.rootUrl}/auth/user`,
+			`${this.rootUrl}/auth/is-available`,
 			{
 				body: {
 					...value,
@@ -68,20 +69,21 @@ export class AuthService {
 	}
 
 	loginWithGoogle() {
-		const newWindow = window.open(
-			`${this.rootUrl}/auth/login-with-google`,
-			'_blank',
-			'width=500,height=600'
-		);
-		if (newWindow) {
-			const timer = setInterval(() => {
-				if (newWindow.closed) {
-					this.router.navigateByUrl('home');
-					if (timer) clearInterval(timer);
-				}
-			}, 500);
-		}
-		// this.http.get<any>();
+		this.ngZone.run(() => {
+			const newWindow = window.open(
+				`${this.rootUrl}/auth/login-with-google`,
+				'_blank',
+				'width=500,height=600'
+			);
+			if (newWindow) {
+				const timer = setInterval(() => {
+					if (newWindow.closed) {
+						this.router.navigateByUrl('home');
+						if (timer) clearInterval(timer);
+					}
+				}, 500);
+			}
+		});
 	}
 
 	forgotPassword(email: { email: string }) {

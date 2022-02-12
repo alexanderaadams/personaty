@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputComponent } from './input/input.component';
 import { ModalComponent } from './modal/modal.component';
+import { DateComponent } from './date/date.component';
 
 @NgModule({
-  declarations: [InputComponent, ModalComponent],
+  declarations: [InputComponent, ModalComponent, DateComponent],
   imports: [CommonModule, ReactiveFormsModule],
-  exports: [InputComponent, ModalComponent]
+  exports: [InputComponent, ModalComponent,DateComponent]
 })
 export class SharedModule {}

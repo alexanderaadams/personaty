@@ -9,7 +9,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument, UserModel } from './user.model';
 import { JWTService } from '../jwt/jwt.service';
-import { FindUser } from '../core/shared.model';
+import { join } from 'path';
+// import { isFileExtensionSafe, removeFile } from './image-storage';
 
 @Injectable()
 export class UserService {
@@ -28,15 +29,33 @@ export class UserService {
 		}
 	}
 
-	async findOne(user: FindUser): Promise<UserModel> {
+	async findUserById(id: string): Promise<UserModel> {
 		try {
-			const newUser = await this.userModel.findOne(user);
+			const user = await this.userModel.findById(id);
 
-			if (!newUser) return null;
+			if (!user) return null;
 
-			return newUser as unknown as Promise<UserModel>;
+			return user as unknown as Promise<UserModel>;
 		} catch (err) {
-			throw new HttpException('User Not Found', err.status || 203);
+			throw new HttpException(
+				err?.message || err?.response?.message || 'Something Went Wrong',
+				err?.status || err?.response?.statusCode || 500
+			);
+		}
+	}
+
+	async findOne(payload): Promise<UserModel> {
+		try {
+			const user = await this.userModel.findOne(payload);
+
+			if (!user) return null;
+
+			return user as unknown as Promise<UserModel>;
+		} catch (err) {
+			throw new HttpException(
+				err?.message || err?.response?.message || 'Something Went Wrong',
+				err?.status || err?.response?.statusCode || 500
+			);
 		}
 	}
 
@@ -75,4 +94,35 @@ export class UserService {
 			throw new BadGatewayException('Something Went Wrong');
 		}
 	}
+
+	// async uploadImage(file: Express.Multer.File, id: string) {
+	// 	try {
+	// 		const user = await this.findUserById(id);
+
+	// 		const fileName = file?.filename;
+
+	// 		if (!fileName)
+	// 			return { valid: false, error: 'File must be a png, jpg/jpeg' };
+
+	// 		const imagesFolderPath = join(process.cwd(), 'upload');
+
+	// 		const fullImagePath = join(imagesFolderPath + '/' + file.filename);
+
+	// 		const isFileLegit = await isFileExtensionSafe(fullImagePath);
+
+	// 		if (isFileLegit)
+	// 			return this.updateUser(user._id, {
+	// 				profilePicture: fileName,
+	// 			});
+
+	// 		removeFile(fullImagePath);
+
+	// 		return { error: 'File content does not match extension!' };
+	// 	} catch (err) {
+	// 		throw new HttpException(
+	// 			err?.message || err?.response?.message || 'Something Went Wrong',
+	// 			err?.status || err?.response?.statusCode || 500
+	// 		);
+	// 	}
+	// }
 }

@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { UniqueUser } from './../validators/unique-username';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { AuthService } from '../auth.service';
 import { Login, LoginWithGoogle } from '../store/auth.actions';
 
 @Component({
@@ -11,20 +11,21 @@ import { Login, LoginWithGoogle } from '../store/auth.actions';
 	styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-	googleApi = '';
-
 	authForm: FormGroup = new FormGroup({
 		username: new FormControl(''),
 
 		password: new FormControl(''),
 	});
+
 	constructor(
 		private store: Store,
 		private router: Router,
-		private authService: AuthService
+		private uniqueUser: UniqueUser,
+		private readonly changeDetectorRef: ChangeDetectorRef
 	) {}
+
 	onSubmit() {
-		if (this.authForm?.invalid) {
+		if (this.authForm?.invalid || !this.authForm.value) {
 			console.log(this.authForm);
 			return;
 		}
@@ -35,9 +36,7 @@ export class LoginComponent {
 			},
 			error: ({ error }) => {
 				this.authForm.setErrors({ credentialsError: true });
-			},
-			complete() {
-				return;
+				console.log(error, this.authForm);
 			},
 		});
 	}
@@ -46,7 +45,7 @@ export class LoginComponent {
 		return this.authForm?.get(option) as FormControl;
 	}
 
-	lognWithGoogle() {
+	loginWithGoogle() {
 		this.store.dispatch(new LoginWithGoogle()).subscribe({
 			next: (response) => {
 				console.log(response);
@@ -59,5 +58,9 @@ export class LoginComponent {
 				return;
 			},
 		});
+	}
+
+	ngAfterViewChecked(): void {
+		this.changeDetectorRef.detectChanges();
 	}
 }

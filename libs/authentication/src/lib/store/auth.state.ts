@@ -62,7 +62,6 @@ export class AuthState {
 	loginWithGoogle(ctx: StateContext<AuthStateModel>, action: LoginWithGoogle) {
 		return of(this.authService.loginWithGoogle()).pipe(
 			tap((result: any) => {
-				console.log(result);
 				ctx.patchState({
 					status: 'logged-in-with-google',
 				});
