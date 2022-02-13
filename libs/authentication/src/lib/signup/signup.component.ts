@@ -52,16 +52,13 @@ export class SignupComponent {
 
 	onSubmit() {
 		if (this.authForm?.invalid) {
-			console.log(
-				this.authForm,
-				this.authForm?.['controls']?.['email']?.['errors']?.['notAvailable']
-			);
+			console.log(this.authForm.value);
 			return this.authForm.setErrors({ invalid: true });
 		}
 
 		this.store.dispatch(new Signup(this.authForm.value)).subscribe({
 			next: (response) => {
-				this.router.navigateByUrl('/home');
+				// this.router.navigateByUrl('/home');
 			},
 			error: (err) => {
 				console.log(err);
@@ -83,7 +80,6 @@ export class SignupComponent {
 		this.store.dispatch(new LoginWithGoogle()).subscribe({
 			next: (response) => {
 				console.log(response);
-				// this.router.navigate(response);
 			},
 			error: ({ error }) => {
 				this.authForm.setErrors({ credentialsError: true });
