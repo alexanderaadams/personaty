@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { tap } from 'rxjs';
@@ -13,11 +13,12 @@ import { MatchPassword } from '../validators/match-password';
 	styleUrls: ['./reset-password.component.scss'],
 })
 export class ResetPasswordComponent {
+	showModal = false;
 	authForm: FormGroup = new FormGroup(
 		{
-			password: new FormControl(''),
+			password: new FormControl('', [Validators.required]),
 
-			confirmPassword: new FormControl(''),
+			confirmPassword: new FormControl('', [Validators.required]),
 		},
 		this.matchPassword.validate
 	);
@@ -30,10 +31,12 @@ export class ResetPasswordComponent {
 	) {}
 
 	onSubmit() {
-		if (this.authForm?.invalid) {
+		if (this.authForm?.invalid || !this.authForm.value) {
 			console.log(this.authForm);
-			return;
+			this.showModal = true;
+			return this.authForm.setErrors({ invalid: true });
 		}
+
 		this.activatedRoute.params
 			.pipe(
 				tap((data) => {
@@ -51,16 +54,10 @@ export class ResetPasswordComponent {
 							error: ({ error }) => {
 								this.authForm.setErrors({ credentialsError: true });
 							},
-							complete() {
-								return;
-							},
-						})
-
-					// console.log(data['token']);
+						});
 				})
 			)
-			.subscribe()
-			.unsubscribe();
+			.subscribe();
 
 		// .subscribe({
 		// 	next: (response) => {

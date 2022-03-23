@@ -1,59 +1,65 @@
-// import { diskStorage } from 'multer';
-// import { v4 as uuidv4 } from 'uuid';
+import { diskStorage } from 'multer';
+import { v4 as uuidv4 } from 'uuid';
+import * as fs from 'fs';
+import * as path from 'path';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const mmm = require('mmmagic'),
+	Magic = mmm.Magic;
 
-// // eslint-disable-next-line @typescript-eslint/no-var-requires
-// import * as fs from 'fs';
-// // eslint-disable-next-line @typescript-eslint/no-var-requires
-// const fileType = require('file-type');
+type validFileExtensions = 'png' | 'jpg' | 'jpeg';
+type validMimeType = 'image/png' | 'image/jpg' | 'image/jpeg';
 
-// import path = require('path');
+const validFileExtensions: validFileExtensions[] = ['png', 'jpg', 'jpeg'];
+const validMimeType: validMimeType[] = ['image/png', 'image/jpg', 'image/jpeg'];
 
-// type validFileExtensions = 'png' | 'jpg' | 'jpeg';
-// type validMimeType = 'image/png' | 'image/jpg' | 'image/jpeg';
+export const saveImageToStorage = {
+	storage: diskStorage({
+		destination: 'upload',
+		filename: (req, file, cb) => {
+			const fileExtension: string = path.extname(file.originalname);
+			const fileName: string = uuidv4() + fileExtension;
 
-// const validFileExtensions: validFileExtensions[] = ['png', 'jpg', 'jpeg'];
-// const validMimeType: validMimeType[] = ['image/png', 'image/jpg', 'image/jpeg'];
+			console.log(file);
+			cb(null, fileName);
+		},
+	}),
+	fileFilter: (req, file, cb) => {
+		const allowedMimeTypes: validMimeType[] = validMimeType;
+		allowedMimeTypes.includes(file.mimetype) ? cb(null, true) : cb(null, false);
+	},
+};
 
-// export const saveImageToStorage = {
-// 	storage: diskStorage({
-// 		destination: 'upload',
-// 		filename: (req, file, cb) => {
-// 			const fileExtension: string = path.extname(file.originalname);
-// 			const fileName: string = uuidv4() + fileExtension;
+export const isFileExtensionSafe = async (fullFilePath: string) => {
+	console.log(fullFilePath);
+	const myRegex = /.(jpe?g|png)$/gi;
+	const fileExtensionType = myRegex.test(fullFilePath);
 
-// 			cb(null, fileName);
-// 		},
-// 	}),
-// 	fileFilter: (req, file, cb) => {
-// 		const allowedMimeTypes: validMimeType[] = validMimeType;
-// 		allowedMimeTypes.includes(file.mimetype) ? cb(null, true) : cb(null, false);
-// 	},
-// };
-// export const isFileExtensionSafe = async (fullFilePath: string) => {
-// 	const fileExtensionAndMimeType = (await fileType.fileTypeFromFile(
-// 		fullFilePath
-// 	)) as {
-// 		ext: validFileExtensions;
-// 		mime: validMimeType;
-// 	};
+	if (!fileExtensionType) return false;
 
-// 	if (!fileExtensionAndMimeType) return false;
+	const magic = new Magic(mmm.MAGIC_MIME_TYPE);
 
-// 	const isFileTypeLegit = validFileExtensions.includes(
-// 		fileExtensionAndMimeType.ext
-// 	);
-// 	const isMimeTypeLegit = validMimeType.includes(fileExtensionAndMimeType.mime);
+	const bitmap = function (fullFilePath) {
+		return new Promise(function (resolve, reject) {
+			magic.detectFile(fullFilePath, function (err, data) {
+				if (err) reject(err);
+				else resolve(data);
+			});
+		});
+	};
 
-// 	const isFileLegit = isFileTypeLegit && isMimeTypeLegit;
+	const isMimeTypeLegit = validMimeType.includes(
+		(await bitmap(fullFilePath)) as any
+	);
 
-// 	return isFileLegit;
-// };
-// export const removeFile = (fullFilePath: string): void => {
-// 	try {
-// 		fs.unlink(fullFilePath, () => {
-// 			return;
-// 		});
-// 	} catch (err) {
-// 		console.log(err);
-// 	}
-// };
+	return fileExtensionType && isMimeTypeLegit;
+};
+
+export const removeFile = (fullFilePath: string): void => {
+	try {
+		fs.unlink(fullFilePath, () => {
+			return;
+		});
+	} catch (err) {
+		console.log(err);
+	}
+};

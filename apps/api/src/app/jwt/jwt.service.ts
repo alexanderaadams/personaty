@@ -5,19 +5,19 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 export class JWTService {
 	constructor(private jwtService: JwtService) {}
 
-	signToken(payload: object, options?: JwtSignOptions) {
+	async signToken(payload: object, options?: JwtSignOptions) {
 		try {
 			if (options) return this.jwtService.signAsync(payload, options);
 
-			return this.jwtService.signAsync(payload);
+			return await this.jwtService.signAsync(payload);
 		} catch (err) {
 			throw new UnauthorizedException();
 		}
 	}
 
-	verifyToken(token: string) {
+	async verifyToken(token: string) {
 		try {
-			return this.jwtService.verifyAsync(token);
+			return await this.jwtService.verifyAsync(token);
 		} catch (err) {
 			throw new UnauthorizedException();
 		}

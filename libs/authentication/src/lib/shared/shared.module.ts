@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+
 import { InputComponent } from './input/input.component';
-import { ModalComponent } from './modal/modal.component';
-import { DateComponent } from './date/date.component';
+import { EmailTokenComponent } from './email-token/email-token.component';
+import { DatePickerComponent } from './date-picker/date-picker.component';
 
 @NgModule({
-  declarations: [InputComponent, ModalComponent, DateComponent],
-  imports: [CommonModule, ReactiveFormsModule],
-  exports: [InputComponent, ModalComponent,DateComponent]
+	declarations: [InputComponent, EmailTokenComponent, DatePickerComponent],
+	imports: [CommonModule, ReactiveFormsModule],
+	exports: [InputComponent, EmailTokenComponent, DatePickerComponent],
 })
 export class SharedModule {}

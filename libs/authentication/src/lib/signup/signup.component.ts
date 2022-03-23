@@ -1,17 +1,13 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Component, OnInit, SimpleChanges } from '@angular/core';
-import {
-	AbstractControl,
-	FormControl,
-	FormGroup,
-	Validators,
-} from '@angular/forms';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { UniqueEmail } from '../validators/unique-email';
-import { UniqueUser } from '../validators/unique-username';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { LoginWithGoogle, Signup } from '../store/auth.actions';
+import { catchError, Observable, of, Subject, tap } from 'rxjs';
+import { AuthStateModel } from '../store/auth.model';
 
 @Component({
 	selector: 'lib-signup',
@@ -19,24 +15,27 @@ import { LoginWithGoogle, Signup } from '../store/auth.actions';
 	styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent {
+	showModal = false;
+
+	@Select('Auth')
+	status$!: Observable<AuthStateModel>;
+
+	emailToken!: any;
+
 	authForm = new FormGroup({
-		email: new FormControl(
-			'',
-			[
-				Validators.required,
-				Validators.pattern(
-					/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-				),
-			],
-			[this.uniqueEmail.validate]
-		),
+		email: new FormControl('', [
+			Validators.required,
+			Validators.pattern(
+				/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+			),
+		]),
 		password: new FormControl('', [
 			Validators.required,
-			Validators.minLength(1),
+			Validators.minLength(2),
 			Validators.maxLength(30),
 		]),
 
-		date: new FormControl('', [
+		birthDate: new FormControl('', [
 			Validators.required,
 			Validators.pattern(
 				/^([0-9]{4})-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])$/
@@ -47,43 +46,54 @@ export class SignupComponent {
 	constructor(
 		private store: Store,
 		private uniqueEmail: UniqueEmail,
-		private router: Router
+		private router: Router,
+		private readonly changeDetectorRef: ChangeDetectorRef
 	) {}
 
 	onSubmit() {
-		if (this.authForm?.invalid) {
-			console.log(this.authForm.value);
+		if (this.authForm?.invalid || !this.authForm.value) {
+			// console.log(this.authForm);
+			this.showModal = true;
 			return this.authForm.setErrors({ invalid: true });
 		}
 
 		this.store.dispatch(new Signup(this.authForm.value)).subscribe({
-			next: (response) => {
-				// this.router.navigateByUrl('/home');
+			next: () => {
+				this.status$
+					.pipe(
+						tap(({ authenticated }) => {
+							if (authenticated === false) this.showModal = true;
+							{
+								this.authForm.setErrors({ invalid: true });
+								this.showModal = true;
+							}
+
+							if (authenticated === null) {
+								this.showModal = true;
+								this.emailToken = { authForm: this.authForm, status: 'signup' };
+							}
+							// console.log(authenticated);
+						})
+					)
+					.subscribe();
 			},
 			error: (err) => {
-				console.log(err);
-				this.authForm.setErrors({ credentialsError: true });
+				this.authForm.setErrors({ invalid: true });
 			},
 		});
+
+		// console.log(this.authForm);
 	}
 
 	inputFormControl(option: string): FormControl {
 		return this.authForm?.get(option) as FormControl;
 	}
 
-	showErrors() {
-		const { dirty, touched } = this.authForm;
-		return dirty && touched;
+	loginWithGoogle() {
+		this.store.dispatch(new LoginWithGoogle());
 	}
 
-	loginWithGoogle() {
-		this.store.dispatch(new LoginWithGoogle()).subscribe({
-			next: (response) => {
-				console.log(response);
-			},
-			error: ({ error }) => {
-				this.authForm.setErrors({ credentialsError: true });
-			},
-		});
+	ngAfterViewChecked(): void {
+		this.changeDetectorRef.detectChanges();
 	}
 }

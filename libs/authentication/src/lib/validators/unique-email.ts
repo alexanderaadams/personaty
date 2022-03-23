@@ -21,14 +21,18 @@ export class UniqueEmail implements AsyncValidator {
 	): Observable<ValidationErrors | null> => {
 		const { value } = control;
 
-		return this.authService.userAvailable({ email: value }).pipe(
-			map((value) => {
-				return value;
-			}),
-			catchError((err) => {
-				console.log(err);
-				return of({ noConnection: true });
-			})
-		);
+		this.authService.userAvailable({ email: value }).subscribe();
+		return of({ notAvailable: false });
+		// 	.pipe(
+		// 		map((value) => {
+		// 			console.log('unique email', value);
+		// 			// if (value?.available) return null;
+		// 			return { notAvailable: true };
+		// 		}),
+		// 		catchError((err) => {
+		// 			console.log(err);
+		// 			return of({ noConnection: true });
+		// 		})
+		// 	);
 	};
 }

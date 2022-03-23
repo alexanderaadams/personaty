@@ -1,39 +1,88 @@
-$border-radius: 0.25rem !default;
+@use '../../shared/scss/auth.scss' as auth;
+@use '../../shared/scss/animation.scss' as animation;
 
-@mixin input-border(
-	$border-radius: $border-radius,
-	$shadow-color: rgba(215, 215, 215, 0.5),
-	$border: #bcbcbc
-) {
-	border-radius: $border-radius;
-	box-shadow: 0 0.5rem 1rem $shadow-color;
-	border: 0.1rem solid $border;
+@mixin shared--form {
+	@include auth.input-border(0.5rem, var(--box-shadow));
+
+	width: 100%;
+
+	font-size: 1rem;
+
+	color: var(--font-primary-dark-color);
+
+	margin-bottom: 0.3rem;
+
+	padding: 1rem 0.5rem 1rem 0.5rem;
+
+	&:hover {
+		box-shadow: 0 0.5rem 0.5rem var(--hover-box-shadow);
+	}
+
+	&:focus {
+		border-color: var(--focus-primary-color);
+		box-shadow: 0 0 0 2px var(--box-shadow);
+		caret-color: var(--font-primary-bg);
+	}
 }
 
-@mixin form-input-order($flex-direction, $align-items: center) {
-	display: flex;
-	flex-direction: $flex-direction;
-	align-items: $align-items;
+.form--input {
+	@include shared--form;
+	@include auth.flex(column, flex-start);
+
+	@media only screen and (min-width: 0px) and (max-width: 768px) {
+		font-size: 1rem;
+	}
+
+	@media only screen and (min-width: 768px) and (max-width: 1024px) {
+		font-size: 1.1rem;
+	}
 }
 
-@mixin flex(
-	$flex-direction,
-	$align-items,
-	$justify-content: 'center',
-	$align-content: 'center'
-) {
-	display: flex;
-	flex-direction: $flex-direction;
-	align-items: $align-items;
-	justify-content: $justify-content;
-	align-content: $align-content;
+.form--input__date {
+	@include shared--form;
+	@include auth.flex(row, center);
+
+	@media only screen and (min-width: 0px) and (max-width: 768px) {
+		font-size: 1rem;
+	}
+
+	@media only screen and (min-width: 768px) and (max-width: 1024px) {
+		font-size: 1.1rem;
+	}
 }
 
-.form--errors {
-	color: #d72714;
-	visibility: visible;
+.credentials_errors {
+	@media only screen and (min-width: 0px) and (max-width: 1024px) {
+		border: 0.1rem solid #fb5340 !important;
+		box-shadow: 0 0.2rem 0.4rem #febab3 !important;
+	}
+	@include animation.shake;
+}
+
+.form--signup__errors {
+	text-align: left;
+	color: #cf3929;
+	font-size: 1rem;
+	font-weight: 600;
+	height: 0.4rem;
+
+	@media only screen and (min-width: 0px) and (max-width: 425px) {
+		font-size: 0.7rem;
+	}
+
+	@media only screen and (min-width: 425px) and (max-width: 1024px) {
+		font-size: 0.8rem;
+	}
+
+	@media only screen and (min-width: 1024px) and (max-width: 2048px) {
+		font-size: 0.8rem;
+	}
 }
 
 .notVisible {
 	visibility: hidden;
+}
+
+.displayNone {
+	display: none;
 }

@@ -1,32 +1,25 @@
-import { Injectable, NgZone } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, of, tap } from 'rxjs';
-
 import { CookieService } from 'ngx-cookie-service';
+import { Injectable, NgZone } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, catchError, map, of, tap } from 'rxjs';
+import {
+	LoginCredentials,
+	ResetPasswordCredentials,
+	SignupCredentials,
+	UserAvailableRequest,
+	UserAvailableResponse,
+} from './store/auth.model';
+
 import { Router } from '@angular/router';
-
-interface UserAvailableResponse {
-	available: boolean;
-}
-interface UserAvailableRequest {
-	username?: string;
-	email?: string;
-}
-
-interface SignupCredentials {
-	email: string;
-	password: string;
-}
-
-interface LoginCredentials {
-	username: string;
-	password: string;
-}
-interface ResetPasswordCredentials {
-	password: string;
-	confirmPassword: string;
-	token: string;
-}
+import { Apollo } from 'apollo-angular';
+import {
+	FORGOT_PASSWORD,
+	IS_AVAILABLE,
+	LOGIN,
+	LOGOUT,
+	RESET_PASSWORD,
+	SIGNUP,
+} from './gql.schema';
 
 @Injectable({
 	providedIn: 'root',
@@ -39,33 +32,88 @@ export class AuthService {
 
 	constructor(
 		private http: HttpClient,
-		private cookieService: CookieService,
 		private router: Router,
-		private ngZone: NgZone
+		private ngZone: NgZone,
+		private readonly cookieService: CookieService,
+		private apollo: Apollo
 	) {}
 
 	userAvailable(value: UserAvailableRequest) {
-		return this.http.request<UserAvailableResponse>(
-			'POST',
-			`${this.rootUrl}/auth/is-available`,
-			{
-				body: {
-					...value,
+		return this.apollo
+			.watchQuery({
+				query: IS_AVAILABLE,
+				variables: {
+					findUser: value,
 				},
-			}
-		);
+				errorPolicy: 'all',
+				context: {
+					withCredentials: true,
+				},
+			})
+			.valueChanges.pipe(
+				map(({ data }: any) => {
+					return data.isAvailable as UserAvailableResponse;
+				})
+			);
 	}
 
 	signup(credentials: SignupCredentials) {
-		return this.http.post<any>(`${this.rootUrl}/auth/signup`, credentials, {
-			withCredentials: true,
-		});
+		return this.apollo
+			.mutate({
+				mutation: SIGNUP,
+				variables: {
+					user: credentials,
+				},
+				errorPolicy: 'all',
+				context: {
+					withCredentials: true,
+				},
+			})
+			.pipe(
+				map(({ data }: any) => {
+					// console.log(data);
+					return {
+						status: data?.signup?.status,
+						authenticated: data?.signup?.authenticated,
+					};
+				}),
+				catchError(({ error }) => {
+					return of({
+						status: `Failed to signup, ${error.message} ${error.statusCode}`,
+						authenticated: false,
+					});
+				})
+			);
 	}
 
 	login(credentials: LoginCredentials) {
-		return this.http.post<any>(`${this.rootUrl}/auth/login`, credentials, {
-			withCredentials: true,
-		});
+		return this.apollo
+			.mutate({
+				mutation: LOGIN,
+				variables: {
+					user: credentials,
+				},
+				errorPolicy: 'all',
+				context: {
+					withCredentials: true,
+				},
+			})
+			.pipe(
+				map(({ data }: any) => {
+					// console.log(data);
+					return {
+						status: data?.login?.status,
+						authenticated: data?.login?.authenticated,
+					};
+				}),
+				catchError(({ error }) => {
+					console.log(error);
+					return of({
+						status: `Failed to login, ${error.message} ${error.statusCode}`,
+						authenticated: false,
+					});
+				})
+			);
 	}
 
 	loginWithGoogle() {
@@ -87,22 +135,86 @@ export class AuthService {
 	}
 
 	forgotPassword(email: { email: string }) {
-		return this.http.post<any>(`${this.rootUrl}/auth/forgot-password`, email, {
-			withCredentials: true,
-		});
+		return this.apollo
+			.mutate({
+				mutation: FORGOT_PASSWORD,
+				variables: {
+					user: email,
+				},
+				errorPolicy: 'all',
+				context: {
+					withCredentials: true,
+				},
+			})
+
+			.pipe(
+				map(({ data }: any) => {
+					// console.log(data);
+					return {
+						status: data?.forgotPassword?.status,
+						authenticated: data?.forgotPassword?.authenticated,
+					};
+				}),
+				catchError(({ error }) => {
+					return of({
+						status: `Failed to send forgot password email, ${error.message} ${error.statusCode}`,
+						authenticated: null,
+					});
+				})
+			);
 	}
+
 	resetPassword(credentials: ResetPasswordCredentials) {
-		return this.http.post<any>(
-			`${this.rootUrl}/auth/reset-password/${credentials.token}`,
-			credentials,
-			{
-				withCredentials: true,
-			}
-		);
+		return this.apollo
+			.mutate({
+				mutation: RESET_PASSWORD,
+				variables: {
+					credentials,
+				},
+				errorPolicy: 'all',
+				context: {
+					withCredentials: true,
+				},
+			})
+			.pipe(
+				map(({ data }: any) => {
+					// console.log(data);
+					return {
+						status: data?.resetPasswordToken?.status,
+						authenticated: data?.resetPasswordToken?.authenticated,
+					};
+				}),
+				catchError(({ error }) => {
+					return of({
+						status: `Failed to reset password, ${error.message} ${error.statusCode}`,
+						authenticated: false,
+					});
+				})
+			);
 	}
-	getAllUser() {
-		return this.http.get(`${this.rootUrl}/user/getallusers`);
+
+	logout() {
+		return this.apollo
+			.query({
+				query: LOGOUT,
+				errorPolicy: 'all',
+				context: {
+					withCredentials: true,
+				},
+			})
+			.pipe(
+				map(() => {
+					return {
+						status: 'Successfully logged out',
+						authenticated: false,
+					};
+				}),
+				catchError(({ error }) => {
+					return of({
+						status: 'Failed to Log out',
+						authenticated: false,
+					});
+				})
+			);
 	}
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	// logout(user: any) {}
 }

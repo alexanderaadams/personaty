@@ -10,12 +10,19 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { environment } from '../environments/environment';
 import { UserModule } from './user/users.module';
 import { AuthModule } from './auth/auth.module';
-import { HomeModule } from './home/home.module';
-import { PostModule } from './post/post.module';
 import { AdminModule } from './admin/admin.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 
+import { join } from 'path';
+import { StoryModule } from './story/story.module';
 @Module({
 	imports: [
+		AuthModule,
+		UserModule,
+		AdminModule,
+		StoryModule,
 		MongooseModule.forRootAsync({
 			connectionName: 'persona',
 			useFactory: () => ({
@@ -26,25 +33,45 @@ import { AdminModule } from './admin/admin.module';
 		PassportModule.registerAsync({
 			useFactory: () => ({ defaultStrategy: 'jwt' }),
 		}),
-		ThrottlerModule.forRootAsync({
+
+		GraphQLModule.forRootAsync<ApolloDriverConfig>({
+			driver: ApolloDriver,
 			useFactory: () => ({
-				ttl: 360,
-				limit: 25,
+				include: [AuthModule, StoryModule],
+				typePaths: ['./**/**/*.graphql'],
+
+				// playground: false,
+				// plugins: [ApolloServerPluginLandingPageLocalDefault()],
+				sortSchema: true,
+				cors: {
+					credentials: true,
+					origin: true,
+				},
+				context: ({ req, res }) => {
+					return {
+						req,
+						res,
+					};
+				},
+
+				// useGlobalPrefix: true,
 			}),
 		}),
-		AuthModule,
-		UserModule,
-		HomeModule,
-		PostModule,
-		AdminModule,
+
+		// ThrottlerModule.forRootAsync({
+		// 	useFactory: () => ({
+		// 		ttl: 360,
+		// 		limit: 2005,
+		// 	}),
+		// }),
 	],
-	controllers: [AppController],
+	controllers: [],
 	providers: [
 		AppService,
-		{
-			provide: APP_GUARD,
-			useClass: ThrottlerGuard,
-		},
+		// {
+		// 	provide: APP_GUARD,
+		// 	useClass: ThrottlerGuard,
+		// },
 	],
 })
 export class AppModule {}

@@ -1,0 +1,75 @@
+scalar Date
+
+type Query {
+	isAvailable(findUser: FindUserInput!): AvailableReturn!
+	logout: StatusReturn!
+}
+
+type Mutation {
+	signup(user: SignupInput!): StatusReturn!
+	login(user: LoginInput!): StatusReturn!
+	forgotPassword(user: ForgotPasswordInput!): StatusReturn!
+	resetPasswordToken(credentials: ResetPasswordTokenInput!): StatusReturn!
+}
+
+input SignupInput {
+	email: String!
+
+	password: String!
+
+	birthDate: String!
+}
+
+input LoginInput {
+	email: String!
+
+	password: String!
+}
+
+input ForgotPasswordInput {
+	email: String!
+}
+
+input FindUserInput {
+	id: String
+
+	username: String
+
+	email: String
+}
+
+input ResetPasswordTokenInput {
+	password: String!
+
+	confirmPassword: String!
+
+	token: String!
+}
+
+type User {
+	_id: String
+
+	username: String
+
+	email: String
+
+	locale: String
+
+	profilePicture: String
+
+	birthDate: String
+
+	gender: String
+
+	createdAt: Date
+}
+
+type AvailableReturn {
+	available: Boolean!
+}
+
+type StatusReturn {
+	status: String!
+
+	authenticated: Boolean
+}

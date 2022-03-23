@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { CanLoad, Route, UrlSegment, UrlTree } from '@angular/router';
-import { AuthState } from '@march/authentication';
-import { Observable } from 'rxjs';
-import { Store } from '@ngxs/store';
+
+import { map, Observable } from 'rxjs';
+import { Select, Store } from '@ngxs/store';
+import { AuthStateModel } from '@march/authentication';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class AuthGuard implements CanLoad {
+	@Select('Auth')
+	status!: Observable<AuthStateModel>;
+
 	constructor(private store: Store) {}
 	canLoad(
 		route: Route,
@@ -17,9 +21,12 @@ export class AuthGuard implements CanLoad {
 		| Promise<boolean | UrlTree>
 		| boolean
 		| UrlTree {
-		const isAuthenticated = this.store.selectSnapshot(
-			AuthState.isAuthenticated
+		return this.status.pipe(
+			map(({ authenticated }) => {
+				if (!authenticated) return false;
+
+				return true;
+			})
 		);
-		return isAuthenticated;
 	}
 }

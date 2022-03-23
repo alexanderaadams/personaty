@@ -1,9 +1,43 @@
 <input
+	[class]="formInput"
 	[name]="name"
 	[spellcheck]="spellcheck"
 	[placeholder]="placeholder"
-	required="required"
+	required
 	[type]="type"
 	[formControl]="control"
+	[ngClass]="{ credentials_errors: submit }"
+	[min]="min"
+	[max]="max"
 	[autocomplete]="autocomplete"
 />
+<i
+	*ngIf="type === 'password'"
+	class="far fa-eye"
+	id="togglePassword"
+	style="margin-left: -30px; cursor: pointer"
+></i>
+
+<div [ngClass]="{ notVisible: !showErrors() }" class="form--signup__errors">
+	<p *ngIf="control?.['errors']?.['minlength']">
+		❗️ Password must be at lest
+		{{ control?.['errors']?.['minlength']?.requiredLength }}
+		characters.
+	</p>
+
+	<p *ngIf="control?.['errors']?.['maxlength']">
+		❗️ Password must be no longer than
+		{{ control?.['errors']?.['maxlength']?.requiredLength }}
+		characters.
+	</p>
+
+	<p *ngIf="control?.['errors']?.['pattern']">
+		❗️ Pleader enter a valid email
+	</p>
+
+	<p *ngIf="control?.['errors']?.['required']">❗️ This field is requierd</p>
+
+	<p *ngIf="control?.['errors']?.['notAvailable']">
+		❗️ Email is already taken
+	</p>
+</div>

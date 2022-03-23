@@ -2,10 +2,10 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"outDir": "../../dist/out-tsc",
-		"module": "commonjs",
+		"module": "CommonJS",
 		"types": ["node"],
 		"emitDecoratorMetadata": true,
-		"target": "es2015"
+		"target": "es2017"
 	},
 	"exclude": ["**/*.spec.ts", "**/*.test.ts"],
 	"include": ["**/*.ts", "src/app/auth/utils/mail/email.js"]

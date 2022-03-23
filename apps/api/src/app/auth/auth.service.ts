@@ -14,6 +14,7 @@ import { promisify } from 'util';
 import { UserService } from '../user/user.service';
 import { NodemailerService } from './utils/mail/nodemailer.service';
 import { GoogleOauth2 } from './auth.model';
+import { UserExtraInfo } from '../user/user.model';
 
 const scrypt = promisify(_scrypt);
 
@@ -45,23 +46,29 @@ export class AuthService {
 
 			if (user) throw new ConflictException();
 
-			const token = await this.myJWTService.signToken(
-				{ email, password, birthDate },
-				{
-					expiresIn: '15m',
-				}
-			);
+			// const token = await this.myJWTService.signToken(
+			// 	{ email, password, birthDate },
+			// 	{
+			// 		expiresIn: '15m',
+			// 	}
+			// );
 
-			const tokenURL = `http://localhost:3333/api/v1/auth/signup/${token}`;
+			// const tokenURL = `http://localhost:3333/api/v1/auth/signup/${token}`;
 
-			this.nodemailerService.sendEmail(
+			// this.nodemailerService.sendEmail(
+			// 	email,
+			// 	'Verify Your Email',
+			// 	'Click On The Button To Verify Your Email',
+			// 	tokenURL
+			// );
+			const hashedPassword = await this.hashingPassword(password);
+			const newUser = await this.usersService.createUser({
 				email,
-				'Verify Your Email',
-				'Click On The Button To Verify Your Email',
-				tokenURL
-			);
-
+				password: hashedPassword,
+				birthDate,
+			});
 			return { status: 'Email Has Been Send, Check Your Email' };
+			// return newUser;
 		} catch (err) {
 			throw new HttpException(
 				err?.message || err?.response?.message || 'Something Went Wrong',
@@ -89,7 +96,7 @@ export class AuthService {
 				email_verified: true,
 			});
 			const token = await this.myJWTService.signToken({
-				id: newUser._id,
+				id: newUser._id.toString(),
 				username,
 			});
 
@@ -105,9 +112,12 @@ export class AuthService {
 		}
 	}
 
-	async login(username: string, password: string) {
+	async login(
+		email: string,
+		password: string
+	): Promise<{ user: UserExtraInfo; token: string }> {
 		try {
-			const user = await this.usersService.findOne({ username });
+			const user = await this.usersService.getUserExtraInfo({ email });
 
 			if (!user) throw new BadRequestException('Wrong Username or Password');
 
@@ -117,12 +127,12 @@ export class AuthService {
 
 			if (storedHash !== hash.toString('hex'))
 				throw new UnauthorizedException('bad password');
-			console.log(user);
-			const token = await this.myJWTService.signToken({
-				id: user._id,
-				username,
-			});
 
+			const token = await this.myJWTService.signToken({
+				id: user._id.toString(),
+				email,
+			});
+			// console.log(user._id.toString(), token);
 			return {
 				user,
 				token,
@@ -163,13 +173,12 @@ export class AuthService {
 			const newUser = await this.usersService.createUser({
 				...googleUser,
 				password: salt,
-				birthDate: new Date(1970, 7, 7),
 			});
 
 			return {
 				newUser,
 				token: await this.myJWTService.signToken({
-					id: user._id,
+					id: user._id.toString(),
 					username: newUser.username,
 				}),
 			};
@@ -187,18 +196,19 @@ export class AuthService {
 
 			if (!user) throw new NotFoundException();
 
-			const token = this.myJWTService.signToken(
-				{ id: user._id, username: user.username },
+			const token = await this.myJWTService.signToken(
+				{ id: user._id.toString(), username: user.username },
 				{
 					expiresIn: '15m',
 				}
 			);
+
 			const tokenURL = `http://localhost:4200/auth/reset-password/${token}`;
 			// console.log(user);
 			this.nodemailerService.sendEmail(
 				email,
 				'Reset Your Password',
-				'Click On Bhe Button To Reset Your Password',
+				'Click On The Button To Reset Your Password',
 				tokenURL
 			);
 			return { status: 'Email has ben send' };
@@ -234,7 +244,7 @@ export class AuthService {
 			});
 			const hashedPassword = await this.hashingPassword(password);
 
-			const updateUser = await this.usersService.updateUser(user.id, {
+			const updateUser = await this.usersService.updateUser(user._id, {
 				password: hashedPassword,
 			});
 

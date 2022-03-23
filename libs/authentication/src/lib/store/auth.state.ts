@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { of, tap } from 'rxjs';
+import { catchError, map, of, Subscription, tap } from 'rxjs';
 import { AuthService } from '../auth.service';
 import {
-	AuthStateModel,
 	Login,
 	Logout,
 	Signup,
@@ -13,20 +12,22 @@ import {
 import { Action, State, StateContext, Selector } from '@ngxs/store';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
+import { AuthStateModel } from './auth.model';
 
 @State<AuthStateModel>({
-	name: 'auth',
+	name: 'Auth',
 	defaults: {
 		status: null,
-		username: null,
+		authenticated: null,
 	},
 })
 @Injectable()
 export class AuthState {
-	@Selector()
-	static isAuthenticated(state: AuthStateModel): boolean {
-		return !!state.status;
-	}
+	private querySubscription!: Subscription;
+	// @Selector()
+	// static isAuthenticated(state: AuthStateModel): boolean {
+	// 	return !!state.authenticated;
+	// }
 
 	constructor(
 		private authService: AuthService,
@@ -36,72 +37,85 @@ export class AuthState {
 
 	@Action(Signup)
 	signup(ctx: StateContext<AuthStateModel>, action: Signup) {
-		return this.authService.signup(action.payload).pipe(
-			tap(() => {
-				ctx.setState({
-					status: 'signed-up',
-					username: action.payload.username,
-				});
-			})
-		);
+		this.querySubscription = this.authService
+			.signup(action.payload)
+			.pipe(
+				tap((res) => {
+					console.log(res);
+					ctx.patchState(res);
+				})
+			)
+			.subscribe();
 	}
 
 	@Action(Login)
 	login(ctx: StateContext<AuthStateModel>, action: Login) {
-		return this.authService.login(action.payload).pipe(
-			tap(() => {
-				ctx.patchState({
-					status: 'logged-in',
-					username: action.payload.username,
-				});
-			})
-		);
+		this.querySubscription = this.authService
+			.login(action.payload)
+			.pipe(
+				tap((res) => {
+					console.log(res);
+					ctx.patchState(res);
+				})
+			)
+			.subscribe();
 	}
 
 	@Action(LoginWithGoogle)
 	loginWithGoogle(ctx: StateContext<AuthStateModel>, action: LoginWithGoogle) {
-		return of(this.authService.loginWithGoogle()).pipe(
-			tap((result: any) => {
-				ctx.patchState({
-					status: 'logged-in-with-google',
-				});
-			})
-		);
+		this.querySubscription = of(this.authService.loginWithGoogle())
+			.pipe(
+				tap((res: any) => {
+					console.log(res);
+					ctx.patchState({
+						status: 'Supposedly logged-in-with-google',
+						authenticated: null,
+					});
+				})
+			)
+			.subscribe();
 	}
 
 	@Action(ForgotPassword)
 	forgotPassword(ctx: StateContext<AuthStateModel>, action: ForgotPassword) {
-		return this.authService.forgotPassword(action.payload).pipe(
-			tap(() => {
-				ctx.patchState({
-					status: 'forgotPassword',
-				});
-			})
-		);
+		this.querySubscription = this.authService
+			.forgotPassword(action.payload)
+			.pipe(
+				tap((res) => {
+					console.log(res);
+					ctx.patchState(res);
+				})
+			)
+			.subscribe();
 	}
 
 	@Action(ResetPassword)
 	resetPassword(ctx: StateContext<AuthStateModel>, action: ResetPassword) {
-		console.log(action.payload);
-		return this.authService.resetPassword(action.payload).pipe(
-			tap(() => {
-				ctx.patchState({
-					status: 'reset-password',
-				});
-			})
-		);
+		this.querySubscription = this.authService
+			.resetPassword(action.payload)
+			.pipe(
+				tap((res) => {
+					console.log(res);
+					ctx.patchState(res);
+				})
+			)
+			.subscribe();
 	}
 
-	// @Action(Logout)
-	// logout(ctx: StateContext<AuthStateModel>) {
-	// 	const state = ctx.getState();
-	// 	return this.authService.logout(state.token).pipe(
-	// 		tap(() => {
-	// 			ctx.setState({
-	// 				token: null,
-	// 				username: null,
-	// 			});
-	// 		})
-	// 	);
-	// }
+	@Action(Logout)
+	logout(ctx: StateContext<AuthStateModel>) {
+		this.querySubscription = this.authService
+			.logout()
+			.pipe(
+				tap((res) => {
+					console.log(res);
+					ctx.patchState(res);
+				})
+			)
+			.subscribe();
+	}
+
+	ngOnDestroy() {
+		this.querySubscription.unsubscribe();
+	}
 }

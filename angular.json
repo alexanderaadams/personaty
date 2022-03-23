@@ -1,12 +1,12 @@
 {
-	"version": 2,
-	"projects": {
-		"api": "apps/api",
-		"api-interfaces": "libs/api-interfaces",
-		"authentication": "libs/authentication",
-		"error-handler": "libs/error-handler",
-		"keys": "libs/keys",
-		"march": "apps/march",
-		"march-e2e": "apps/march-e2e"
-	}
+  "version": 2,
+  "projects": {
+    "api": "apps/api",
+    "api-interfaces": "libs/api-interfaces",
+    "authentication": "libs/authentication",
+    "error-handler": "libs/error-handler",
+    "keys": "libs/keys",
+    "march": "apps/march",
+    "march-e2e": "apps/march-e2e"
+  }
 }

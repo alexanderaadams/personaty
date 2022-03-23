@@ -1,0 +1,58 @@
+scalar Date
+
+type Query {
+	getUser(id: ID!): UserReturn!
+	# getImage(id: ID!): StatusReturn!
+}
+
+type Mutation {
+	updateUser(id: ID!, user: UpdateUserInput!): UserReturn!
+	deleteUser(id: ID!): StatusReturn!
+	# uploadProfilePicture(id: ID!): StatusReturn!
+}
+
+input UpdateUserInput {
+	username: String
+
+	fullName: String
+
+	email: String
+
+	password: String
+
+	gender: String
+
+	birthDate: Date
+
+	locale: String
+
+	profilePicture: String
+}
+
+type UserReturn {
+	_id: String
+
+	fullName: String
+
+	username: String
+
+	email: String
+
+	locale: String
+
+	profilePicture: String
+
+	createdAt: Date
+
+	birthDate: String
+
+	gender: String
+
+	role: String
+
+	stories: [String]
+}
+
+type StatusReturn {
+	status: String!
+}

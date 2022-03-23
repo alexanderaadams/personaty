@@ -1,4 +1,3 @@
-import { AuthGuard } from '@nestjs/passport';
 import {
 	Body,
 	Controller,
@@ -13,32 +12,28 @@ import { Response, Request } from 'express';
 
 import { AuthService } from './auth.service';
 import { Serialize } from '../user/interceptors/serialize.interceptor';
-import {
-	GoogleOauth2,
-	LoginUser,
-	SignupUser,
-	UserSignupResponse,
-} from './auth.model';
+import { GoogleOauth2 } from './auth.model';
 import { FindUser } from '../core/shared.model';
+import { AuthGuard } from '@nestjs/passport';
+import { TokenAuthGuard } from '../utils/guards/is-auth.guard';
 
 @Controller('auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
-	@Post('signup')
-	// @Serialize(UserSignupResponse)
-	async signup(@Body() signupUser: SignupUser) {
-		const status = await this.authService.sendSignupEmail(
-			signupUser.email,
-			signupUser.password,
-			signupUser.birthDate
-		);
+	// @Post('signup')
+	// // @Serialize(UserSignupResponse)
+	// async signup(@Body() signupUser: SignupUser, @Res() res: Response) {
+	// 	const status = await this.authService.sendSignupEmail(
+	// 		signupUser.email,
+	// 		signupUser.password,
+	// 		signupUser.birthDate
+	// 	);
 
-		return status;
-	}
+	// 	return status;
+	// }
 
 	@Get('signup/:token')
-	// @Serialize(UserSignupResponse)
 	async signupToken(
 		@Param('token') token: string,
 		@Res({ passthrough: true }) res: Response
@@ -60,56 +55,63 @@ export class AuthController {
 	async findOne(@Body() findUser: FindUser) {
 		const user = await this.authService.findOne(findUser);
 
-		if (user) return { notAvailable: true };
+		if (user) return { available: false };
 
-		return { notAvailable: false };
+		return { available: true };
 	}
 
-	@Post('login')
-	// @Serialize(UserSignupResponse)
-	async login(
-		@Body() loginUser: LoginUser,
-		@Res({ passthrough: true }) res: Response
-	) {
-		const user = await this.authService.login(
-			loginUser.username,
-			loginUser.password
-		);
+	// @Post('login')
+	// // @Serialize(UserSignupResponse)
+	// async login(
+	// 	@Body() loginUser: LoginUser,
+	// 	@Res({ passthrough: true }) res: Response
+	// ) {
+	// 	const user = await this.authService.login(
+	// 		loginUser.username,
+	// 		loginUser.password
+	// 	);
 
-		res.cookie('token', user.token, {
-			maxAge: 3600000 * 24 * 7 * 12,
-			httpOnly: true,
-			sameSite: 'strict',
-			secure: false,
-		});
+	// 	res.cookie('token', user.token, {
+	// 		maxAge: 3600000 * 24 * 7 * 12,
+	// 		httpOnly: true,
+	// 		sameSite: 'strict',
+	// 		secure: false,
+	// 	});
 
-		return { user: user.user, Authenticated: true };
-	}
+	// 	return { user: user.user, Authenticated: true };
+	// }
 
-	@Post('forgot-password')
-	async sendResetPasswordEmail(@Body() resetPasswordEmail: { email: string }) {
-		// console.log(resetPasswordEmail);
-		await this.authService.sendResetPasswordEmail(resetPasswordEmail.email);
-		return { status: 'email has been send' };
-	}
+	// @Get('logout')
+	// @UseGuards(TokenAuthGuard)
+	// async logout(@Res({ passthrough: true }) res: Response) {
+	// 	res.clearCookie('token', { httpOnly: true });
+	// 	return { status: 'logged out', authenticated: false };
+	// }
 
-	@Post('reset-password/:token')
-	async verifyResetPassword(
-		@Body()
-		credentials: { password: string; confirmPassword: string; token: string },
-		@Res({ passthrough: true }) res: Response
-	) {
-		// console.log(credentials);
-		const user = await this.authService.verifyResetPassword(credentials);
+	// @Post('forgot-password')
+	// async sendResetPasswordEmail(@Body() resetPasswordEmail: { email: string }) {
+	// 	// console.log(resetPasswordEmail);
+	// 	await this.authService.sendResetPasswordEmail(resetPasswordEmail.email);
+	// 	return { status: 'email has been send' };
+	// }
 
-		res.cookie('token', user.token, {
-			maxAge: 1000 * 60 * 60 * 24 * 7 * 12,
-			httpOnly: true,
-			sameSite: 'strict',
-			secure: false,
-		});
-		return { user: user.updateUser, updatedUser: true };
-	}
+	// @Post('reset-password/:token')
+	// async verifyResetPassword(
+	// 	@Body()
+	// 	credentials: { password: string; confirmPassword: string; token: string },
+	// 	@Res({ passthrough: true }) res: Response
+	// ) {
+	// 	// console.log(credentials);
+	// 	const user = await this.authService.verifyResetPassword(credentials);
+
+	// 	res.cookie('token', user.token, {
+	// 		maxAge: 1000 * 60 * 60 * 24 * 7 * 12,
+	// 		httpOnly: true,
+	// 		sameSite: 'strict',
+	// 		secure: false,
+	// 	});
+	// 	return { user: user.updateUser, updatedUser: true };
+	// }
 
 	@Get('login-with-google')
 	@UseGuards(AuthGuard('google'))

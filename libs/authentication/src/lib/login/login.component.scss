@@ -1,153 +1,72 @@
-// @import url('../shared/input/input.component.scss');
+@use '../shared/scss/forms.scss';
+@use '../shared/scss/animation.scss' as animation;
+@use '../shared/scss/auth.scss' as auth;
 
-$border-radius: 0.25rem !default;
-
-@mixin input-border(
-	$border-radius: $border-radius,
-	$shadow-color: rgba(215, 215, 215, 0.5),
-	$border: #bcbcbc
-) {
-	border-radius: $border-radius;
-	box-shadow: 0 0.5rem 1rem $shadow-color;
-	border: 0.1rem solid $border;
-}
-
-@mixin form-input-order($flex-direction, $align-items: center) {
+.form--btn__forgot-box {
 	display: flex;
-	flex-direction: $flex-direction;
-	align-items: $align-items;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-top: 0.4rem;
+	// margin-bottom: 1rem;
 }
-
-@mixin flex(
-	$flex-direction,
-	$align-items,
-	$justify-content: 'center',
-	$align-content: 'center'
-) {
-	display: flex;
-	flex-direction: $flex-direction;
-	align-items: $align-items;
-	justify-content: $justify-content;
-	align-content: $align-content;
-}
-
-:host {
-	@media screen and (max-width: 320px) {
-		@include flex(column, center, center, center);
-		margin-top: 5rem;
-	}
-}
-
-.form {
-	@media screen and (max-width: 320px) {
-		@include flex(column, center, center, center);
-	}
-}
-
-.form--btn__submit {
-	@media screen and (max-width: 320px) {
-		width: 14rem;
-		padding: 0.5rem;
-		margin-top: 0.4rem;
-		border: 0;
-		border-radius: 0.5rem;
-		font: 600 1.2rem roboto;
-		color: #2e2e2e;
-		background: #fa8072;
-		text-align: center;
-	}
-	&:focus {
-		animation-duration: 0.5s;
-		animation-name: slideDown;
-		animation-iteration-count: 1;
-	}
-}
-@keyframes slideDown {
-	from {
-		background: #fa8072;
-		transform: translateY(0rem);
-	}
-	50% {
-		background: #c45c51;
-		transform: translateY(0.3rem);
-	}
-	to {
-		background: #fa8072;
-		transform: translateY(-0.3rem);
-	}
-}
-hr {
-	@media screen and (max-width: 320px) {
-		width: 40%;
-		margin: 1rem;
-		border: 1px solid #c3c3c3;
-	}
-}
-
 .btn--forgot {
-	@media screen and (max-width: 320px) {
-		color: #4682b4;
-		text-decoration: none;
+	// border-top: 0.1rem solid var(--border);
+	// padding-bottom: 1rem;
+	color: var(--resend-color);
+	font-size: 1rem;
+	text-decoration: none;
+
+	&:hover {
+		color: var(#1877f2);
+		text-decoration: underline;
 	}
 }
 
-.login-with-google {
-	@media screen and (max-width: 320px) {
-		display: flex;
-		justify-content: space-around;
-		align-items: center;
-		border: 0.1rem solid #4682b4;
-		border-radius: 0.4rem;
-		padding: 0.2rem;
-		width: 12.8rem;
-		padding: 0.4rem;
-		margin-bottom: 1rem;
-		background-color: #dcf4ff;
+.hr {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--font-primary-dark-color);
+	width: 100%;
+	margin: 1rem 0 1rem 0;
+}
 
-		&:hover {
-			background-color: #e1e1e1;
-			cursor: pointer;
+.btn--signup {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	align-content: center;
+	width: 50%;
+	margin-left: 25%;
+	margin-bottom: 0.5rem;
+
+	&:not(:active) {
+		&:focus {
+			@include animation.click;
 		}
 	}
 }
 
-.btn--login-with-google {
-	@media screen and (max-width: 320px) {
-		color: #2e2e2e;
-		text-align: center;
-		font-weight: 600;
+.btn--signup__link {
+	border: 0.1rem solid var(--resend-color);
+	color: #1d2129;
+	box-shadow: 0.2rem 0.1rem 1rem #f7796e59;
+	width: 100%;
+	border-radius: 1rem;
 
-		&:hover {
-			color: #171717;
-		}
+	padding: 1.5rem 0.5rem 1.5rem 0.5rem;
+	text-decoration: none;
+	text-align: center;
+	font-size: 1rem;
+	color: #1d2129;
+	font-weight: 600;
+
+	&:hover {
+		background-color: var(--resend-color);
+		border: 0;
+		color: var(--font-primary-color);
+		cursor: pointer;
+		box-shadow: 0.2rem 0.1rem 0.5rem #f7796e59;
 	}
-}
-
-.credentials_errors {
-	@media screen and (max-width: 320px) {
-		border: 0.1rem solid #fb5340 !important;
-		box-shadow: 0 0.2rem 0.4rem #febab3 !important;
-	}
-}
-
-.form--input {
-	@include form-input-order(column, flex-start);
-
-	margin-bottom: 1rem;
-
-	@include input-border(0.4rem, rgba(215, 215, 215, 0.5));
-	padding: 1rem 0.5rem 1rem 0.5rem;
-
-	&:focus {
-		@include input-border(0.4rem, rgba(215, 215, 215, 0.5), #4682b4);
-	}
-}
-
-.form--errors {
-	color: #d72714;
-	visibility: visible;
-}
-
-.notVisible {
-	visibility: hidden;
 }

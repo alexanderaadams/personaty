@@ -1,0 +1,53 @@
+scalar Date
+
+type Query {
+	getStory(story: GetStoryInput!): StoryReturn!
+}
+
+type Mutation {
+	createStory(story: CreateStoryInput!): StoryReturn!
+	updateStory(id: ID!, story: UpdateStoryInput!): StoryReturn!
+	deleteStory(story: DeleteStoryInput!): DeleteStoryReturn!
+}
+
+input GetStoryInput {
+	id: String!
+}
+
+input CreateStoryInput {
+	title: String!
+
+	description: String!
+
+	photo: String!
+}
+
+input UpdateStoryInput {
+	title: String
+
+	description: String
+
+	photo: String
+}
+
+input DeleteStoryInput {
+	id: String!
+}
+
+type StoryReturn {
+	_id: String
+
+	title: String
+
+	description: String
+
+	photo: String
+
+	createdAt: Date
+
+	userId: String
+}
+
+type DeleteStoryReturn {
+	status: String!
+}

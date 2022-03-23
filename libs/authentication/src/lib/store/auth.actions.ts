@@ -1,12 +1,9 @@
-export interface AuthStateModel {
-	status: string | null;
-	username: string | null;
-}
+
 
 export class Signup {
 	static readonly type = '[Auth] Signup';
 	constructor(
-		public payload: { username: string; email: string; password: string }
+		public payload: { email: string; password: string; birthDate: string }
 	) {}
 }
 

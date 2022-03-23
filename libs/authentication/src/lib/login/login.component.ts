@@ -1,9 +1,10 @@
-import { UniqueUser } from './../validators/unique-username';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { Login, LoginWithGoogle } from '../store/auth.actions';
+import { Observable, tap } from 'rxjs';
+import { AuthStateModel } from '../store/auth.model';
 
 @Component({
 	selector: 'lib-login',
@@ -11,34 +12,54 @@ import { Login, LoginWithGoogle } from '../store/auth.actions';
 	styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-	authForm: FormGroup = new FormGroup({
-		username: new FormControl(''),
+	showModal = false;
 
-		password: new FormControl(''),
+	@Select('Auth')
+	status$!: Observable<AuthStateModel>;
+
+	authForm: FormGroup = new FormGroup({
+		email: new FormControl('', [Validators.required]),
+
+		password: new FormControl('', [Validators.required]),
 	});
 
 	constructor(
 		private store: Store,
 		private router: Router,
-		private uniqueUser: UniqueUser,
 		private readonly changeDetectorRef: ChangeDetectorRef
 	) {}
 
 	onSubmit() {
 		if (this.authForm?.invalid || !this.authForm.value) {
-			console.log(this.authForm);
-			return;
+			// console.log(this.authForm);
+			this.showModal = true;
+			return this.authForm.setErrors({ invalid: true });
 		}
 
 		this.store.dispatch(new Login(this.authForm.value)).subscribe({
-			next: (response) => {
-				this.router.navigateByUrl('/home');
+			next: () => {
+				this.status$
+					.pipe(
+						tap(({ authenticated }) => {
+							if (!authenticated) {
+								this.authForm.setErrors({ invalid: true });
+								this.showModal = true;
+							}
+
+							if (authenticated === true) {
+								this.router.navigateByUrl('/home');
+							}
+							console.log(authenticated);
+						})
+					)
+					.subscribe();
 			},
-			error: ({ error }) => {
-				this.authForm.setErrors({ credentialsError: true });
-				console.log(error, this.authForm);
+			error: (err) => {
+				this.authForm.setErrors({ invalid: true });
 			},
 		});
+
+		// console.log(this.authForm);
 	}
 
 	inputFormControl(option: string): FormControl {
@@ -46,18 +67,7 @@ export class LoginComponent {
 	}
 
 	loginWithGoogle() {
-		this.store.dispatch(new LoginWithGoogle()).subscribe({
-			next: (response) => {
-				console.log(response);
-				// this.router.navigate(response);
-			},
-			error: ({ error }) => {
-				this.authForm.setErrors({ credentialsError: true });
-			},
-			complete() {
-				return;
-			},
-		});
+		this.store.dispatch(new LoginWithGoogle());
 	}
 
 	ngAfterViewChecked(): void {

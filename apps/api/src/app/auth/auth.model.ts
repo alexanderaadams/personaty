@@ -1,5 +1,20 @@
 import { Expose } from 'class-transformer';
-import { IsDateString, IsEmail, IsString } from 'class-validator';
+import {
+	IsBoolean,
+	IsDateString,
+	IsEmail,
+	IsString,
+	Min,
+} from 'class-validator';
+import {
+	AvailableReturn,
+	ForgotPasswordInput,
+	LoginInput,
+	ResetPasswordTokenInput,
+	SignupInput,
+	StatusReturn,
+} from '../core/graphql.schema';
+import { UserInfo } from '../core/shared.model';
 
 export class GoogleOauth2 {
 	@IsString()
@@ -30,18 +45,15 @@ export class GoogleOauth2 {
 	refreshToken: string;
 }
 
-export class LoginUser {
+export class Login extends LoginInput {
 	@IsString()
-	username: string;
+	email: string;
 
 	@IsString()
 	password: string;
 }
 
-export class SignupUser {
-	@IsString()
-	username: string;
-
+export class Signup extends SignupInput {
 	@IsEmail()
 	email: string;
 
@@ -52,10 +64,30 @@ export class SignupUser {
 	birthDate: string;
 }
 
-export class UserSignupResponse {
+export class ForgotPassword extends ForgotPasswordInput {
+	@IsEmail()
+	email: string;
+}
+
+export class ResetPasswordToken extends ResetPasswordTokenInput {
+	@IsString()
+	confirmPassword: string;
+
+	@IsString()
+	password: string;
+
+	@IsString()
+	token: string;
+}
+
+export class Status extends StatusReturn {
 	@Expose()
-	username: string;
+	status: string;
 
 	@Expose()
-	email: string;
+	authenticated: boolean;
+}
+export class Available extends AvailableReturn {
+	@IsBoolean()
+	available: boolean;
 }

@@ -18,53 +18,51 @@ import { Request, Response } from 'express';
 
 import { UserService } from './user.service';
 
-import { AuthGuard } from '../utils/guards/is-auth.guard';
-import { UpdateUser } from '../core/shared.model';
+import { TokenAuthGuard } from '../utils/guards/is-auth.guard';
+
 import { Express } from 'express';
 import { Multer } from 'multer';
-// import { saveImageToStorage } from './image-storage';
-import { of, switchMap } from 'rxjs';
-import { join } from 'path';
-// import { Serialize } from './interceptors/serialize.interceptor';
+import { saveImageToStorage } from './image-storage';
 
 @Controller('user')
-@UseGuards(AuthGuard)
+@UseGuards(TokenAuthGuard)
 // @Serialize(UserDto)
 export class UserController {
 	constructor(private usersService: UserService) {}
 
 	@Post('upload/:id')
-	// @UseInterceptors(FileInterceptor('file', saveImageToStorage))
+	@UseInterceptors(FileInterceptor('file', saveImageToStorage))
 	async uploadImage(
 		@UploadedFile() file: Express.Multer.File,
 		@Param('id') id: string
 	) {
-		// return this.usersService.uploadImage(file, id);
+		await this.usersService.uploadImage(file, id);
+		return { status: "User's profile picture has been uploaded successfully" };
 	}
 
-	@Get('image/:id')
+	@Get('profile-picture/:id')
 	async getImage(@Param('id') id: string, @Res() res: Response) {
-		const user = await this.usersService.findUserById(id);
-		return await res.sendFile(user.profilePicture, { root: 'upload' });
+		const { profilePicture } = await this.usersService.findUserById(id);
+		return res.sendFile(profilePicture, { root: 'upload' });
 	}
 
-	@Get(':id')
-	async findUser(@Param('id') id: string) {
-		return await this.usersService.findUserById(id);
-	}
+	// @Get(':id')
+	// async findUser(@Param('id') id: string) {
+	// 	return await this.usersService.findUserById(id);
+	// }
 
-	@Get()
-	async findOne(@Query('email') email: string) {
-		return await this.usersService.findOne({ email });
-	}
+	// @Get()
+	// async findOne(@Query('email') email: string) {
+	// 	return await this.usersService.findOne({ email });
+	// }
 
-	@Patch(':id')
-	async updateUser(@Param('id') id: string, @Body() body: UpdateUser) {
-		return await this.usersService.updateUser(id, body);
-	}
+	// @Patch(':id')
+	// async updateUser(@Param('id') id: string, @Body() updateUser: UpdateUser) {
+	// 	return await this.usersService.updateUser(id, updateUser);
+	// }
 
-	@Delete(':id')
-	async deleteUser(@Param('id') id: string) {
-		return await this.usersService.deleteUser(id);
-	}
+	// @Delete(':id')
+	// async deleteUser(@Param('id') id: string) {
+	// 	return await this.usersService.deleteUser(id);
+	// }
 }

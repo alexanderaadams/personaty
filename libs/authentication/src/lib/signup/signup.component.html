@@ -31,42 +31,60 @@
 			<button class="btn--login-with-google">Continue with Google</button>
 		</div>
 
+		<div class="word--through-line">
+			<hr class="line" />
+			<span class="word--through-line__word">OR</span>
+			<hr class="line" />
+		</div>
+
 		<form (ngSubmit)="onSubmit()" class="form" [formGroup]="authForm">
-			<input
-				class="form--input"
+			<lib-input
+				class="lib-input"
+				formInput="form--input"
 				name="email"
 				spellcheck="true"
 				placeholder="Email"
-				required
 				type="email"
-				[formControl]="inputFormControl('email')"
-				[ngClass]="{ credentials_errors: authForm.errors?.['invalid'] }"
-			/>
+				[control]="inputFormControl('email')"
+				[submit]="authForm?.['errors']?.['invalid']"
+				autocomplete="email"
+			>
+			</lib-input>
 
-			<input
-				class="form--input"
+			<lib-input
+				class="lib-input"
+				formInput="form--input"
 				name="password"
 				placeholder="Password"
-				required
 				type="password"
-				autocomplete="password"
-				[formControl]="inputFormControl('password')"
-				[ngClass]="{ credentials_errors: authForm.errors?.['invalid']  }"
-			/>
+				[control]="inputFormControl('password')"
+				[submit]="authForm?.['errors']?.['invalid']"
+				autocomplete="new-password"
+			>
+			</lib-input>
 
-			<input
-				class="form--input__date"
+			<lib-input
+				class="lib-input"
+				formInput="form--input__date"
 				type="date"
-				name="date"
+				name="birthDate"
 				min="1922-02-12"
 				max="2004-02-12"
-				[formControl]="inputFormControl('date')"
-				[ngClass]="{ credentials_errors: authForm.errors?.['invalid']  }"
-			/>
+				[control]="inputFormControl('birthDate')"
+				[submit]="authForm?.['errors']?.['invalid']"
+				autocomplete="bday"
+			>
+			</lib-input>
 
 			<div class="form--btn__submit-box">
 				<div>
-					<button class="form--btn__submit">Sign up</button>
+					<button
+						type="submit"
+						[disabled]="authForm?.['invalid']"
+						class="form--btn__submit"
+					>
+						Sign up
+					</button>
 				</div>
 				<div class="form--btn__login-box">
 					<p>Already have an account</p>
@@ -74,49 +92,24 @@
 				</div>
 			</div>
 		</form>
-		<div *ngIf="showErrors()" class="form--signup__errors">
-			<p *ngIf="authForm?.['errors']?.['invalid']" class="displayNone">
-				Please enter a valid information
-			</p>
-
-			<p
-				*ngIf="authForm?.['controls']?.['password']?.['errors']?.['minlength']"
-				class="displayNone"
-			>
-				password must no less
-				{{ authForm?.['controls']?.['password']?.['errors']?.['minlength']?.requiredLength }}
-				characters.
-			</p>
-
-			<p
-				*ngIf="authForm?.['controls']?.['password']?.['errors']?.['maxlength']"
-				class="displayNone"
-			>
-				password must no longer than
-				{{ authForm?.['controls']?.['password']?.['errors']?.['maxlength']?.requiredLength }}
-				characters.
-			</p>
-
-			<p
-				*ngIf="authForm?.['controls']?.['email']?.['errors']?.['pattern']"
-				class="displayNone"
-			>
-				Enter a valid email
-			</p>
-
-			<p
-				*ngIf="authForm?.['controls']?.['email']?.['errors']?.['notAvailable']"
-				class="displayNone"
-			>
-				Email is not Available
-			</p>
-
-			<p
-				*ngIf="authForm?.['controls']?.['email']?.['errors']?.['noConnection']"
-				class="displayNone"
-			>
-				No internet connection
-			</p>
-		</div>
 	</span>
 </span>
+
+<lib-email-token
+	header="Please Check Your email address"
+	[authForm]="emailToken"
+	(dismiss)="showModal = false"
+	*ngIf="showModal"
+></lib-email-token>
+
+<lib-email-token
+	*ngIf="(authForm?.['errors']?.['invalid']) && showModal"
+	header="Please enter a valid information ❗️"
+	(dismiss)="showModal = false"
+></lib-email-token>
+
+<lib-email-token
+	*ngIf="(authForm?.['controls']?.['email']?.['errors']?.['noConnection']) && showModal"
+	header="Check your internet connection"
+	(dismiss)="showModal = false"
+></lib-email-token>

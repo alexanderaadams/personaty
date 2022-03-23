@@ -1,1 +1,8 @@
-<h1>Signing you out...</h1>
+<div>
+	<p>Logging out</p>
+</div>
+<lib-email-token
+	*ngIf="showModal"
+	header="Check your internet connection"
+	(dismiss)="showModal = false"
+></lib-email-token>

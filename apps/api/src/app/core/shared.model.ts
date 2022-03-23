@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import {
 	IsDateString,
 	IsEmail,
@@ -5,40 +6,51 @@ import {
 	IsOptional,
 	IsString,
 } from 'class-validator';
+import { FindUserInput } from './graphql.schema';
 import { Gender } from './shared.enum';
+// import { FindUserInput } from '../auth/graphql/graphql.ts';
 
-export interface FindUser {
+export class FindUser extends FindUserInput {
+	@IsString()
+	@IsOptional()
 	id?: string;
+
+	@IsString()
+	@IsOptional()
 	username?: string;
+
+	@IsString()
+	@IsOptional()
 	email?: string;
 }
 
-export class UpdateUser {
-	@IsString()
-	@IsOptional()
+
+
+export class UserInfo {
+	@Expose()
+	_id: string;
+
+	@Expose()
 	username: string;
 
-	@IsEmail()
-	@IsOptional()
+	@Expose()
 	email: string;
 
-	@IsString()
-	@IsOptional()
-	password: string;
-
-	@IsEnum(Gender)
-	@IsOptional()
-	Gender: string;
-
-	@IsDateString()
-	@IsOptional()
+	@Expose()
 	birthDate: string;
 
-	@IsString()
-	@IsOptional()
+	@Expose()
+	createdAt: Date;
+
+	@Expose()
+	stories: string[];
+
+	@Expose()
+	gender: string;
+
+	@Expose()
 	locale: string;
 
-	@IsString()
-	@IsOptional()
+	@Expose()
 	profilePicture: string;
 }

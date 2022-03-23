@@ -5,6 +5,8 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { User, UserSchema } from './user.model';
 import { JWTModule } from '../jwt/jwt.module';
+import { DateScalar } from '../core/date.scalar';
+import { UserResolver } from './user.resolver';
 
 @Module({
 	imports: [
@@ -15,7 +17,7 @@ import { JWTModule } from '../jwt/jwt.module';
 		JWTModule,
 	],
 	controllers: [UserController],
-	providers: [UserService],
+	providers: [UserService, UserResolver, DateScalar],
 	exports: [UserService],
 })
 export class UserModule {}
