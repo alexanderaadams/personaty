@@ -50,9 +50,23 @@ type UserReturn {
 
 	role: String
 
-	stories: [String]
+	stories: [Stories]
 }
 
 type StatusReturn {
 	status: String!
+}
+
+type Stories {
+	_id: String
+
+	title: String
+
+	description: String
+
+	photo: String
+
+	created_at: Date
+
+	user_id: ID
 }

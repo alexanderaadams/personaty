@@ -9,12 +9,12 @@ import { environment } from '../../../../environments/environment';
 		MailerModule.forRootAsync({
 			useFactory: () => ({
 				transport: {
-					host: 'smtp.mailtrap.io',
-					port: 2525,
+					host: 'smtp.mailtrap.io', // 'outlook.office365.com'
+					port: 2525, //995
 					secure: false,
 					auth: {
-						user: '9063ef07a10237',
-						pass: '68c620d9e5780b',
+						user: '9063ef07a10237', //'persona1335-613@hotmail.com'
+						pass: '68c620d9e5780b', //'agg3sHE3#HRD4?LKdf472b-vxzznmBMRD25ah36'
 					},
 				},
 				defaults: {

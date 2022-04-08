@@ -45,7 +45,11 @@ export class UserService {
 
 	async findUserById(id: string): Promise<UserModel> {
 		try {
-			const user = await this.userModel.findById(id);
+			const user = await this.userModel.findById(id).populate({
+				path: 'stories',
+				// select: '_id description title photo created_at',
+			});
+			console.log(user);
 
 			if (!user) return null;
 

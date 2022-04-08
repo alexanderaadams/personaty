@@ -53,7 +53,7 @@ style="
 		this.mailerService
 			.sendMail({
 				to: to, // List of receivers email address
-				from: 'persona1335-613@hotmail.com', // Senders email address
+				from: 'No-Reply@hotmail.com', // Senders email address
 				subject: subject, // Subject line
 				text: text, // plaintext body
 				html: html, // HTML body content

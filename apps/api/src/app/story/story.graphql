@@ -15,6 +15,8 @@ input GetStoryInput {
 }
 
 input CreateStoryInput {
+	user_id: ID!
+
 	title: String!
 
 	description: String!
@@ -43,9 +45,9 @@ type StoryReturn {
 
 	photo: String
 
-	createdAt: Date
+	created_at: Date
 
-	userId: String
+	user_id: ID
 }
 
 type DeleteStoryReturn {

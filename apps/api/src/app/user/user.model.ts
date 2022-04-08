@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import {
+	IsAlpha,
 	IsArray,
 	IsDate,
 	IsDateString,
@@ -10,8 +11,10 @@ import {
 	IsString,
 } from 'class-validator';
 import { Schema as MongooseSchema, Document, Types } from 'mongoose';
+import * as mongoose from 'mongoose';
 
-import { Story } from '../story/story.model';
+import { Story, StoryModel } from '../story/story.model';
+
 import {
 	UserReturn,
 	UpdateUserInput,
@@ -27,13 +30,13 @@ export class User extends Document {
 	// @Prop({ type: Types.ObjectId, unique: true })
 	// _id: Types.ObjectId;
 
-	@Prop({ type: String, unique: true, select: false })
+	@Prop({ type: String, select: false })
 	googleId: string;
 
 	@Prop({ type: String, default: '' })
 	fullName: string;
 
-	@Prop({ type: String, unique: true })
+	@Prop({ type: String, default: '' })
 	username: string;
 
 	@Prop({ type: String, required: true, unique: true })
@@ -60,39 +63,8 @@ export class User extends Document {
 	})
 	profilePicture: string;
 
-	@Prop([
-		{
-			type: MongooseSchema.Types.ObjectId,
-			ref: 'Story',
-			default: [],
-		},
-	])
-	stories: Story[];
-
-	@Prop({
-		type: String,
-		select: false,
-	})
-	accessToken: string;
-
-	@Prop({
-		type: String,
-		select: false,
-	})
-	refreshToken: string;
-
-	@Prop({ type: String, required: true })
+	@Prop({ type: String })
 	birthDate: Date;
-
-	@Prop({
-		type: String,
-		enum: {
-			values: ['male', 'female', 'other'],
-			message: 'Gender is either: male, female, other',
-		},
-		default: 'other',
-	})
-	gender: string;
 
 	@Prop({
 		type: String,
@@ -109,6 +81,16 @@ export class User extends Document {
 	@Prop({
 		type: String,
 		enum: {
+			values: ['male', 'female', 'other'],
+			message: 'Gender is either: male, female, other',
+		},
+		default: 'other',
+	})
+	gender: string;
+
+	@Prop({
+		type: String,
+		enum: {
 			values: ['user', 'admin'],
 			message: 'Role is not defined',
 		},
@@ -117,13 +99,25 @@ export class User extends Document {
 	role: string;
 
 	@Prop({ type: Date, default: Date.now() })
-	createdAt: Date;
+	created_at: Date;
 
 	@Prop({ type: Date, default: Date.now(), select: false })
-	updatedAt: Date;
+	updated_at: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+export default mongoose.model('User', UserSchema);
+
+UserSchema.virtual('stories', {
+	ref: 'Story', //The Model to use
+	localField: '_id', //Find in Model, where localField
+	foreignField: 'user_id', // is equal to foreignField
+});
+
+// Set Object and Json property to true. Default is set to false
+UserSchema.set('toObject', { virtuals: true });
+UserSchema.set('toJSON', { virtuals: true });
 
 export class UserModel extends UserReturn {
 	@IsString()
@@ -132,7 +126,7 @@ export class UserModel extends UserReturn {
 	@IsString()
 	fullName: string;
 
-	@IsString()
+	@IsAlpha()
 	username: string;
 
 	@IsEmail()
@@ -143,9 +137,6 @@ export class UserModel extends UserReturn {
 
 	@IsString()
 	locale: string;
-
-	@IsArray()
-	stories: string[];
 
 	@IsString()
 	profilePicture: string;
@@ -160,12 +151,15 @@ export class UserModel extends UserReturn {
 	role: string;
 
 	@IsDate()
-	createdAt: Date;
+	created_at: Date;
+
+	@IsArray()
+	stories: StoryModel[];
 }
 
 export class UserExtraInfo {
 	@IsString()
-	_id: any;
+	_id: string;
 
 	@IsEnum(Role)
 	role: 'admin' | 'user';

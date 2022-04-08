@@ -38,10 +38,10 @@ import { StoryModule } from './story/story.module';
 			driver: ApolloDriver,
 			useFactory: () => ({
 				include: [AuthModule, StoryModule],
-				typePaths: ['./**/**/*.graphql'],
+				typePaths: ['./**/*.graphql'],
 
-				// playground: false,
-				// plugins: [ApolloServerPluginLandingPageLocalDefault()],
+				playground: false,
+				plugins: [ApolloServerPluginLandingPageLocalDefault()],
 				sortSchema: true,
 				cors: {
 					credentials: true,

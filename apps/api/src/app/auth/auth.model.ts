@@ -38,6 +38,9 @@ export class GoogleOauth2 {
 	@IsString()
 	profilePicture: string;
 
+	@IsBoolean()
+	email_verified: boolean;
+
 	@IsString()
 	accessToken: string;
 

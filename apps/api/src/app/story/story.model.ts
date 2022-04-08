@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsDate, IsOptional, IsString } from 'class-validator';
-import { Schema as MongooseSchema, Types, Document } from 'mongoose';
 import {
 	CreateStoryInput,
 	DeleteStoryInput,
@@ -9,6 +8,10 @@ import {
 	UpdateStoryInput,
 	DeleteStoryReturn,
 } from '../core/graphql.schema';
+
+import { Schema as MongooseSchema, Types, Document } from 'mongoose';
+import * as mongoose from 'mongoose';
+
 import { User } from '../user/user.model';
 
 // export type StoryDocument = Story & Document;
@@ -32,15 +35,20 @@ export class Story extends Document {
 		ref: 'User',
 		required: true,
 	})
-	userId: User;
+	user_id: User;
 
 	@Prop({ type: Date, default: Date.now() })
-	createdAt: Date;
+	created_at: Date;
 }
 
 export const StorySchema = SchemaFactory.createForClass(Story);
 
+export default mongoose.model('Story', StorySchema);
+
 export class CreateStory extends CreateStoryInput {
+	@IsString()
+	user_id: string;
+
 	@IsString()
 	title: string;
 
@@ -84,10 +92,10 @@ export class StoryModel extends StoryReturn {
 	photo: string;
 
 	@IsDate()
-	createdAt: Date;
+	created_at: Date;
 
 	@IsString()
-	userId: string;
+	user_id: string;
 }
 
 export class DeleteStory extends DeleteStoryInput {

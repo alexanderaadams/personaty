@@ -19,18 +19,17 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 		refreshToken: string,
 		profile: Profile
 	): Promise<any> {
-		const { id, username,emails, photos, _json,name } = profile;
+		const { id, username, emails, photos, _json, name } = profile;
 		console.log(profile);
 		const user = {
-			googleId: id,
+			googleId: id.toString(),
 			username: username,
 			email: emails[0].value || 'email Does Not Exist',
-			email_verified: emails[0].value || false,
+			email_verified: Boolean(emails[0].value) || false,
 			locale: _json.locale || 'en',
 			fullName: `${name.givenName} ${name.familyName}`,
 			profilePicture: photos[0].value || 'Profile Picture Does Not Exist',
-			accessToken: accessToken || 'Access Token Does Not Exist',
-			refreshToken: refreshToken || 'Refresh Token Does Not Exist',
+
 		};
 		return user;
 	}

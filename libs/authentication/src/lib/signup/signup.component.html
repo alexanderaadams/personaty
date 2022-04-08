@@ -51,6 +51,19 @@
 			>
 			</lib-input>
 
+			<!-- <lib-input
+				class="lib-input"
+				formInput="form--input"
+				name="username"
+				spellcheck="true"
+				placeholder="username"
+				type="username"
+				[control]="inputFormControl('username')"
+				[submit]="authForm?.['errors']?.['invalid']"
+				autocomplete="username"
+			>
+			</lib-input> -->
+
 			<lib-input
 				class="lib-input"
 				formInput="form--input"
@@ -95,7 +108,7 @@
 	</span>
 </span>
 
-<lib-email-token
+<!-- <lib-email-token
 	header="Please Check Your email address"
 	[authForm]="emailToken"
 	(dismiss)="showModal = false"
@@ -112,4 +125,4 @@
 	*ngIf="(authForm?.['controls']?.['email']?.['errors']?.['noConnection']) && showModal"
 	header="Check your internet connection"
 	(dismiss)="showModal = false"
-></lib-email-token>
+></lib-email-token> -->

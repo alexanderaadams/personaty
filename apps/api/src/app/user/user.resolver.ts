@@ -11,11 +11,9 @@ import { TokenAuthGuard } from '../utils/guards/is-auth.guard';
 import { saveImageToStorage } from './image-storage';
 
 @Resolver('User')
-@UseGuards(TokenAuthGuard)
+// @UseGuards(TokenAuthGuard)
 export class UserResolver {
 	constructor(private readonly userService: UserService) {}
-
-
 
 	@Query(() => UserModel, {
 		name: 'getUser',

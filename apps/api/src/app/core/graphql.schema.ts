@@ -39,6 +39,7 @@ export class GetStoryInput {
 }
 
 export class CreateStoryInput {
+    user_id: string;
     title: string;
     description: string;
     photo: string;
@@ -120,8 +121,8 @@ export class StoryReturn {
     title?: Nullable<string>;
     description?: Nullable<string>;
     photo?: Nullable<string>;
-    createdAt?: Nullable<Date>;
-    userId?: Nullable<string>;
+    created_at?: Nullable<Date>;
+    user_id?: Nullable<string>;
 }
 
 export class DeleteStoryReturn {
@@ -139,7 +140,16 @@ export class UserReturn {
     birthDate?: Nullable<string>;
     gender?: Nullable<string>;
     role?: Nullable<string>;
-    stories?: Nullable<Nullable<string>[]>;
+    stories?: Nullable<Nullable<Stories>[]>;
+}
+
+export class Stories {
+    _id?: Nullable<string>;
+    title?: Nullable<string>;
+    description?: Nullable<string>;
+    photo?: Nullable<string>;
+    created_at?: Nullable<Date>;
+    user_id?: Nullable<string>;
 }
 
 type Nullable<T> = T | null;

@@ -19,7 +19,7 @@ async function bootstrap() {
 			// if (whitelist.includes(origin))
 			return callback(null, true);
 
-			throw new UnauthorizedException('Not allowed by CORS');
+			// throw new UnauthorizedException('Not allowed by CORS');
 		},
 	};
 

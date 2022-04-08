@@ -28,7 +28,7 @@ export class StoryService {
 		if (!user || !story)
 			throw new HttpException('User Or Story Does not exist', 404);
 
-		if (user._id.toString() !== story.userId.toString())
+		if (user._id.toString() !== story.user_id.toString())
 			throw new UnauthorizedException(
 				'You are not authorized to update this field'
 			);
@@ -42,21 +42,20 @@ export class StoryService {
 
 	async createStory(token: string, story: CreateStory): Promise<StoryModel> {
 		try {
-			const authUser = await this.userService.isVerified(token);
+			// const authenticatedUser = await this.userService.isVerified(token);
 
-			const user = await this.userModel.findById(authUser.id);
+			// const user = await this.userModel.findById(authenticatedUser.id);
 
-			if (!user) throw new HttpException('User Does not exist', 404);
+			// if (!user) throw new HttpException('User Does not exist', 404);
 
 			const newStory = (await this.storyModel.create({
-				userId: authUser.id,
 				...story,
 			})) as unknown as Promise<StoryModel>;
 
-			await this.userModel.updateOne(
-				{ _id: (await newStory).userId.toString() },
-				{ $push: { stories: (await newStory)._id.toString() } }
-			);
+			// await this.userModel.updateOne(
+			// 	{ _id: (await newStory).userId.toString() },
+			// 	{ $push: { stories: (await newStory)._id.toString() } }
+			// );
 
 			return newStory;
 		} catch (err) {

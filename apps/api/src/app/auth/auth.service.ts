@@ -78,18 +78,18 @@ export class AuthService {
 	}
 
 	async signupToken(token: string) {
-		const { username, email, password, birthDate } =
-			await this.myJWTService.verifyToken(token);
+		const { email, password, birthDate } = await this.myJWTService.verifyToken(
+			token
+		);
 
 		try {
-			const user = await this.usersService.findOne({ username });
+			const user = await this.usersService.findOne({ email });
 
 			if (user) throw new ConflictException('User already exists');
 
 			const hashedPassword = await this.hashingPassword(password);
 
 			const newUser = await this.usersService.createUser({
-				username,
 				email,
 				password: hashedPassword,
 				birthDate,
@@ -97,7 +97,7 @@ export class AuthService {
 			});
 			const token = await this.myJWTService.signToken({
 				id: newUser._id.toString(),
-				username,
+				email,
 			});
 
 			return {
@@ -163,7 +163,7 @@ export class AuthService {
 					user,
 					token: await this.myJWTService.signToken({
 						id: user._id,
-						username: user.username,
+						email: user.email,
 					}),
 				};
 
@@ -179,7 +179,7 @@ export class AuthService {
 				newUser,
 				token: await this.myJWTService.signToken({
 					id: user._id.toString(),
-					username: newUser.username,
+					email: newUser.email,
 				}),
 			};
 		} catch (err) {
@@ -197,7 +197,7 @@ export class AuthService {
 			if (!user) throw new NotFoundException();
 
 			const token = await this.myJWTService.signToken(
-				{ id: user._id.toString(), username: user.username },
+				{ id: user._id.toString(), email: user.email },
 				{
 					expiresIn: '15m',
 				}
@@ -240,7 +240,7 @@ export class AuthService {
 			if (!user) throw new BadGatewayException('User Can Not Be Found');
 
 			const signToken = await this.myJWTService.signToken({
-				username: user.username,
+				email: user.email,
 			});
 			const hashedPassword = await this.hashingPassword(password);
 

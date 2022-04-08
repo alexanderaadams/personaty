@@ -14,7 +14,7 @@ import {
 import { StoryReturn } from '../core/graphql.schema';
 
 @Resolver('Story')
-@UseGuards(TokenAuthGuard)
+// @UseGuards(TokenAuthGuard)
 export class StoryResolver {
 	constructor(private readonly storyService: StoryService) {}
 
