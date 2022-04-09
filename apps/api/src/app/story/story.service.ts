@@ -6,15 +6,13 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserModel } from '../user/user.model';
+
+import { UserDocument } from '../user/user.schema';
 import { UserService } from '../user/user.service';
-import {
-	CreateStory,
-	DeleteStory,
-	Story,
-	StoryModel,
-	UpdateStory,
-} from './story.model';
+import { CreateStoryDto } from './dto/create-story.dto';
+import { StoryModel } from './story.model';
+import { UpdateStoryDto } from './dto/update-story';
+import { StoryDocument } from './story.schema';
 
 @Injectable()
 export class StoryService {
@@ -35,12 +33,12 @@ export class StoryService {
 	}
 
 	constructor(
-		@InjectModel(Story.name) private readonly storyModel: Model<Story>,
-		@InjectModel(User.name) private readonly userModel: Model<User>,
+		@InjectModel('Story') private readonly storyModel: Model<StoryDocument>,
+		@InjectModel('User') private readonly userModel: Model<UserDocument>,
 		private userService: UserService
 	) {}
 
-	async createStory(token: string, story: CreateStory): Promise<StoryModel> {
+	async createStory(token: string, story: CreateStoryDto): Promise<StoryModel> {
 		try {
 			// const authenticatedUser = await this.userService.isVerified(token);
 
@@ -79,7 +77,7 @@ export class StoryService {
 	async updateStory(
 		token: string,
 		id: string,
-		attrs: UpdateStory
+		attrs: UpdateStoryDto
 	): Promise<StoryModel> {
 		try {
 			await this.checkUserHasStory(token, id);

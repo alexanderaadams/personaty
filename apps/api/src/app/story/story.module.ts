@@ -3,17 +3,17 @@ import { StoryService } from './story.service';
 import { StoryResolver } from './story.resolver';
 import { UserModule } from '../user/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Story, StorySchema } from './story.model';
+import { StorySchema } from './story.schema';
 import { DateScalar } from '../core/date.scalar';
-import { User, UserSchema } from '../user/user.model';
+import { UserSchema } from '../user/user.schema';
 
 @Module({
 	imports: [
 		UserModule,
 		MongooseModule.forFeature(
 			[
-				{ name: Story.name, schema: StorySchema },
-				{ name: User.name, schema: UserSchema },
+				{ name: 'Story', schema: StorySchema },
+				{ name: 'User', schema: UserSchema },
 			],
 			'persona'
 		),

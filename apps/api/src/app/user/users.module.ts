@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { User, UserSchema } from './user.model';
+import { UserSchema } from './user.schema';
 import { JWTModule } from '../jwt/jwt.module';
 import { DateScalar } from '../core/date.scalar';
 import { UserResolver } from './user.resolver';
@@ -11,7 +11,7 @@ import { UserResolver } from './user.resolver';
 @Module({
 	imports: [
 		MongooseModule.forFeature(
-			[{ name: User.name, schema: UserSchema }],
+			[{ name: 'User', schema: UserSchema }],
 			'persona'
 		),
 		JWTModule,

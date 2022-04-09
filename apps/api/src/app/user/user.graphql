@@ -1,13 +1,16 @@
 scalar Date
 
 type Query {
-	getUser(id: ID!): UserReturn!
+	getUser(id: ID!): User!
+
 	# getImage(id: ID!): StatusReturn!
 }
 
 type Mutation {
-	updateUser(id: ID!, user: UpdateUserInput!): UserReturn!
-	deleteUser(id: ID!): StatusReturn!
+	updateUser(id: ID!, user: UpdateUserInput!): User!
+
+	deleteUser(id: ID!): User_Status!
+
 	# uploadProfilePicture(id: ID!): StatusReturn!
 }
 
@@ -27,9 +30,13 @@ input UpdateUserInput {
 	locale: String
 
 	profilePicture: String
+
+	bio: String
+
+	tags: [String]
 }
 
-type UserReturn {
+type User {
 	_id: String
 
 	fullName: String
@@ -50,14 +57,18 @@ type UserReturn {
 
 	role: String
 
-	stories: [Stories]
+	stories: [Story]!
+
+	bio: String
+
+	tags: [String]
 }
 
-type StatusReturn {
+type User_Status {
 	status: String!
 }
 
-type Stories {
+type Story {
 	_id: String
 
 	title: String

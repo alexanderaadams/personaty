@@ -16,7 +16,7 @@ export class AdminGuard implements CanActivate {
 			const request = context.switchToHttp().getRequest();
 
 			const token = await this.usersService.isVerified(request.cookies.token);
-			const user = await this.usersService.getUserExtraInfo({
+			const user = await this.usersService.getUserSensitiveInformation({
 				username: token.username,
 			});
 

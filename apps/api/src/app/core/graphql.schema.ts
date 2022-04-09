@@ -28,7 +28,7 @@ export class FindUserInput {
     email?: Nullable<string>;
 }
 
-export class ResetPasswordTokenInput {
+export class Reset_Password_With_JWT_Input {
     password: string;
     confirmPassword: string;
     token: string;
@@ -39,10 +39,10 @@ export class GetStoryInput {
 }
 
 export class CreateStoryInput {
-    user_id: string;
     title: string;
     description: string;
     photo: string;
+    user_id: string;
 }
 
 export class UpdateStoryInput {
@@ -64,36 +64,38 @@ export class UpdateUserInput {
     birthDate?: Nullable<Date>;
     locale?: Nullable<string>;
     profilePicture?: Nullable<string>;
+    bio?: Nullable<string>;
+    tags?: Nullable<Nullable<string>[]>;
 }
 
 export abstract class IQuery {
-    abstract isAvailable(findUser: FindUserInput): AvailableReturn | Promise<AvailableReturn>;
+    abstract isAvailable(findUser: FindUserInput): Is_User_Available | Promise<Is_User_Available>;
 
-    abstract logout(): StatusReturn | Promise<StatusReturn>;
+    abstract logout(): Authentication_Status | Promise<Authentication_Status>;
 
-    abstract getStory(story: GetStoryInput): StoryReturn | Promise<StoryReturn>;
+    abstract getStory(story: GetStoryInput): Story | Promise<Story>;
 
-    abstract getUser(id: string): UserReturn | Promise<UserReturn>;
+    abstract getUser(id: string): User | Promise<User>;
 }
 
 export abstract class IMutation {
-    abstract signup(user: SignupInput): StatusReturn | Promise<StatusReturn>;
+    abstract signup(user: SignupInput): Authentication_Status | Promise<Authentication_Status>;
 
-    abstract login(user: LoginInput): StatusReturn | Promise<StatusReturn>;
+    abstract login(user: LoginInput): Authentication_Status | Promise<Authentication_Status>;
 
-    abstract forgotPassword(user: ForgotPasswordInput): StatusReturn | Promise<StatusReturn>;
+    abstract forgotPassword(user: ForgotPasswordInput): Authentication_Status | Promise<Authentication_Status>;
 
-    abstract resetPasswordToken(credentials: ResetPasswordTokenInput): StatusReturn | Promise<StatusReturn>;
+    abstract resetPasswordToken(credentials: Reset_Password_With_JWT_Input): Authentication_Status | Promise<Authentication_Status>;
 
-    abstract createStory(story: CreateStoryInput): StoryReturn | Promise<StoryReturn>;
+    abstract createStory(story: CreateStoryInput): Story | Promise<Story>;
 
-    abstract updateStory(id: string, story: UpdateStoryInput): StoryReturn | Promise<StoryReturn>;
+    abstract updateStory(id: string, story: UpdateStoryInput): Story | Promise<Story>;
 
-    abstract deleteStory(story: DeleteStoryInput): DeleteStoryReturn | Promise<DeleteStoryReturn>;
+    abstract deleteStory(story: DeleteStoryInput): Story_Status | Promise<Story_Status>;
 
-    abstract updateUser(id: string, user: UpdateUserInput): UserReturn | Promise<UserReturn>;
+    abstract updateUser(id: string, user: UpdateUserInput): User | Promise<User>;
 
-    abstract deleteUser(id: string): StatusReturn | Promise<StatusReturn>;
+    abstract deleteUser(id: string): User_Status | Promise<User_Status>;
 }
 
 export class User {
@@ -105,18 +107,23 @@ export class User {
     birthDate?: Nullable<string>;
     gender?: Nullable<string>;
     createdAt?: Nullable<Date>;
+    fullName?: Nullable<string>;
+    role?: Nullable<string>;
+    stories: Nullable<Story>[];
+    bio?: Nullable<string>;
+    tags?: Nullable<Nullable<string>[]>;
 }
 
-export class AvailableReturn {
+export class Is_User_Available {
     available: boolean;
 }
 
-export class StatusReturn {
+export class Authentication_Status {
     status: string;
     authenticated?: Nullable<boolean>;
 }
 
-export class StoryReturn {
+export class Story {
     _id?: Nullable<string>;
     title?: Nullable<string>;
     description?: Nullable<string>;
@@ -125,31 +132,12 @@ export class StoryReturn {
     user_id?: Nullable<string>;
 }
 
-export class DeleteStoryReturn {
+export class Story_Status {
     status: string;
 }
 
-export class UserReturn {
-    _id?: Nullable<string>;
-    fullName?: Nullable<string>;
-    username?: Nullable<string>;
-    email?: Nullable<string>;
-    locale?: Nullable<string>;
-    profilePicture?: Nullable<string>;
-    createdAt?: Nullable<Date>;
-    birthDate?: Nullable<string>;
-    gender?: Nullable<string>;
-    role?: Nullable<string>;
-    stories?: Nullable<Nullable<Stories>[]>;
-}
-
-export class Stories {
-    _id?: Nullable<string>;
-    title?: Nullable<string>;
-    description?: Nullable<string>;
-    photo?: Nullable<string>;
-    created_at?: Nullable<Date>;
-    user_id?: Nullable<string>;
+export class User_Status {
+    status: string;
 }
 
 type Nullable<T> = T | null;

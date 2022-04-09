@@ -13,9 +13,9 @@ import { promisify } from 'util';
 
 import { UserService } from '../user/user.service';
 import { NodemailerService } from './utils/mail/nodemailer.service';
-import { GoogleOauth2 } from './auth.model';
-import { UserExtraInfo } from '../user/user.model';
+import { GoogleOauth2 } from './entities/google-oauth-2.entity';
 
+import { UserSensitiveInformation } from '../user/entities/user-sensitive-information.entity';
 const scrypt = promisify(_scrypt);
 
 @Injectable()
@@ -115,9 +115,11 @@ export class AuthService {
 	async login(
 		email: string,
 		password: string
-	): Promise<{ user: UserExtraInfo; token: string }> {
+	): Promise<{ user: UserSensitiveInformation; token: string }> {
 		try {
-			const user = await this.usersService.getUserExtraInfo({ email });
+			const user = await this.usersService.getUserSensitiveInformation({
+				email,
+			});
 
 			if (!user) throw new BadRequestException('Wrong Username or Password');
 
@@ -233,9 +235,7 @@ export class AuthService {
 
 			const verifyToken = await this.myJWTService.verifyToken(token);
 
-			const user = await this.usersService.findOne({
-				id: verifyToken.id,
-			});
+			const user = await this.usersService.findUserById(verifyToken.id);
 
 			if (!user) throw new BadGatewayException('User Can Not Be Found');
 

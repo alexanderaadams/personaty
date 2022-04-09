@@ -8,15 +8,17 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { join } from 'path';
 
-import { User, UserExtraInfo, UserModel } from './user.model';
 import { JWTService } from '../jwt/jwt.service';
 import { isFileExtensionSafe, removeFile } from './image-storage';
 import { UserInfo } from '../core/shared.model';
+import { UserDocument } from './user.schema';
+import { UserModel } from './user.model';
+import { UserSensitiveInformation } from './entities/user-sensitive-information.entity';
 
 @Injectable()
 export class UserService {
 	constructor(
-		@InjectModel(User.name) private readonly userModel: Model<User>,
+		@InjectModel('User') private readonly userModel: Model<UserDocument>,
 		private myJWTService: JWTService
 	) {}
 
@@ -45,10 +47,10 @@ export class UserService {
 
 	async findUserById(id: string): Promise<UserModel> {
 		try {
-			const user = await this.userModel.findById(id).populate({
-				path: 'stories',
-				// select: '_id description title photo created_at',
-			});
+			const user = await this.userModel
+				.findById(id)
+				.populate('stories')
+				.exec();
 			console.log(user);
 
 			if (!user) return null;
@@ -64,7 +66,7 @@ export class UserService {
 
 	async findOne(payload: object): Promise<UserInfo> {
 		try {
-			const user = await this.userModel.findOne(payload);
+			const user = await this.userModel.findOne(payload).exec();
 
 			if (!user) return null;
 
@@ -77,15 +79,18 @@ export class UserService {
 		}
 	}
 
-	async getUserExtraInfo(payload: object): Promise<UserExtraInfo> {
+	async getUserSensitiveInformation(
+		payload: object
+	): Promise<UserSensitiveInformation> {
 		try {
 			const user = await this.userModel
 				.findOne(payload)
-				.select('_id password role');
+				.select('_id password role')
+				.exec();
 
 			if (!user) return null;
 
-			return user as unknown as Promise<UserExtraInfo>;
+			return user as unknown as Promise<UserSensitiveInformation>;
 		} catch (err) {
 			throw new HttpException(
 				err?.message || err?.response?.message || 'Something Went Wrong',
@@ -96,7 +101,9 @@ export class UserService {
 
 	async findAllUsers(): Promise<UserInfo> {
 		try {
-			return (await this.userModel.find()) as unknown as Promise<UserInfo>;
+			return (await this.userModel
+				.find()
+				.exec()) as unknown as Promise<UserInfo>;
 		} catch (err) {
 			throw new HttpException(
 				err?.message || err?.response?.message || 'Something Went Wrong',
@@ -107,13 +114,15 @@ export class UserService {
 
 	async updateUser(id: string, attrs: object): Promise<UserInfo> {
 		try {
-			const user = await this.userModel.findByIdAndUpdate(
-				id,
-				{ ...attrs, updatedAt: Date.now() },
-				{
-					new: true,
-				}
-			);
+			const user = await this.userModel
+				.findByIdAndUpdate(
+					id,
+					{ ...attrs, updatedAt: Date.now() },
+					{
+						new: true,
+					}
+				)
+				.exec();
 
 			if (!user) throw new HttpException('Content Not Found', 203);
 
@@ -125,7 +134,7 @@ export class UserService {
 
 	async deleteUser(id: string): Promise<null> {
 		try {
-			await this.userModel.findByIdAndDelete(id);
+			await this.userModel.findByIdAndDelete(id).exec();
 
 			return null as unknown as Promise<null>;
 		} catch (_) {
@@ -163,7 +172,10 @@ export class UserService {
 
 			removeFile(fullImagePath);
 
-			return { valid: false, error: 'File content does not match extension!' };
+			return {
+				valid: false,
+				error: 'File content does not match extension!',
+			};
 		} catch (err) {
 			throw new HttpException(
 				err?.message || err?.response?.message || 'Something Went Wrong',

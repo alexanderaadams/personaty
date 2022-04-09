@@ -1,14 +1,10 @@
-import { Args, Context, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UseInterceptors, UploadedFile, UseGuards } from '@nestjs/common';
-import { Request, Response } from 'express';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express';
-import { Multer } from 'multer';
-
-import { Status, UpdateUser, UserModel } from './user.model';
-import { UserService } from './user.service';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { TokenAuthGuard } from '../utils/guards/is-auth.guard';
-import { saveImageToStorage } from './image-storage';
+
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UserStatus } from './entities/user-status.entity';
+import { UserModel } from './user.model';
+import { UserService } from './user.service';
 
 @Resolver('User')
 // @UseGuards(TokenAuthGuard)
@@ -25,19 +21,6 @@ export class UserResolver {
 		return await this.userService.findUserById(id);
 	}
 
-	// @Query(() => Status, {
-	// 	name: 'getImage',
-	// 	description: 'Get Story',
-	// })
-	// async getImage(
-	// 	@Args('id', { type: () => ID }) id: string,
-	// 	@Context('res') res: Response
-	// ) {
-	// 	const { profilePicture } = await this.userService.findUserById(id);
-	// 	res.sendFile(profilePicture, { root: 'upload' });
-	// 	return { status: "User's profile picture has been sent successfully" };
-	// }
-
 	@Mutation(() => UserModel, {
 		name: 'updateUser',
 		description: 'Create Story',
@@ -45,14 +28,14 @@ export class UserResolver {
 	async updateUser(
 		@Args('id', { type: () => ID }) id: string,
 		@Args('user', {
-			type: () => UpdateUser,
+			type: () => UpdateUserDto,
 		})
-		updateUser: UpdateUser
+		updateUser: UpdateUserDto
 	) {
 		return await this.userService.updateUser(id, updateUser);
 	}
 
-	@Mutation(() => Status, {
+	@Mutation(() => UserStatus, {
 		name: 'deleteUser',
 		description: 'Create Story',
 	})
@@ -60,18 +43,4 @@ export class UserResolver {
 		await this.userService.deleteUser(id);
 		return { status: 'User has been deleted successfully' };
 	}
-
-	// @Mutation(() => Status, {
-	// 	name: 'uploadProfilePicture',
-	// 	description: 'Create Story',
-	// })
-	// @UseInterceptors(FileInterceptor('profilePicture', saveImageToStorage))
-	// async uploadImage(
-	// 	@UploadedFile() file: Express.Multer.File,
-	// 	@Args('id', { type: () => ID }) id: string
-	// ) {
-	// 	await this.userService.uploadImage(file, id);
-
-	// 	return { status: "User's profile picture has been uploaded successfully" };
-	// }
 }

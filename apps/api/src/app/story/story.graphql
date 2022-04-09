@@ -1,13 +1,15 @@
 scalar Date
 
 type Query {
-	getStory(story: GetStoryInput!): StoryReturn!
+	getStory(story: GetStoryInput!): Story!
 }
 
 type Mutation {
-	createStory(story: CreateStoryInput!): StoryReturn!
-	updateStory(id: ID!, story: UpdateStoryInput!): StoryReturn!
-	deleteStory(story: DeleteStoryInput!): DeleteStoryReturn!
+	createStory(story: CreateStoryInput!): Story!
+
+	updateStory(id: ID!, story: UpdateStoryInput!): Story!
+
+	deleteStory(story: DeleteStoryInput!): Story_Status!
 }
 
 input GetStoryInput {
@@ -15,13 +17,13 @@ input GetStoryInput {
 }
 
 input CreateStoryInput {
-	user_id: ID!
-
 	title: String!
 
 	description: String!
 
 	photo: String!
+
+	user_id: ID!
 }
 
 input UpdateStoryInput {
@@ -36,7 +38,7 @@ input DeleteStoryInput {
 	id: String!
 }
 
-type StoryReturn {
+type Story {
 	_id: String
 
 	title: String
@@ -50,6 +52,6 @@ type StoryReturn {
 	user_id: ID
 }
 
-type DeleteStoryReturn {
+type Story_Status {
 	status: String!
 }
