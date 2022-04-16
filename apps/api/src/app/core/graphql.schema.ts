@@ -28,7 +28,7 @@ export class FindUserInput {
     email?: Nullable<string>;
 }
 
-export class Reset_Password_With_JWT_Input {
+export class Confirm_Forgot_Password_With_JWT_Input {
     password: string;
     confirmPassword: string;
     token: string;
@@ -71,6 +71,8 @@ export class UpdateUserInput {
 export abstract class IQuery {
     abstract isAvailable(findUser: FindUserInput): Is_User_Available | Promise<Is_User_Available>;
 
+    abstract isAuthenticated(): Authentication_Status | Promise<Authentication_Status>;
+
     abstract logout(): Authentication_Status | Promise<Authentication_Status>;
 
     abstract getStory(story: GetStoryInput): Story | Promise<Story>;
@@ -85,7 +87,7 @@ export abstract class IMutation {
 
     abstract forgotPassword(user: ForgotPasswordInput): Authentication_Status | Promise<Authentication_Status>;
 
-    abstract resetPasswordToken(credentials: Reset_Password_With_JWT_Input): Authentication_Status | Promise<Authentication_Status>;
+    abstract resetPasswordToken(credentials: Confirm_Forgot_Password_With_JWT_Input): Authentication_Status | Promise<Authentication_Status>;
 
     abstract createStory(story: CreateStoryInput): Story | Promise<Story>;
 
@@ -108,6 +110,7 @@ export class User {
     gender?: Nullable<string>;
     createdAt?: Nullable<Date>;
     fullName?: Nullable<string>;
+    created_at?: Nullable<Date>;
     role?: Nullable<string>;
     stories: Nullable<Story>[];
     bio?: Nullable<string>;

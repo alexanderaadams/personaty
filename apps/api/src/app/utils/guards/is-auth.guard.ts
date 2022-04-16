@@ -5,12 +5,11 @@ import {
 	UnauthorizedException,
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-
-import { UserService } from '../../user/user.service';
+import { MyJWTService } from '../../jwt/jwt.service';
 
 @Injectable()
 export class TokenAuthGuard implements CanActivate {
-	constructor(private usersService: UserService) {}
+	constructor(private myJWTService: MyJWTService) {}
 
 	async canActivate(context: ExecutionContext) {
 		try {
@@ -19,9 +18,11 @@ export class TokenAuthGuard implements CanActivate {
 			// console.log(gqlContext);
 			const req = gqlContext.getContext().req;
 			// console.log(ctx);
-			return await this.usersService.isVerified(req.cookies.token);
+			return await this.myJWTService.verifyToken(req.cookies.token);
 		} catch (err) {
-			throw new UnauthorizedException('Please Login Again');
+			throw new UnauthorizedException(
+				'You are not logged in. Please Login Again'
+			);
 		}
 	}
 }

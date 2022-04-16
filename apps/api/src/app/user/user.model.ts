@@ -18,7 +18,7 @@ export class UserModel extends User {
 	@IsString()
 	fullName: string;
 
-	@IsAlpha()
+	@IsString()
 	username: string;
 
 	@IsEmail()

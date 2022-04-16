@@ -14,12 +14,13 @@ import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
 import {
 	FORGOT_PASSWORD,
+	IS_AUTHENTICATED,
 	IS_AVAILABLE,
 	LOGIN,
 	LOGOUT,
 	RESET_PASSWORD,
 	SIGNUP,
-} from './gql.schema';
+} from './auth.gql.schema';
 
 @Injectable({
 	providedIn: 'root',
@@ -205,10 +206,42 @@ export class AuthService {
 				},
 			})
 			.pipe(
-				map(() => {
+				map(({ data }: any) => {
 					return {
-						status: 'Successfully logged out',
-						authenticated: false,
+						status: data?.isAuthenticated?.status,
+						authenticated: data?.isAuthenticated?.authenticated,
+					};
+				}),
+				catchError(({ error }) => {
+					return of({
+						status: 'Failed to Log out',
+						authenticated: true,
+					});
+				})
+			);
+	}
+
+	isAuthenticated() {
+		return this.apollo
+			.query({
+				query: IS_AUTHENTICATED,
+				errorPolicy: 'all',
+				context: {
+					// this.activatedRoute.url
+					// 	.pipe(
+					// 		tap((id) => {
+					// 			console.log('url', id);
+					// 		})
+					// 	)
+					// 	.subscribe();
+					withCredentials: true,
+				},
+			})
+			.pipe(
+				map(({ data }: any) => {
+					return {
+						status: data?.isAuthenticated?.status,
+						authenticated: data?.isAuthenticated?.authenticated,
 					};
 				}),
 				catchError(({ error }) => {

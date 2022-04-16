@@ -6,7 +6,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 const routes: Routes = [
 	{
 		path: 'profile',
-		canLoad: [AuthGuard],
+		canActivate: [AuthGuard],
 		loadChildren: () =>
 			import('./profile/profile.module').then((m) => m.ProfileModule),
 	},
@@ -16,7 +16,8 @@ const routes: Routes = [
 			import('@march/authentication').then((m) => m.AuthModule),
 	},
 	{
-		path: 'home',
+		path: '',
+		canActivate: [AuthGuard],
 		loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
 	},
 	{ path: '**', component: NotFoundComponent },

@@ -18,8 +18,10 @@
 			"@march/api-interfaces": ["libs/api-interfaces/src/index.ts"],
 			"@march/authentication": ["libs/authentication/src/index.ts"],
 			"@march/error-handler": ["libs/error-handler/src/index.ts"],
-			"@march/keys": ["libs/keys/src/index.ts"]
+			"@march/keys": ["libs/keys/src/index.ts"],
+			"@march/shared-frontend": ["libs/shared-frontend/src/index.ts"]
 		}
 	},
+	"keys": "libs/keys",
 	"exclude": ["node_modules", "tmp"]
 }

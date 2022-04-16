@@ -1,121 +1,152 @@
-import { Injectable } from '@angular/core';
-import { catchError, map, of, Subscription, tap } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { of, tap } from 'rxjs';
 import { AuthService } from '../auth.service';
 import {
 	Login,
 	Logout,
 	Signup,
-	ResetPassword,
+	ConfirmForgotPassword,
 	ForgotPassword,
 	LoginWithGoogle,
-} from './auth.actions';
+	IsAuthenticated,
+} from './auth.action';
 import { Action, State, StateContext, Selector } from '@ngxs/store';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { AuthStateModel } from './auth.model';
-
+import { UnsubscribeOnDestroyAdapter } from '../shared/unsubscribe-on-destroy.adapter';
+import { MyStorageEngineService } from '../shared/storage.service';
 @State<AuthStateModel>({
-	name: 'Auth',
+	name: 'auth',
 	defaults: {
 		status: null,
 		authenticated: null,
 	},
 })
 @Injectable()
-export class AuthState {
-	private querySubscription!: Subscription;
-	// @Selector()
-	// static isAuthenticated(state: AuthStateModel): boolean {
-	// 	return !!state.authenticated;
-	// }
+export class AuthState
+	extends UnsubscribeOnDestroyAdapter
+	implements OnDestroy
+{
+	@Selector()
+	static isAuthenticated(state: AuthStateModel): boolean {
+		return !!state.authenticated;
+	}
 
 	constructor(
 		private authService: AuthService,
 		private cookieService: CookieService,
-		private router: Router
-	) {}
+		private router: Router,
+		private myStorageEngineService: MyStorageEngineService
+	) {
+		super();
+	}
 
-	@Action(Signup)
+	updateMyStorageEngineService(key: string, value: any) {
+		this.myStorageEngineService.removeItem(key);
+		this.myStorageEngineService.setItem(key, JSON.stringify(value));
+	}
+
+	@Action(Signup, { cancelUncompleted: true })
 	signup(ctx: StateContext<AuthStateModel>, action: Signup) {
-		this.querySubscription = this.authService
+		this.subs.sink = this.authService
 			.signup(action.payload)
 			.pipe(
 				tap((res) => {
-					console.log(res);
+					// console.log(res);
 					ctx.patchState(res);
+					this.updateMyStorageEngineService('auth', res);
 				})
 			)
 			.subscribe();
 	}
 
-	@Action(Login)
+	@Action(Login, { cancelUncompleted: true })
 	login(ctx: StateContext<AuthStateModel>, action: Login) {
-		this.querySubscription = this.authService
+		this.subs.sink = this.authService
 			.login(action.payload)
 			.pipe(
 				tap((res) => {
-					console.log(res);
+					// console.log(res);
 					ctx.patchState(res);
+					this.updateMyStorageEngineService('auth', res);
 				})
 			)
 			.subscribe();
 	}
 
-	@Action(LoginWithGoogle)
-	loginWithGoogle(ctx: StateContext<AuthStateModel>, action: LoginWithGoogle) {
-		this.querySubscription = of(this.authService.loginWithGoogle())
+	@Action(LoginWithGoogle, { cancelUncompleted: true })
+	loginWithGoogle(ctx: StateContext<AuthStateModel>) {
+		this.subs.sink = of(this.authService.loginWithGoogle())
 			.pipe(
 				tap((res: any) => {
-					console.log(res);
+					// console.log(res);
 					ctx.patchState({
 						status: 'Supposedly logged-in-with-google',
 						authenticated: null,
 					});
+					this.updateMyStorageEngineService('auth', res);
 				})
 			)
 			.subscribe();
 	}
 
-	@Action(ForgotPassword)
+	@Action(ForgotPassword, { cancelUncompleted: true })
 	forgotPassword(ctx: StateContext<AuthStateModel>, action: ForgotPassword) {
-		this.querySubscription = this.authService
+		this.subs.sink = this.authService
 			.forgotPassword(action.payload)
 			.pipe(
 				tap((res) => {
-					console.log(res);
+					// console.log(res);
 					ctx.patchState(res);
+					this.updateMyStorageEngineService('auth', res);
 				})
 			)
 			.subscribe();
 	}
 
-	@Action(ResetPassword)
-	resetPassword(ctx: StateContext<AuthStateModel>, action: ResetPassword) {
-		this.querySubscription = this.authService
+	@Action(ConfirmForgotPassword, { cancelUncompleted: true })
+	resetPassword(
+		ctx: StateContext<AuthStateModel>,
+		action: ConfirmForgotPassword
+	) {
+		this.subs.sink = this.authService
 			.resetPassword(action.payload)
 			.pipe(
 				tap((res) => {
-					console.log(res);
+					// console.log(res);
 					ctx.patchState(res);
+					this.updateMyStorageEngineService('auth', res);
 				})
 			)
 			.subscribe();
 	}
 
-	@Action(Logout)
+	@Action(Logout, { cancelUncompleted: true })
 	logout(ctx: StateContext<AuthStateModel>) {
-		this.querySubscription = this.authService
+		this.subs.sink = this.authService
 			.logout()
 			.pipe(
 				tap((res) => {
-					console.log(res);
+					// console.log(res);
 					ctx.patchState(res);
+					this.updateMyStorageEngineService('auth', res);
 				})
 			)
 			.subscribe();
 	}
 
-	ngOnDestroy() {
-		this.querySubscription.unsubscribe();
+	@Action(IsAuthenticated, { cancelUncompleted: true })
+	isAuthenticated(ctx: StateContext<AuthStateModel>) {
+		this.subs.sink = this.authService
+			.isAuthenticated()
+			.pipe(
+				tap((res) => {
+					// console.log(res);
+					ctx.patchState(res);
+					this.updateMyStorageEngineService('auth', res);
+				})
+			)
+			.subscribe();
 	}
 }

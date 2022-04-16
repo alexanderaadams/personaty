@@ -8,7 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { join } from 'path';
 
-import { JWTService } from '../jwt/jwt.service';
+import { MyJWTService } from '../jwt/jwt.service';
 import { isFileExtensionSafe, removeFile } from './image-storage';
 import { UserInfo } from '../core/shared.model';
 import { UserDocument } from './user.schema';
@@ -19,7 +19,7 @@ import { UserSensitiveInformation } from './entities/user-sensitive-information.
 export class UserService {
 	constructor(
 		@InjectModel('User') private readonly userModel: Model<UserDocument>,
-		private myJWTService: JWTService
+		private myJWTService: MyJWTService
 	) {}
 
 	async createUser(user: {
@@ -47,11 +47,8 @@ export class UserService {
 
 	async findUserById(id: string): Promise<UserModel> {
 		try {
-			const user = await this.userModel
-				.findById(id)
-				.populate('stories')
-				.exec();
-			console.log(user);
+			const user = await this.userModel.findById(id).populate('stories').exec();
+
 
 			if (!user) return null;
 
@@ -142,13 +139,13 @@ export class UserService {
 		}
 	}
 
-	async isVerified(jwt: string) {
-		try {
-			return await this.myJWTService.verifyToken(jwt);
-		} catch (_) {
-			throw new BadGatewayException('Something Went Wrong');
-		}
-	}
+	// async isVerified(jwt: string) {
+	// 	try {
+	// 		return await this.myJWTService.verifyToken(jwt);
+	// 	} catch (_) {
+	// 		throw new BadGatewayException('Something Went Wrong');
+	// 	}
+	// }
 
 	async uploadImage(file: Express.Multer.File, id: string) {
 		try {

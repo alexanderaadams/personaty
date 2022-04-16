@@ -14,6 +14,9 @@ export class Story extends Document {
 	@Prop({ type: String, required: true })
 	description: string;
 
+	@Prop({ type: [String], required: true })
+	category: string[];
+
 	@Prop({
 		type: String,
 		required: true,

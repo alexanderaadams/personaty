@@ -17,11 +17,17 @@
 		"noPropertyAccessFromIndexSignature": true,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
-		"lib": ["es2020", "dom"]
+		"lib": ["es2020", "dom"],
+		// NOTE manually added
+		"composite": true
 	},
 	"angularCompilerOptions": {
 		"strictInjectionParameters": true,
 		"strictInputAccessModifiers": true,
 		"strictTemplates": true
 	}
+	// NOTE the paths configs has been added manually
+	// "paths": {
+	// 	"@march/shared-frontend": ["libs/shared-frontend/src/index.ts"]
+	// }
 }

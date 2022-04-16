@@ -1,51 +1,59 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Chewy&display=swap');
 
-* {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	outline: 0;
-	vertical-align: baseline;
-	background: transparent;
-}
+@import 'bootstrap/scss/bootstrap.scss';
 
 body {
-	font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial,
-		Lucida Grande, sans-serif;
+	font-family: Roboto, 'Helvetica Neue', sans-serif;
 	font-size: 62.5%;
-	color: var(--btn-primary-dark-color);
-	box-sizing: border-box;
-	background-color: #ffefed59;
-}
-
-:root {
-	--font-primary-dark-color: #1d2129;
-
-	--font-primary-color: #fff;
-
-	--font-primary-bg: #ff5757;
-
-	--font-hover-primary-color: #c6c6c6;
-
-	--font-hover-primary-dark-color: #0c0e13;
-
-	--font-hover-primary-bg: #b83d3d;
-
-	--border: #bcbcbc;
-
-	--box-shadow: #d7d7d780;
-
-	--hover-box-shadow: #ffbcbc80;
-
-	--focus-primary-color: rgb(26, 58, 75);
-
-	--resend-color: #144166;
+	margin: 0;
+	color: var(--bs-white);
+	background: #000a18;
 }
 
 button {
 	font-family: inherit;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+	height: 100%;
+}
+
+:root {
+	--mat-bg: #c2185b;
+	// --font-primary-dark-color: #1d2129;
+
+	// --font-primary-color: #fff;
+
+	// --font-primary-bg: #ff5757;
+
+	// --font-hover-primary-color: #c6c6c6;
+
+	// --font-hover-primary-dark-color: #0c0e13;
+
+	// --font-hover-primary-bg: #b83d3d;
+
+	// --border: #bcbcbc;
+
+	// --box-shadow: #d7d7d780;
+
+	// --hover-box-shadow: #ffbcbc80;
+
+	// --focus-primary-color: rgb(26, 58, 75);
+
+	// --resend-color: #144166;
+}
+
+.mat-bg {
+	background-color: var(--mat-bg);
+}
+
+.link {
+	text-decoration: none;
+	background-color: transparent;
+
+	// &:hover {
+	// 	color: var(--bs-white) !important;
+	// }
+}

@@ -1,1 +1,34 @@
-<p>profile works!</p>
+<div *ngIf="user$ | async as user" class="container">
+	<div class="row justify-content-center align-content-center mt-5">
+		<header class="row justify-content-center align-content-center my-5 gap-3">
+			<img
+				style="border-radius: 4rem"
+				class="container shadow-sm"
+				[src]="user?.profilePicture"
+				alt="Profile Picture"
+			/>
+			<h2 class="text-center">{{ user?.fullName }}</h2>
+			<p class="text-center d-block">{{ user?.bio }}</p>
+
+			<mat-chip-list
+				class="row justify-content-center align-items-center"
+				aria-label="Specialty selection"
+			>
+				<mat-chip
+					class="col-auto"
+					*ngFor="let tag of user?.tags"
+					color="primary"
+					selected
+				>
+					{{ tag }}</mat-chip
+				>
+			</mat-chip-list>
+		</header>
+		<section class="row">
+			<div *ngFor="let story of user?.stories">
+				<img [src]="story.photo" alt="Story photo" />
+				<h4>{{ story.title }}</h4>
+			</div>
+		</section>
+	</div>
+</div>

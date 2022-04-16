@@ -1,4 +1,4 @@
-import { JWTService } from './../jwt/jwt.service';
+import { MyJWTService } from './../jwt/jwt.service';
 import {
 	Injectable,
 	HttpException,
@@ -22,7 +22,7 @@ const scrypt = promisify(_scrypt);
 export class AuthService {
 	constructor(
 		private readonly usersService: UserService,
-		private myJWTService: JWTService,
+		private myJWTService: MyJWTService,
 		private readonly nodemailerService: NodemailerService
 	) {}
 
@@ -192,7 +192,7 @@ export class AuthService {
 		}
 	}
 
-	async sendResetPasswordEmail(email: string) {
+	async sendForgotPasswordEmail(email: string) {
 		try {
 			const user = await this.usersService.findOne({ email });
 
@@ -209,8 +209,8 @@ export class AuthService {
 			// console.log(user);
 			this.nodemailerService.sendEmail(
 				email,
-				'Reset Your Password',
-				'Click On The Button To Reset Your Password',
+				'Forgot Your Password',
+				'Click On The Button To Forgot Your Password',
 				tokenURL
 			);
 			return { status: 'Email has ben send' };
@@ -222,7 +222,7 @@ export class AuthService {
 		}
 	}
 
-	async verifyResetPassword(passwords: {
+	async verifyForgotPassword(passwords: {
 		password: string;
 		confirmPassword: string;
 		token: string;

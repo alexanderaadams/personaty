@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Validator, FormGroup, AbstractControl } from '@angular/forms';
+import { Validator, AbstractControl } from '@angular/forms';
 
 @Injectable({ providedIn: 'root' })
 export class MatchPassword implements Validator {

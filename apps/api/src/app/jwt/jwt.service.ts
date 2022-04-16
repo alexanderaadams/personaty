@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 
 @Injectable()
-export class JWTService {
+export class MyJWTService {
 	constructor(private jwtService: JwtService) {}
 
 	async signToken(payload: object, options?: JwtSignOptions) {

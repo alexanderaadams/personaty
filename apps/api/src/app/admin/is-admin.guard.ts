@@ -4,19 +4,22 @@ import {
 	Injectable,
 	UnauthorizedException,
 } from '@nestjs/common';
-
+import { MyJWTService } from '../jwt/jwt.service';
 import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
-	constructor(private usersService: UserService) {}
+	constructor(
+		private myJWTService: MyJWTService,
+		private userService: UserService
+	) {}
 
 	async canActivate(context: ExecutionContext) {
 		try {
 			const request = context.switchToHttp().getRequest();
 
-			const token = await this.usersService.isVerified(request.cookies.token);
-			const user = await this.usersService.getUserSensitiveInformation({
+			const token = await this.myJWTService.verifyToken(request.cookies.token);
+			const user = await this.userService.getUserSensitiveInformation({
 				username: token.username,
 			});
 

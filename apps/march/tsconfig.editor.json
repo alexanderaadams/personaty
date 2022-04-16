@@ -1,7 +1,10 @@
 {
-  "extends": "./tsconfig.json",
-  "include": ["**/*.ts"],
-  "compilerOptions": {
-    "types": ["jest", "node"]
-  }
+	"extends": "./tsconfig.json",
+	"include": [
+		"**/*.ts",
+		"../../libs/authentication/src/lib/shared/not-auth.guard.ts"
+	],
+	"compilerOptions": {
+		"types": ["jest", "node"]
+	}
 }

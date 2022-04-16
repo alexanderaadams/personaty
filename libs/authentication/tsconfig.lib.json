@@ -8,5 +8,8 @@
 		"types": []
 	},
 	"exclude": ["src/test-setup.ts", "**/*.spec.ts", "**/*.test.ts"],
-	"include": ["**/*.ts"]
+	"include": [
+		"**/*.ts",
+		"../../apps/march/src/app/core/guards/auth-store.guard.ts"
+	]
 }

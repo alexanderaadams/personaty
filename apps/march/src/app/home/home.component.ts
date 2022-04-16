@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngxs/store';
+import { GetUserInfo } from '../profile/store/profile.action';
 
 @Component({
 	selector: 'march-home',
@@ -7,11 +9,16 @@ import { Router } from '@angular/router';
 	styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-	constructor(private readonly router: Router) {}
+	constructor(private readonly router: Router, private store: Store) {}
 
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		this.store
+			.dispatch(new GetUserInfo('624dbc17d348902015bae0df'))
+			.subscribe();
+	}
 
 	logout() {
-		this.router.navigateByUrl('auth/logout');
+		console.log('log');
+		this.router.navigate(['auth', 'logout']);
 	}
 }

@@ -8,16 +8,16 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { UserDocument } from '../user/user.schema';
-import { UserService } from '../user/user.service';
 import { CreateStoryDto } from './dto/create-story.dto';
 import { StoryModel } from './story.model';
 import { UpdateStoryDto } from './dto/update-story';
 import { StoryDocument } from './story.schema';
+import { MyJWTService } from '../jwt/jwt.service';
 
 @Injectable()
 export class StoryService {
 	async checkUserHasStory(token: string, id: string) {
-		const authUser = await this.userService.isVerified(token);
+		const authUser = await this.myJWTService.verifyToken(token);
 
 		const story = await this.storyModel.findById(id);
 
@@ -35,7 +35,7 @@ export class StoryService {
 	constructor(
 		@InjectModel('Story') private readonly storyModel: Model<StoryDocument>,
 		@InjectModel('User') private readonly userModel: Model<UserDocument>,
-		private userService: UserService
+		private myJWTService: MyJWTService
 	) {}
 
 	async createStory(token: string, story: CreateStoryDto): Promise<StoryModel> {

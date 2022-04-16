@@ -1,94 +1,149 @@
-<div class="logo"></div>
+<div class="bg-svg w-100 h-100">
+	<div class="container-md" style="padding-top: 12vh">
+		<!-- <div class="row justify-content-between align-items-center">
+		<a
+			[routerLink]="['/auth/signup']"
+			color="accent"
+			class="col"
+			aria-hidden="false"
+			aria-label=" back "
+		>
+			<mat-icon aria-hidden="false" aria-label=" back "
+				>arrow_back_ios
+			</mat-icon></a
+		> -->
 
-<span class="authentication">
-	<h1 class="authentication--header">persona</h1>
-	<span class="authentication--form"
-		><div class="login-with-google" (click)="loginWithGoogle()">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 48 48"
-				class="svg--login-with-google"
-				width="24px"
-				height="24px"
-			>
-				<path
-					fill="#FFC107"
-					d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
-				/>
-				<path
-					fill="#FF3D00"
-					d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
-				/>
-				<path
-					fill="#4CAF50"
-					d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
-				/>
-				<path
-					fill="#1976D2"
-					d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
-				/>
-			</svg>
-			<button class="btn--login-with-google">Continue with Google</button>
-		</div>
-		<div class="word--through-line">
-			<hr class="line" />
-			<span class="word--through-line__word">OR</span>
-			<hr class="line" />
-		</div>
-		<form (ngSubmit)="onSubmit()" class="form" [formGroup]="authForm">
-			<lib-input
-				class="lib-input"
-				formInput="form--input"
-				name="email"
-				spellcheck="true"
-				placeholder="Email"
-				type="email"
-				[control]="inputFormControl('email')"
-				[submit]="authForm?.['errors']?.['invalid']"
-				autocomplete="email"
-			>
-			</lib-input>
+		<div class="row justify-content-center align-items-center gap-2 mx-md-15">
+			<h1 class="col h1 text-center fs-1 text-light mb-5">Login</h1>
+			<!-- </div> -->
 
-			<lib-input
-				class="lib-input"
-				formInput="form--input"
-				name="password"
-				placeholder="Password"
-				type="password"
-				[control]="inputFormControl('password')"
-				[submit]="authForm?.['errors']?.['invalid']"
-				autocomplete="current-password"
+			<form
+				(ngSubmit)="onSubmit()"
+				class="row justify-content-center align-items-center gap-2"
+				[formGroup]="authForm"
 			>
-			</lib-input>
+				<mat-form-field appearance="fill">
+					<mat-label>Email</mat-label>
+					<input
+						matInput
+						class="row justify-content-center align-items-center"
+						name="Email"
+						label="Email"
+						spellcheck="true"
+						placeholder="Ex. pat@example.com"
+						type="email"
+						[formControlName]="'email'"
+						attr.matAutocomplete="email"
+					/>
 
-			<div class="form--btn__submit-box">
-				<div>
-					<button
-						type="submit"
-						[disabled]="authForm?.['invalid']"
-						class="form--btn__submit"
-					>
-						Login
-					</button>
-				</div>
-				<div class="form--btn__forgot-box">
-					<a [routerLink]="['/auth/forgot-password']" class="btn--forgot"
+					<mat-error *ngIf="authForm?.['controls']?.['email']?.['invalid']">
+						Please Enter Correct Email
+					</mat-error>
+				</mat-form-field>
+
+				<mat-form-field appearance="fill" class="mb-3">
+					<mat-label>Password</mat-label>
+					<input
+						matInput
+						name="Password"
+						label="Password"
+						[formControlName]="'password'"
+						attr.matAutocomplete="new-password"
+					/>
+
+					<mat-icon matSuffix (click)="hide = !hide">{{
+						hide ? 'visibility_off' : 'visibility'
+					}}</mat-icon>
+
+					<mat-hint>Password must be at least 8 characters. </mat-hint>
+
+					<mat-error *ngIf="authForm?.['controls']?.['password']?.['invalid']">
+						Password must be at least
+						{{ authForm?.['controls']?.['password']?.['errors']?.['minlength']?.requiredLength }}
+						characters.
+					</mat-error>
+				</mat-form-field>
+
+				<!-- <lib-input
+					class="row justify-content-center align-items-center mb-4"
+					name="Password"
+					label="Password"
+					placeholder="Password"
+					type="password"
+					[control]="inputFormControl('password')"
+					autocomplete="current-password"
+				>
+				</lib-input> -->
+
+				<div class="w-100 row justify-content-center align-items-center">
+					<a
+						class="link m-2 text-white-50 d-flex justify-content-center align-items-center"
+						[routerLink]="['/auth/forgot-password']"
 						>Forgot password?</a
 					>
 				</div>
-				<div class="hr">
-					<hr class="line" />
+				<div class="row justify-content-center align-items-center">
+					<div class="row">
+						<button
+							class="p-2 mb-3 fs-5"
+							mat-raised-button
+							color="primary"
+							type="submit"
+						>
+							Login
+						</button>
+					</div>
 				</div>
-				<div class="btn--signup">
-					<a class="btn--signup__link" [routerLink]="['/auth/signup']"
-						>Signup</a
-					>
-				</div>
+			</form>
+			<div class="d-flex justify-content-center align-items-center gap-3 m-2">
+				<mat-divider class="hr w-25"> </mat-divider>
+				<span class="d-block text-center text-white-50">Continue With</span>
+				<mat-divider class="hr w-25"> </mat-divider>
 			</div>
-		</form>
-	</span>
-</span>
 
+			<div
+				class="d-flex justify-content-center align-items-center align-items-center gap-2"
+			>
+				<button
+					class="row justify-content-around bg-transparent p-3"
+					aria-hidden="true"
+					mat-flat-button
+					(click)="loginWithGoogle()"
+				>
+					<svg class="icon">
+						<use xlink:href="../../assets/sprite.svg#google"></use>
+					</svg>
+				</button>
+
+				<button
+					class="row justify-content-around bg-transparent p-3"
+					aria-hidden="true"
+					mat-flat-button
+					(click)="loginWithFacebook()"
+				>
+					<svg class="icon">
+						<use xlink:href="../../assets/sprite.svg#facebook"></use>
+					</svg>
+				</button>
+			</div>
+			<div class="row justify-content-center align-items-center gap-2 m-3">
+				<p
+					class="col-sm-4 col-md-2 text-white-50 text-end"
+					style="margin: 0; padding: 0; width: max-content"
+				>
+					Don't you have an account?
+				</p>
+
+				<a
+					class="col-2 link text-light text-center"
+					style="margin: 0; padding: 0"
+					[routerLink]="['/auth/signup']"
+					>signup</a
+				>
+			</div>
+		</div>
+	</div>
+</div>
 <!-- <lib-email-token
 	*ngIf="(authForm?.['errors']?.['invalid']) && showModal"
 	header="Invalid username or password ❗️"

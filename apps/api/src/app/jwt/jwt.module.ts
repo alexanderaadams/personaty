@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PRIV_KEY, PUB_KEY } from '@march/keys';
 import { JwtStrategy } from './jwt.strategy';
-import { JWTService } from './jwt.service';
+import { MyJWTService } from './jwt.service';
 
 @Module({
 	imports: [
@@ -21,7 +21,7 @@ import { JWTService } from './jwt.service';
 		}),
 	],
 	controllers: [],
-	providers: [JWTService, JwtStrategy],
-	exports: [JWTService],
+	providers: [MyJWTService, JwtStrategy],
+	exports: [MyJWTService],
 })
 export class JWTModule {}

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AbstractControl, FormControl } from '@angular/forms';
 
 @Component({
@@ -7,8 +7,11 @@ import { AbstractControl, FormControl } from '@angular/forms';
 	styleUrls: ['./input.component.scss'],
 })
 export class InputComponent {
+	hide = false;
+
 	@Input() formInput!: string;
 	@Input() name!: string;
+	@Input() label!: string;
 	@Input() spellcheck!: string;
 	@Input() placeholder = '';
 	@Input() type!: string;
