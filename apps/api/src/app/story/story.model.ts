@@ -1,4 +1,4 @@
-import { IsDate, IsString } from 'class-validator';
+import { IsArray, IsDate, IsString } from 'class-validator';
 import { Story } from '../core/graphql.schema';
 
 export class StoryModel extends Story {
@@ -11,8 +11,11 @@ export class StoryModel extends Story {
 	@IsString()
 	description: string;
 
-	@IsString()
-	photo: string;
+	@IsArray()
+	category: string[];
+
+	// @IsString()
+	// cover_image: string;
 
 	@IsDate()
 	created_at: Date;

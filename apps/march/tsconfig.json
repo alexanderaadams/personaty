@@ -21,6 +21,8 @@
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
 		"lib": ["es2020", "dom"]
+		//added manually
+		// "composite": true
 	},
 	"angularCompilerOptions": {
 		"strictInjectionParameters": true,

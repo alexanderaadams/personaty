@@ -19,9 +19,8 @@ export class Story extends Document {
 
 	@Prop({
 		type: String,
-		required: true,
 	})
-	photo: string;
+	cover_image: string;
 
 	@Prop({
 		type: MongooseSchema.Types.ObjectId,
@@ -35,5 +34,3 @@ export class Story extends Document {
 }
 
 export const StorySchema = SchemaFactory.createForClass(Story);
-
-

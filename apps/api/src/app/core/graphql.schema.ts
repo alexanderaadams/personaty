@@ -41,14 +41,14 @@ export class GetStoryInput {
 export class CreateStoryInput {
     title: string;
     description: string;
-    photo: string;
+    category: string[];
     user_id: string;
 }
 
 export class UpdateStoryInput {
     title?: Nullable<string>;
     description?: Nullable<string>;
-    photo?: Nullable<string>;
+    category?: Nullable<Nullable<string>[]>;
 }
 
 export class DeleteStoryInput {
@@ -130,9 +130,10 @@ export class Story {
     _id?: Nullable<string>;
     title?: Nullable<string>;
     description?: Nullable<string>;
-    photo?: Nullable<string>;
+    category?: Nullable<Nullable<string>[]>;
     created_at?: Nullable<Date>;
     user_id?: Nullable<string>;
+    photo?: Nullable<string>;
 }
 
 export class Story_Status {

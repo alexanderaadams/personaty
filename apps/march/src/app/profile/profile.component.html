@@ -1,32 +1,107 @@
 <div *ngIf="user$ | async as user" class="container">
 	<div class="row justify-content-center align-content-center mt-5">
 		<header class="row justify-content-center align-content-center my-5 gap-3">
-			<img
-				style="border-radius: 4rem"
-				class="container shadow-sm"
-				[src]="user?.profilePicture"
-				alt="Profile Picture"
-			/>
+			<div
+				class="position-relative w-100 row justify-content-center align-content-center"
+				style="height: 40vh"
+			>
+				<div class="profile-background w-100 h-50"></div>
+
+				<img
+					style="
+						width: 25vh;
+						height: 25vh;
+						background-size: cover;
+						object-fit: cover;
+						border: 0.2rem solid var(--bg-primary-darker);
+					"
+					class="bottom-0 shadow-sm img-fluid rounded-circle position-absolute border-info"
+					[src]="user?.profilePicture"
+					alt="Profile Picture"
+				/>
+			</div>
 			<h2 class="text-center">{{ user?.fullName }}</h2>
-			<p class="text-center d-block">{{ user?.bio }}</p>
+
+			<p class="text-center bg-primary-darker rounded-3 p-5">{{ user?.bio }}</p>
 
 			<mat-chip-list
 				class="row justify-content-center align-items-center"
 				aria-label="Specialty selection"
 			>
-				<mat-chip
-					class="col-auto"
-					*ngFor="let tag of user?.tags"
-					color="primary"
-					selected
-				>
-					{{ tag }}</mat-chip
-				>
+				<mat-chip class="col p-4" *ngFor="let tag of user?.tags">
+					{{ tag }}
+				</mat-chip>
 			</mat-chip-list>
 		</header>
-		<section class="row">
-			<div *ngFor="let story of user?.stories">
-				<img [src]="story.photo" alt="Story photo" />
+		<section class="mt-3">
+			<form class="row gap-3" (ngSubmit)="onSubmit()" [formGroup]="storyForm">
+				<input
+					class="w-100 text-light fs-5 story-title"
+					[formControlName]="'title'"
+					spellcheck="true"
+					placeholder="Write your story's title here"
+				/>
+
+				<!-- <mat-form-field class="w-100 container"> -->
+				<!-- <mat-label>Category</mat-label> -->
+				<mat-chip-list #chipList aria-label="Category selection" class="p-5">
+					<mat-chip
+						*ngFor="let category of categories"
+						(removed)="remove(category)"
+					>
+						{{ category }}
+						<button matChipRemove>
+							<mat-icon>cancel</mat-icon>
+						</button>
+					</mat-chip>
+					<input
+						class="story-category"
+						[formControlName]="'category'"
+						spellcheck="true"
+						placeholder="New Category..."
+						[matChipInputFor]="chipList"
+						[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+						[matChipInputAddOnBlur]="addOnBlur"
+						(matChipInputTokenEnd)="add($event)"
+					/>
+				</mat-chip-list>
+				<!-- </mat-form-field> -->
+
+				<input
+					style="background: transparent; border: 0; height: 15vh"
+					class="w-100 text-light p-5 fs-3"
+					[formControlName]="'description'"
+					spellcheck="true"
+					placeholder="Write your story's title here"
+				/>
+
+				<div class="row justify-content-center align-items-center">
+					<div class="row">
+						<button
+							class="p-2 mb-3 fs-5"
+							mat-raised-button
+							color="primary"
+							type="submit"
+						>
+							Signup
+						</button>
+					</div>
+				</div>
+			</form>
+
+			<!-- <mat-form-field class="w-100" appearance="outline">
+				<mat-label>Description</mat-label>
+				<input
+					spellcheck="true"
+					matInput
+					placeholder="Write your story's description here"
+				/>
+			</mat-form-field> -->
+		</section>
+
+		<section class="row justify-content-center align-items-center mt-3">
+			<div class="col" *ngFor="let story of user?.stories">
+				<!-- <img [src]="story.cover_image" alt="Story photo" /> -->
 				<h4>{{ story.title }}</h4>
 			</div>
 		</section>

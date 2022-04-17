@@ -19,7 +19,7 @@
 		"noFallthroughCasesInSwitch": true,
 		"lib": ["es2020", "dom"],
 		// NOTE manually added
-		"composite": true
+		// "composite": true
 	},
 	"angularCompilerOptions": {
 		"strictInjectionParameters": true,

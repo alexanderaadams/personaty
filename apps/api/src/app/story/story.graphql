@@ -21,7 +21,9 @@ input CreateStoryInput {
 
 	description: String!
 
-	photo: String!
+	# cover_image: String
+
+	category: [String!]!
 
 	user_id: ID!
 }
@@ -31,7 +33,9 @@ input UpdateStoryInput {
 
 	description: String
 
-	photo: String
+	# cover_image: String
+
+	category: [String]
 }
 
 input DeleteStoryInput {
@@ -45,7 +49,9 @@ type Story {
 
 	description: String
 
-	photo: String
+	# cover_image: String
+
+	category: [String]
 
 	created_at: Date
 

@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { UniqueEmail } from '../validators/unique-email';
 import { Select, Store } from '@ngxs/store';
 import { LoginWithGoogle, Signup } from '../store/auth.action';
-import { Observable, tap, Subscription } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { AuthStateModel } from '../store/auth.model';
 
 import { AuthState } from '../store/auth.state';
@@ -58,20 +58,22 @@ export class SignupComponent
 			return this.authForm.setErrors({ invalid: true });
 		}
 
-		this.subs.sink = this.store.dispatch(new Signup(this.authForm.value)).subscribe({
-			next: () => {
-				this.subs.sink = this.isAuthenticated$
-					.pipe(
-						tap((authenticated) => {
-							if (!authenticated) this.authForm.setErrors({ invalid: true });
-						})
-					)
-					.subscribe();
-			},
-			error: () => {
-				this.authForm.setErrors({ invalid: true });
-			},
-		});
+		this.subs.sink = this.store
+			.dispatch(new Signup(this.authForm.value))
+			.subscribe({
+				next: () => {
+					this.subs.sink = this.isAuthenticated$
+						.pipe(
+							tap((authenticated) => {
+								if (!authenticated) this.authForm.setErrors({ invalid: true });
+							})
+						)
+						.subscribe();
+				},
+				error: () => {
+					this.authForm.setErrors({ invalid: true });
+				},
+			});
 	}
 
 	inputFormControl(option: string): FormControl {
@@ -85,7 +87,6 @@ export class SignupComponent
 	loginWithFacebook() {
 		//
 	}
-
 
 	// showErrors(control: any) {
 	// 	const { dirty, touched } = control;

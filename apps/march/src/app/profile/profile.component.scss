@@ -1,0 +1,21 @@
+.profile-background {
+	background-color: aqua;
+}
+
+[contentEditable='true']:empty:not(:focus):before {
+	content: attr(data-text);
+}
+.story-title {
+	background: transparent;
+	border: 0;
+	height: 15vh;
+	outline: transparent;
+}
+
+.story-category {
+	height: 7vh;
+	background: transparent;
+	border: 0;
+	border-bottom: 0.1rem solid #fff;
+	outline: transparent;
+}

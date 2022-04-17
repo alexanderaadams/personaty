@@ -4,26 +4,26 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { InMemoryCache } from '@apollo/client/core';
-
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
-import { NotFoundComponent } from './not-found/not-found.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsSelectSnapshotModule } from '@ngxs-labs/select-snapshot';
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { AuthState, MaterialModule } from '@march/authentication';
 import { CookieService } from 'ngx-cookie-service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// import { AuthGuard } from './core/guards/auth.guard';
-import { environment } from '../environments/environment';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+
+import { StoryComponent } from './story/story.component';
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { environment } from '../environments/environment';
 import { ProfileState } from './profile/store/profile.state';
-// import { NotAuthGuard } from './core/guards/not-auth.guard';
+import { StoryState } from './story/store/story.state';
+
+import { AuthState, MaterialModule } from '@march/authentication';
 
 @NgModule({
-	declarations: [AppComponent, NotFoundComponent],
+	declarations: [AppComponent, NotFoundComponent, StoryComponent],
 	imports: [
 		BrowserModule,
 		BrowserAnimationsModule,
@@ -32,7 +32,7 @@ import { ProfileState } from './profile/store/profile.state';
 		AppRoutingModule,
 		ReactiveFormsModule,
 		FormsModule,
-		NgxsModule.forRoot([AuthState, ProfileState], {
+		NgxsModule.forRoot([AuthState, ProfileState, StoryState], {
 			developmentMode: !environment.production,
 		}),
 		NgxsReduxDevtoolsPluginModule.forRoot(),
@@ -61,5 +61,6 @@ import { ProfileState } from './profile/store/profile.state';
 		},
 	],
 	bootstrap: [AppComponent],
+	exports: [StoryComponent],
 })
 export class AppModule {}

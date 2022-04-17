@@ -40,11 +40,11 @@ export class StoryService {
 
 	async createStory(token: string, story: CreateStoryDto): Promise<StoryModel> {
 		try {
-			// const authenticatedUser = await this.userService.isVerified(token);
+			const authenticatedUser = await this.myJWTService.verifyToken(token);
 
-			// const user = await this.userModel.findById(authenticatedUser.id);
+			const user = await this.userModel.findById(authenticatedUser.id);
 
-			// if (!user) throw new HttpException('User Does not exist', 404);
+			if (!user) throw new HttpException('User Does not exist', 404);
 
 			const newStory = (await this.storyModel.create({
 				...story,

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, map } from 'rxjs';
+import { CreateStoryDto } from '../story/create-story.dto';
 import { GET_USER_INFO } from './profile.gql.schema';
 import { ProfileStateModel } from './store/profile.model';
 

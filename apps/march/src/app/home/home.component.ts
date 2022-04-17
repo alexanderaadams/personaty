@@ -12,9 +12,7 @@ export class HomeComponent implements OnInit {
 	constructor(private readonly router: Router, private store: Store) {}
 
 	ngOnInit(): void {
-		this.store
-			.dispatch(new GetUserInfo('624dbc17d348902015bae0df'))
-			.subscribe();
+		// this.store.dispatch(new GetHomeInfo());
 	}
 
 	logout() {

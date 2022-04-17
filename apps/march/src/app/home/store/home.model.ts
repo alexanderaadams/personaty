@@ -1,5 +1,6 @@
 import { StoryStateModel } from '../../story/store/story.model';
-export interface ProfileStateModel {
+
+export interface HomeStateModel {
 	fullName: string | null;
 
 	username: string | null;
@@ -11,6 +12,5 @@ export interface ProfileStateModel {
 	stories: StoryStateModel[] | null;
 
 	bio: string | null;
-
 	tags: string[] | null;
 }
