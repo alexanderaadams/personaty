@@ -227,13 +227,6 @@ export class AuthService {
 				query: IS_AUTHENTICATED,
 				errorPolicy: 'all',
 				context: {
-					// this.activatedRoute.url
-					// 	.pipe(
-					// 		tap((id) => {
-					// 			console.log('url', id);
-					// 		})
-					// 	)
-					// 	.subscribe();
 					withCredentials: true,
 				},
 			})

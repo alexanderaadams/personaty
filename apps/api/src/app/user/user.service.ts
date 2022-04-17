@@ -14,6 +14,7 @@ import { UserInfo } from '../core/shared.model';
 import { UserDocument } from './user.schema';
 import { UserModel } from './user.model';
 import { UserSensitiveInformation } from './entities/user-sensitive-information.entity';
+import { readFile } from 'fs';
 
 @Injectable()
 export class UserService {
@@ -48,7 +49,6 @@ export class UserService {
 	async findUserById(id: string): Promise<UserModel> {
 		try {
 			const user = await this.userModel.findById(id).populate('stories').exec();
-
 
 			if (!user) return null;
 
@@ -173,6 +173,32 @@ export class UserService {
 				valid: false,
 				error: 'File content does not match extension!',
 			};
+		} catch (err) {
+			throw new HttpException(
+				err?.message || err?.response?.message || 'Something Went Wrong',
+				err?.status || err?.response?.statusCode || 500
+			);
+		}
+	}
+
+	async getImage(imageId): Promise<boolean> {
+		try {
+			const imagesFolderPath = join(process.cwd(), 'upload');
+
+			const fullImagePath = join(imagesFolderPath + '/' + imageId);
+
+			const DoesImageExist = function () {
+				return new Promise(function (resolve, reject) {
+					readFile(fullImagePath, 'utf8', function (err, data) {
+						if (err) reject(err);
+						else resolve(data);
+					});
+				});
+			};
+
+			if (await DoesImageExist()) return true;
+
+			throw new HttpException('File Does Not Exist', 404);
 		} catch (err) {
 			throw new HttpException(
 				err?.message || err?.response?.message || 'Something Went Wrong',

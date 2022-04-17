@@ -1,15 +1,10 @@
 import {
-	Body,
 	Controller,
 	Get,
-	Patch,
-	Delete,
 	Param,
-	Query,
 	UseGuards,
 	UseInterceptors,
 	Post,
-	Req,
 	UploadedFile,
 	Res,
 } from '@nestjs/common';
@@ -23,6 +18,8 @@ import { TokenAuthGuard } from '../utils/guards/is-auth.guard';
 import { Express } from 'express';
 import { Multer } from 'multer';
 import { saveImageToStorage } from './image-storage';
+import { readFile } from 'fs';
+import { join } from 'path';
 
 @Controller('user')
 @UseGuards(TokenAuthGuard)
@@ -40,10 +37,13 @@ export class UserController {
 		return { status: "User's profile picture has been uploaded successfully" };
 	}
 
-	@Get('profile-picture/:id')
-	async getImage(@Param('id') id: string, @Res() res: Response) {
-		const { profilePicture } = await this.usersService.findUserById(id);
-		return res.sendFile(profilePicture, { root: 'upload' });
+	@Get('picture/:imageId')
+	async getImage(@Param('imageId') imageId: string, @Res() res: Response) {
+		// console.log(imageId);
+		// const { profilePicture } =
+
+		if (await this.usersService.getImage(imageId))
+			return res.sendFile(imageId, { root: 'upload' });
 	}
 
 	// @Get(':id')

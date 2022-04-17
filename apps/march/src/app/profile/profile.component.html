@@ -16,20 +16,33 @@
 						border: 0.2rem solid var(--bg-primary-darker);
 					"
 					class="bottom-0 shadow-sm img-fluid rounded-circle position-absolute border-info"
-					[src]="user?.profilePicture"
+					[src]="
+						'http://localhost:3333/api/v1/user/picture/' + user?.profilePicture
+					"
 					alt="Profile Picture"
 				/>
 			</div>
 			<h2 class="text-center">{{ user?.fullName }}</h2>
 
-			<p class="text-center bg-primary-darker rounded-3 p-5">{{ user?.bio }}</p>
+			<p
+				style="width: max-content; background-color: var(--mat-bg)"
+				class="text-center br-04 p-3 fst-italic"
+			>
+				{{ user?.bio }}
+			</p>
 
 			<mat-chip-list
 				class="row justify-content-center align-items-center"
 				aria-label="Specialty selection"
 			>
-				<mat-chip class="col p-4" *ngFor="let tag of user?.tags">
-					{{ tag }}
+				<mat-chip
+					*ngFor="let tag of user?.tags; let i = index"
+					[style]="'background-color:' + bgColors[i]"
+					class="col p-4 d-flex justify-content-center align-content-center"
+				>
+					<span class="text-center">
+						{{ tag }}
+					</span>
 				</mat-chip>
 			</mat-chip-list>
 		</header>
@@ -101,7 +114,7 @@
 
 		<section class="row justify-content-center align-items-center mt-3">
 			<div class="col" *ngFor="let story of user?.stories">
-				<!-- <img [src]="story.cover_image" alt="Story photo" /> -->
+				<!-- <img [src]="	'http://localhost:3333/api/v1/user/picture/' + story.cover_image" alt="Story photo" /> -->
 				<h4>{{ story.title }}</h4>
 			</div>
 		</section>

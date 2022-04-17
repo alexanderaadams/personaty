@@ -38,4 +38,8 @@ export class ProfileService {
 				})
 			);
 	}
+
+	getImage(imageId: string) {
+		return this.http.get(`${this.rootUrl}/user/picture/${imageId}`);
+	}
 }

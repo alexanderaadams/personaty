@@ -1,3 +1,4 @@
+import { ProfileService } from './profile.service';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Select, Store, Actions } from '@ngxs/store';
@@ -9,6 +10,7 @@ import { ProfileStateModel } from './store/profile.model';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { colors } from '../core/colors';
 
 import { CreateStory } from '../story/store/story.action';
 @Component({
@@ -20,6 +22,8 @@ export class ProfileComponent
 	extends UnsubscribeOnDestroyAdapter
 	implements OnInit
 {
+	bgColors = colors;
+
 	storyForm = new FormGroup({
 		title: new FormControl('', [Validators.required]),
 
@@ -39,7 +43,8 @@ export class ProfileComponent
 	constructor(
 		private store: Store,
 		private activatedRoute: ActivatedRoute,
-		private actions$: Actions
+		private actions$: Actions,
+		private profileService: ProfileService
 	) {
 		super();
 	}
@@ -79,20 +84,10 @@ export class ProfileComponent
 		this.store.dispatch(
 			new CreateStory({ ...this.storyForm.value, user_id: this.id })
 		);
+	}
 
-		// this.subs.sink = this.store.dispatch(new Signup(this.authForm.value)).subscribe({
-		// 	next: () => {
-		// 		this.subs.sink = this.isAuthenticated$
-		// 			.pipe(
-		// 				tap((authenticated) => {
-		// 					if (!authenticated) this.authForm.setErrors({ invalid: true });
-		// 				})
-		// 			)
-		// 			.subscribe();
-		// 	},
-		// 	error: () => {
-		// 		this.authForm.setErrors({ invalid: true });
-		// 	},
-		// });
+	getImage(imageId: string | null | undefined) {
+		const fallbackImage = 'e70e9711-6d91-407f-b04d-f6c34f75d403.png';
+		return this.profileService.getImage(imageId ?? fallbackImage).subscribe();
 	}
 }
