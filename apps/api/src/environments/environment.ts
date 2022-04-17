@@ -3,7 +3,7 @@ export const environment = {
 
 	// Database Info
 	DATABASE_CONNECTION: 'mongodb://localhost:27017/persona',
-	// 'mongodb+srv://remy:t7mjdezqWKJs6sgT@cluster0.amx9w.mongodb.net/persona',
+	// ,
 	DATABASE_NAME: 'persona',
 	SECRET_SALT: 'heHYthisIStheBENshapiroSHOW',
 
