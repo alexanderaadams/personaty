@@ -1,1 +1,1 @@
-web: nx run api:serve
+web: node dist/apps/api/main.js

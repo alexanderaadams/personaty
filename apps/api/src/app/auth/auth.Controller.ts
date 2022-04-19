@@ -14,7 +14,6 @@ import { AuthService } from './auth.service';
 import { GoogleOauth2 } from './entities/google-oauth-2.entity';
 import { FindUser } from '../core/shared.model';
 import { AuthGuard } from '@nestjs/passport';
-import { TokenAuthGuard } from '../utils/guards/is-auth.guard';
 
 @Controller('auth')
 export class AuthController {
