@@ -1,33 +1,39 @@
 import { Logger, UnauthorizedException, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
-// import helmet from 'helmet';
+import helmet from 'helmet';
 // import * as csurf from 'csurf';
 
+import { environment } from './environments/environment.prod';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 
-	const whitelist = ['http://localhost:4200', '*'];
+	let whitelist = [];
+
+	if (environment.production)
+		whitelist = ['https://625ec6305dd1e81414066825--api-persona.netlify.app'];
+
+	if (!environment.production) whitelist = ['http://localhost:4200'];
 
 	const corsOptions = {
 		credentials: true, // This is important.
-		// methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH'],
-		// allowedHeaders: ['Content-Type, Authorization, X-Requested-With'],
-		origin: (origin, callback) => {
-			// if (whitelist.includes(origin))
-			return callback(null, true);
 
-			// throw new UnauthorizedException('Not allowed by CORS');
+		origin: (origin, callback) => {
+			if (whitelist.includes(origin)) return callback(null, true);
+
+			throw new UnauthorizedException('Not allowed by CORS');
 		},
 	};
 
 	app.enableCors(corsOptions);
 
-	// app.use(helmet());
+	if (environment.production) {
+		app.use(helmet());
 
-	// app.use(csurf());
+		// app.use(csurf());
+	}
 
 	app.use(cookieParser());
 

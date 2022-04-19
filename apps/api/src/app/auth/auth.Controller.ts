@@ -36,7 +36,8 @@ export class AuthController {
 	@Get('signup/:token')
 	async signupToken(
 		@Param('token') token: string,
-		@Res({ passthrough: true }) res: Response
+		@Res({ passthrough: true }) res: Response,
+		@Req() req: Request
 	) {
 		const user = await this.authService.signupToken(token);
 
@@ -48,7 +49,7 @@ export class AuthController {
 				secure: false,
 			});
 		}
-		return res.redirect('http://localhost:4200/home');
+		return res.redirect(`${req.headers.origin}/home`);
 	}
 
 	@Post('is-available')
@@ -134,6 +135,6 @@ export class AuthController {
 			sameSite: 'strict',
 			secure: false,
 		});
-		return res.redirect('http://localhost:4200/auth/success');
+		return res.redirect(`${req.headers.origin}/auth/success`);
 	}
 }

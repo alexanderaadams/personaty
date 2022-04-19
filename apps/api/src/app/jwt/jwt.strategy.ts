@@ -10,8 +10,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 			ignoreExpiration: false,
 			secretOrKey: PUB_KEY,
-			issuer: 'March Inc.',
-			audience: 'www.march.com',
+			issuer: 'Persona Inc.',
+			audience: 'www.persona.com',
 			algorithms: ['RS256', 'RS512'],
 		});
 	}

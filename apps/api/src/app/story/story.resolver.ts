@@ -12,7 +12,7 @@ import { DeleteStoryDto } from './dto/delete-story.dto';
 import { StoryStatus } from './entities/story-status.entity';
 
 @Resolver('Story')
-// @UseGuards(TokenAuthGuard)
+@UseGuards(TokenAuthGuard)
 export class StoryResolver {
 	constructor(private readonly storyService: StoryService) {}
 
