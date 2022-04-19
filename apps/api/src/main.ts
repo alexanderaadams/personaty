@@ -12,9 +12,10 @@ async function bootstrap() {
 
 	let whitelist = [];
 
-	if (environment.production) whitelist = ['https://api-persona.netlify.app'];
+	if (environment.production)
+		whitelist = ['https://api-persona.netlify.app', '*'];
 
-	if (!environment.production) whitelist = ['http://localhost:4200'];
+	if (!environment.production) whitelist = ['http://localhost:4200', '*'];
 
 	const corsOptions = {
 		credentials: true, // This is important.
