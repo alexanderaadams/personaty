@@ -44,7 +44,7 @@ export class AuthResolver {
 		@Args('user', { type: () => SignupDto }) signupUser: SignupDto,
 		@Context('req') req: Request
 	): Promise<AuthenticationStatus> {
-		console.log(req.headers);
+		// console.log(req.headers);
 		const status = await this.authService.sendSignupEmail(
 			signupUser.email,
 			signupUser.password,

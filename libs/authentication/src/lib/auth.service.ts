@@ -59,7 +59,6 @@ export class AuthService {
 	}
 
 	signup(credentials: SignupCredentials) {
-		console.log(credentials);
 		return this.apollo
 			.mutate({
 				mutation: SIGNUP,
@@ -73,14 +72,12 @@ export class AuthService {
 			})
 			.pipe(
 				map(({ data }: any) => {
-					console.log(data);
 					return {
 						status: data?.signup?.status,
 						authenticated: data?.signup?.authenticated,
 					};
 				}),
 				catchError(({ error }) => {
-					console.log(error);
 					return of({
 						status: `Failed to signup, ${error.message} ${error.statusCode}`,
 						authenticated: false,
@@ -103,14 +100,12 @@ export class AuthService {
 			})
 			.pipe(
 				map(({ data }: any) => {
-					// console.log(data);
 					return {
 						status: data?.login?.status,
 						authenticated: data?.login?.authenticated,
 					};
 				}),
 				catchError(({ error }) => {
-					console.log(error);
 					return of({
 						status: `Failed to login, ${error.message} ${error.statusCode}`,
 						authenticated: false,
@@ -152,7 +147,6 @@ export class AuthService {
 
 			.pipe(
 				map(({ data }: any) => {
-					// console.log(data);
 					return {
 						status: data?.forgotPassword?.status,
 						authenticated: data?.forgotPassword?.authenticated,
@@ -181,7 +175,6 @@ export class AuthService {
 			})
 			.pipe(
 				map(({ data }: any) => {
-					// console.log(data);
 					return {
 						status: data?.resetPasswordToken?.status,
 						authenticated: data?.resetPasswordToken?.authenticated,
