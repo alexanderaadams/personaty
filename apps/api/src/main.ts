@@ -12,8 +12,7 @@ async function bootstrap() {
 
 	let whitelist = [];
 
-	if (environment.production)
-		whitelist = ['https://625ec6305dd1e81414066825--api-persona.netlify.app'];
+	if (environment.production) whitelist = ['https://api-persona.netlify.app'];
 
 	if (!environment.production) whitelist = ['http://localhost:4200'];
 
