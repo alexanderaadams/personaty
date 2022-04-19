@@ -11,7 +11,6 @@ import {
 import { Response, Request } from 'express';
 
 import { AuthService } from './auth.service';
-import { Serialize } from '../user/interceptors/serialize.interceptor';
 import { GoogleOauth2 } from './entities/google-oauth-2.entity';
 import { FindUser } from '../core/shared.model';
 import { AuthGuard } from '@nestjs/passport';
