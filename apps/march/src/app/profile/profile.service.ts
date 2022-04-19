@@ -12,7 +12,8 @@ import { ProfileStateModel } from './store/profile.model';
 	providedIn: 'root',
 })
 export class ProfileService {
-	rootUrl = 'http://localhost:3333/api/v1';
+	// rootUrl = 'http://localhost:3333/api/v1';
+	rootUrl = 'https://api-persona2.herokuapp.com/api/v1';
 
 	constructor(
 		private http: HttpClient,
@@ -38,6 +39,4 @@ export class ProfileService {
 				})
 			);
 	}
-
-
 }

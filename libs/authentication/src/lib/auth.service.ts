@@ -26,7 +26,7 @@ import {
 	providedIn: 'root',
 })
 export class AuthService {
-	rootUrl = 'http://localhost:3333/api/v1';
+	rootUrl = 'https://api-persona2.herokuapp.com/api/v1';
 	signedin$ = new BehaviorSubject(false);
 	username = '';
 	email = '';

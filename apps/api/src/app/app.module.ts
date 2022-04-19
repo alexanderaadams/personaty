@@ -7,6 +7,7 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
+import { ConfigModule } from '@nestjs/config';
 
 import { AppService } from './app.service';
 import { environment } from '../environments/environment';
@@ -63,6 +64,7 @@ import { StoryModule } from './story/story.module';
 		// 		limit: 2005,
 		// 	}),
 		// }),
+		ConfigModule.forRoot(),
 	],
 	controllers: [],
 	providers: [

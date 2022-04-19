@@ -16,6 +16,7 @@ import { MyJWTService } from '../jwt/jwt.service';
 
 @Injectable()
 export class StoryService {
+	rootUrl = 'https://api-persona2.herokuapp.com/api/v1';
 	async checkUserHasStory(token: string, id: string) {
 		const authUser = await this.myJWTService.verifyToken(token);
 

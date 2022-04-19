@@ -12,7 +12,6 @@ import { CookieService } from 'ngx-cookie-service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 
-
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NotFoundComponent } from './not-found/not-found.component';
@@ -53,7 +52,8 @@ import { AuthState, MaterialModule } from '@march/authentication';
 				return {
 					cache: new InMemoryCache(),
 					link: httpLink.create({
-						uri: 'http://localhost:3333/graphql',
+						uri: 'https://api-persona2.herokuapp.com/graphql',
+						// uri: 'http://localhost:3333/graphql',
 					}),
 				};
 			},
@@ -61,6 +61,5 @@ import { AuthState, MaterialModule } from '@march/authentication';
 		},
 	],
 	bootstrap: [AppComponent],
-
 })
 export class AppModule {}
