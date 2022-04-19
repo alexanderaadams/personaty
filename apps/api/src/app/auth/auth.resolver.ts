@@ -110,9 +110,13 @@ export class AuthResolver {
 		description: 'Validate account using the sended token',
 	})
 	async sendForgotPasswordEmail(
-		@Args('user', { type: () => Object }) resetPasswordEmail: { email: string }
+		@Args('user', { type: () => Object }) resetPasswordEmail: { email: string },
+		@Context('req') req: Request
 	): Promise<AuthenticationStatus> {
-		await this.authService.sendForgotPasswordEmail(resetPasswordEmail.email);
+		await this.authService.sendForgotPasswordEmail(
+			resetPasswordEmail.email,
+			req.headers.origin
+		);
 
 		return {
 			status: 'Successfully send forgot password email',

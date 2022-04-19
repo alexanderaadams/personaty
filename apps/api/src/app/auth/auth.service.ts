@@ -44,7 +44,7 @@ export class AuthService {
 		email: string,
 		password: string,
 		birthDate: string,
-		reqHeadersOrigin: string
+		reqHeadersHost: string
 	) {
 		try {
 			const user = await this.usersService.findOne({ email });
@@ -58,7 +58,7 @@ export class AuthService {
 				}
 			);
 
-			const tokenURL = `${reqHeadersOrigin}/api/v1/auth/signup/${token}`;
+			const tokenURL = `${reqHeadersHost}/api/v1/auth/signup/${token}`;
 
 			this.nodemailerService.sendEmail(
 				email,
@@ -197,7 +197,7 @@ export class AuthService {
 		}
 	}
 
-	async sendForgotPasswordEmail(email: string) {
+	async sendForgotPasswordEmail(email: string, reqHeadersOrigin: string) {
 		try {
 			const user = await this.usersService.findOne({ email });
 
@@ -210,7 +210,7 @@ export class AuthService {
 				}
 			);
 
-			const tokenURL = `http://localhost:4200/auth/reset-password/${token}`;
+			const tokenURL = `${reqHeadersOrigin}/auth/reset-password/${token}`;
 			// console.log(user);
 			this.nodemailerService.sendEmail(
 				email,
