@@ -1,3 +1,4 @@
+import { isObject } from '@ngxs/store/src/internal/internals';
 import {
 	IsAlpha,
 	IsEnum,
@@ -6,10 +7,12 @@ import {
 	IsString,
 	IsDate,
 	IsArray,
+	IsObject,
 } from 'class-validator';
 import { User } from '../core/graphql.schema';
 import { Gender, Role } from '../core/shared.enum';
 import { StoryModel } from '../story/story.model';
+import { TagAndBio } from './entities/tag-and-bio.entity';
 
 export class UserModel extends User {
 	@IsString()
@@ -33,6 +36,9 @@ export class UserModel extends User {
 	@IsString()
 	profilePicture: string;
 
+	@IsString()
+	profileCover: string;
+
 	@IsDateString()
 	birthDate: string;
 
@@ -48,9 +54,9 @@ export class UserModel extends User {
 	@IsArray()
 	stories: StoryModel[];
 
-	@IsString()
-	bio: string;
+	@IsObject()
+	bio: TagAndBio;
 
 	@IsArray()
-	tags: string[];
+	tags: TagAndBio[];
 }

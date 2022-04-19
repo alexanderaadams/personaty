@@ -1,5 +1,6 @@
 import { IsOptional, IsString, IsArray } from 'class-validator';
 import { CreateStoryInput } from '../../core/graphql.schema';
+import { Category } from '../entities/category.entity';
 
 export class CreateStoryDto extends CreateStoryInput {
 	@IsString()
@@ -16,5 +17,5 @@ export class CreateStoryDto extends CreateStoryInput {
 	// cover_image?: string;
 
 	@IsArray()
-	category: string[];
+	category: Category[];
 }

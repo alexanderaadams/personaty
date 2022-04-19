@@ -12,7 +12,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 
-import { StoryComponent } from './story/story.component';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NotFoundComponent } from './not-found/not-found.component';
@@ -23,7 +23,7 @@ import { StoryState } from './story/store/story.state';
 import { AuthState, MaterialModule } from '@march/authentication';
 
 @NgModule({
-	declarations: [AppComponent, NotFoundComponent, StoryComponent],
+	declarations: [AppComponent, NotFoundComponent],
 	imports: [
 		BrowserModule,
 		BrowserAnimationsModule,
@@ -61,6 +61,6 @@ import { AuthState, MaterialModule } from '@march/authentication';
 		},
 	],
 	bootstrap: [AppComponent],
-	exports: [StoryComponent],
+
 })
 export class AppModule {}

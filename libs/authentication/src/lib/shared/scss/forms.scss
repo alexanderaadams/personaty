@@ -5,8 +5,14 @@
 	stroke: var(--bs-white);
 	fill: var(--bs-white);
 }
+
 .mx-md-15 {
 	@media (min-width: 540px) {
 		margin: 0 15vw;
 	}
+}
+
+.form-box {
+	border: 0.1rem solid var(--mat-bg);
+	border-radius: 0.8rem;
 }

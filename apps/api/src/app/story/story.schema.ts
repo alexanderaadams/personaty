@@ -3,19 +3,18 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Schema as MongooseSchema, Types, Document, model } from 'mongoose';
 
 import { User } from '../user/user.schema';
+import { Category } from './entities/category.entity';
 
 export type StoryDocument = Story & Document;
 
 @Schema()
 export class Story extends Document {
-	@Prop({ type: String, required: true })
-	title: string;
-
-	@Prop({ type: String, required: true })
-	description: string;
-
-	@Prop({ type: [String], required: true })
-	category: string[];
+	@Prop({
+		type: { text: String, color: String },
+		default: { text: '', color: '#fff' },
+		required: true,
+	})
+	category: Category[];
 
 	@Prop({
 		type: String,

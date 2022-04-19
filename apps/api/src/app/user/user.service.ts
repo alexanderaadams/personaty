@@ -139,14 +139,6 @@ export class UserService {
 		}
 	}
 
-	// async isVerified(jwt: string) {
-	// 	try {
-	// 		return await this.myJWTService.verifyToken(jwt);
-	// 	} catch (_) {
-	// 		throw new BadGatewayException('Something Went Wrong');
-	// 	}
-	// }
-
 	async uploadImage(file: Express.Multer.File, id: string) {
 		try {
 			const user = await this.findUserById(id);

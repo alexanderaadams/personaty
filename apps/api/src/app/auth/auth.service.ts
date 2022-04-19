@@ -40,33 +40,38 @@ export class AuthService {
 		}
 	}
 
-	async sendSignupEmail(email: string, password: string, birthDate: string) {
+	async sendSignupEmail(
+		email: string,
+		password: string,
+		birthDate: string,
+		reqHeadersOrigin: string
+	) {
 		try {
 			const user = await this.usersService.findOne({ email });
 
 			if (user) throw new ConflictException();
 
-			// const token = await this.myJWTService.signToken(
-			// 	{ email, password, birthDate },
-			// 	{
-			// 		expiresIn: '15m',
-			// 	}
-			// );
+			const token = await this.myJWTService.signToken(
+				{ email, password, birthDate },
+				{
+					expiresIn: '15m',
+				}
+			);
 
-			// const tokenURL = `http://localhost:3333/api/v1/auth/signup/${token}`;
+			const tokenURL = `${reqHeadersOrigin}/api/v1/auth/signup/${token}`;
 
-			// this.nodemailerService.sendEmail(
-			// 	email,
-			// 	'Verify Your Email',
-			// 	'Click On The Button To Verify Your Email',
-			// 	tokenURL
-			// );
-			const hashedPassword = await this.hashingPassword(password);
-			const newUser = await this.usersService.createUser({
+			this.nodemailerService.sendEmail(
 				email,
-				password: hashedPassword,
-				birthDate,
-			});
+				'Verify Your Email',
+				'Click On The Button To Verify Your Email',
+				tokenURL
+			);
+			const hashedPassword = await this.hashingPassword(password);
+			// const newUser = await this.usersService.createUser({
+			// 	email,
+			// 	password: hashedPassword,
+			// 	birthDate,
+			// });
 			return { status: 'Email Has Been Send, Check Your Email' };
 			// return newUser;
 		} catch (err) {

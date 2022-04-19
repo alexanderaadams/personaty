@@ -11,9 +11,15 @@ export const GET_USER_INFO = gql`
 
 			created_at
 
-			bio
+			bio {
+				text
+				color
+			}
 
-			tags
+			tags {
+				text
+				color
+			}
 
 			stories {
 				_id

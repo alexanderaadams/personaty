@@ -1,14 +1,10 @@
-import { IsString, IsOptional } from 'class-validator';
-import { UpdateStoryInput } from '../../core/graphql.schema';
+import { IsString, IsOptional, IsArray } from 'class-validator';
+import { Category, UpdateStoryInput } from '../../core/graphql.schema';
 
 export class UpdateStoryDto extends UpdateStoryInput {
-	@IsString()
+	@IsArray()
 	@IsOptional()
-	title?: string;
-
-	@IsString()
-	@IsOptional()
-	description?: string;
+	category?: Category[];
 
 	@IsString()
 	@IsOptional()

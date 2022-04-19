@@ -1,1 +1,65 @@
-<p>story works!</p>
+<section class="mt-3">
+    <form class="row gap-3" (ngSubmit)="onSubmit()" [formGroup]="storyForm">
+        <input
+            class="w-100 text-light fs-5 story-title"
+            [formControlName]="'title'"
+            spellcheck="true"
+            placeholder="Write your story's title here"
+        />
+
+        <!-- <mat-form-field class="w-100 container"> -->
+        <!-- <mat-label>Category</mat-label> -->
+        <mat-chip-list #chipList aria-label="Category selection" class="p-5">
+            <mat-chip
+                *ngFor="let category of categories"
+                (removed)="remove(category)"
+            >
+                {{ category }}
+                <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip>
+            <input
+                class="story-category"
+                [formControlName]="'category'"
+                spellcheck="true"
+                placeholder="New Category..."
+                [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="addOnBlur"
+                (matChipInputTokenEnd)="add($event)"
+            />
+        </mat-chip-list>
+        <!-- </mat-form-field> -->
+
+        <input
+            style="background: transparent; border: 0; height: 15vh"
+            class="w-100 text-light p-5 fs-3"
+            [formControlName]="'description'"
+            spellcheck="true"
+            placeholder="Write your story's title here"
+        />
+
+        <div class="row justify-content-center align-items-center">
+            <div class="row">
+                <button
+                    class="p-2 mb-3 fs-5"
+                    mat-raised-button
+                    color="primary"
+                    type="submit"
+                >
+                    Signup
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Description</mat-label>
+        <input
+            spellcheck="true"
+            matInput
+            placeholder="Write your story's description here"
+        />
+    </mat-form-field> -->
+</section>

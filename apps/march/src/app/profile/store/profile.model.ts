@@ -1,4 +1,8 @@
 import { StoryStateModel } from '../../story/store/story.model';
+
+
+export interface tag {text:string,color:string}
+
 export interface ProfileStateModel {
 	fullName: string | null;
 
@@ -10,7 +14,7 @@ export interface ProfileStateModel {
 
 	stories: StoryStateModel[] | null;
 
-	bio: string | null;
+	bio: tag | null;
 
-	tags: string[] | null;
+	tags: tag[] | null;
 }

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Schema as MongooseSchema, Document, Types } from 'mongoose';
+import { TagAndBio } from './entities/tag-and-bio.entity';
 
 export type UserDocument = User & Document;
 
@@ -11,7 +12,7 @@ export class User {
 	@Prop({ type: String, default: '' })
 	fullName: string;
 
-	@Prop({ type: String,default: '' })
+	@Prop({ type: String, default: '' })
 	username: string;
 
 	@Prop({ type: String, required: true, unique: true })
@@ -37,6 +38,12 @@ export class User {
 		default: '',
 	})
 	profilePicture: string;
+
+	@Prop({
+		type: String,
+		default: '',
+	})
+	profileCover: string;
 
 	@Prop({ type: String })
 	birthDate: Date;
@@ -79,11 +86,14 @@ export class User {
 	@Prop({ type: Date, default: Date.now(), select: false })
 	updated_at: Date;
 
-	@Prop({ type: String, default: '' })
-	bio: string;
+	@Prop({
+		type: { text: String, color: String },
+		default: { text: '', color: '#fff' },
+	})
+	bio: TagAndBio;
 
-	@Prop({ type: [String], default: [''] })
-	tags: string[];
+	@Prop({ type: [{ text: String, color: String }], default: [''] })
+	tags: TagAndBio[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

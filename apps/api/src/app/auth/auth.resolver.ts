@@ -41,12 +41,15 @@ export class AuthResolver {
 		description: 'send email contains token to be used for signing up',
 	})
 	async signup(
-		@Args('user', { type: () => SignupDto }) signupUser: SignupDto
+		@Args('user', { type: () => SignupDto }) signupUser: SignupDto,
+		@Context('req') req: Request
 	): Promise<AuthenticationStatus> {
+		console.log(req.headers);
 		const status = await this.authService.sendSignupEmail(
 			signupUser.email,
 			signupUser.password,
-			signupUser.birthDate
+			signupUser.birthDate,
+			`${req.protocol}://${req.headers.host}`
 		);
 
 		return { status: status.status, authenticated: null };

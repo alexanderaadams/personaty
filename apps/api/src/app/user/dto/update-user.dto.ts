@@ -1,7 +1,9 @@
 import {
+	IsArray,
 	IsDateString,
 	IsEmail,
 	IsEnum,
+	IsObject,
 	IsOptional,
 	IsString,
 } from 'class-validator';
@@ -40,4 +42,12 @@ export class UpdateUserDto extends UpdateUserInput {
 	@IsString()
 	@IsOptional()
 	profilePicture?: string;
+
+	@IsObject()
+	@IsOptional()
+	bio?: { text: string; color: string };
+
+	@IsArray()
+	@IsOptional()
+	tags?: { text: string; color: string }[];
 }
