@@ -46,7 +46,7 @@ import { ImageModule } from './image/image.module';
 				sortSchema: true,
 				cors: {
 					credentials: true,
-					origin: true,
+					origin: [environment.URI_HOST, environment.URI_ORIGIN, undefined],
 				},
 				context: ({ req, res }) => {
 					return {
