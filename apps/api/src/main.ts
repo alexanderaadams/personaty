@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 // import * as csurf from 'csurf';
+import * as compression from 'compression';
 
 import { environment } from './environments/environment';
 import { AppModule } from './app/app.module';
@@ -27,6 +28,7 @@ async function bootstrap() {
 	};
 
 	app.enableCors(corsOptions);
+	app.use(compression());
 
 	if (environment.production) {
 		app.use(helmet());
