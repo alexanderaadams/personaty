@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 
 import { GraphQLModule } from '@nestjs/graphql';
@@ -16,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
 import { StoryModule } from './story/story.module';
 import { ImageModule } from './image/image.module';
+import { AllExceptionsFilter } from './all-exceptions.filter';
 
 @Module({
 	imports: [
@@ -45,8 +46,10 @@ import { ImageModule } from './image/image.module';
 				// plugins: [ApolloServerPluginLandingPageLocalDefault()],
 				sortSchema: true,
 				cors: {
-					credentials: true,
 					origin: [environment.URI_HOST, environment.URI_ORIGIN, undefined],
+					credentials: true,
+					preflightContinue: true,
+					optionsSuccessStatus: 200,
 				},
 				context: ({ req, res }) => {
 					return {
@@ -61,20 +64,24 @@ import { ImageModule } from './image/image.module';
 
 		ImageModule,
 
-		// ThrottlerModule.forRootAsync({
-		// 	useFactory: () => ({
-		// 		ttl: 360,
-		// 		limit: 2005,
-		// 	}),
-		// }),
+		ThrottlerModule.forRootAsync({
+			useFactory: () => ({
+				ttl: 360,
+				limit: 2000,
+			}),
+		}),
 	],
 	controllers: [],
 	providers: [
 		AppService,
-		// {
-		// 	provide: APP_GUARD,
-		// 	useClass: ThrottlerGuard,
-		// },
+		{
+			provide: APP_GUARD,
+			useClass: ThrottlerGuard,
+		},
+		{
+			provide: APP_FILTER,
+			useClass: AllExceptionsFilter,
+		},
 	],
 })
 export class AppModule {}
