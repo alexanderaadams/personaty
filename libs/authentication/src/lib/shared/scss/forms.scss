@@ -6,13 +6,9 @@
 	fill: var(--bs-white);
 }
 
-.mx-sm-5 {
-	@media (max-width: 540px) {
-		margin: 0 5vw;
-	}
-}
-
 .form-box {
-	border: 0.15rem solid var(--mat-bg);
-	border-radius: 0.8rem;
+	@media (min-width: 575px) {
+		border: 0.15rem solid var(--mat-bg);
+		border-radius: 0.8rem;
+	}
 }
