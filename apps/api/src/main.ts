@@ -1,5 +1,6 @@
 import { Logger, UnauthorizedException, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+// import { ExpressAdapter } from '@nestjs/platform-express';
 import * as cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 // import * as csurf from 'csurf';
@@ -10,16 +11,19 @@ import { AppModule } from './app/app.module';
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 
-	const whitelist = [environment.URI_HOST, environment.URI_ORIGIN];
+	const whitelist = [environment.URI_HOST, environment.URI_ORIGIN, undefined];
 
 	const corsOptions = {
-		credentials: true, // This is important.
-
-		origin: (origin, callback) => {
-			if (whitelist.includes(origin)) return callback(null, true);
+		origin: function (origin, callback) {
+			// console.log(origin);
+			if (whitelist.filter((x) => x && x.startsWith(origin)))
+				return callback(null, true);
 
 			throw new UnauthorizedException('Not allowed by CORS');
 		},
+		credentials: true,
+		preflightContinue: true,
+		optionsSuccessStatus: 200,
 	};
 
 	app.enableCors(corsOptions);
@@ -48,8 +52,10 @@ async function bootstrap() {
 	Logger.log(`🚀 Application is running on: http://localhost:${port}`);
 
 	Logger.log(
-		`🧑‍💻 The Application is running on: ${environment.ENVIRONMENT_NAME} environment`
+		`🧑‍💻 Application is running on: ${environment.ENVIRONMENT_NAME} environment`
 	);
+
+	// console.log(whitelist);
 }
 
 bootstrap();

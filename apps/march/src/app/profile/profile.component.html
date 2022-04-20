@@ -5,9 +5,10 @@
 				class="position-relative w-100 row justify-content-center align-content-center"
 				style="height: 40vh"
 			>
-				<div class="profile-background w-100 h-50"></div>
+				<div class="bg-unknown w-100 h-50"></div>
 
 				<img
+					async
 					style="
 						width: 25vh;
 						height: 25vh;
@@ -16,9 +17,7 @@
 						border: 0.2rem solid var(--bg-primary-darker);
 					"
 					class="bottom-0 shadow-sm img-fluid rounded-circle position-absolute border-info"
-					[src]="
-						'http://localhost:3333/api/v1/user/picture/' + user?.profilePicture
-					"
+					[src]="backendURL + '/api/v1/image/picture/' + user?.profilePicture"
 					alt="Profile Picture"
 				/>
 			</div>
@@ -46,12 +45,28 @@
 				</mat-chip>
 			</mat-chip-list>
 		</header>
-		<march-story [storyForm]="storyForm" [id]="id"></march-story>
+		<section
+			(click)="onCreateStory()"
+			*ngIf="(createStory | async) === false"
+			class="row justify-content-center align-items-center my-3 bg-unknown vh-25 br-04 shadow-sm"
+		></section>
+
+		<section
+			*ngIf="createStory | async"
+			style="background-color: #c2185c20"
+			(dismiss)="onCancelStory()"
+			class="position-fixed vh-100 vw-100 top-0"
+		>
+			<march-story [storyForm]="storyForm" [id]="id"></march-story>
+		</section>
 
 		<section class="row justify-content-center align-items-center mt-3">
 			<div class="col" *ngFor="let story of user?.stories">
-				<!-- <img [src]="	'http://localhost:3333/api/v1/user/picture/' + story.cover_image" alt="Story photo" /> -->
-				<h4>{{ story.title }}</h4>
+				<!-- <img [src]="	backendURL+'/api/v1/user/picture/' + story.cover_image" alt="Story photo" /> -->
+
+				<ng-container *ngFor="let category of story?.category">
+					<h4>{{ category.text }}</h4>
+				</ng-container>
 			</div>
 		</section>
 	</div>

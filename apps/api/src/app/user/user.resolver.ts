@@ -1,3 +1,4 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { TokenAuthGuard } from '../utils/guards/is-auth.guard';
 
@@ -7,7 +8,7 @@ import { UserModel } from './user.model';
 import { UserService } from './user.service';
 
 @Resolver('User')
-// @UseGuards(TokenAuthGuard)
+@UseGuards(TokenAuthGuard)
 export class UserResolver {
 	constructor(private readonly userService: UserService) {}
 
@@ -35,12 +36,12 @@ export class UserResolver {
 		return await this.userService.updateUser(id, updateUser);
 	}
 
-	@Mutation(() => UserStatus, {
-		name: 'deleteUser',
-		description: 'Create Story',
-	})
-	async deleteUser(@Args('id', { type: () => ID }) id: string) {
-		await this.userService.deleteUser(id);
-		return { status: 'User has been deleted successfully' };
-	}
+	// @Mutation(() => UserStatus, {
+	// 	name: 'deleteUser',
+	// 	description: 'Create Story',
+	// })
+	// async deleteUser(@Args('id', { type: () => ID }) id: string) {
+	// 	await this.userService.deleteUser(id);
+	// 	return { status: 'User has been deleted successfully' };
+	// }
 }

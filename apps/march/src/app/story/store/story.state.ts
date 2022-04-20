@@ -13,10 +13,8 @@ import { StoryService } from '../story.service';
 	defaults: {
 		_id: null,
 
-		title: null,
-
-		description: null,
-
+		category:null,
+		
 		created_at: null,
 
 		user_id: null,

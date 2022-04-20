@@ -6,21 +6,16 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { join } from 'path';
 
-
-import { isFileExtensionSafe, removeFile } from './image-storage';
 import { UserInfo } from '../core/shared.model';
 import { UserDocument } from './user.schema';
 import { UserModel } from './user.model';
 import { UserSensitiveInformation } from './entities/user-sensitive-information.entity';
-import { readFile } from 'fs';
 
 @Injectable()
 export class UserService {
 	constructor(
-		@InjectModel('User') private readonly userModel: Model<UserDocument>,
-
+		@InjectModel('User') private readonly userModel: Model<UserDocument>
 	) {}
 
 	async createUser(user: {
@@ -124,59 +119,6 @@ export class UserService {
 			return null as unknown as Promise<null>;
 		} catch (_) {
 			throw new BadGatewayException('Something Went Wrong');
-		}
-	}
-	async uploadImage(file: Express.Multer.File, id: string) {
-		try {
-			const user = await this.findUserById(id);
-
-			const fileName = file?.filename;
-
-			if (!fileName)
-				return { valid: false, error: 'File must be a png, jpg/jpeg' };
-
-			const imagesFolderPath = join(process.cwd(), 'upload');
-
-			const fullImagePath = join(imagesFolderPath + '/' + file.filename);
-
-			const isFileLegit = await isFileExtensionSafe(fullImagePath);
-
-			if (isFileLegit)
-				return this.updateUser(user._id, {
-					profilePicture: fileName,
-				});
-
-			removeFile(fullImagePath);
-
-			return {
-				valid: false,
-				error: 'File content does not match extension!',
-			};
-		} catch (err) {
-			throw new HttpException('Something Went Wrong', 500);
-		}
-	}
-
-	async getImage(imageId): Promise<boolean> {
-		try {
-			const imagesFolderPath = join(process.cwd(), 'upload');
-
-			const fullImagePath = join(imagesFolderPath + '/' + imageId);
-
-			const DoesImageExist = function () {
-				return new Promise(function (resolve, reject) {
-					readFile(fullImagePath, 'utf8', function (err, data) {
-						if (err) reject(err);
-						else resolve(data);
-					});
-				});
-			};
-
-			if (await DoesImageExist()) return true;
-
-			throw new HttpException('File Does Not Exist', 404);
-		} catch (err) {
-			throw new HttpException('Something Went Wrong', 500);
 		}
 	}
 }

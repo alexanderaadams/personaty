@@ -24,4 +24,4 @@ import { MyJWTService } from './jwt.service';
 	providers: [MyJWTService, JwtStrategy],
 	exports: [MyJWTService],
 })
-export class JWTModule {}
+export class MyJWTModule {}

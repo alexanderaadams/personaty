@@ -6,7 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { StorySchema } from './story.schema';
 import { DateScalar } from '../core/date.scalar';
 import { UserSchema } from '../user/user.schema';
-import { JWTModule } from '../jwt/jwt.module';
+import { MyJWTModule } from '../jwt/jwt.module';
 
 @Module({
 	imports: [
@@ -18,7 +18,7 @@ import { JWTModule } from '../jwt/jwt.module';
 			],
 			'persona'
 		),
-		JWTModule,
+		MyJWTModule,
 	],
 	providers: [StoryResolver, StoryService, DateScalar],
 })

@@ -3,8 +3,8 @@ export const environment = {
 
 	ENVIRONMENT_NAME: 'production',
 
-	URI_HOST: 'https://api-persona2.herokuapp.com/graphql',
-	URI_ORIGIN: 'https://personaty.netlify.app/',
+	URI_HOST: 'https://api-persona2.herokuapp.com',
+	URI_ORIGIN: 'https://personaty.netlify.app',
 
 	DATABASE_CONNECTION:
 		'mongodb+srv://remy:t7mjdezqWKJs6sgT@cluster0.amx9w.mongodb.net/persona',

@@ -5,11 +5,12 @@ import { Select, Store, Actions } from '@ngxs/store';
 import { GetUserInfo } from './store/profile.action';
 import { UnsubscribeOnDestroyAdapter } from '@march/authentication';
 import { ProfileState } from './store/profile.state';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ProfileStateModel } from './store/profile.model';
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { colors } from '../core/colors';
+import { environment } from '../../environments/environment';
+// import { colors } from '../core/colors';
 @Component({
 	selector: 'march-profile',
 	templateUrl: './profile.component.html',
@@ -19,7 +20,8 @@ export class ProfileComponent
 	extends UnsubscribeOnDestroyAdapter
 	implements OnInit
 {
-	bgColors = colors;
+	backendURL = environment.URI_BACKEND;
+	createStory = new BehaviorSubject(false);
 
 	storyForm = new FormGroup({
 		title: new FormControl('', [Validators.required]),
@@ -47,4 +49,11 @@ export class ProfileComponent
 		this.store.dispatch(new GetUserInfo(this.id));
 	}
 
+	onCreateStory() {
+		this.createStory.next(true);
+	}
+
+	onCancelStory() {
+		this.createStory.next(false);
+	}
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -14,6 +14,7 @@ import { CreateStory } from './store/story.action';
 	styleUrls: ['./story.component.scss'],
 })
 export class StoryComponent extends UnsubscribeOnDestroyAdapter {
+	@Output() dismiss = new EventEmitter();
 	@Input() storyForm!: FormGroup;
 	@Input() id!: string;
 
@@ -61,5 +62,9 @@ export class StoryComponent extends UnsubscribeOnDestroyAdapter {
 		this.store.dispatch(
 			new CreateStory({ ...this.storyForm.value, user_id: this.id })
 		);
+	}
+
+	onDismissClick() {
+		this.dismiss.emit(true);
 	}
 }

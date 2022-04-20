@@ -1,9 +1,13 @@
+export interface Category {
+	text: string;
+
+	color: string;
+}
+
 export interface StoryStateModel {
 	_id: string | null;
 
-	title: string | null;
-
-	description: string | null;
+	category: Category[] | null;
 
 	// cover_image: string | null;
 

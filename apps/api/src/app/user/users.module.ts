@@ -4,7 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { UserSchema } from './user.schema';
-import { JWTModule } from '../jwt/jwt.module';
+import { MyJWTModule } from '../jwt/jwt.module';
 import { DateScalar } from '../core/date.scalar';
 import { UserResolver } from './user.resolver';
 
@@ -14,7 +14,7 @@ import { UserResolver } from './user.resolver';
 			[{ name: 'User', schema: UserSchema }],
 			'persona'
 		),
-		JWTModule,
+		MyJWTModule,
 	],
 	controllers: [UserController],
 	providers: [UserService, UserResolver, DateScalar],

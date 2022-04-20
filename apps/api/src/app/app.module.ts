@@ -15,6 +15,7 @@ import { UserModule } from './user/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
 import { StoryModule } from './story/story.module';
+import { ImageModule } from './image/image.module';
 
 @Module({
 	imports: [
@@ -58,13 +59,14 @@ import { StoryModule } from './story/story.module';
 			}),
 		}),
 
+		ImageModule,
+
 		// ThrottlerModule.forRootAsync({
 		// 	useFactory: () => ({
 		// 		ttl: 360,
 		// 		limit: 2005,
 		// 	}),
 		// }),
-		ConfigModule.forRoot(),
 	],
 	controllers: [],
 	providers: [
