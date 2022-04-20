@@ -1,6 +1,12 @@
 export const environment = {
 	production: false,
 
+	ENVIRONMENT_NAME: 'development',
+
+	//URIs
+	URI_HOST: 'http://localhost:3333',
+	URI_ORIGIN: 'http://localhost:4200',
+
 	// Database Info
 	DATABASE_CONNECTION: 'mongodb://localhost:27017/persona',
 	// ,
@@ -14,8 +20,8 @@ export const environment = {
 	GOOGLE_CALLBACK_URL: '/api/v1/auth/redirect',
 
 	// Mailtrap Info for Nodemailer
-	EMAIL_HOST: 'smtp.office365.com',
-	EMAIL_PORT: 587,
-	EMAIL_ID: 'persona1335-613@hotmail.com',
-	EMAIL_PASS: 'agg3sHE3#HRD4?LKdf472b-vxzznmBMRD25ah36',
+	NODEMAILER_HOST: 'smtp.mailtrap.io',
+	NODEMAILER_PORT: 2525,
+	NODEMAILER_USER: '9063ef07a10237',
+	NODEMAILER_PASSWORD: '68c620d9e5780b',
 };

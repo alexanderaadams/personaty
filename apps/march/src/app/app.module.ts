@@ -52,8 +52,7 @@ import { AuthState, MaterialModule } from '@march/authentication';
 				return {
 					cache: new InMemoryCache(),
 					link: httpLink.create({
-						uri: 'https://api-persona2.herokuapp.com/graphql',
-						// uri: 'http://localhost:3333/graphql',
+						uri: `${environment.URI_BACKEND}/graphql`,
 					}),
 				};
 			},

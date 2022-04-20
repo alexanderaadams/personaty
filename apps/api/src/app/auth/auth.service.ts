@@ -76,8 +76,8 @@ export class AuthService {
 			// return newUser;
 		} catch (err) {
 			throw new HttpException(
-				err?.message || err?.response?.message || 'Something Went Wrong',
-				err?.status || err?.response?.statusCode || 500
+			 'Something Went Wrong',
+				500
 			);
 		}
 	}
@@ -111,8 +111,8 @@ export class AuthService {
 			};
 		} catch (err) {
 			throw new HttpException(
-				err?.message || err?.response?.message || 'Something Went Wrong',
-				err?.status || err?.response?.statusCode || 500
+			 'Something Went Wrong',
+				 500
 			);
 		}
 	}
@@ -139,15 +139,15 @@ export class AuthService {
 				id: user._id.toString(),
 				email,
 			});
-			// console.log(user._id.toString(), token);
+
 			return {
 				user,
 				token,
 			};
 		} catch (err) {
 			throw new HttpException(
-				err?.message || err?.response?.message || 'Something Went Wrong',
-				err?.status || err?.response?.statusCode || 500
+		'Something Went Wrong',
+			 500
 			);
 		}
 	}
@@ -161,7 +161,7 @@ export class AuthService {
 			if (!googleUser) {
 				throw new NotFoundException('Did not get any user from google');
 			}
-			// console.log(googleUser);
+
 
 			const user = await this.usersService.findOne({ email: googleUser.email });
 
@@ -191,8 +191,8 @@ export class AuthService {
 			};
 		} catch (err) {
 			throw new HttpException(
-				err?.message || err?.response?.message || 'Something Went Wrong',
-				err?.status || err?.response?.statusCode || 500
+		 'Something Went Wrong',
+			 500
 			);
 		}
 	}
@@ -221,8 +221,8 @@ export class AuthService {
 			return { status: 'Email has ben send' };
 		} catch (err) {
 			throw new HttpException(
-				err?.message || err?.response?.message || 'Something Went Wrong',
-				err?.status || err?.response?.statusCode || 500
+	'Something Went Wrong',
+	500
 			);
 		}
 	}
@@ -259,8 +259,8 @@ export class AuthService {
 			};
 		} catch (err) {
 			throw new HttpException(
-				err?.message || err?.response?.message || 'Something Went Wrong',
-				err?.status || err?.response?.statusCode || 500
+			 'Something Went Wrong',
+		 500
 			);
 		}
 	}

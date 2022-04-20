@@ -8,7 +8,7 @@
 		"start": "nx serve",
 		"build": "nx build",
 		"test": "nx test",
-		"heroku-postbuild": "nx build api --prod"
+		"heroku-postbuild": "nx run api:build:production "
 	},
 	"private": true,
 	"dependencies": {

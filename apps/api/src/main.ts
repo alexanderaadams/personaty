@@ -4,18 +4,13 @@ import * as cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 // import * as csurf from 'csurf';
 
-import { environment } from './environments/environment.prod';
+import { environment } from './environments/environment';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 
-	let whitelist = [];
-
-	// if (environment.production)
-	whitelist = ['https://api-persona.netlify.app', '*', 'http://localhost:4200'];
-
-	// if (!environment.production) whitelist = ['http://localhost:4200', '*'];
+	const whitelist = [environment.URI_HOST, environment.URI_ORIGIN];
 
 	const corsOptions = {
 		credentials: true, // This is important.
@@ -29,11 +24,11 @@ async function bootstrap() {
 
 	app.enableCors(corsOptions);
 
-	// if (environment.production) {
-	app.use(helmet());
+	if (environment.production) {
+		app.use(helmet());
 
-	// app.use(csurf());
-	// }
+		// app.use(csurf());
+	}
 
 	app.use(cookieParser());
 
@@ -46,12 +41,15 @@ async function bootstrap() {
 			whitelist: true,
 		})
 	);
-	console.log(process.env);
 
 	const port = process.env.PORT || 3333;
 
 	await app.listen(port);
 	Logger.log(`🚀 Application is running on: http://localhost:${port}`);
+
+	Logger.log(
+		`🧑‍💻 The Application is running on: ${environment.ENVIRONMENT_NAME} environment`
+	);
 }
 
 bootstrap();

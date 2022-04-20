@@ -62,10 +62,7 @@ style="
 				// console.log(success);
 			})
 			.catch((err) => {
-				throw new HttpException(
-					err?.message || err?.response?.message || 'Something Went Wrong',
-					err?.status || err?.response?.statusCode || 500
-				);
+				throw new HttpException('Something Went Wrong', 500);
 			});
 	}
 }

@@ -18,7 +18,7 @@ export class StoryService {
 				variables: {
 					id,
 				},
-				errorPolicy: 'all',
+				// errorPolicy: 'all',
 				context: {
 					withCredentials: true,
 				},
@@ -39,7 +39,7 @@ export class StoryService {
 				variables: {
 					story,
 				},
-				errorPolicy: 'all',
+				// errorPolicy: 'all',
 				context: {
 					withCredentials: true,
 				},

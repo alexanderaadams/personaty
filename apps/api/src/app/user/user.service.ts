@@ -8,7 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { join } from 'path';
 
-import { MyJWTService } from '../jwt/jwt.service';
+
 import { isFileExtensionSafe, removeFile } from './image-storage';
 import { UserInfo } from '../core/shared.model';
 import { UserDocument } from './user.schema';
@@ -20,7 +20,7 @@ import { readFile } from 'fs';
 export class UserService {
 	constructor(
 		@InjectModel('User') private readonly userModel: Model<UserDocument>,
-		private myJWTService: MyJWTService
+
 	) {}
 
 	async createUser(user: {
@@ -54,10 +54,7 @@ export class UserService {
 
 			return user as unknown as Promise<UserModel>;
 		} catch (err) {
-			throw new HttpException(
-				err?.message || err?.response?.message || 'Something Went Wrong',
-				err?.status || err?.response?.statusCode || 500
-			);
+			throw new HttpException('Something Went Wrong', 500);
 		}
 	}
 
@@ -69,10 +66,7 @@ export class UserService {
 
 			return user as unknown as Promise<UserInfo>;
 		} catch (err) {
-			throw new HttpException(
-				err?.message || err?.response?.message || 'Something Went Wrong',
-				err?.status || err?.response?.statusCode || 500
-			);
+			throw new HttpException('Something Went Wrong', 500);
 		}
 	}
 
@@ -89,10 +83,7 @@ export class UserService {
 
 			return user as unknown as Promise<UserSensitiveInformation>;
 		} catch (err) {
-			throw new HttpException(
-				err?.message || err?.response?.message || 'Something Went Wrong',
-				err?.status || err?.response?.statusCode || 500
-			);
+			throw new HttpException('Something Went Wrong', 500);
 		}
 	}
 
@@ -102,10 +93,7 @@ export class UserService {
 				.find()
 				.exec()) as unknown as Promise<UserInfo>;
 		} catch (err) {
-			throw new HttpException(
-				err?.message || err?.response?.message || 'Something Went Wrong',
-				err?.status || err?.response?.statusCode || 500
-			);
+			throw new HttpException('Something Went Wrong', 500);
 		}
 	}
 
@@ -138,7 +126,6 @@ export class UserService {
 			throw new BadGatewayException('Something Went Wrong');
 		}
 	}
-
 	async uploadImage(file: Express.Multer.File, id: string) {
 		try {
 			const user = await this.findUserById(id);
@@ -166,10 +153,7 @@ export class UserService {
 				error: 'File content does not match extension!',
 			};
 		} catch (err) {
-			throw new HttpException(
-				err?.message || err?.response?.message || 'Something Went Wrong',
-				err?.status || err?.response?.statusCode || 500
-			);
+			throw new HttpException('Something Went Wrong', 500);
 		}
 	}
 
@@ -192,10 +176,7 @@ export class UserService {
 
 			throw new HttpException('File Does Not Exist', 404);
 		} catch (err) {
-			throw new HttpException(
-				err?.message || err?.response?.message || 'Something Went Wrong',
-				err?.status || err?.response?.statusCode || 500
-			);
+			throw new HttpException('Something Went Wrong', 500);
 		}
 	}
 }

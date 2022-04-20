@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
-import { CookieService } from 'ngx-cookie-service';
-import { BehaviorSubject, map } from 'rxjs';
-import { CreateStoryDto } from '../story/create-story.dto';
+
+import { map } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { GET_USER_INFO } from './profile.gql.schema';
 import { ProfileStateModel } from './store/profile.model';
 
@@ -13,7 +12,7 @@ import { ProfileStateModel } from './store/profile.model';
 })
 export class ProfileService {
 	// rootUrl = 'http://localhost:3333/api/v1';
-	rootUrl = 'https://api-persona2.herokuapp.com/api/v1';
+	rootUrl = `${environment.URI_BACKEND}/api/v1`;
 
 	constructor(
 		private http: HttpClient,
@@ -28,7 +27,7 @@ export class ProfileService {
 				variables: {
 					id,
 				},
-				errorPolicy: 'all',
+				// errorPolicy: 'all',
 				context: {
 					withCredentials: true,
 				},

@@ -1,7 +1,7 @@
 import { CookieService } from 'ngx-cookie-service';
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, catchError, map, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, of } from 'rxjs';
 import {
 	LoginCredentials,
 	ResetPasswordCredentials,
@@ -46,7 +46,7 @@ export class AuthService {
 				variables: {
 					findUser: value,
 				},
-				errorPolicy: 'all',
+				// errorPolicy: 'all',
 				context: {
 					withCredentials: true,
 				},
@@ -65,7 +65,7 @@ export class AuthService {
 				variables: {
 					user: credentials,
 				},
-				errorPolicy: 'all',
+				// errorPolicy: 'all',
 				context: {
 					withCredentials: true,
 				},
@@ -93,7 +93,7 @@ export class AuthService {
 				variables: {
 					user: credentials,
 				},
-				errorPolicy: 'all',
+				// errorPolicy: 'all',
 				context: {
 					withCredentials: true,
 				},
@@ -139,7 +139,7 @@ export class AuthService {
 				variables: {
 					user: email,
 				},
-				errorPolicy: 'all',
+				// errorPolicy: 'all',
 				context: {
 					withCredentials: true,
 				},
@@ -168,7 +168,7 @@ export class AuthService {
 				variables: {
 					credentials,
 				},
-				errorPolicy: 'all',
+				// errorPolicy: 'all',
 				context: {
 					withCredentials: true,
 				},
@@ -193,7 +193,7 @@ export class AuthService {
 		return this.apollo
 			.query({
 				query: LOGOUT,
-				errorPolicy: 'all',
+				// errorPolicy: 'all',
 				context: {
 					withCredentials: true,
 				},
@@ -218,7 +218,7 @@ export class AuthService {
 		return this.apollo
 			.query({
 				query: IS_AUTHENTICATED,
-				errorPolicy: 'all',
+				// errorPolicy: 'all',
 				context: {
 					withCredentials: true,
 				},

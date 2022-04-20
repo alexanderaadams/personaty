@@ -16,7 +16,6 @@ import { MyJWTService } from '../jwt/jwt.service';
 
 @Injectable()
 export class StoryService {
-	rootUrl = 'https://api-persona2.herokuapp.com/api/v1';
 	async checkUserHasStory(token: string, id: string) {
 		const authUser = await this.myJWTService.verifyToken(token);
 
@@ -58,10 +57,7 @@ export class StoryService {
 
 			return newStory;
 		} catch (err) {
-			throw new HttpException(
-				err?.message || err?.response?.message || 'Something Went Wrong',
-				err?.status || err?.response?.statusCode || 500
-			);
+			throw new HttpException('Something Went Wrong', 500);
 		}
 	}
 
@@ -87,10 +83,7 @@ export class StoryService {
 				new: true,
 			})) as unknown as Promise<StoryModel>;
 		} catch (err) {
-			throw new HttpException(
-				err?.message || err?.response?.message || 'Something Went Wrong',
-				err?.status || err?.response?.statusCode || 500
-			);
+			throw new HttpException('Something Went Wrong', 500);
 		}
 	}
 
@@ -102,10 +95,7 @@ export class StoryService {
 				id
 			)) as unknown as Promise<null>;
 		} catch (err) {
-			throw new HttpException(
-				err?.message || err?.response?.message || 'Something Went Wrong',
-				err?.status || err?.response?.statusCode || 500
-			);
+			throw new HttpException('Something Went Wrong', 500);
 		}
 	}
 }
