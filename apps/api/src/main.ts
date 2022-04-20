@@ -20,7 +20,7 @@ async function bootstrap() {
 
 	const corsOptions = {
 		origin: function (origin, callback) {
-			// console.log(origin);
+			console.log(origin);
 			if (whitelist.filter((x) => x && x.startsWith(origin)))
 				return callback(null, true);
 
