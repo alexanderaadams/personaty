@@ -44,8 +44,6 @@ export class LoginComponent extends UnsubscribeOnDestroyAdapter {
 
 		this.subs.sink = this.isAuthenticated$.subscribe({
 			next: (authenticated) => {
-
-
 				if (authenticated) this.router.navigate(['']);
 			},
 		});

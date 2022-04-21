@@ -54,7 +54,7 @@ export class AuthService {
 			const token = await this.myJWTService.signToken(
 				{ email, password, birthDate },
 				{
-					expiresIn: '15m',
+					expiresIn: '30m',
 				}
 			);
 
@@ -62,11 +62,11 @@ export class AuthService {
 
 			this.nodemailerService.sendEmail(
 				email,
-				'Verify Your Email',
+				'Confirm Your Email',
 				'Click On The Button To Verify Your Email',
 				tokenURL
 			);
-			const hashedPassword = await this.hashingPassword(password);
+			// const hashedPassword = await this.hashingPassword(password);
 			// const newUser = await this.usersService.createUser({
 			// 	email,
 			// 	password: hashedPassword,
@@ -75,10 +75,7 @@ export class AuthService {
 			return { status: 'Email Has Been Send, Check Your Email' };
 			// return newUser;
 		} catch (err) {
-			throw new HttpException(
-			 'Something Went Wrong',
-				500
-			);
+			throw new HttpException('Something Went Wrong', 500);
 		}
 	}
 
@@ -110,10 +107,7 @@ export class AuthService {
 				token,
 			};
 		} catch (err) {
-			throw new HttpException(
-			 'Something Went Wrong',
-				 500
-			);
+			throw new HttpException('Something Went Wrong', 500);
 		}
 	}
 
@@ -145,10 +139,7 @@ export class AuthService {
 				token,
 			};
 		} catch (err) {
-			throw new HttpException(
-		'Something Went Wrong',
-			 500
-			);
+			throw new HttpException('Something Went Wrong', 500);
 		}
 	}
 
@@ -161,7 +152,6 @@ export class AuthService {
 			if (!googleUser) {
 				throw new NotFoundException('Did not get any user from google');
 			}
-
 
 			const user = await this.usersService.findOne({ email: googleUser.email });
 
@@ -190,10 +180,7 @@ export class AuthService {
 				}),
 			};
 		} catch (err) {
-			throw new HttpException(
-		 'Something Went Wrong',
-			 500
-			);
+			throw new HttpException('Something Went Wrong', 500);
 		}
 	}
 
@@ -206,7 +193,7 @@ export class AuthService {
 			const token = await this.myJWTService.signToken(
 				{ id: user._id.toString(), email: user.email },
 				{
-					expiresIn: '15m',
+					expiresIn: '30m',
 				}
 			);
 
@@ -220,10 +207,7 @@ export class AuthService {
 			);
 			return { status: 'Email has ben send' };
 		} catch (err) {
-			throw new HttpException(
-	'Something Went Wrong',
-	500
-			);
+			throw new HttpException('Something Went Wrong', 500);
 		}
 	}
 
@@ -258,10 +242,7 @@ export class AuthService {
 				token: signToken,
 			};
 		} catch (err) {
-			throw new HttpException(
-			 'Something Went Wrong',
-		 500
-			);
+			throw new HttpException('Something Went Wrong', 500);
 		}
 	}
 }

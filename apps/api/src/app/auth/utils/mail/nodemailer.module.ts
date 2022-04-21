@@ -9,12 +9,13 @@ import { environment } from '../../../../environments/environment';
 		MailerModule.forRootAsync({
 			useFactory: () => ({
 				transport: {
-					host: environment.NODEMAILER_HOST,
-					port: environment.NODEMAILER_PORT,
-					secure: false,
+					host: environment.NODEMAILER_EMAIL_HOST,
+					port: environment.NODEMAILER_EMAIL_PORT,
+					// secure: environment.NODEMAILER_SECURE_EMAIL_SERVICE,
+					requireTLS: environment.NODEMAILER_SECURE_EMAIL_SERVICE,
 					auth: {
-						user: environment.NODEMAILER_USER,
-						pass: environment.NODEMAILER_PASSWORD,
+						user: environment.NODEMAILER_EMAIL_USER,
+						pass: environment.NODEMAILER_EMAIL_PASSWORD,
 					},
 				},
 				defaults: {

@@ -21,8 +21,9 @@ export const environment = {
 	GOOGLE_CALLBACK_URL: '/api/v1/auth/redirect',
 
 	// Mailtrap Info for Nodemailer
-	EMAIL_HOST: 'smtp.office365.com',
-	EMAIL_PORT: 587,
-	EMAIL_ID: 'persona1335-613@hotmail.com',
-	EMAIL_PASS: 'agg3sHE3#HRD4?LKdf472b-vxzznmBMRD25ah36',
+	NODEMAILER_EMAIL_HOST: 'smtp.office365.com',
+	NODEMAILER_EMAIL_PORT: 587,
+	NODEMAILER_EMAIL_USER: 'persona1335-613@hotmail.com',
+	NODEMAILER_EMAIL_PASSWORD: 'agg3sHE3#HRD4?LKdf472b-vxzznmBMRD25ah36',
+	NODEMAILER_SECURE_EMAIL_SERVICE: true,
 };

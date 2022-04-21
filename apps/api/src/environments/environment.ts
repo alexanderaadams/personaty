@@ -3,7 +3,7 @@ export const environment = {
 
 	ENVIRONMENT_NAME: 'development',
 
-	COOKIE_SECURE:false,
+	COOKIE_SECURE: false,
 
 	//URIs
 	URI_HOST: 'http://localhost:3333',
@@ -22,8 +22,15 @@ export const environment = {
 	GOOGLE_CALLBACK_URL: '/api/v1/auth/redirect',
 
 	// Mailtrap Info for Nodemailer
-	NODEMAILER_HOST: 'smtp.mailtrap.io',
-	NODEMAILER_PORT: 2525,
-	NODEMAILER_USER: '9063ef07a10237',
-	NODEMAILER_PASSWORD: '68c620d9e5780b',
+	// NODEMAILER_EMAIL_HOST: 'smtp.office365.com',
+	// NODEMAILER_EMAIL_PORT: 587,
+	// NODEMAILER_EMAIL_USER: 'persona1335-613@hotmail.com',
+	// NODEMAILER_EMAIL_PASSWORD: 'agg3sHE3#HRD4?LKdf472b-vxzznmBMRD25ah36',
+	// NODEMAILER_SECURE_EMAIL_SERVICE: true,
+
+	NODEMAILER_EMAIL_HOST: 'smtp.mailtrap.io',
+	NODEMAILER_EMAIL_PORT: 2525,
+	NODEMAILER_EMAIL_USER: '9063ef07a10237',
+	NODEMAILER_EMAIL_PASSWORD: '68c620d9e5780b',
+	NODEMAILER_SECURE_EMAIL_SERVICE: false,
 };

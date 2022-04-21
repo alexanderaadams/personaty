@@ -1,6 +1,7 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 
+import { environment } from '../../../../environments/environment';
 // import * as url from './email';
 
 @Injectable()
@@ -27,7 +28,6 @@ style="
 "
 >
 <div style="display: flex; justify-content: center">
-	<img src="test.jpeg" alt="image" />
 </div>
 <div>
 	<h3 style="color: rgb(80, 80, 80)">Confirm your email now !</h3>
@@ -53,7 +53,8 @@ style="
 		this.mailerService
 			.sendMail({
 				to: to, // List of receivers email address
-				from: 'No-Reply@hotmail.com', // Senders email address
+				from: environment.NODEMAILER_EMAIL_USER,
+				//No-Reply@hotmail.com', // Senders email address
 				subject: subject, // Subject line
 				text: text, // plaintext body
 				html: html, // HTML body content
@@ -62,7 +63,9 @@ style="
 				// console.log(success);
 			})
 			.catch((err) => {
-				throw new HttpException('Something Went Wrong', 500);
+				// console.log(err);
+				return err;
+				// throw new HttpException('Something Went Wrong', 500);
 			});
 	}
 }
