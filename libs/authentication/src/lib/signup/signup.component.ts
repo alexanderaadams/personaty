@@ -1,15 +1,19 @@
-import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-
-import { UniqueEmail } from '../validators/unique-email';
 import { Select, Store } from '@ngxs/store';
-import { LoginWithGoogle, Signup } from '../store/auth.action';
 import { Observable, tap } from 'rxjs';
-import { AuthStateModel } from '../store/auth.model';
 
+import { LoginWithGoogle, Signup } from '../store/auth.action';
+import { AuthStateModel } from '../store/auth.model';
 import { AuthState } from '../store/auth.state';
 import { UnsubscribeOnDestroyAdapter } from '../shared/unsubscribe-on-destroy.adapter';
+
+import * as _moment from 'moment';
+import { Moment } from 'moment';
+
+const moment = _moment;
+
 @Component({
 	selector: 'lib-signup',
 	templateUrl: './signup.component.html',
@@ -32,23 +36,19 @@ export class SignupComponent
 
 		password: new FormControl('', [
 			Validators.required,
-			Validators.minLength(2),
+			Validators.minLength(8),
 			Validators.maxLength(30),
 		]),
 
-		birthDate: new FormControl('', [
+		birthDate: new FormControl(moment('1995-09-09', 'YYYY-MM-DD'), [
 			Validators.required,
-			// Validators.pattern(
-			// 	/^([0-9]{4})-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])$/
-			// ),
 		]),
 	});
 
 	constructor(
 		private store: Store,
-		private uniqueEmail: UniqueEmail,
-		private router: Router,
-		private readonly changeDetectorRef: ChangeDetectorRef
+
+		private router: Router
 	) {
 		super();
 	}
@@ -58,8 +58,17 @@ export class SignupComponent
 			return this.authForm.setErrors({ invalid: true });
 		}
 
+		const { email, password } = this.authForm.value;
+
+		const birthDate: Moment = this.authForm
+			.get('birthDate')
+			?.value.format('YYYY-MM-DD');
+		// console.log({ birthDate, email, password });
+
 		this.subs.sink = this.store
-			.dispatch(new Signup(this.authForm.value))
+			.dispatch(
+				new Signup({ birthDate: birthDate.toString(), email, password })
+			)
 			.subscribe({
 				next: () => {
 					this.subs.sink = this.isAuthenticated$
