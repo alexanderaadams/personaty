@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
-import { ConfigModule } from '@nestjs/config';
 
 import { AppService } from './app.service';
 import { environment } from '../environments/environment';
@@ -16,7 +15,7 @@ import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
 import { StoryModule } from './story/story.module';
 import { ImageModule } from './image/image.module';
-import { AllExceptionsFilter } from './all-exceptions.filter';
+// import { AllExceptionsFilter } from './all-exceptions.filter';
 
 @Module({
 	imports: [
@@ -48,8 +47,6 @@ import { AllExceptionsFilter } from './all-exceptions.filter';
 				cors: {
 					origin: [environment.URI_HOST, environment.URI_ORIGIN, undefined],
 					credentials: true,
-					preflightContinue: true,
-					optionsSuccessStatus: 200,
 				},
 				context: ({ req, res }) => {
 					return {
@@ -66,7 +63,7 @@ import { AllExceptionsFilter } from './all-exceptions.filter';
 
 		ThrottlerModule.forRootAsync({
 			useFactory: () => ({
-				ttl: 360,
+				ttl: 60,
 				limit: 2000,
 			}),
 		}),
@@ -77,10 +74,6 @@ import { AllExceptionsFilter } from './all-exceptions.filter';
 		{
 			provide: APP_GUARD,
 			useClass: ThrottlerGuard,
-		},
-		{
-			provide: APP_FILTER,
-			useClass: AllExceptionsFilter,
 		},
 	],
 })

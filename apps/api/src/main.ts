@@ -16,15 +16,12 @@ async function bootstrap() {
 
 	const corsOptions = {
 		origin: function (origin, callback) {
-			console.log(origin);
 			if (whitelist.filter((x) => x && x.startsWith(origin)))
 				return callback(null, true);
 
 			throw new UnauthorizedException('Not allowed by CORS');
 		},
 		credentials: true,
-		preflightContinue: true,
-		optionsSuccessStatus: 200,
 	};
 
 	app.enableCors(corsOptions);
