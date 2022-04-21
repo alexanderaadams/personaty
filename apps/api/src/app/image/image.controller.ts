@@ -15,7 +15,7 @@ import { Response } from 'express';
 import { ImageService } from './image.service';
 import { TokenAuthGuard } from '../utils/guards/is-auth.guard';
 
-@Controller('image')
+@Controller('picture')
 @UseGuards(TokenAuthGuard)
 export class ImageController {
 	constructor(private readonly imageService: ImageService) {}
@@ -30,7 +30,7 @@ export class ImageController {
 		return { status: "User's profile picture has been uploaded successfully" };
 	}
 
-	@Get('picture/:imageId')
+	@Get(':imageId')
 	async getImage(@Param('imageId') imageId: string, @Res() res: Response) {
 		// console.log(imageId);
 		// const { profilePicture } =

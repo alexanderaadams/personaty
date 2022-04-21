@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
-import { APP_GUARD } from '@nestjs/core';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+// import { APP_GUARD } from '@nestjs/core';
+// import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -61,20 +61,20 @@ import { ImageModule } from './image/image.module';
 
 		ImageModule,
 
-		ThrottlerModule.forRootAsync({
-			useFactory: () => ({
-				ttl: 60,
-				limit: 2000,
-			}),
-		}),
+		// ThrottlerModule.forRootAsync({
+		// 	useFactory: () => ({
+		// 		ttl: 60,
+		// 		limit: 2000,
+		// 	}),
+		// }),
 	],
 	controllers: [],
 	providers: [
 		AppService,
-		{
-			provide: APP_GUARD,
-			useClass: ThrottlerGuard,
-		},
+		// {
+		// 	provide: APP_GUARD,
+		// 	useClass: ThrottlerGuard,
+		// },
 	],
 })
 export class AppModule {}
