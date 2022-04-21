@@ -3,6 +3,8 @@ export const environment = {
 
 	ENVIRONMENT_NAME: 'development',
 
+	COOKIE_SECURE:false,
+
 	//URIs
 	URI_HOST: 'http://localhost:3333',
 	URI_ORIGIN: 'http://localhost:4200',

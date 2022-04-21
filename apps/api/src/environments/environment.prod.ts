@@ -3,6 +3,8 @@ export const environment = {
 
 	ENVIRONMENT_NAME: 'production',
 
+	COOKIE_SECURE: true,
+
 	URI_HOST: 'https://api-persona2.herokuapp.com',
 	URI_ORIGIN: 'https://personaty.netlify.app',
 

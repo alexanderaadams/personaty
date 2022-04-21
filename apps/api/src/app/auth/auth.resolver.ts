@@ -1,5 +1,4 @@
-import { Get, Req, Res, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { UseGuards } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { Resolver, Query, Args, Mutation, Context } from '@nestjs/graphql';
 
@@ -15,6 +14,7 @@ import { LoginDto } from './dto/login.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ConfirmForgotPasswordWithTokenDto } from './dto/confirm-forgot-password-with-token.dto';
 import { MyJWTService } from '../jwt/jwt.service';
+import { environment } from '../../environments/environment';
 @Resolver('auth')
 export class AuthResolver {
 	constructor(
@@ -70,7 +70,7 @@ export class AuthResolver {
 				maxAge: 1000 * 60 * 60 * 24 * 7 * 12,
 				httpOnly: true,
 				sameSite: 'strict',
-				secure: false,
+				secure: environment.COOKIE_SECURE,
 			});
 
 		return { status: 'Successfully Logged in', authenticated: true };
@@ -142,7 +142,7 @@ export class AuthResolver {
 				maxAge: 1000 * 60 * 60 * 24 * 7 * 12,
 				httpOnly: true,
 				sameSite: 'strict',
-				secure: false,
+				secure: environment.COOKIE_SECURE,
 			});
 		return {
 			status: 'Password has been updated successfully',
