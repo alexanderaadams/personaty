@@ -20,7 +20,7 @@ export class ProfileComponent
 	extends UnsubscribeOnDestroyAdapter
 	implements OnInit
 {
-	backendURL = environment.URI_BACKEND;
+	backendUrl = environment.BACKEND_URL;
 	createStory = new BehaviorSubject(false);
 
 	storyForm = new FormGroup({

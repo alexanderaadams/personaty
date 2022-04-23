@@ -68,12 +68,12 @@ export class AuthResolver {
 		if (user)
 			res.cookie('token', user.token, {
 				maxAge: 1000 * 60 * 60 * 24 * 7 * 12,
-				httpOnly: true,
-				sameSite: 'strict',
-				secure: environment.COOKIE_SECURE,
+				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
+				sameSite: 'lax',
+				secure: environment.COOKIE_ATTRIBUTE_SECURE,
 			});
 
-		return { status: 'Successfully Logged in', authenticated: true };
+		return { status: 'LOGGED_IN_SUCCESSFULLY', authenticated: true };
 	}
 
 	@Query(() => AuthenticationStatus, {
@@ -84,7 +84,7 @@ export class AuthResolver {
 	async logout(@Context('res') res: Response): Promise<AuthenticationStatus> {
 		res.clearCookie('token', { httpOnly: true });
 
-		return { status: 'Successfully Logged out', authenticated: false };
+		return { status: 'LOGGED_OUT_SUCCESSFULLY', authenticated: false };
 	}
 
 	@Query(() => AuthenticationStatus, {
@@ -100,9 +100,9 @@ export class AuthResolver {
 		// console.log('token', token, req.cookies.token);
 
 		if (token)
-			return { status: 'User is Correctly Authenticated', authenticated: true };
+			return { status: 'CORRECTLY_AUTHENTICATED', authenticated: true };
 
-		return { status: 'User is Not Authenticated', authenticated: false };
+		return { status: 'NOT_AUTHENTICATED', authenticated: false };
 	}
 
 	@Mutation(() => ForgotPasswordDto, {
@@ -119,7 +119,7 @@ export class AuthResolver {
 		);
 
 		return {
-			status: 'Successfully send forgot password email',
+			status: 'FORGOT_PASSWORD_EMAIL_SENT_SUCCESSFULLY',
 			authenticated: null,
 		};
 	}
@@ -140,12 +140,12 @@ export class AuthResolver {
 		if (user)
 			res.cookie('token', user.token, {
 				maxAge: 1000 * 60 * 60 * 24 * 7 * 12,
-				httpOnly: true,
-				sameSite: 'strict',
-				secure: environment.COOKIE_SECURE,
+				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
+				sameSite: 'lax',
+				secure: environment.COOKIE_ATTRIBUTE_SECURE,
 			});
 		return {
-			status: 'Password has been updated successfully',
+			status: 'PASSWORD_UPDATED_SUCCESSFULLY',
 			authenticated: true,
 		};
 	}

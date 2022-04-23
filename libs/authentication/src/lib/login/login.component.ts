@@ -1,22 +1,26 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { IsAuthenticatedService } from './../shared/is-authenticated.service';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Actions, Select, Store } from '@ngxs/store';
+
+import { Select, Store } from '@ngxs/store';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+
 import { Login, LoginWithGoogle } from '../store/auth.action';
-import { Observable } from 'rxjs';
 import { AuthStateModel } from '../store/auth.model';
 import { UnsubscribeOnDestroyAdapter } from '../shared/unsubscribe-on-destroy.adapter';
-import { AuthState } from '../store/auth.state';
 
 @Component({
 	selector: 'lib-login',
 	templateUrl: './login.component.html',
 	styleUrls: ['./login.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent extends UnsubscribeOnDestroyAdapter {
 	hide = true;
 
-	@Select(AuthState.isAuthenticated)
+	loginExecutingLoader$ = new BehaviorSubject<boolean>(false);
+
+	@Select('auth')
 	isAuthenticated$!: Observable<AuthStateModel>;
 
 	authForm: FormGroup = new FormGroup({
@@ -30,11 +34,17 @@ export class LoginComponent extends UnsubscribeOnDestroyAdapter {
 
 	constructor(
 		private readonly store: Store,
-		private readonly router: Router,
-		private readonly changeDetectorRef: ChangeDetectorRef,
-		private readonly actions$: Actions
+		private isAuthenticatedService: IsAuthenticatedService
 	) {
 		super();
+	}
+
+	ngOnInit() {
+		this.isAuthenticatedService.checkActionStatus(
+			Login,
+			'Failed to Login, Please Try Again',
+			'Check your email'
+		);
 	}
 
 	onSubmit() {
@@ -42,13 +52,10 @@ export class LoginComponent extends UnsubscribeOnDestroyAdapter {
 			return this.authForm.setErrors({ invalid: true });
 		}
 
-		this.subs.sink = this.isAuthenticated$.subscribe({
-			next: (authenticated) => {
-				if (authenticated) this.router.navigate(['']);
-			},
-		});
+		this.loginExecutingLoader$ =
+			this.isAuthenticatedService.loginExecutingLoader$;
 
-		this.store.dispatch(new Login(this.authForm.value));
+		this.isAuthenticatedService.goAuthenticate(new Login(this.authForm.value));
 	}
 
 	inputFormControl(option: string): FormControl {

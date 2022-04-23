@@ -3,5 +3,5 @@ export const environment = {
 
 	ENVIRONMENT_NAME: 'production',
 
-	URI_BACKEND: 'https://api-persona2.herokuapp.com',
+	BACKEND_URL: 'https://api-persona2.herokuapp.com',
 };

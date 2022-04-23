@@ -11,7 +11,10 @@ import { MatChipsModule } from '@angular/material/chips';
 import { CommonModule } from '@angular/common';
 import { MomentDateModule } from '@angular/material-moment-adapter';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MY_DATE_FORMATS } from './my-date-formats';
+
 
 @NgModule({
 	imports: [
@@ -27,6 +30,7 @@ import { MY_DATE_FORMATS } from './my-date-formats';
 		MatInputModule,
 		MatDatepickerModule,
 		MomentDateModule,
+		MatSnackBarModule,MatProgressBarModule
 	],
 	exports: [
 		MatButtonModule,
@@ -40,6 +44,7 @@ import { MY_DATE_FORMATS } from './my-date-formats';
 		MatInputModule,
 		MatDatepickerModule,
 		MomentDateModule,
+		MatSnackBarModule,MatProgressBarModule
 	],
 	providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }],
 })

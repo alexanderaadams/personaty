@@ -1,4 +1,5 @@
-import { Observable, tap } from 'rxjs';
+import { IsAuthenticatedService } from './../shared/is-authenticated.service';
+import { Observable } from 'rxjs';
 import { UnsubscribeOnDestroyAdapter } from '../shared/unsubscribe-on-destroy.adapter';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -19,17 +20,21 @@ export class LogoutComponent
 	@Select(AuthState.isAuthenticated)
 	isAuthenticated$!: Observable<boolean>;
 
-	constructor(private store: Store, private router: Router) {
+	constructor(
+		private store: Store,
+		private router: Router,
+		private isAuthenticatedService: IsAuthenticatedService
+	) {
 		super();
 	}
 
 	ngOnInit() {
-		this.subs.sink = this.isAuthenticated$.subscribe({
-			next: (authenticated) => {
-				if (!authenticated) this.router.navigate(['auth', 'login']);
-			},
-		});
+		this.isAuthenticatedService.checkActionStatus(
+			Logout,
+			'Failed to Logout, Please Try Again',
+			'Logged out successfully'
+		);
 
-		this.store.dispatch(new Logout());
+		this.isAuthenticatedService.goAuthenticate(new Logout());
 	}
 }

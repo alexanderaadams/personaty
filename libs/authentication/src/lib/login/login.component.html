@@ -1,3 +1,14 @@
+<mat-progress-bar
+	*ngIf="loginExecutingLoader$ | async"
+	class="position-fixed top-0"
+	color="primary"
+	mode="indeterminate"
+	value="35"
+	role="progressbar"
+	aria-label="Login progressbar"
+>
+</mat-progress-bar>
+
 <div class="container bg-svg w-100 h-100">
 	<!-- <div class="d-flex justify-content-center align-items-center vh-100"> -->
 	<!-- <div class="row justify-content-between align-items-center">
@@ -12,6 +23,7 @@
 				>arrow_back_ios
 			</mat-icon></a
 		> -->
+
 	<div class="d-flex justify-content-center align-items-center vh-100">
 		<div class="col-sm-8 col-md-5">
 			<div
@@ -89,6 +101,7 @@
 					<div class="row justify-content-center align-items-center">
 						<!-- <div class="row"> -->
 						<button
+							[disabled]="loginExecutingLoader$ | async"
 							class="p-2 mb-3 fs-5"
 							mat-raised-button
 							color="primary"

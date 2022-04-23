@@ -7,7 +7,7 @@ export const environment = {
 
 	ENVIRONMENT_NAME: 'development',
 
-	URI_BACKEND: 'http://localhost:3333',
+	BACKEND_URL: 'http://localhost:3333',
 };
 
 /*

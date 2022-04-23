@@ -31,3 +31,7 @@ export class Logout {
 export class IsAuthenticated {
 	static readonly type = '[Auth] Is Authenticated';
 }
+
+export class ResetAuthStoreToDefault {
+	static readonly type = '[Auth] Reset Auth Store';
+}

@@ -17,7 +17,7 @@
 						border: 0.2rem solid var(--bg-primary-darker);
 					"
 					class="bottom-0 shadow-sm img-fluid rounded-circle position-absolute border-info"
-					[src]="backendURL + '/api/v1/image/picture/' + user?.profilePicture"
+					[src]="backendUrl + '/api/v1/image/picture/' + user?.profilePicture"
 					alt="Profile Picture"
 				/>
 			</div>
@@ -62,7 +62,7 @@
 
 		<section class="row justify-content-center align-items-center mt-3">
 			<div class="col" *ngFor="let story of user?.stories">
-				<!-- <img [src]="	backendURL+'/api/v1/user/picture/' + story.cover_image" alt="Story photo" /> -->
+				<!-- <img [src]="	backendUrl+'/api/v1/user/picture/' + story.cover_image" alt="Story photo" /> -->
 
 				<ng-container *ngFor="let category of story?.category">
 					<h4>{{ category.text }}</h4>

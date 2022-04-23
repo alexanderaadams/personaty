@@ -7,10 +7,11 @@ import { environment } from '../../../../environments/environment';
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 	constructor() {
 		const scopeURL = 'https://www.googleapis.com/auth';
+
 		super({
 			clientID: environment.GOOGLE_CLIENT_ID,
 			clientSecret: environment.GOOGLE_CLIENT_SECRET,
-			callbackURL: environment.GOOGLE_CALLBACK_URL,
+			callbackURL: environment.HOST_URL + environment.GOOGLE_CALLBACK_URL,
 			scope: [`${scopeURL}/userinfo.email`, `${scopeURL}/userinfo.profile`],
 		});
 	}
@@ -20,7 +21,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 		profile: Profile
 	): Promise<any> {
 		const { id, username, emails, photos, _json, name } = profile;
-		console.log(profile);
+		// console.log(profile);
 		const user = {
 			googleId: id.toString(),
 			username: username,
@@ -29,7 +30,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 			locale: _json.locale || 'en',
 			fullName: `${name.givenName} ${name.familyName}`,
 			profilePicture: photos[0].value || 'Profile Picture Does Not Exist',
-
 		};
 		return user;
 	}

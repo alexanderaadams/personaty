@@ -14,6 +14,7 @@ import { AuthService } from './auth.service';
 import { GoogleOauth2 } from './entities/google-oauth-2.entity';
 import { FindUser } from '../core/shared.model';
 import { AuthGuard } from '@nestjs/passport';
+import { environment } from '../../environments/environment';
 
 @Controller('auth')
 export class AuthController {
@@ -34,20 +35,19 @@ export class AuthController {
 	@Get('signup/:token')
 	async signupToken(
 		@Param('token') token: string,
-		@Res({ passthrough: true }) res: Response,
-		@Req() req: Request
+		@Res({ passthrough: true }) res: Response
 	) {
 		const user = await this.authService.signupToken(token);
 
 		if (user) {
 			res.cookie('token', user.token, {
 				maxAge: 3600000 * 24,
-				httpOnly: true,
-				sameSite: 'strict',
-				secure: false,
+				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
+				sameSite: 'lax',
+				secure: environment.COOKIE_ATTRIBUTE_SECURE,
 			});
 		}
-		return res.redirect(`${req.headers.origin}/home`);
+		return res.redirect(`${environment.ORIGIN_URL}`);
 	}
 
 	@Post('is-available')
@@ -71,10 +71,10 @@ export class AuthController {
 	// 	);
 
 	// 	res.cookie('token', user.token, {
-	// 		maxAge: 3600000 * 24 * 7 * 12,
-	// 		httpOnly: true,
-	// 		sameSite: 'strict',
-	// 		secure: false,
+	// maxAge: 3600000 * 24,
+	// httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
+	// sameSite: 'lax',
+	// secure: environment.COOKIE_ATTRIBUTE_SECURE,
 	// 	});
 
 	// 	return { user: user.user, Authenticated: true };
@@ -104,10 +104,10 @@ export class AuthController {
 	// 	const user = await this.authService.verifyResetPassword(credentials);
 
 	// 	res.cookie('token', user.token, {
-	// 		maxAge: 1000 * 60 * 60 * 24 * 7 * 12,
-	// 		httpOnly: true,
-	// 		sameSite: 'strict',
-	// 		secure: false,
+	// maxAge: 3600000 * 24,
+	// httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
+	// sameSite: 'lax',
+	// secure: environment.COOKIE_ATTRIBUTE_SECURE,
 	// 	});
 	// 	return { user: user.updateUser, updatedUser: true };
 	// }
@@ -123,16 +123,17 @@ export class AuthController {
 		@Req() req: Request,
 		@Res({ passthrough: true }) res: Response
 	) {
+		console.log(req.headers);
 		const user = await this.authService.googleOauth2Login(
 			req.user as GoogleOauth2
 		);
-		// console.log(user, req.user);
+		console.log(user, req.user);
 		res.cookie('token', user.token, {
-			maxAge: 1000 * 60 * 60 * 24 * 7 * 12,
-			httpOnly: true,
-			sameSite: 'strict',
-			secure: false,
+			maxAge: 3600000 * 24,
+			httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
+			sameSite: 'lax',
+			secure: environment.COOKIE_ATTRIBUTE_SECURE,
 		});
-		return res.redirect(`${req.headers.origin}/auth/success`);
+		return res.redirect(`${environment.ORIGIN_URL}`);
 	}
 }

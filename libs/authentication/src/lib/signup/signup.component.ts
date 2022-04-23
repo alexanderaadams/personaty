@@ -2,8 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
-import { Observable, tap } from 'rxjs';
-
+import { BehaviorSubject, Observable } from 'rxjs';
 import { LoginWithGoogle, Signup } from '../store/auth.action';
 import { AuthStateModel } from '../store/auth.model';
 import { AuthState } from '../store/auth.state';
@@ -11,6 +10,7 @@ import { UnsubscribeOnDestroyAdapter } from '../shared/unsubscribe-on-destroy.ad
 
 import * as _moment from 'moment';
 import { Moment } from 'moment';
+import { IsAuthenticatedService } from '../shared/is-authenticated.service';
 
 const moment = _moment;
 
@@ -24,33 +24,37 @@ export class SignupComponent
 	implements OnDestroy
 {
 	hide = true;
+	loginExecutingLoader$ = new BehaviorSubject<boolean>(false);
 
 	@Select(AuthState.isAuthenticated)
 	isAuthenticated$!: Observable<AuthStateModel>;
 
-	// Validators.pattern(
-	// 	/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-	// )
 	authForm = new FormGroup({
 		email: new FormControl('', [Validators.required, Validators.email]),
 
 		password: new FormControl('', [
 			Validators.required,
-			Validators.minLength(8),
+			Validators.minLength(2),
 			Validators.maxLength(30),
 		]),
 
-		birthDate: new FormControl(moment('1995-09-09', 'YYYY-MM-DD'), [
-			Validators.required,
-		]),
+		birthDate: new FormControl('', [Validators.required]),
 	});
 
 	constructor(
 		private store: Store,
-
-		private router: Router
+		private router: Router,
+		private isAuthenticatedService: IsAuthenticatedService
 	) {
 		super();
+	}
+
+	ngOnInit() {
+		this.isAuthenticatedService.checkActionStatus(
+			Signup,
+			'Failed to signup, Please Try Again',
+			'Check your email'
+		);
 	}
 
 	onSubmit() {
@@ -63,26 +67,13 @@ export class SignupComponent
 		const birthDate: Moment = this.authForm
 			.get('birthDate')
 			?.value.format('YYYY-MM-DD');
-		// console.log({ birthDate, email, password });
 
-		this.subs.sink = this.store
-			.dispatch(
-				new Signup({ birthDate: birthDate.toString(), email, password })
-			)
-			.subscribe({
-				next: () => {
-					this.subs.sink = this.isAuthenticated$
-						.pipe(
-							tap((authenticated) => {
-								if (!authenticated) this.authForm.setErrors({ invalid: true });
-							})
-						)
-						.subscribe();
-				},
-				error: () => {
-					this.authForm.setErrors({ invalid: true });
-				},
-			});
+		this.loginExecutingLoader$ =
+			this.isAuthenticatedService.loginExecutingLoader$;
+
+		this.isAuthenticatedService.goAuthenticate(
+			new Signup({ birthDate: birthDate.toString(), email, password })
+		);
 	}
 
 	inputFormControl(option: string): FormControl {

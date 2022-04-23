@@ -11,8 +11,7 @@ import { ProfileStateModel } from './store/profile.model';
 	providedIn: 'root',
 })
 export class ProfileService {
-	// rootUrl = 'http://localhost:3333/api/v1';
-	rootUrl = `${environment.URI_BACKEND}/api/v1`;
+	// BackendUrl = `${environment.BACKEND_URL}/api/v1`;
 
 	constructor(
 		private http: HttpClient,

@@ -6,7 +6,7 @@ import { GoogleStrategy } from './utils/strategy/google.strategy';
 import { NodemailerModule } from './utils/mail/nodemailer.module';
 import { AuthResolver } from './auth.resolver';
 import { DateScalar } from '../core/date.scalar';
-import { AuthController } from './auth.Controller';
+import { AuthController } from './auth.controller';
 
 @Module({
 	imports: [UserModule, MyJWTModule, NodemailerModule],

@@ -1,6 +1,6 @@
 export interface AuthStateModel {
 	status: string | null;
-	authenticated: boolean | null;
+	authenticated: boolean | null | unknown;
 }
 
 export interface UserAvailableResponse {

@@ -20,6 +20,7 @@ import { ProfileState } from './profile/store/profile.state';
 import { StoryState } from './story/store/story.state';
 
 import { AuthState, MaterialModule } from '@march/authentication';
+import { AuthGuard } from './core/guards/auth.guard';
 
 @NgModule({
 	declarations: [AppComponent, NotFoundComponent],
@@ -40,6 +41,7 @@ import { AuthState, MaterialModule } from '@march/authentication';
 			key: 'auth',
 			storage: 0,
 		}),
+
 		MaterialModule,
 	],
 
@@ -52,7 +54,7 @@ import { AuthState, MaterialModule } from '@march/authentication';
 				return {
 					cache: new InMemoryCache(),
 					link: httpLink.create({
-						uri: `${environment.URI_BACKEND}/graphql`,
+						uri: `${environment.BACKEND_URL}/graphql`,
 					}),
 				};
 			},

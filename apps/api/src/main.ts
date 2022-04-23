@@ -12,7 +12,7 @@ import { AppModule } from './app/app.module';
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 
-	const whitelist = [environment.URI_HOST, environment.URI_ORIGIN, undefined];
+	const whitelist = [environment.HOST_URL, environment.ORIGIN_URL, undefined];
 
 	const corsOptions = {
 		origin: function (origin, callback) {

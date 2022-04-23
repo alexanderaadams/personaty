@@ -72,10 +72,13 @@ export class AuthService {
 			// 	password: hashedPassword,
 			// 	birthDate,
 			// });
-			return { status: 'Email Has Been Send, Check Your Email' };
+			return { status: 'SENT_SIGNUP_EMAIL_SUCCESSFULLY' };
 			// return newUser;
 		} catch (err) {
-			throw new HttpException('Something Went Wrong', 500);
+			throw new HttpException(
+				err.response.message || 'Something Went Wrong',
+				err.response.statusCode || err.status || 500
+			);
 		}
 	}
 
@@ -107,7 +110,10 @@ export class AuthService {
 				token,
 			};
 		} catch (err) {
-			throw new HttpException('Something Went Wrong', 500);
+			throw new HttpException(
+				err.response.message || 'Something Went Wrong',
+				err.response.statusCode || err.status || 500
+			);
 		}
 	}
 
@@ -139,7 +145,10 @@ export class AuthService {
 				token,
 			};
 		} catch (err) {
-			throw new HttpException('Something Went Wrong', 500);
+			throw new HttpException(
+				err.response.message || 'Something Went Wrong',
+				err.response.statusCode || err.status || 500
+			);
 		}
 	}
 
@@ -180,7 +189,10 @@ export class AuthService {
 				}),
 			};
 		} catch (err) {
-			throw new HttpException('Something Went Wrong', 500);
+			throw new HttpException(
+				err.response.message || 'Something Went Wrong',
+				err.response.statusCode || err.status || 500
+			);
 		}
 	}
 
@@ -207,7 +219,10 @@ export class AuthService {
 			);
 			return { status: 'Email has ben send' };
 		} catch (err) {
-			throw new HttpException('Something Went Wrong', 500);
+			throw new HttpException(
+				err.response.message || 'Something Went Wrong',
+				err.response.statusCode || err.status || 500
+			);
 		}
 	}
 
@@ -242,7 +257,10 @@ export class AuthService {
 				token: signToken,
 			};
 		} catch (err) {
-			throw new HttpException('Something Went Wrong', 500);
+			throw new HttpException(
+				err.response.message || 'Something Went Wrong',
+				err.response.statusCode || err.status || 500
+			);
 		}
 	}
 }

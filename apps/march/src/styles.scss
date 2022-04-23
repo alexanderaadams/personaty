@@ -77,3 +77,13 @@ body {
 .bg-unknown {
 	background-color: #c2185c52;
 }
+
+.snack-bar-danger {
+	background-color: var(--bs-danger);
+	color: var(--bs-white);
+}
+
+.snack-bar-success {
+	background-color: var(--bs-success);
+	color: var(--bs-white);
+}

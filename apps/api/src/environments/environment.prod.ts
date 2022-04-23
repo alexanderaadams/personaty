@@ -3,24 +3,28 @@ export const environment = {
 
 	ENVIRONMENT_NAME: 'production',
 
-	COOKIE_SECURE: true,
+	//	Cookies attributes
+	COOKIE_ATTRIBUTE_SECURE: true,
+	COOKIE_ATTRIBUTE_HTTP_ONLY: true,
 
-	URI_HOST: 'https://api-persona2.herokuapp.com',
-	URI_ORIGIN: 'https://personaty.netlify.app',
+	//	URL Connection
+	HOST_URL: 'https://api-persona2.herokuapp.com',
+	ORIGIN_URL: 'https://personaty.netlify.app',
 
+	//	MongoDB Atlas Connection Information.
 	DATABASE_CONNECTION:
 		'mongodb+srv://remy:t7mjdezqWKJs6sgT@cluster0.amx9w.mongodb.net/persona',
 	DATABASE_NAME: 'persona',
 
 	SECRET_SALT: 'heHYthisIStheBENshapiroSHOW',
 
-	// Google Oauth2 Info
+	//	Google Oauth2 Info
 	GOOGLE_CLIENT_ID:
 		'248176349194-ji6ciaoe6cdp8jcp0b3601npk7ka1guo.apps.googleusercontent.com',
 	GOOGLE_CLIENT_SECRET: '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',
 	GOOGLE_CALLBACK_URL: '/api/v1/auth/redirect',
 
-	// Mailtrap Info for Nodemailer
+	//	Outlook Information for Nodemailer
 	NODEMAILER_EMAIL_HOST: 'smtp.office365.com',
 	NODEMAILER_EMAIL_PORT: 587,
 	NODEMAILER_EMAIL_USER: 'persona1335-613@hotmail.com',

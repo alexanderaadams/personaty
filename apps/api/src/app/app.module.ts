@@ -45,7 +45,7 @@ import { ImageModule } from './image/image.module';
 				// plugins: [ApolloServerPluginLandingPageLocalDefault()],
 				sortSchema: true,
 				cors: {
-					origin: [environment.URI_HOST, environment.URI_ORIGIN, undefined],
+					origin: [environment.HOST_URL, environment.ORIGIN_URL, undefined],
 					credentials: true,
 				},
 				context: ({ req, res }) => {

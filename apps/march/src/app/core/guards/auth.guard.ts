@@ -7,8 +7,9 @@ import {
 	AuthState,
 	IsAuthenticated,
 	UnsubscribeOnDestroyAdapter,
+	IsAuthenticatedService,
+	ResetAuthStoreToDefault,
 } from '@march/authentication';
-import { Dispatch } from '@ngxs-labs/dispatch-decorator';
 
 @Injectable({
 	providedIn: 'root',
@@ -20,12 +21,13 @@ export class AuthGuard
 	@Select(AuthState.isAuthenticated)
 	isAuthenticated$!: Observable<boolean>;
 
-	@Dispatch() isAuthenticatedDispatcher = () => new IsAuthenticated();
+	// @Dispatch() isAuthenticatedDispatcher = () => new IsAuthenticated();
 
 	constructor(
 		private store: Store,
 		private actions$: Actions,
-		private router: Router
+		private router: Router,
+		private isAuthenticatedService: IsAuthenticatedService
 	) {
 		super();
 	}
@@ -35,27 +37,31 @@ export class AuthGuard
 		| UrlTree
 		| Observable<boolean | UrlTree>
 		| Promise<boolean | UrlTree> {
-		const isAuthenticated = new BehaviorSubject<boolean>(false);
+		const authenticated$ = new BehaviorSubject<boolean>(false);
 
 		const authenticated = this.store.selectSnapshot(AuthState.isAuthenticated);
 
-		if (!authenticated) return this.router.navigate(['auth', 'login']);
+		// console.log(authenticated);
+
+		if (authenticated) return true;
 
 		this.subs.sink = this.actions$
 			.pipe(
 				ofActionCompleted(IsAuthenticated),
-				tap(() => {
-					isAuthenticated.next(true);
-					isAuthenticated.complete();
+				tap((res) => {
+					console.log(res);
+					authenticated$.next(true);
+					authenticated$.complete();
 				})
 			)
 			.subscribe();
 
-		this.isAuthenticatedDispatcher();
+		this.store.dispatch(new IsAuthenticated());
 
 		return this.isAuthenticated$.pipe(
-			takeUntil(isAuthenticated),
+			takeUntil(authenticated$),
 			map((authenticated) => {
+				// console.log(authenticated);
 				if (authenticated) return true;
 
 				this.router.navigate(['auth', 'login']);

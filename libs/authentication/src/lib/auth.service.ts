@@ -27,9 +27,9 @@ import {
 })
 export class AuthService {
 	rootUrl = 'https://api-persona2.herokuapp.com/api/v1';
-	signedin$ = new BehaviorSubject(false);
-	username = '';
-	email = '';
+	// signedin$ = new BehaviorSubject(false);
+	// username = '';
+	// email = '';
 
 	constructor(
 		private http: HttpClient,
@@ -77,11 +77,8 @@ export class AuthService {
 						authenticated: data?.signup?.authenticated,
 					};
 				}),
-				catchError(({ error }) => {
-					return of({
-						status: `Failed to signup, ${error.message} ${error.statusCode}`,
-						authenticated: false,
-					});
+				catchError((error) => {
+					return error;
 				})
 			);
 	}
@@ -105,11 +102,8 @@ export class AuthService {
 						authenticated: data?.login?.authenticated,
 					};
 				}),
-				catchError(({ error }) => {
-					return of({
-						status: `Failed to login, ${error.message} ${error.statusCode}`,
-						authenticated: false,
-					});
+				catchError((error) => {
+					return error;
 				})
 			);
 	}
@@ -124,7 +118,7 @@ export class AuthService {
 			if (newWindow) {
 				const timer = setInterval(() => {
 					if (newWindow.closed) {
-						this.router.navigateByUrl('home');
+						this.router.navigate(['']);
 						if (timer) clearInterval(timer);
 					}
 				}, 500);
@@ -132,7 +126,7 @@ export class AuthService {
 		});
 	}
 
-	forgotPassword(email: { email: string }) {
+	sendForgotPasswordEmail(email: { email: string }) {
 		return this.apollo
 			.mutate({
 				mutation: FORGOT_PASSWORD,
@@ -152,11 +146,8 @@ export class AuthService {
 						authenticated: data?.forgotPassword?.authenticated,
 					};
 				}),
-				catchError(({ error }) => {
-					return of({
-						status: `Failed to send forgot password email, ${error.message} ${error.statusCode}`,
-						authenticated: null,
-					});
+				catchError((error) => {
+					return error;
 				})
 			);
 	}
@@ -180,11 +171,8 @@ export class AuthService {
 						authenticated: data?.resetPasswordToken?.authenticated,
 					};
 				}),
-				catchError(({ error }) => {
-					return of({
-						status: `Failed to reset password, ${error.message} ${error.statusCode}`,
-						authenticated: false,
-					});
+				catchError((error) => {
+					return error;
 				})
 			);
 	}
@@ -201,15 +189,12 @@ export class AuthService {
 			.pipe(
 				map(({ data }: any) => {
 					return {
-						status: data?.isAuthenticated?.status,
-						authenticated: data?.isAuthenticated?.authenticated,
+						status: data?.logout?.status,
+						authenticated: data?.logout?.authenticated,
 					};
 				}),
-				catchError(({ error }) => {
-					return of({
-						status: 'Failed to Log out',
-						authenticated: true,
-					});
+				catchError((error) => {
+					return error;
 				})
 			);
 	}
@@ -230,11 +215,8 @@ export class AuthService {
 						authenticated: data?.isAuthenticated?.authenticated,
 					};
 				}),
-				catchError(({ error }) => {
-					return of({
-						status: 'Failed to Log out',
-						authenticated: false,
-					});
+				catchError((error) => {
+					return error;
 				})
 			);
 	}

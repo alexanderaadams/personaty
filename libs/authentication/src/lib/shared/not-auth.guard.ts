@@ -1,3 +1,4 @@
+import { IsAuthenticatedService } from './is-authenticated.service';
 import { Injectable } from '@angular/core';
 import { CanActivate, UrlTree, Router } from '@angular/router';
 
@@ -18,12 +19,13 @@ export class NotAuthGuard
 	@Select(AuthState.isAuthenticated)
 	isAuthenticated$!: Observable<boolean>;
 
-	@Dispatch() isAuthenticatedDispatcher = () => new IsAuthenticated();
+	// @Dispatch() isAuthenticatedDispatcher = () => new IsAuthenticated();
 
 	constructor(
 		private store: Store,
 		private actions$: Actions,
-		private router: Router
+		private router: Router,
+		private isAuthenticatedService: IsAuthenticatedService
 	) {
 		super();
 	}
@@ -44,13 +46,12 @@ export class NotAuthGuard
 				ofActionCompleted(IsAuthenticated),
 				tap(() => {
 					isAuthenticated.next(true);
-
 					isAuthenticated.complete();
 				})
 			)
 			.subscribe();
 
-		this.isAuthenticatedDispatcher();
+		this.store.dispatch(new IsAuthenticated());
 
 		return this.isAuthenticated$.pipe(
 			takeUntil(isAuthenticated),
