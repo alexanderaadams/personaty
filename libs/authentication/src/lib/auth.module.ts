@@ -9,7 +9,6 @@ import { LogoutComponent } from './logout/logout.component';
 import { ConfirmForgotPasswordComponent } from './confirm-forgot-password/confirm-forgot-password.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { MaterialModule } from './shared/material.module';
-import { AuthStatusSnackBarComponent } from './shared/auth-status-snack-bar/auth-status-snack-bar.component';
 
 @NgModule({
 	declarations: [
@@ -19,7 +18,7 @@ import { AuthStatusSnackBarComponent } from './shared/auth-status-snack-bar/auth
 		LogoutComponent,
 		ConfirmForgotPasswordComponent,
 		ForgotPasswordComponent,
-		AuthStatusSnackBarComponent,
+
 	],
 	imports: [
 		CommonModule,

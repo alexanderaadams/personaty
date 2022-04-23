@@ -123,17 +123,16 @@ export class AuthController {
 		@Req() req: Request,
 		@Res({ passthrough: true }) res: Response
 	) {
-		console.log(req.headers);
 		const user = await this.authService.googleOauth2Login(
 			req.user as GoogleOauth2
 		);
-		console.log(user, req.user);
+
 		res.cookie('token', user.token, {
 			maxAge: 3600000 * 24,
 			httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 			sameSite: 'lax',
 			secure: environment.COOKIE_ATTRIBUTE_SECURE,
 		});
-		return res.redirect(`${environment.ORIGIN_URL}`);
+		return res.redirect(`${environment.ORIGIN_URL}/auth/oauth2-success`);
 	}
 }

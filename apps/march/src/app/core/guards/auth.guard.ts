@@ -49,7 +49,7 @@ export class AuthGuard
 			.pipe(
 				ofActionCompleted(IsAuthenticated),
 				tap((res) => {
-					console.log(res);
+					// console.log(res);
 					authenticated$.next(true);
 					authenticated$.complete();
 				})

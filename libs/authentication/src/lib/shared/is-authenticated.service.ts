@@ -45,7 +45,7 @@ export class IsAuthenticatedService extends UnsubscribeOnDestroyAdapter {
 					this.subs.sink = this.isAuthenticated$
 						.pipe(
 							tap(({ status, authenticated }) => {
-								console.log(authenticated);
+								// console.log(authenticated);
 
 								if (authenticated) {
 									this.router.navigate(['']);
@@ -76,7 +76,7 @@ export class IsAuthenticatedService extends UnsubscribeOnDestroyAdapter {
 									status === 'LOGGED_OUT_SUCCESSFULLY' ||
 									status === 'EITHER_LOGGED_OUT_ALREADY_OR_INTERNET_PROBLEM'
 								) {
-									console.log('LOGGED_OUT_SUCCESSFULLY');
+
 									this._snackBar.open(snackBarSuccessMessage, 'Dismiss', {
 										duration: 3000,
 										panelClass: 'snack-bar-success',

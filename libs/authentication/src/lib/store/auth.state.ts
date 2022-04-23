@@ -16,7 +16,6 @@ import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { AuthStateModel } from './auth.model';
 import { UnsubscribeOnDestroyAdapter } from '../shared/unsubscribe-on-destroy.adapter';
-import { MyStorageEngineService } from '../shared/storage.service';
 @State<AuthStateModel>({
 	name: 'auth',
 	defaults: {
@@ -37,27 +36,26 @@ export class AuthState
 	constructor(
 		private authService: AuthService,
 		private cookieService: CookieService,
-		private router: Router,
-		private myStorageEngineService: MyStorageEngineService
+		private router: Router // private myStorageEngineService: MyStorageEngineService
 	) {
 		super();
 	}
 
-	updateMyStorageEngineService(key: string, value: any) {
-		this.myStorageEngineService.removeItem(key);
-		this.myStorageEngineService.setItem(key, JSON.stringify(value));
-	}
+	// updateMyStorageEngineService(key: string, value: any) {
+	// 	this.myStorageEngineService.removeItem(key);
+	// 	this.myStorageEngineService.setItem(key, JSON.stringify(value));
+	// }
 
 	@Action(Signup, { cancelUncompleted: true })
 	signup(ctx: StateContext<AuthStateModel>, action: Signup) {
 		this.subs.sink = this.authService.signup(action.payload).subscribe({
 			next: (res: any) => {
 				ctx.patchState(res as AuthStateModel);
-				this.updateMyStorageEngineService('auth', res);
+				// this.updateMyStorageEngineService('auth', res);
 			},
 			error: () => {
 				ctx.patchState({
-					status: `Failed to signup`,
+					status: 'FAILED_TO_SIGNUP',
 					authenticated: false,
 				});
 			},
@@ -69,11 +67,11 @@ export class AuthState
 		this.subs.sink = this.authService.login(action.payload).subscribe({
 			next: (res: any) => {
 				ctx.patchState(res as AuthStateModel);
-				this.updateMyStorageEngineService('auth', res);
+				// this.updateMyStorageEngineService('auth', res);
 			},
 			error: () => {
 				ctx.patchState({
-					status: `Failed to login`,
+					status: 'FAILED_TO_LOGIN',
 					authenticated: false,
 				});
 			},
@@ -85,15 +83,15 @@ export class AuthState
 		this.subs.sink = of(this.authService.loginWithGoogle()).subscribe({
 			next: (res: any) => {
 				ctx.patchState({
-					status: 'Supposedly logged in with google',
+					status: 'SUPPOSEDLY_LOGGED_IN_WITH_GOOGGLE',
 					authenticated: null,
 				});
 
-				this.updateMyStorageEngineService('auth', res);
+				// this.updateMyStorageEngineService('auth', res);
 			},
 			error: () => {
 				ctx.patchState({
-					status: `Failed to login with google`,
+					status: 'FAILED_TO_LOG_IN_WITH_GOOGGLE',
 					authenticated: false,
 				});
 			},
@@ -110,11 +108,11 @@ export class AuthState
 			.subscribe({
 				next: (res: any) => {
 					ctx.patchState(res as AuthStateModel);
-					this.updateMyStorageEngineService('auth', res);
+					// this.updateMyStorageEngineService('auth', res);
 				},
 				error: () => {
 					ctx.patchState({
-						status: `Failed to forgot password`,
+						status: 'FAILED_TO_SEND_FORGOT_PASSWORD_EMAIL',
 						authenticated: false,
 					});
 				},
@@ -129,7 +127,7 @@ export class AuthState
 		this.subs.sink = this.authService.resetPassword(action.payload).subscribe({
 			next: (res: any) => {
 				ctx.patchState(res as AuthStateModel);
-				this.updateMyStorageEngineService('auth', res);
+				// this.updateMyStorageEngineService('auth', res);
 			},
 			error: () => {
 				ctx.patchState({
@@ -145,7 +143,7 @@ export class AuthState
 		this.subs.sink = this.authService.logout().subscribe({
 			next: (res: any) => {
 				ctx.patchState(res as AuthStateModel);
-				this.updateMyStorageEngineService('auth', res);
+				// this.updateMyStorageEngineService('auth', res);
 			},
 			error: () => {
 				ctx.patchState({
@@ -161,7 +159,7 @@ export class AuthState
 		this.subs.sink = this.authService.isAuthenticated().subscribe({
 			next: (res: any) => {
 				ctx.patchState(res as AuthStateModel);
-				this.updateMyStorageEngineService('auth', res);
+				// this.updateMyStorageEngineService('auth', res);
 			},
 			error: () => {
 				ctx.patchState({
@@ -178,9 +176,9 @@ export class AuthState
 			status: 'Reset Auth Store To Default',
 			authenticated: null,
 		});
-		this.updateMyStorageEngineService('auth', {
-			status: 'Reset Auth Store To Default',
-			authenticated: null,
-		});
+		// this.updateMyStorageEngineService('auth', {
+		// 	status: 'Reset Auth Store To Default',
+		// 	authenticated: null,
+		// });
 	}
 }

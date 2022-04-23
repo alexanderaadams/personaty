@@ -117,7 +117,6 @@ export class AuthResolver {
 			resetPasswordEmail.email,
 			req.headers.origin
 		);
-
 		return {
 			status: 'FORGOT_PASSWORD_EMAIL_SENT_SUCCESSFULLY',
 			authenticated: null,

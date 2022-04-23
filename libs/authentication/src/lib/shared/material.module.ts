@@ -14,6 +14,7 @@ import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MY_DATE_FORMATS } from './my-date-formats';
+import { Oauth2SuccessComponent } from '../oauth2-success/oauth2-success.component';
 
 
 @NgModule({
@@ -47,5 +48,8 @@ import { MY_DATE_FORMATS } from './my-date-formats';
 		MatSnackBarModule,MatProgressBarModule
 	],
 	providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }],
+	declarations: [
+   Oauth2SuccessComponent
+	],
 })
 export class MaterialModule {}

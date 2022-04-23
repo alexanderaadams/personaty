@@ -37,10 +37,10 @@ import { AuthGuard } from './core/guards/auth.guard';
 		}),
 		NgxsReduxDevtoolsPluginModule.forRoot(),
 		NgxsSelectSnapshotModule.forRoot(),
-		NgxsStoragePluginModule.forRoot({
-			key: 'auth',
-			storage: 0,
-		}),
+		// NgxsStoragePluginModule.forRoot({
+		// 	key: 'auth',
+		// 	storage: 0,
+		// }),
 
 		MaterialModule,
 	],

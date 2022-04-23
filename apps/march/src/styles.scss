@@ -49,7 +49,11 @@ body {
 	// --resend-color: #144166;
 }
 
-.mat-bg {
+.mat-color {
+	color: var(--mat-bg);
+}
+
+.mat {
 	background-color: var(--mat-bg);
 }
 
