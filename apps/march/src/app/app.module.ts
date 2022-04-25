@@ -21,11 +21,12 @@ import { StoryState } from './story/store/story.state';
 
 import { AuthState, MaterialModule } from '@march/authentication';
 import { AuthGuard } from './core/guards/auth.guard';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
 	declarations: [AppComponent, NotFoundComponent],
 	imports: [
-		BrowserModule,
+		BrowserModule.withServerTransition({ appId: 'serverApp' }),
 		BrowserAnimationsModule,
 		HttpClientModule,
 		ApolloModule,
@@ -43,6 +44,12 @@ import { AuthGuard } from './core/guards/auth.guard';
 		// }),
 
 		MaterialModule,
+  ServiceWorkerModule.register('ngsw-worker.js', {
+    enabled: environment.production,
+    // Register the ServiceWorker as soon as the application is stable
+    // or after 30 seconds (whichever comes first).
+    registrationStrategy: 'registerWhenStable:30000'
+  }),
 	],
 
 	providers: [
