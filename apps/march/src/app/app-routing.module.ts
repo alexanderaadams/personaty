@@ -20,13 +20,21 @@ const routes: Routes = [
 		canActivate: [AuthGuard],
 		loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
 	},
+	{
+		path: 'story/:id',
+		canActivate: [AuthGuard],
+		loadChildren: () =>
+			import('./story/story.module').then((m) => m.StoryModule),
+	},
 	{ path: '**', component: NotFoundComponent },
 ];
 
 @NgModule({
-	imports: [RouterModule.forRoot(routes, {
-    initialNavigation: 'enabledBlocking'
-})],
+	imports: [
+		RouterModule.forRoot(routes, {
+			initialNavigation: 'enabledBlocking',
+		}),
+	],
 	exports: [RouterModule],
 })
 export class AppRoutingModule {}

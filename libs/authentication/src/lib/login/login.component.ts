@@ -1,4 +1,5 @@
-import { IsAuthenticatedService } from './../shared/is-authenticated.service';
+import { HttpClient } from '@angular/common/http';
+import { FormService } from '../shared/form.service';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -34,13 +35,14 @@ export class LoginComponent extends UnsubscribeOnDestroyAdapter {
 
 	constructor(
 		private readonly store: Store,
-		private isAuthenticatedService: IsAuthenticatedService
+		private formService: FormService,
+		private http: HttpClient //
 	) {
 		super();
 	}
 
 	ngOnInit() {
-		this.isAuthenticatedService.checkActionStatus(
+		this.formService.checkAuthenticationStatus(
 			Login,
 			'Failed to Login, Please Try Again',
 			'Check your email'
@@ -52,10 +54,9 @@ export class LoginComponent extends UnsubscribeOnDestroyAdapter {
 			return this.authForm.setErrors({ invalid: true });
 		}
 
-		this.loginExecutingLoader$ =
-			this.isAuthenticatedService.loginExecutingLoader$;
+		this.loginExecutingLoader$ = this.formService.loginExecutingLoader$;
 
-		this.isAuthenticatedService.goAuthenticate(new Login(this.authForm.value));
+		this.formService.goAuthenticate(new Login(this.authForm.value));
 	}
 
 	inputFormControl(option: string): FormControl {
@@ -70,3 +71,6 @@ export class LoginComponent extends UnsubscribeOnDestroyAdapter {
 		//
 	}
 }
+/*
+async@latest portscanner@latest browser-sync@latest @nguniversal/builders@latest nth-check@latest css-select@latest cheerio@latest inline-css@latest @nestjs-modules/mailer@latest list-stylesheets@latest extract-css@latest style-data@latest
+*/

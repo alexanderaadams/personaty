@@ -1,4 +1,4 @@
-import { IsAuthenticatedService } from './../shared/is-authenticated.service';
+import { FormService } from '../shared/form.service';
 import { Observable } from 'rxjs';
 import { UnsubscribeOnDestroyAdapter } from '../shared/unsubscribe-on-destroy.adapter';
 import { Component, OnInit } from '@angular/core';
@@ -23,18 +23,18 @@ export class LogoutComponent
 	constructor(
 		private store: Store,
 		private router: Router,
-		private isAuthenticatedService: IsAuthenticatedService
+		private formService: FormService
 	) {
 		super();
 	}
 
 	ngOnInit() {
-		this.isAuthenticatedService.checkActionStatus(
+		this.formService.checkAuthenticationStatus(
 			Logout,
 			'Failed to Logout, Please Try Again',
 			'Logged out successfully'
 		);
 
-		this.isAuthenticatedService.goAuthenticate(new Logout());
+		this.formService.goAuthenticate(new Logout());
 	}
 }

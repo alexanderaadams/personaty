@@ -1,14 +1,12 @@
 import { StorageEngine } from '@ngxs/storage-plugin';
 import { Injectable } from '@angular/core';
 // import { Storage } from '@ionic/storage';
-import {  Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class MyStorageEngineService implements StorageEngine {
-
-
 	get length(): number {
 		return localStorage.length;
 	}

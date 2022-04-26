@@ -10,7 +10,7 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsSelectSnapshotModule } from '@ngxs-labs/select-snapshot';
 import { CookieService } from 'ngx-cookie-service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+// import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -19,8 +19,7 @@ import { environment } from '../environments/environment';
 import { ProfileState } from './profile/store/profile.state';
 import { StoryState } from './story/store/story.state';
 
-import { AuthState, MaterialModule } from '@march/authentication';
-import { AuthGuard } from './core/guards/auth.guard';
+import { AuthState, AngularMaterialModule } from '@march/authentication';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
@@ -43,13 +42,13 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 		// 	storage: 0,
 		// }),
 
-		MaterialModule,
-  ServiceWorkerModule.register('ngsw-worker.js', {
-    enabled: environment.production,
-    // Register the ServiceWorker as soon as the application is stable
-    // or after 30 seconds (whichever comes first).
-    registrationStrategy: 'registerWhenStable:30000'
-  }),
+		AngularMaterialModule,
+		ServiceWorkerModule.register('ngsw-worker.js', {
+			enabled: environment.production,
+			// Register the ServiceWorker as soon as the application is stable
+			// or after 30 seconds (whichever comes first).
+			registrationStrategy: 'registerWhenStable:30000',
+		}),
 	],
 
 	providers: [

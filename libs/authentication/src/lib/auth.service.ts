@@ -1,13 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CookieService } from 'ngx-cookie-service';
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, catchError, map, of } from 'rxjs';
 import {
+	AuthStateModel,
 	LoginCredentials,
 	ResetPasswordCredentials,
 	SignupCredentials,
 	UserAvailableRequest,
-	UserAvailableResponse,
 } from './store/auth.model';
 
 import { Router } from '@angular/router';
@@ -21,6 +21,7 @@ import {
 	RESET_PASSWORD,
 	SIGNUP,
 } from './auth.gql.schema';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
 	providedIn: 'root',
@@ -53,7 +54,7 @@ export class AuthService {
 			})
 			.valueChanges.pipe(
 				map(({ data }: any) => {
-					return data.isAvailable as UserAvailableResponse;
+					return data.isAvailable;
 				})
 			);
 	}
@@ -77,7 +78,7 @@ export class AuthService {
 						authenticated: data?.signup?.authenticated,
 					};
 				}),
-				catchError((error) => {
+				catchError((error: any) => {
 					return error;
 				})
 			);
@@ -102,7 +103,7 @@ export class AuthService {
 						authenticated: data?.login?.authenticated,
 					};
 				}),
-				catchError((error) => {
+				catchError((error: any) => {
 					return error;
 				})
 			);
@@ -146,13 +147,13 @@ export class AuthService {
 						authenticated: data?.forgotPassword?.authenticated,
 					};
 				}),
-				catchError((error) => {
+				catchError((error: any) => {
 					return error;
 				})
 			);
 	}
 
-	resetPassword(credentials: ResetPasswordCredentials) {
+	resetPassword(credentials: ResetPasswordCredentials): any {
 		return this.apollo
 			.mutate({
 				mutation: RESET_PASSWORD,
@@ -171,10 +172,11 @@ export class AuthService {
 						authenticated: data?.resetPasswordToken?.authenticated,
 					};
 				}),
-				catchError((error) => {
+				catchError((error: any) => {
 					return error;
 				})
-			);
+			)
+			.subscribe();
 	}
 
 	logout() {
@@ -193,7 +195,7 @@ export class AuthService {
 						authenticated: data?.logout?.authenticated,
 					};
 				}),
-				catchError((error) => {
+				catchError((error: any) => {
 					return error;
 				})
 			);
@@ -215,7 +217,7 @@ export class AuthService {
 						authenticated: data?.isAuthenticated?.authenticated,
 					};
 				}),
-				catchError((error) => {
+				catchError((error: any) => {
 					return error;
 				})
 			);

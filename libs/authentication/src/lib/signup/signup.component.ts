@@ -10,7 +10,7 @@ import { UnsubscribeOnDestroyAdapter } from '../shared/unsubscribe-on-destroy.ad
 
 import * as _moment from 'moment';
 import { Moment } from 'moment';
-import { IsAuthenticatedService } from '../shared/is-authenticated.service';
+import { FormService } from '../shared/form.service';
 
 const moment = _moment;
 
@@ -44,13 +44,13 @@ export class SignupComponent
 	constructor(
 		private store: Store,
 		private router: Router,
-		private isAuthenticatedService: IsAuthenticatedService
+		private formService: FormService
 	) {
 		super();
 	}
 
 	ngOnInit() {
-		this.isAuthenticatedService.checkActionStatus(
+		this.formService.checkAuthenticationStatus(
 			Signup,
 			'Failed to signup, Please Try Again',
 			'Check your email'
@@ -68,10 +68,9 @@ export class SignupComponent
 			.get('birthDate')
 			?.value.format('YYYY-MM-DD');
 
-		this.loginExecutingLoader$ =
-			this.isAuthenticatedService.loginExecutingLoader$;
+		this.loginExecutingLoader$ = this.formService.loginExecutingLoader$;
 
-		this.isAuthenticatedService.goAuthenticate(
+		this.formService.goAuthenticate(
 			new Signup({ birthDate: birthDate.toString(), email, password })
 		);
 	}

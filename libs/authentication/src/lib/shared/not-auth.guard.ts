@@ -1,11 +1,9 @@
-import { IsAuthenticatedService } from './is-authenticated.service';
 import { Injectable } from '@angular/core';
 import { CanActivate, UrlTree, Router } from '@angular/router';
 
 import { BehaviorSubject, map, Observable, takeUntil, tap } from 'rxjs';
 import { Actions, ofActionCompleted, Select, Store } from '@ngxs/store';
 import { UnsubscribeOnDestroyAdapter } from '../shared/unsubscribe-on-destroy.adapter';
-import { Dispatch } from '@ngxs-labs/dispatch-decorator';
 import { AuthState } from '../store/auth.state';
 import { IsAuthenticated } from '../store/auth.action';
 
@@ -24,8 +22,7 @@ export class NotAuthGuard
 	constructor(
 		private store: Store,
 		private actions$: Actions,
-		private router: Router,
-		private isAuthenticatedService: IsAuthenticatedService
+		private router: Router
 	) {
 		super();
 	}
