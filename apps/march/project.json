@@ -24,7 +24,7 @@
 					},
 					{
 						"glob": "_redirects",
-						"input": "src",
+						"input": "apps/march/src",
 						"output": "/"
 					},
 					"apps/march/src/manifest.webmanifest"
