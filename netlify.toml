@@ -1,4 +1,8 @@
+[build]
+  publish = "dist/march/browser"
+  command = "    npx nx build march --configuration=production && npx nx run march:server --configuration=production"
++  functions = "./functions"
 [[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
+  from = "/*"
+  to = "/index.html"[build]
+  status = 200
