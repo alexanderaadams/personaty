@@ -50,7 +50,7 @@ export class SignupComponent
 	}
 
 	ngOnInit() {
-		this.formService.checkAuthenticationStatus(
+		this.formService.followAuthenticationStatus(
 			Signup,
 			'Failed to signup, Please Try Again',
 			'Check your email'

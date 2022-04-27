@@ -6,3 +6,4 @@ export * from './lib/shared/storage.service';
 export * from './lib/shared/unsubscribe-on-destroy.adapter';
 export * from './lib/shared/form.service';
 export * from './lib/shared/angular-material.module';
+// export * from './lib/auth.service';

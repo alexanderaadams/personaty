@@ -1,27 +1,26 @@
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { AngularMaterialModule } from '@march/authentication';
-import { StoryComponent } from './story.component';
+import { LogoutComponent } from './logout.component';
+import { AngularMaterialModule } from '../shared/angular-material.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
 	{
 		path: '',
-		component: StoryComponent,
+		component: LogoutComponent,
 	},
 ];
 
 @NgModule({
-	declarations: [StoryComponent],
+
 
 	imports: [
 		CommonModule,
-		RouterModule.forChild(routes),
 		AngularMaterialModule,
+		RouterModule.forChild(routes),
 		FormsModule,
 		ReactiveFormsModule,
 	],
 })
-export class StoryModule {}
+export class LogoutModule {}

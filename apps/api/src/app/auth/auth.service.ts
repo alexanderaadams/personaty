@@ -12,7 +12,7 @@ import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 
 import { UserService } from '../user/user.service';
-import { NodemailerService } from './utils/mail/nodemailer.service';
+import { NodemailerService } from './utilities/mail/nodemailer.service';
 import { GoogleOauth2 } from './entities/google-oauth-2.entity';
 
 import { UserSensitiveInformation } from '../user/entities/user-sensitive-information.entity';

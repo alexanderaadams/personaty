@@ -8,5 +8,5 @@
 		"target": "es2017"
 	},
 	"exclude": ["**/*.spec.ts", "**/*.test.ts"],
-	"include": ["**/*.ts", "src/app/auth/utils/mail/email.js"]
+	"include": ["**/*.ts", "src/app/auth/utilities/mail/email.js"]
 }

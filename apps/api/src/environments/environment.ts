@@ -19,8 +19,8 @@ export const environment = {
 
 	//	Google Oauth2 Info
 	GOOGLE_CLIENT_ID:
-		'248176349194-ji6ciaoe6cdp8jcp0b3601npk7ka1guo.apps.googleusercontent.com',
-	GOOGLE_CLIENT_SECRET: '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',
+		'248176349194-bp788eg7k7ji0cjejshfohlufk2ehlfo.apps.googleusercontent.com',
+	GOOGLE_CLIENT_SECRET: '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',
 	GOOGLE_CALLBACK_URL: '/api/v1/auth/redirect',
 
 	//	Mailtrap Information for Nodemailer

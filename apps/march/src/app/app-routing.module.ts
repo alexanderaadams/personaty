@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
-import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
 	{
-		path: 'profile',
+		path: 'profile/:id',
 		canActivate: [AuthGuard],
 		loadChildren: () =>
 			import('./profile/profile.module').then((m) => m.ProfileModule),
@@ -26,13 +25,17 @@ const routes: Routes = [
 		loadChildren: () =>
 			import('./story/story.module').then((m) => m.StoryModule),
 	},
-	{ path: '**', component: NotFoundComponent },
+	{
+		path: '**',
+		loadChildren: () =>
+			import('./not-found/not-found.module').then((m) => m.NotFoundModule),
+	},
 ];
 
 @NgModule({
 	imports: [
 		RouterModule.forRoot(routes, {
-			initialNavigation: 'enabledBlocking',
+			onSameUrlNavigation: 'ignore',
 		}),
 	],
 	exports: [RouterModule],

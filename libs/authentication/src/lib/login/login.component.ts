@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { FormService } from '../shared/form.service';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
-import { Login, LoginWithGoogle } from '../store/auth.action';
+import { IsAuthenticated, Login, LoginWithGoogle } from '../store/auth.action';
 import { AuthStateModel } from '../store/auth.model';
 import { UnsubscribeOnDestroyAdapter } from '../shared/unsubscribe-on-destroy.adapter';
 
@@ -16,7 +16,10 @@ import { UnsubscribeOnDestroyAdapter } from '../shared/unsubscribe-on-destroy.ad
 	styleUrls: ['./login.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent extends UnsubscribeOnDestroyAdapter {
+export class LoginComponent
+	extends UnsubscribeOnDestroyAdapter
+	implements OnInit
+{
 	hide = true;
 
 	loginExecutingLoader$ = new BehaviorSubject<boolean>(false);
@@ -42,10 +45,10 @@ export class LoginComponent extends UnsubscribeOnDestroyAdapter {
 	}
 
 	ngOnInit() {
-		this.formService.checkAuthenticationStatus(
+		this.formService.followAuthenticationStatus(
 			Login,
 			'Failed to Login, Please Try Again',
-			'Check your email'
+			'Logged in successfully'
 		);
 	}
 

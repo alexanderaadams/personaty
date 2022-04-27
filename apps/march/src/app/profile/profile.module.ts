@@ -2,17 +2,23 @@ import { NgModule } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { ProfileComponent } from './profile.component';
-import { ProfileRoutingModule } from './profile-routing.module';
-import { MaterialModule } from '@march/authentication';
+import { AngularMaterialModule } from '@march/authentication';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { StoryComponent } from '../story/story.component';
+import { Routes, RouterModule } from '@angular/router';
 
+const routes: Routes = [
+	{
+		path: '',
+		component: ProfileComponent,
+	},
+];
 @NgModule({
-	declarations: [ProfileComponent, StoryComponent],
+	declarations: [ProfileComponent],
+
 	imports: [
 		CommonModule,
-		ProfileRoutingModule,
-		MaterialModule,
+		RouterModule.forChild(routes),
+		AngularMaterialModule,
 		ReactiveFormsModule,
 		FormsModule,
 	],

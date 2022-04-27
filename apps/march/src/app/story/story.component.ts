@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, Output, EventEmitter } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute } from '@angular/router';
@@ -14,13 +14,19 @@ import { CreateStory } from './store/story.action';
 	styleUrls: ['./story.component.scss'],
 })
 export class StoryComponent extends UnsubscribeOnDestroyAdapter {
-	@Output() dismiss = new EventEmitter();
-	@Input() storyForm!: FormGroup;
-	@Input() id!: string;
-
 	addOnBlur = true;
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
 	categories: string[] = [];
+
+	id = this.activatedRoute.snapshot.params['id'];
+
+	storyForm = new FormGroup({
+		title: new FormControl('', [Validators.required]),
+
+		description: new FormControl('', [Validators.required]),
+
+		category: new FormControl([''], [Validators.required]),
+	});
 
 	constructor(
 		private store: Store,
@@ -53,7 +59,6 @@ export class StoryComponent extends UnsubscribeOnDestroyAdapter {
 	}
 
 	onSubmit() {
-		// const id = this.activatedRoute.snapshot.params['id'];
 		console.log({ ...this.storyForm.value, user_id: this.id });
 		if (this.storyForm?.invalid || !this.storyForm.value) {
 			return this.storyForm.setErrors({ invalid: true });
@@ -64,7 +69,7 @@ export class StoryComponent extends UnsubscribeOnDestroyAdapter {
 		);
 	}
 
-	onDismissClick() {
-		this.dismiss.emit(true);
-	}
+	// onDismissClick() {
+	// 	this.dismiss.emit(true);
+	// }
 }

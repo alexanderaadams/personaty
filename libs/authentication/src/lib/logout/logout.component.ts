@@ -29,7 +29,7 @@ export class LogoutComponent
 	}
 
 	ngOnInit() {
-		this.formService.checkAuthenticationStatus(
+		this.formService.followAuthenticationStatus(
 			Logout,
 			'Failed to Logout, Please Try Again',
 			'Logged out successfully'

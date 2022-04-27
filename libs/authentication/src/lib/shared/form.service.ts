@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Router } from '@angular/router';
 import { UnsubscribeOnDestroyAdapter } from './unsubscribe-on-destroy.adapter';
@@ -8,19 +9,21 @@ import {
 	Select,
 	Store,
 } from '@ngxs/store';
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AuthStateModel } from '../store/auth.model';
-import { ResetAuthStoreToDefault } from '../store/auth.action';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { IsAuthenticated, ResetAuthStoreToDefault } from '../store/auth.action';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { take, takeUntil, tap } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class FormService extends UnsubscribeOnDestroyAdapter {
 	loginExecutingLoader$ = new BehaviorSubject<boolean>(false);
+	isBrowser: boolean;
 
 	@Select('auth')
 	isAuthenticated$!: Observable<AuthStateModel>;
@@ -29,26 +32,56 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 		private actions$: Actions,
 		private _snackBar: MatSnackBar,
 		private router: Router,
-		private store: Store
+		private store: Store,
+		private activatedRoute: ActivatedRoute,
+		@Inject(PLATFORM_ID) private platformId: Record<string, unknown>
 	) {
 		super();
+		this.isBrowser = isPlatformBrowser(platformId);
+	}
+	private ngUnsubscribeCheckIfAlreadyAuthenticated = new Subject<void>();
+
+	checkIfAlreadyAuthenticated() {
+		// let count = 0;
+
+		this.isAuthenticated$
+			.pipe(
+				tap(({ status }: any) => {
+					// const currentRoute = this.router.url;
+					// console.log(count++, currentRoute, typeof currentRoute);
+
+					if (status === 'NOT_AUTHENTICATED') {
+						this.router.navigateByUrl('/auth/login');
+					}
+
+					// if (status === 'CORRECTLY_AUTHENTICATED') {
+					// }
+				}),
+				takeUntil(this.ngUnsubscribeCheckIfAlreadyAuthenticated)
+			)
+			.subscribe();
+
+		this.goAuthenticate(IsAuthenticated);
 	}
 
-	checkAuthenticationStatus(
+	followAuthenticationStatus(
 		action: ActionType,
 		snackBarFailedMessage: string,
 		snackBarSuccessMessage: string
 	) {
-		this.subs.sink = this.actions$
+		this.actions$
 			.pipe(
 				ofActionSuccessful(action),
-				tap((res) => {
+				tap(() => {
 					this.loginExecutingLoader$.next(true);
 
-					this.subs.sink = this.isAuthenticated$
+					this.isAuthenticated$
 						.pipe(
 							tap(({ status, authenticated }: any) => {
-								console.log(authenticated);
+								if (authenticated !== null && status !== null) {
+									this.loginExecutingLoader$.next(false);
+								}
+
 								if (authenticated) {
 									this.router.navigate(['']);
 									this._snackBar.open(snackBarSuccessMessage, 'Dismiss', {
@@ -56,13 +89,13 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 										panelClass: 'snack-bar-success',
 									});
 								}
-								if (authenticated !== null)
-									this.loginExecutingLoader$.next(false);
+
 								if (authenticated === false && status !== 'NOT_AUTHENTICATED')
 									this._snackBar.open(snackBarFailedMessage, 'Dismiss', {
 										duration: 3000,
 										panelClass: 'snack-bar-danger',
 									});
+
 								if (status === 'SENT_SIGNUP_EMAIL_SUCCESSFULLY') {
 									this.loginExecutingLoader$.next(false);
 									this._snackBar.open(snackBarSuccessMessage, 'Dismiss', {
@@ -70,6 +103,7 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 										panelClass: 'snack-bar-success',
 									});
 								}
+
 								if (
 									status === 'LOGGED_OUT_SUCCESSFULLY' ||
 									status === 'EITHER_LOGGED_OUT_ALREADY_OR_INTERNET_PROBLEM'
@@ -80,10 +114,12 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 									});
 									this.router.navigate(['auth', 'login']);
 								}
-							})
+							}),
+							take(2)
 						)
 						.subscribe();
-				})
+				}),
+				take(2)
 			)
 			.subscribe();
 	}

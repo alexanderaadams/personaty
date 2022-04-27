@@ -14,7 +14,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { NotFoundComponent } from './not-found/not-found.component';
 import { environment } from '../environments/environment';
 import { ProfileState } from './profile/store/profile.state';
 import { StoryState } from './story/store/story.state';
@@ -23,7 +22,7 @@ import { AuthState, AngularMaterialModule } from '@march/authentication';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
-	declarations: [AppComponent, NotFoundComponent],
+	declarations: [AppComponent],
 	imports: [
 		BrowserModule.withServerTransition({ appId: 'serverApp' }),
 		BrowserAnimationsModule,

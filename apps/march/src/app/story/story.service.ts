@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
 import { CreateStoryDto } from './create-story.dto';
 import { CREATE_STORY, GET_STORY } from './story.gql.schema';
 import { Apollo } from 'apollo-angular';
 import { StoryStateModel } from './store/story.model';
-import { map } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
 	providedIn: 'root',

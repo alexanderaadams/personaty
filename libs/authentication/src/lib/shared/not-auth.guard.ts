@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, UrlTree, Router } from '@angular/router';
+import { Store } from '@ngxs/store';
 
-import { BehaviorSubject, map, Observable, takeUntil, tap } from 'rxjs';
-import { Actions, ofActionCompleted, Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { UnsubscribeOnDestroyAdapter } from '../shared/unsubscribe-on-destroy.adapter';
 import { AuthState } from '../store/auth.state';
-import { IsAuthenticated } from '../store/auth.action';
+
+import { FormService } from './form.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -14,15 +15,10 @@ export class NotAuthGuard
 	extends UnsubscribeOnDestroyAdapter
 	implements CanActivate
 {
-	@Select(AuthState.isAuthenticated)
-	isAuthenticated$!: Observable<boolean>;
-
-	// @Dispatch() isAuthenticatedDispatcher = () => new IsAuthenticated();
-
 	constructor(
 		private store: Store,
-		private actions$: Actions,
-		private router: Router
+		private router: Router,
+		private formService: FormService
 	) {
 		super();
 	}
@@ -32,33 +28,12 @@ export class NotAuthGuard
 		| UrlTree
 		| Observable<boolean | UrlTree>
 		| Promise<boolean | UrlTree> {
-		const isAuthenticated = new BehaviorSubject<boolean>(false);
-
 		const authenticated = this.store.selectSnapshot(AuthState.isAuthenticated);
 
-		if (authenticated) return this.router.navigate(['']);
+		if (!authenticated) return true;
 
-		this.subs.sink = this.actions$
-			.pipe(
-				ofActionCompleted(IsAuthenticated),
-				tap(() => {
-					isAuthenticated.next(true);
-					isAuthenticated.complete();
-				})
-			)
-			.subscribe();
+		this.formService.checkIfAlreadyAuthenticated();
 
-		this.store.dispatch(new IsAuthenticated());
-
-		return this.isAuthenticated$.pipe(
-			takeUntil(isAuthenticated),
-			map((authenticated) => {
-				if (!authenticated) return true;
-
-				this.router.navigate(['']);
-
-				return false;
-			})
-		);
+		return this.router.navigate(['']);
 	}
 }

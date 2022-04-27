@@ -1,9 +1,9 @@
+import { FormService } from './shared/form.service';
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { CookieService } from 'ngx-cookie-service';
-import { Injectable, NgZone } from '@angular/core';
+
+import { Inject, Injectable, NgZone, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
-	AuthStateModel,
 	LoginCredentials,
 	ResetPasswordCredentials,
 	SignupCredentials,
@@ -22,22 +22,25 @@ import {
 	SIGNUP,
 } from './auth.gql.schema';
 import { catchError, map } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class AuthService {
-	rootUrl = 'https://api-persona2.herokuapp.com/api/v1';
+	rootUrlProduction = 'https://api-persona2.herokuapp.com/api/v1';
+	// rootUrlDevelopment = 'http://localhost:3333/api/v1';
 	// signedin$ = new BehaviorSubject(false);
 	// username = '';
 	// email = '';
+	isBrowser = this.formService.isBrowser;
 
 	constructor(
 		private http: HttpClient,
 		private router: Router,
 		private ngZone: NgZone,
-		private readonly cookieService: CookieService,
-		private apollo: Apollo
+		private apollo: Apollo,
+		private formService: FormService
 	) {}
 
 	userAvailable(value: UserAvailableRequest) {
@@ -111,18 +114,20 @@ export class AuthService {
 
 	loginWithGoogle() {
 		this.ngZone.run(() => {
-			const newWindow = window.open(
-				`${this.rootUrl}/auth/login-with-google`,
-				'_blank',
-				'width=500,height=600'
-			);
-			if (newWindow) {
-				const timer = setInterval(() => {
-					if (newWindow.closed) {
-						this.router.navigate(['']);
-						if (timer) clearInterval(timer);
-					}
-				}, 500);
+			if (this.isBrowser) {
+				const newWindow = window.open(
+					`${this.rootUrlProduction}/auth/login-with-google`,
+					'_blank',
+					'width=600,height=600'
+				);
+				if (newWindow) {
+					const timer = setInterval(() => {
+						if (newWindow.closed) {
+							this.router.navigate(['']);
+							if (timer) clearInterval(timer);
+						}
+					}, 500);
+				}
 			}
 		});
 	}
