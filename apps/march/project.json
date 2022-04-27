@@ -22,11 +22,6 @@
 						"input": "./libs/authentication/src/assets",
 						"output": "./assets"
 					},
-					{
-						"glob": "_redirects",
-						"input": "src",
-						"output": "/"
-					},
 					"apps/march/src/manifest.webmanifest"
 				],
 				"styles": [
