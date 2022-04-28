@@ -7,7 +7,7 @@ const routes: Routes = [
 		path: 'profile/:id',
 		canActivate: [AuthGuard],
 		loadChildren: () =>
-			import('./profile/profile.module').then((m) => m.ProfileModule),
+			import('./profile/feature/profile.module').then((m) => m.ProfileModule),
 	},
 	{
 		path: 'auth',
@@ -17,13 +17,14 @@ const routes: Routes = [
 	{
 		path: '',
 		canActivate: [AuthGuard],
-		loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
+		loadChildren: () =>
+			import('./home/feature/home.module').then((m) => m.HomeModule),
 	},
 	{
 		path: 'story/:id',
 		canActivate: [AuthGuard],
 		loadChildren: () =>
-			import('./story/story.module').then((m) => m.StoryModule),
+			import('./story/feature/story.module').then((m) => m.StoryModule),
 	},
 	{
 		path: '**',
