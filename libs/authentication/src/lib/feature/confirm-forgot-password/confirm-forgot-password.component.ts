@@ -18,7 +18,7 @@ export class ConfirmForgotPasswordComponent
 	extends UnsubscribeOnDestroyAdapter
 	implements OnInit
 {
-	hide = false;
+	hide = true;
 
 	loginExecutingLoader$: BehaviorSubject<boolean> =
 		new BehaviorSubject<boolean>(false);

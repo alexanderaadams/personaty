@@ -30,6 +30,7 @@ const routes: Routes = [
 	},
 	{
 		path: 'confirm-forgot-password/:token',
+		canActivate: [NotAuthGuard],
 		loadChildren: () =>
 			import('./confirm-forgot-password/confirm-forgot-password.module').then(
 				(m) => m.ConfirmForgotPasswordModule
@@ -37,6 +38,7 @@ const routes: Routes = [
 	},
 	{
 		path: 'oauth2-success',
+		canActivate: [NotAuthGuard],
 		loadChildren: () =>
 			import('./oauth2-success/oauth2-success.module').then(
 				(m) => m.Oauth2SuccessModule
