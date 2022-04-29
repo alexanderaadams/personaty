@@ -31,9 +31,9 @@ input UpdateUserInput {
 
 	profilePicture: String
 
-	bio: Tag_And_Bio_Input
+	bio: Interest_And_Bio_Input
 
-	tags: [Tag_And_Bio_Input]
+	interests: [Interest_And_Bio_Input]
 }
 
 type User {
@@ -59,9 +59,9 @@ type User {
 
 	stories: [Story]!
 
-	bio: Tag_And_Bio!
+	bio: Interest_And_Bio!
 
-	tags: [Tag_And_Bio]!
+	interests: [Interest_And_Bio]!
 }
 
 type User_Status {
@@ -82,12 +82,12 @@ type Story {
 	user_id: ID
 }
 
-input Tag_And_Bio_Input {
+input Interest_And_Bio_Input {
 	text: String!
 	color: String!
 }
 
-type Tag_And_Bio {
+type Interest_And_Bio {
 	text: String!
 	color: String!
 }

@@ -15,9 +15,11 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { take, takeUntil, tap } from 'rxjs/operators';
 import { isPlatformBrowser } from '@angular/common';
 
-
 import { AuthStateModel } from '../../../data-access/store/auth.model';
-import { IsAuthenticated, ResetAuthStoreToDefault } from '../../../data-access/store/auth.action';
+import {
+	IsAuthenticated,
+	ResetAuthStoreToDefault,
+} from '../../../data-access/store/auth.action';
 
 @Injectable({
 	providedIn: 'root',
@@ -85,21 +87,21 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 
 								if (authenticated) {
 									this.router.navigate(['']);
-									this._snackBar.open(snackBarSuccessMessage, 'Dismiss', {
+									this._snackBar.open(snackBarSuccessMessage, '', {
 										duration: 3000,
 										panelClass: 'snack-bar-success',
 									});
 								}
 
 								if (authenticated === false && status !== 'NOT_AUTHENTICATED')
-									this._snackBar.open(snackBarFailedMessage, 'Dismiss', {
+									this._snackBar.open(snackBarFailedMessage, '', {
 										duration: 3000,
 										panelClass: 'snack-bar-danger',
 									});
 
 								if (status === 'SENT_SIGNUP_EMAIL_SUCCESSFULLY') {
 									this.loginExecutingLoader$.next(false);
-									this._snackBar.open(snackBarSuccessMessage, 'Dismiss', {
+									this._snackBar.open(snackBarSuccessMessage, '', {
 										duration: 3000,
 										panelClass: 'snack-bar-success',
 									});
@@ -109,7 +111,7 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 									status === 'LOGGED_OUT_SUCCESSFULLY' ||
 									status === 'EITHER_LOGGED_OUT_ALREADY_OR_INTERNET_PROBLEM'
 								) {
-									this._snackBar.open(snackBarSuccessMessage, 'Dismiss', {
+									this._snackBar.open(snackBarSuccessMessage, '', {
 										duration: 3000,
 										panelClass: 'snack-bar-success',
 									});

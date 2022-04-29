@@ -6,12 +6,6 @@ export class CreateStoryDto extends CreateStoryInput {
 	@IsString()
 	user_id: string;
 
-	@IsString()
-	title: string;
-
-	@IsString()
-	description: string;
-
 	// @IsString()
 	// @IsOptional()
 	// cover_image?: string;

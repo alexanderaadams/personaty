@@ -5,23 +5,20 @@
 	mode="indeterminate"
 	value="35"
 	role="progressbar"
-	aria-label="Login progressbar"
->
+	aria-label="Login progressbar">
 </mat-progress-bar>
 
 <div class="container bg-svg">
 	<div class="d-flex justify-content-center align-items-center vh-100">
 		<div class="col-sm-8 col-md-6">
 			<div
-				class="form-box row justify-content-center align-items-center gap-2 shadow-lg"
-			>
+				class="row justify-content-center align-items-center gap-2 shadow form-box ">
 				<h1 class="col-12 h1 text-center fs-2 text-light my-4">Signup</h1>
 
 				<form
 					(ngSubmit)="onSubmit()"
 					class="row justify-content-center align-items-center gap-2"
-					[formGroup]="authForm"
-				>
+					[formGroup]="authForm">
 					<mat-form-field appearance="fill">
 						<mat-label>Email</mat-label>
 						<input
@@ -31,8 +28,7 @@
 							spellcheck="true"
 							placeholder="Ex. pat@example.com"
 							type="email"
-							[formControlName]="'email'"
-						/>
+							[formControlName]="'email'" />
 
 						<mat-error *ngIf="authForm?.['controls']?.['email']?.['invalid']">
 							Please Enter Correct Email
@@ -45,8 +41,7 @@
 							matInput
 							name="password"
 							label="Password"
-							[formControlName]="'password'"
-						/>
+							[formControlName]="'password'" />
 
 						<mat-icon matSuffix (click)="hide = !hide">{{
 							hide ? 'visibility_off' : 'visibility'
@@ -55,8 +50,7 @@
 						<mat-hint>Password must be at least 8 characters. </mat-hint>
 
 						<mat-error
-							*ngIf="authForm?.['controls']?.['password']?.['invalid']"
-						>
+							*ngIf="authForm?.['controls']?.['password']?.['invalid']">
 							Password must be at least
 							{{ authForm?.['controls']?.['password']?.['errors']?.['minlength']?.requiredLength }}
 							characters.
@@ -72,13 +66,11 @@
 							name="Date"
 							label="Birthday"
 							[formControlName]="'birthDate'"
-							[matDatepicker]="picker"
-						/>
+							[matDatepicker]="picker" />
 						<mat-hint>YYYY-MM-DD</mat-hint>
 						<mat-datepicker-toggle
 							matSuffix
-							[for]="picker"
-						></mat-datepicker-toggle>
+							[for]="picker"></mat-datepicker-toggle>
 						<mat-datepicker touchUi #picker></mat-datepicker>
 					</mat-form-field>
 
@@ -89,8 +81,7 @@
 								class="p-2 mb-3 fs-5"
 								mat-raised-button
 								color="primary"
-								type="submit"
-							>
+								type="submit">
 								Signup
 							</button>
 						</div>
@@ -103,15 +94,13 @@
 				</div>
 
 				<div
-					class="d-flex justify-content-center align-items-center align-items-center gap-2"
-				>
+					class="d-flex justify-content-center align-items-center align-items-center gap-2">
 					<button
 						class="row justify-content-around bg-transparent p-3"
 						aria-hidden="true"
 						aria-label="Login with google"
 						mat-flat-button
-						(click)="loginWithGoogle()"
-					>
+						(click)="loginWithGoogle()">
 						<svg class="icon">
 							<use xlink:href="../../assets/sprite.svg#google"></use>
 						</svg>
@@ -132,8 +121,7 @@
 				<div class="row justify-content-center align-items-center gap-2 m-3">
 					<p
 						class="col-sm-4 col-md-2 text-gray text-end"
-						style="margin: 0; padding: 0; width: max-content"
-					>
+						style="margin: 0; padding: 0; width: max-content">
 						Do have an account?
 					</p>
 

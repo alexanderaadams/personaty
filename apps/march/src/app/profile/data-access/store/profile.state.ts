@@ -1,4 +1,4 @@
-import {  GetUserInfo } from './profile.action';
+import { GetUserInfo } from './profile.action';
 import { Injectable } from '@angular/core';
 import { tap } from 'rxjs';
 
@@ -23,7 +23,7 @@ import { UnsubscribeOnDestroyAdapter } from '@march/authentication';
 
 		bio: null,
 
-		tags: null,
+		interests: null,
 	},
 })
 @Injectable()

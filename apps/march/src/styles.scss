@@ -9,8 +9,8 @@ body {
 	font-family: Roboto, 'Helvetica Neue', sans-serif;
 	font-size: 62.5%;
 	margin: 0;
-	color: var(--bs-white);
-	background-color: var(--bg-primary);
+	color: currentColor;
+	// background-color: map_get(mat.$blue-grey-palette, 900);
 }
 
 button {
@@ -22,57 +22,34 @@ body {
 	height: 100%;
 }
 
-:root {
+// :root {
+// --mat-bg: #ff72aa;
 
+// --bg-primary: #04162e;
 
+// --bg-primary-darker: #020f1f;
+// --font-primary-dark-color: #1d2129;
 
-	--mat-bg: #ff72aa;
+// --font-primary-color: #fff;
 
-	--bg-primary: #04162e;
+// --font-primary-bg: #ff5757;
 
-	--bg-primary-darker: #020f1f;
-	// --font-primary-dark-color: #1d2129;
+// --font-hover-primary-color: #c6c6c6;
 
-	// --font-primary-color: #fff;
+// --font-hover-primary-dark-color: #0c0e13;
 
-	// --font-primary-bg: #ff5757;
+// --font-hover-primary-bg: #b83d3d;
 
-	// --font-hover-primary-color: #c6c6c6;
+// --border: #bcbcbc;
 
-	// --font-hover-primary-dark-color: #0c0e13;
+// --box-shadow: #d7d7d780;
 
-	// --font-hover-primary-bg: #b83d3d;
+// --hover-box-shadow: #ffbcbc80;
 
-	// --border: #bcbcbc;
+// --focus-primary-color: rgb(26, 58, 75);
 
-	// --box-shadow: #d7d7d780;
-
-	// --hover-box-shadow: #ffbcbc80;
-
-	// --focus-primary-color: rgb(26, 58, 75);
-
-	// --resend-color: #144166;
-}
-
-.text-gray{
-	color: rgb(183 177 179) !important;
-}
-
-.mat-color {
-	color: var(--mat-bg);
-}
-
-.mat {
-	background-color: var(--mat-bg);
-}
-
-.bg-primary {
-	background-color: var(--bg-primary);
-}
-
-.bg-primary-darker {
-	background-color: var(--bg-primary-darker);
-}
+// --resend-color: #144166;
+// }
 
 .link {
 	text-decoration: none;
@@ -87,16 +64,28 @@ body {
 	height: 25vh;
 }
 
+.text-grey {
+	color: var(--bs-grey-palette) !important;
+}
+
 .bg-unknown {
-	background-color: #c2185c52;
+	background-color: var(--bs-red-palette) !important;
+}
+
+.dark-primary-bg {
+	background-color: #262c38;
+}
+
+.darker-primary-bg {
+	background-color: #1a1e27;
 }
 
 .snack-bar-danger {
-	background-color: var(--bs-danger);
-	color: var(--bs-white);
+	background-color: var(--bg-red-palette) !important;
+	color: var(--bs-red-palette-warn) !important;
 }
 
 .snack-bar-success {
-	background-color: var(--bs-success);
-	color: var(--bs-white);
+	background-color: var(--bg-green-palette) !important;
+	color: var(--bs-green-palette) !important;
 }

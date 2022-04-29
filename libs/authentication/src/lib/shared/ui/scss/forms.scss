@@ -8,7 +8,10 @@
 
 .form-box {
 	@media (min-width: 575px) {
-		border: 0.15rem solid var(--mat-bg);
 		border-radius: 0.8rem;
+	}
+
+	@media (max-width: 575px) {
+		box-shadow: none !important;
 	}
 }

@@ -17,9 +17,6 @@ input GetStoryInput {
 }
 
 input CreateStoryInput {
-	title: String!
-
-	description: String!
 
 	# cover_image: String
 
@@ -29,9 +26,6 @@ input CreateStoryInput {
 }
 
 input UpdateStoryInput {
-	title: String
-
-	description: String
 
 	# cover_image: String
 
@@ -44,11 +38,6 @@ input DeleteStoryInput {
 
 type Story {
 	_id: String
-
-	title: String
-
-	description: String
-
 	# cover_image: String
 
 	category: [Category]

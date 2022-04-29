@@ -35,12 +35,12 @@
 				aria-label="Specialty selection"
 			>
 				<mat-chip
-					*ngFor="let tag of user?.tags; let i = index"
-					[style]="'background-color:' + tag.color"
+					*ngFor="let interest of user?.interests; let i = index"
+					[style]="'background-color:' + interest.color"
 					class="col p-4 d-flex justify-content-center align-content-center"
 				>
 					<span class="text-center">
-						{{ tag.text }}
+						{{ interest.text }}
 					</span>
 				</mat-chip>
 			</mat-chip-list>

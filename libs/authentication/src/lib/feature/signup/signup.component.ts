@@ -1,4 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+	Component,
+	OnDestroy,
+	OnInit,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
@@ -16,18 +21,20 @@ import { Moment } from 'moment';
 	selector: 'lib-signup',
 	templateUrl: './signup.component.html',
 	styleUrls: ['./signup.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignupComponent
 	extends UnsubscribeOnDestroyAdapter
 	implements OnDestroy, OnInit
 {
 	hide = true;
-	loginExecutingLoader$ = new BehaviorSubject<boolean>(false);
+	loginExecutingLoader$: BehaviorSubject<boolean> =
+		new BehaviorSubject<boolean>(false);
 
 	@Select(AuthState.isAuthenticated)
 	isAuthenticated$!: Observable<AuthStateModel>;
 
-	authForm = new FormGroup({
+	authForm: FormGroup = new FormGroup({
 		email: new FormControl('', [Validators.required, Validators.email]),
 
 		password: new FormControl('', [

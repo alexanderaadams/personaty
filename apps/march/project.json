@@ -30,7 +30,7 @@
 					}
 				],
 				"styles": [
-					"node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
+					"apps/march/src/app/core/ui/angular-material-custom-theme.scss",
 					"apps/march/src/styles.scss"
 				],
 				"scripts": [],

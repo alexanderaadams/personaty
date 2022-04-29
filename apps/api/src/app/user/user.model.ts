@@ -12,7 +12,7 @@ import {
 import { User } from '../core/graphql.schema';
 import { Gender, Role } from '../core/shared.enum';
 import { StoryModel } from '../story/story.model';
-import { TagAndBio } from './entities/tag-and-bio.entity';
+import { InterestAndBio } from './entities/interest-and-bio.entity';
 
 export class UserModel extends User {
 	@IsString()
@@ -55,8 +55,8 @@ export class UserModel extends User {
 	stories: StoryModel[];
 
 	@IsObject()
-	bio: TagAndBio;
+	bio: InterestAndBio;
 
 	@IsArray()
-	tags: TagAndBio[];
+	interests: InterestAndBio[];
 }

@@ -1,8 +1,9 @@
-import { StoryStateModel } from "../../../story/data-access/store/story.model";
+import { StoryStateModel } from '../../../story/data-access/store/story.model';
 
-
-
-export interface tag {text:string,color:string}
+export interface tag {
+	text: string;
+	color: string;
+}
 
 export interface ProfileStateModel {
 	fullName: string | null;
@@ -17,5 +18,5 @@ export interface ProfileStateModel {
 
 	bio: tag | null;
 
-	tags: tag[] | null;
+	interests: tag[] | null;
 }

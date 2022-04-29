@@ -6,12 +6,26 @@ import { map } from 'rxjs/operators';
 import { CreateStoryDto } from '../model/create-story.dto';
 import { CREATE_STORY, GET_STORY } from '../graphql/story.gql.schema';
 import { StoryStateModel } from '../store/story.model';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+// import { environment } from '';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class StoryService {
-	constructor(private apollo: Apollo) {}
+	constructor(private http: HttpClient, private apollo: Apollo) {}
+
+	uploadStoryPhoto(formData: any, id: string) {
+		return this.http.post(
+			`${environment.BACKEND_URL}/api/v1/picture/upload/${id}`,
+			formData,
+			{
+				reportProgress: true,
+				observe: 'events',
+			}
+		);
+	}
 
 	getStory(id: string) {
 		return this.apollo

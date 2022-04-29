@@ -21,7 +21,8 @@ export class LoginComponent
 {
 	hide = true;
 
-	loginExecutingLoader$ = new BehaviorSubject<boolean>(false);
+	loginExecutingLoader$: BehaviorSubject<boolean> =
+		new BehaviorSubject<boolean>(false);
 
 	@Select('auth')
 	isAuthenticated$!: Observable<AuthStateModel>;

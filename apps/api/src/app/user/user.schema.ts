@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Schema as MongooseSchema, Document, Types } from 'mongoose';
-import { TagAndBio } from './entities/tag-and-bio.entity';
+import { InterestAndBio } from './entities/interest-and-bio.entity';
 
 export type UserDocument = User & Document;
 
@@ -90,10 +90,10 @@ export class User {
 		type: { text: String, color: String },
 		default: { text: '', color: '#fff' },
 	})
-	bio: TagAndBio;
+	bio: InterestAndBio;
 
 	@Prop({ type: [{ text: String, color: String }], default: [''] })
-	tags: TagAndBio[];
+	interests: InterestAndBio[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

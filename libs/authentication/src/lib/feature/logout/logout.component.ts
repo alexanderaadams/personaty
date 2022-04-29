@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 
@@ -8,12 +8,12 @@ import { AuthState } from '../../data-access/store/auth.state';
 import { FormService } from '../../shared/data-access/services/form.service';
 import { Logout } from '../../data-access/store/auth.action';
 
-
 @Component({
 	// eslint-disable-next-line @angular-eslint/component-selector
 	selector: 'lib-signout',
 	templateUrl: './logout.component.html',
 	styleUrls: ['./logout.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LogoutComponent
 	extends UnsubscribeOnDestroyAdapter

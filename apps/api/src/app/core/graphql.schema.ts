@@ -39,15 +39,11 @@ export class GetStoryInput {
 }
 
 export class CreateStoryInput {
-    title: string;
-    description: string;
     category: CategoryInput[];
     user_id: string;
 }
 
 export class UpdateStoryInput {
-    title?: Nullable<string>;
-    description?: Nullable<string>;
     category?: Nullable<Nullable<CategoryInput>[]>;
 }
 
@@ -69,11 +65,11 @@ export class UpdateUserInput {
     birthDate?: Nullable<Date>;
     locale?: Nullable<string>;
     profilePicture?: Nullable<string>;
-    bio?: Nullable<Tag_And_Bio_Input>;
-    tags?: Nullable<Nullable<Tag_And_Bio_Input>[]>;
+    bio?: Nullable<Interest_And_Bio_Input>;
+    interests?: Nullable<Nullable<Interest_And_Bio_Input>[]>;
 }
 
-export class Tag_And_Bio_Input {
+export class Interest_And_Bio_Input {
     text: string;
     color: string;
 }
@@ -123,8 +119,8 @@ export class User {
     created_at: Date;
     role?: Nullable<string>;
     stories: Nullable<Story>[];
-    bio: Tag_And_Bio;
-    tags: Nullable<Tag_And_Bio>[];
+    bio: Interest_And_Bio;
+    interests: Nullable<Interest_And_Bio>[];
 }
 
 export class Is_User_Available {
@@ -138,11 +134,11 @@ export class Authentication_Status {
 
 export class Story {
     _id?: Nullable<string>;
-    title?: Nullable<string>;
-    description?: Nullable<string>;
     category?: Nullable<Nullable<Category>[]>;
     created_at?: Nullable<Date>;
     user_id?: Nullable<string>;
+    title?: Nullable<string>;
+    description?: Nullable<string>;
     photo?: Nullable<string>;
 }
 
@@ -159,7 +155,7 @@ export class User_Status {
     status: string;
 }
 
-export class Tag_And_Bio {
+export class Interest_And_Bio {
     text: string;
     color: string;
 }

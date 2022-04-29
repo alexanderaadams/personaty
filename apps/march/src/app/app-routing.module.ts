@@ -5,7 +5,7 @@ import { AuthGuard } from './core/guards/auth.guard';
 const routes: Routes = [
 	{
 		path: 'profile/:id',
-		canActivate: [AuthGuard],
+		// canActivate: [AuthGuard],
 		loadChildren: () =>
 			import('./profile/feature/profile.module').then((m) => m.ProfileModule),
 	},
@@ -21,7 +21,7 @@ const routes: Routes = [
 			import('./home/feature/home.module').then((m) => m.HomeModule),
 	},
 	{
-		path: 'story/:id',
+		path: 'story',
 		canActivate: [AuthGuard],
 		loadChildren: () =>
 			import('./story/feature/story.module').then((m) => m.StoryModule),

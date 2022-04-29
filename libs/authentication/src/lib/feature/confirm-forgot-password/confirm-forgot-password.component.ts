@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
@@ -7,11 +7,11 @@ import { ConfirmForgotPassword } from '../../data-access/store/auth.action';
 import { MatchPassword } from '../../data-access/validators/match-password';
 import { UnsubscribeOnDestroyAdapter } from '../../shared/unsubscribe-on-destroy.adapter';
 
-
 @Component({
 	selector: 'lib-confirm-forgot-password',
 	templateUrl: './confirm-forgot-password.component.html',
 	styleUrls: ['./confirm-forgot-password.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmForgotPasswordComponent extends UnsubscribeOnDestroyAdapter {
 	hide = true;
