@@ -1,9 +1,11 @@
-import { Component,ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
+import { BehaviorSubject } from 'rxjs';
 
-import { ForgotPassword } from '../../data-access/store/auth.action';
+import { SendForgotPasswordEmail } from '../../data-access/store/auth.action';
+import { FormService } from '../../shared/data-access/services/form.service';
 
 @Component({
 	selector: 'lib-forgot-password',
@@ -11,23 +13,36 @@ import { ForgotPassword } from '../../data-access/store/auth.action';
 	styleUrls: ['./forgot-password.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ForgotPasswordComponent {
+export class ForgotPasswordComponent implements OnInit {
+	loginExecutingLoader$: BehaviorSubject<boolean> =
+		new BehaviorSubject<boolean>(false);
+
 	authForm: FormGroup = new FormGroup({
 		email: new FormControl('', [Validators.required, Validators.email]),
 	});
 
-	constructor(private store: Store, private router: Router) {}
+	constructor(
+		private store: Store,
+		private router: Router,
+		private formService: FormService
+	) {}
+
+	ngOnInit() {
+		this.formService.followAuthenticationStatus(
+			SendForgotPasswordEmail,
+			'Failed to Forgot Password, Please Try Again',
+			'Please Check your Email Address'
+		);
+	}
 
 	onSubmit() {
 		if (this.authForm.invalid || !this.authForm.value)
 			return this.authForm.setErrors({ invalid: true });
 
-		this.store.dispatch(new ForgotPassword(this.authForm.value));
+		this.loginExecutingLoader$ = this.formService.loginExecutingLoader$;
 
-		this.router.navigate(['auth', 'login']);
-	}
-
-	inputFormControl(option: string): FormControl {
-		return this.authForm?.get(option) as FormControl;
+		this.formService.goAuthenticate(
+			new SendForgotPasswordEmail(this.authForm.value)
+		);
 	}
 }

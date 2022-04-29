@@ -1,7 +1,7 @@
 import { IsString } from 'class-validator';
-import { LoginInput } from '../../core/graphql.schema';
+import { Login_Input } from '../../core/graphql.schema';
 
-export class LoginDto extends LoginInput {
+export class LoginDto extends Login_Input {
 	@IsString()
 	email: string;
 

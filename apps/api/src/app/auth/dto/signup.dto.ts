@@ -1,7 +1,7 @@
-import { SignupInput } from '../../core/graphql.schema';
+import { Signup_Input } from '../../core/graphql.schema';
 import { IsDateString, IsString, IsEmail } from 'class-validator';
 
-export class SignupDto extends SignupInput {
+export class SignupDto extends Signup_Input {
 	@IsEmail()
 	email: string;
 

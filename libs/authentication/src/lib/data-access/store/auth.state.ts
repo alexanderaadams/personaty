@@ -11,7 +11,7 @@ import {
 	Logout,
 	Signup,
 	ConfirmForgotPassword,
-	ForgotPassword,
+	SendForgotPasswordEmail,
 	LoginWithGoogle,
 	IsAuthenticated,
 	ResetAuthStoreToDefault,
@@ -86,7 +86,7 @@ export class AuthState
 		this.subs.sink = of(this.authService.loginWithGoogle()).subscribe({
 			next: (res: any) => {
 				ctx.patchState({
-					status: 'SUPPOSEDLY_LOGGED_IN_WITH_GOOGGLE',
+					status: 'SUPPOSEDLY_LOGGED_IN_WITH_GOOGLE',
 					authenticated: null,
 				});
 
@@ -94,17 +94,17 @@ export class AuthState
 			},
 			error: () => {
 				ctx.patchState({
-					status: 'FAILED_TO_LOG_IN_WITH_GOOGGLE',
+					status: 'FAILED_TO_LOG_IN_WITH_GOOGLE',
 					authenticated: false,
 				});
 			},
 		});
 	}
 
-	@Action(ForgotPassword, { cancelUncompleted: true })
+	@Action(SendForgotPasswordEmail, { cancelUncompleted: true })
 	sendForgotPasswordEmail(
 		ctx: StateContext<AuthStateModel>,
-		action: ForgotPassword
+		action: SendForgotPasswordEmail
 	) {
 		this.subs.sink = this.authService
 			.sendForgotPasswordEmail(action.payload)
@@ -123,22 +123,25 @@ export class AuthState
 	}
 
 	@Action(ConfirmForgotPassword, { cancelUncompleted: true })
-	resetPassword(
+	confirmForgotPassword(
 		ctx: StateContext<AuthStateModel>,
 		action: ConfirmForgotPassword
 	) {
-		this.subs.sink = this.authService.resetPassword(action.payload).subscribe({
-			next: (res: any) => {
-				ctx.patchState(res as AuthStateModel);
-				// this.updateMyStorageEngineService('auth', res);
-			},
-			error: () => {
-				ctx.patchState({
-					status: `Failed to Reset Password`,
-					authenticated: false,
-				});
-			},
-		});
+		this.subs.sink = this.authService
+			.confirmForgotPassword(action.payload)
+			.subscribe({
+				next: (res: any) => {
+
+					ctx.patchState(res as AuthStateModel);
+					// this.updateMyStorageEngineService('auth', res);
+				},
+				error: () => {
+					ctx.patchState({
+						status: `FAILED_TO_CONFIRM_FORGOT_PASSWORD`,
+						authenticated: false,
+					});
+				},
+			});
 	}
 
 	@Action(Logout, { cancelUncompleted: true })

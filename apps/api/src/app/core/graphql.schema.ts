@@ -7,28 +7,26 @@
 
 /* tslint:disable */
 /* eslint-disable */
-export class SignupInput {
+export class Signup_Input {
     email: string;
     password: string;
     birthDate: string;
 }
 
-export class LoginInput {
+export class Login_Input {
     email: string;
     password: string;
 }
 
-export class ForgotPasswordInput {
+export class Send_Forgot_Password_Email_Input {
     email: string;
 }
 
-export class FindUserInput {
-    id?: Nullable<string>;
+export class Find_User_Input {
     username?: Nullable<string>;
-    email?: Nullable<string>;
 }
 
-export class Confirm_Forgot_Password_With_JWT_Input {
+export class Confirm_Forgot_Password_Input {
     password: string;
     confirmPassword: string;
     token: string;
@@ -75,7 +73,7 @@ export class Interest_And_Bio_Input {
 }
 
 export abstract class IQuery {
-    abstract isAvailable(findUser: FindUserInput): Is_User_Available | Promise<Is_User_Available>;
+    abstract isAvailable(findUser: Find_User_Input): Is_User_Available | Promise<Is_User_Available>;
 
     abstract isAuthenticated(): Authentication_Status | Promise<Authentication_Status>;
 
@@ -87,13 +85,13 @@ export abstract class IQuery {
 }
 
 export abstract class IMutation {
-    abstract signup(user: SignupInput): Authentication_Status | Promise<Authentication_Status>;
+    abstract signup(user: Signup_Input): Authentication_Status | Promise<Authentication_Status>;
 
-    abstract login(user: LoginInput): Authentication_Status | Promise<Authentication_Status>;
+    abstract login(user: Login_Input): Authentication_Status | Promise<Authentication_Status>;
 
-    abstract forgotPassword(user: ForgotPasswordInput): Authentication_Status | Promise<Authentication_Status>;
+    abstract sendForgotPasswordEmail(user: Send_Forgot_Password_Email_Input): Authentication_Status | Promise<Authentication_Status>;
 
-    abstract resetPasswordToken(credentials: Confirm_Forgot_Password_With_JWT_Input): Authentication_Status | Promise<Authentication_Status>;
+    abstract confirmForgotPassword(credentials: Confirm_Forgot_Password_Input): Authentication_Status | Promise<Authentication_Status>;
 
     abstract createStory(story: CreateStoryInput): Story | Promise<Story>;
 

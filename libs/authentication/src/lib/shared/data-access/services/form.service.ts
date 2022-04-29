@@ -109,12 +109,16 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 
 								if (
 									status === 'LOGGED_OUT_SUCCESSFULLY' ||
-									status === 'EITHER_LOGGED_OUT_ALREADY_OR_INTERNET_PROBLEM'
+									status === 'EITHER_LOGGED_OUT_ALREADY_OR_INTERNET_PROBLEM' ||
+									status === 'FORGOT_PASSWORD_EMAIL_SENT_SUCCESSFULLY'
 								) {
 									this._snackBar.open(snackBarSuccessMessage, '', {
 										duration: 3000,
 										panelClass: 'snack-bar-success',
 									});
+									this.router.navigate(['auth', 'login']);
+								}
+								if (status === 'PASSWORD_UPDATED_SUCCESSFULLY') {
 									this.router.navigate(['auth', 'login']);
 								}
 							}),

@@ -23,7 +23,7 @@ export interface LoginCredentials {
 	password: string;
 }
 
-export interface ResetPasswordCredentials {
+export interface ConfirmForgotPasswordCredentials {
 	password: string;
 	confirmPassword: string;
 	token: string;

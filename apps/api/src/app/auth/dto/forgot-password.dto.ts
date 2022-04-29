@@ -1,7 +1,7 @@
 import { IsEmail } from 'class-validator';
-import { ForgotPasswordInput } from '../../core/graphql.schema';
+import { Send_Forgot_Password_Email_Input } from '../../core/graphql.schema';
 
-export class ForgotPasswordDto extends ForgotPasswordInput {
+export class sendForgotPasswordEmailDto extends Send_Forgot_Password_Email_Input {
 	@IsEmail()
 	email: string;
 }

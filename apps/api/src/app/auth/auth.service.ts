@@ -209,12 +209,12 @@ export class AuthService {
 				}
 			);
 
-			const tokenURL = `${reqHeadersOrigin}/auth/reset-password/${token}`;
+			const tokenURL = `${reqHeadersOrigin}/auth/confirm-forgot-password/${token}`;
 			// console.log(user);
 			this.nodemailerService.sendEmail(
 				email,
 				'Forgot Your Password',
-				'Click On The Button To Forgot Your Password',
+				'Click On The Button To Reset Your Password',
 				tokenURL
 			);
 			return { status: 'Email has ben send' };
@@ -226,7 +226,7 @@ export class AuthService {
 		}
 	}
 
-	async verifyForgotPassword(passwords: {
+	async confirmForgotPassword(passwords: {
 		password: string;
 		confirmPassword: string;
 		token: string;
@@ -246,6 +246,7 @@ export class AuthService {
 			const signToken = await this.myJWTService.signToken({
 				email: user.email,
 			});
+
 			const hashedPassword = await this.hashingPassword(password);
 
 			const updateUser = await this.usersService.updateUser(user._id, {

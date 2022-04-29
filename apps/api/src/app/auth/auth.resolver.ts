@@ -11,8 +11,8 @@ import { IsUserAvailable } from './entities/is-user-available';
 import { AuthenticationStatus } from './entities/authentication-status.entity';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
-import { ForgotPasswordDto } from './dto/forgot-password.dto';
-import { ConfirmForgotPasswordWithTokenDto } from './dto/confirm-forgot-password-with-token.dto';
+import { sendForgotPasswordEmailDto } from './dto/forgot-password.dto';
+import { ConfirmForgotPasswordDto } from './dto/confirm-forgot-password-with-token.dto';
 import { MyJWTService } from '../jwt/jwt.service';
 import { environment } from '../../environments/environment';
 @Resolver('auth')
@@ -105,16 +105,17 @@ export class AuthResolver {
 		return { status: 'NOT_AUTHENTICATED', authenticated: false };
 	}
 
-	@Mutation(() => ForgotPasswordDto, {
-		name: 'forgotPassword',
+	@Mutation(() => sendForgotPasswordEmailDto, {
+		name: 'sendForgotPasswordEmail',
 		description: 'Validate account using the sended token',
 	})
 	async sendForgotPasswordEmail(
-		@Args('user', { type: () => Object }) resetPasswordEmail: { email: string },
+		@Args('user', { type: () => Object })
+		sendForgotPasswordEmail: { email: string },
 		@Context('req') req: Request
 	): Promise<AuthenticationStatus> {
 		await this.authService.sendForgotPasswordEmail(
-			resetPasswordEmail.email,
+			sendForgotPasswordEmail.email,
 			req.headers.origin
 		);
 		return {
@@ -124,17 +125,17 @@ export class AuthResolver {
 	}
 
 	@Mutation(() => AuthenticationStatus, {
-		name: 'resetPasswordToken',
+		name: 'confirmForgotPassword',
 		description: 'Email token to reset the password',
 	})
-	async verifyForgotPassword(
+	async confirmForgotPassword(
 		@Args('credentials', { type: () => String })
-		credentials: ConfirmForgotPasswordWithTokenDto,
+		credentials: ConfirmForgotPasswordDto,
 
 		@Context('res') res: Response
 	): Promise<AuthenticationStatus> {
 		// console.log(credentials);
-		const user = await this.authService.verifyForgotPassword(credentials);
+		const user = await this.authService.confirmForgotPassword(credentials);
 
 		if (user)
 			res.cookie('token', user.token, {

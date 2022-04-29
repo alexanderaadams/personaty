@@ -1,21 +1,23 @@
 scalar Date
 
 type Query {
-	isAvailable(findUser: FindUserInput!): Is_User_Available!
+	isAvailable(findUser: Find_User_Input!): Is_User_Available!
 	isAuthenticated: Authentication_Status!
 	logout: Authentication_Status!
 }
 
 type Mutation {
-	signup(user: SignupInput!): Authentication_Status!
-	login(user: LoginInput!): Authentication_Status!
-	forgotPassword(user: ForgotPasswordInput!): Authentication_Status!
-	resetPasswordToken(
-		credentials: Confirm_Forgot_Password_With_JWT_Input!
+	signup(user: Signup_Input!): Authentication_Status!
+	login(user: Login_Input!): Authentication_Status!
+	sendForgotPasswordEmail(
+		user: Send_Forgot_Password_Email_Input!
+	): Authentication_Status!
+	confirmForgotPassword(
+		credentials: Confirm_Forgot_Password_Input!
 	): Authentication_Status!
 }
 
-input SignupInput {
+input Signup_Input {
 	email: String!
 
 	password: String!
@@ -23,25 +25,25 @@ input SignupInput {
 	birthDate: String!
 }
 
-input LoginInput {
+input Login_Input {
 	email: String!
 
 	password: String!
 }
 
-input ForgotPasswordInput {
+input Send_Forgot_Password_Email_Input {
 	email: String!
 }
 
-input FindUserInput {
-	id: String
+input Find_User_Input {
+	# id: String
 
 	username: String
 
-	email: String
+	# email: String
 }
 
-input Confirm_Forgot_Password_With_JWT_Input {
+input Confirm_Forgot_Password_Input {
 	password: String!
 
 	confirmPassword: String!

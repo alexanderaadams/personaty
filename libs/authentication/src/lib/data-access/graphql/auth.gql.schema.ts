@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const IS_AVAILABLE = gql`
-	query ($findUser: FindUserInput!) {
+	query ($findUser: Find_User_Input!) {
 		isAvailable(findUser: $findUser) {
 			available
 		}
@@ -9,7 +9,7 @@ export const IS_AVAILABLE = gql`
 `;
 
 export const SIGNUP = gql`
-	mutation ($user: SignupInput!) {
+	mutation ($user: Signup_Input!) {
 		signup(user: $user) {
 			status
 			authenticated
@@ -27,7 +27,7 @@ export const SIGNUP_TOKEN = gql`
 `;
 
 export const LOGIN = gql`
-	mutation ($user: LoginInput!) {
+	mutation ($user: Login_Input!) {
 		login(user: $user) {
 			status
 			authenticated
@@ -35,18 +35,18 @@ export const LOGIN = gql`
 	}
 `;
 
-export const FORGOT_PASSWORD = gql`
-	mutation ($user: ForgotPasswordInput!) {
-		forgotPassword(user: $user) {
+export const SEND_FORGOT_PASSWORD_EMAIL = gql`
+	mutation ($user: Send_Forgot_Password_Email_Input!) {
+		sendForgotPasswordEmail(user: $user) {
 			status
 			authenticated
 		}
 	}
 `;
 
-export const RESET_PASSWORD = gql`
-	mutation ($credentials: ResetPasswordTokenInput!) {
-		resetPasswordToken(credentials: $credentials) {
+export const CONFIRM_FORGOT_PASSWORD = gql`
+	mutation ($credentials: Confirm_Forgot_Password_Input!) {
+		confirmForgotPassword(credentials: $credentials) {
 			status
 			authenticated
 		}

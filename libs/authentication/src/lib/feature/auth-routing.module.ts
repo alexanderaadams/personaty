@@ -22,7 +22,7 @@ const routes: Routes = [
 			import('./logout/logout.module').then((m) => m.LogoutModule),
 	},
 	{
-		path: 'forgot-password',
+		path: 'send-forgot-password-email',
 		loadChildren: () =>
 			import('./forgot-password/forgot-password.module').then(
 				(m) => m.ForgotPasswordModule

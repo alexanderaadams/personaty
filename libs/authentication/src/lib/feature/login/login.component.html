@@ -13,9 +13,7 @@
 		<div class="col-sm-8 col-md-5">
 			<div
 				class="row justify-content-center align-items-center gap-2 shadow form-box">
-				<h1 class="col-12 h1 text-center fs-2 text-light my-4">Login</h1>
-				<!-- </div> -->
-				<!-- <div class="col-6"> -->
+				<h1 class="col-12 h1 text-center fs-2 my-4">Login</h1>
 				<form
 					(ngSubmit)="onSubmit()"
 					class="row justify-content-center align-items-center gap-2"
@@ -74,7 +72,7 @@
 					<div class="w-100 row justify-content-center align-items-center">
 						<a
 							class="link m-2 text-grey d-flex justify-content-center align-items-center"
-							[routerLink]="['/auth/forgot-password']"
+							[routerLink]="['/auth/send-forgot-password-email']"
 							>Forgot password?</a
 						>
 					</div>
@@ -131,7 +129,7 @@
 					</p>
 
 					<a
-						class="col-2 link text-light text-left"
+						class="col-2 link text-left text-grey"
 						style="margin: 0; padding: 0; text-decoration: underline"
 						[routerLink]="['/auth/signup']"
 						>signup</a

@@ -32,7 +32,7 @@ style="
 <div>
 	<h3 style="color: rgb(80, 80, 80)">Confirm your email now !</h3>
 	<p style="margin-bottom: 4rem; color: rgb(75, 75, 75)">
-		Please lick on the button bellow to confirm your account
+		Please click on the button bellow to confirm your account
 	</p>
 </div>
 <a
@@ -48,7 +48,7 @@ style="
 	text-align: center;
 	font-weight: 600;
 "
->Click To Confirm</a>
+>Click Here</a>
 </div>`;
 		this.mailerService
 			.sendMail({

@@ -1,25 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {  Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Apollo } from 'apollo-angular';
+import { catchError, map } from 'rxjs/operators';
+
 import {
 	LoginCredentials,
-	ResetPasswordCredentials,
+	ConfirmForgotPasswordCredentials,
 	SignupCredentials,
 	UserAvailableRequest,
 } from '../store/auth.model';
-
-import { Router } from '@angular/router';
-import { Apollo } from 'apollo-angular';
 import {
-	FORGOT_PASSWORD,
+	SEND_FORGOT_PASSWORD_EMAIL,
 	IS_AUTHENTICATED,
 	IS_AVAILABLE,
 	LOGIN,
 	LOGOUT,
-	RESET_PASSWORD,
+	CONFIRM_FORGOT_PASSWORD,
 	SIGNUP,
 } from '../graphql/auth.gql.schema';
-import { catchError, map } from 'rxjs/operators';
 import { FormService } from '../../shared/data-access/services/form.service';
 
 @Injectable({
@@ -133,7 +133,7 @@ export class AuthService {
 	sendForgotPasswordEmail(email: { email: string }) {
 		return this.apollo
 			.mutate({
-				mutation: FORGOT_PASSWORD,
+				mutation: SEND_FORGOT_PASSWORD_EMAIL,
 				variables: {
 					user: email,
 				},
@@ -146,8 +146,8 @@ export class AuthService {
 			.pipe(
 				map(({ data }: any) => {
 					return {
-						status: data?.forgotPassword?.status,
-						authenticated: data?.forgotPassword?.authenticated,
+						status: data?.sendForgotPasswordEmail?.status,
+						authenticated: data?.sendForgotPasswordEmail?.authenticated,
 					};
 				}),
 				catchError((error: any) => {
@@ -156,10 +156,10 @@ export class AuthService {
 			);
 	}
 
-	resetPassword(credentials: ResetPasswordCredentials): any {
+	confirmForgotPassword(credentials: ConfirmForgotPasswordCredentials) {
 		return this.apollo
 			.mutate({
-				mutation: RESET_PASSWORD,
+				mutation: CONFIRM_FORGOT_PASSWORD,
 				variables: {
 					credentials,
 				},
@@ -171,15 +171,14 @@ export class AuthService {
 			.pipe(
 				map(({ data }: any) => {
 					return {
-						status: data?.resetPasswordToken?.status,
-						authenticated: data?.resetPasswordToken?.authenticated,
+						status: data?.confirmForgotPassword?.status,
+						authenticated: data?.confirmForgotPassword?.authenticated,
 					};
 				}),
 				catchError((error: any) => {
 					return error;
 				})
-			)
-			.subscribe();
+			);
 	}
 
 	logout() {

@@ -1,10 +1,11 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngxs/store';
+import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 
 import { ConfirmForgotPassword } from '../../data-access/store/auth.action';
 import { MatchPassword } from '../../data-access/validators/match-password';
+import { FormService } from '../../shared/data-access/services/form.service';
 import { UnsubscribeOnDestroyAdapter } from '../../shared/unsubscribe-on-destroy.adapter';
 
 @Component({
@@ -13,31 +14,44 @@ import { UnsubscribeOnDestroyAdapter } from '../../shared/unsubscribe-on-destroy
 	styleUrls: ['./confirm-forgot-password.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfirmForgotPasswordComponent extends UnsubscribeOnDestroyAdapter {
-	hide = true;
+export class ConfirmForgotPasswordComponent
+	extends UnsubscribeOnDestroyAdapter
+	implements OnInit
+{
+	hide = false;
+
+	loginExecutingLoader$: BehaviorSubject<boolean> =
+		new BehaviorSubject<boolean>(false);
 
 	authForm: FormGroup = new FormGroup(
 		{
 			password: new FormControl('', [
 				Validators.required,
-				Validators.maxLength(2),
+				Validators.minLength(8),
 			]),
 
 			confirmPassword: new FormControl('', [
 				Validators.required,
-				Validators.maxLength(2),
+				Validators.minLength(8),
 			]),
 		},
 		{ validators: [this.matchPassword.validate] }
 	);
 
 	constructor(
-		private store: Store,
 		private matchPassword: MatchPassword,
 		private activatedRoute: ActivatedRoute,
-		private router: Router
+		private formService: FormService
 	) {
 		super();
+	}
+
+	ngOnInit() {
+		this.formService.followAuthenticationStatus(
+			ConfirmForgotPassword,
+			'Failed to confirm your new password',
+			'Password has been changed successfully'
+		);
 	}
 
 	onSubmit() {
@@ -45,16 +59,16 @@ export class ConfirmForgotPasswordComponent extends UnsubscribeOnDestroyAdapter 
 			return this.authForm.setErrors({ invalid: true });
 		}
 
-		const token = this.activatedRoute.snapshot.params['token'];
+		const token: string = this.activatedRoute.snapshot.params['token'];
 
-		this.store.dispatch(
+		this.loginExecutingLoader$ = this.formService.loginExecutingLoader$;
+
+		this.formService.goAuthenticate(
 			new ConfirmForgotPassword({
 				...this.authForm.value,
 				token,
 			})
 		);
-
-		this.router.navigate(['auth', 'login']);
 	}
 	// inputFormControl(option: string): FormControl {
 	// 	return this.authForm?.get(option) as FormControl;

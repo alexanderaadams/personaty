@@ -13,7 +13,7 @@ export class Login {
 export class LoginWithGoogle {
 	static readonly type = '[Auth] Login With Google';
 }
-export class ForgotPassword {
+export class SendForgotPasswordEmail {
 	static readonly type = '[Auth] Forgot Password';
 	constructor(public payload: { email: string }) {}
 }
