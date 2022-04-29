@@ -35,7 +35,7 @@
 						</mat-error>
 					</mat-form-field>
 
-					<mat-form-field appearance="fill" class="mb-3">
+					<mat-form-field appearance="fill" class="mb-1">
 						<mat-label>Password</mat-label>
 						<input
 							matInput
@@ -71,7 +71,8 @@
 
 					<div class="w-100 row justify-content-center align-items-center">
 						<a
-							class="link m-2 text-grey d-flex justify-content-center align-items-center"
+							mat-button
+							class="col-4 link m-2 text-grey d-flex justify-content-center align-items-center"
 							[routerLink]="['/auth/send-forgot-password-email']"
 							>Forgot password?</a
 						>
@@ -129,7 +130,8 @@
 					</p>
 
 					<a
-						class="col-2 link text-left text-grey"
+						mat-button
+						class="col-2 link text-left"
 						style="margin: 0; padding: 0; text-decoration: underline"
 						[routerLink]="['/auth/signup']"
 						>signup</a
