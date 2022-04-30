@@ -62,6 +62,8 @@ import { AuthState, AngularMaterialModule } from '@march/authentication';
 						uri: `${environment.BACKEND_URL}/graphql`,
 						withCredentials: true,
 					}),
+					credentials: environment.ENVIRONMENT_ORIGIN,
+					ssrMode: environment.ENVIRONMENT_SSR_MODE,
 				};
 			},
 			deps: [HttpLink],

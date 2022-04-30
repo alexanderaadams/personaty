@@ -7,6 +7,10 @@ export const environment = {
 
 	ENVIRONMENT_NAME: 'development',
 
+	// Apollo CORS Configuration Options
+	ENVIRONMENT_SSR_MODE: false,
+	ENVIRONMENT_ORIGIN: 'same-origin',
+
 	BACKEND_URL: 'http://localhost:3333',
 };
 
