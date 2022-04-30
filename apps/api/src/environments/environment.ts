@@ -4,6 +4,7 @@ export const environment = {
 	ENVIRONMENT_NAME: 'development',
 
 	//	Cookies attributes
+	COOKIE_ATTRIBUTE_SAME_SITE: 'strict' as const,
 	COOKIE_ATTRIBUTE_SECURE: false,
 	COOKIE_ATTRIBUTE_HTTP_ONLY: false,
 

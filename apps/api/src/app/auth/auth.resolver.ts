@@ -69,7 +69,7 @@ export class AuthResolver {
 			res.cookie('token', user.token, {
 				maxAge: 1000 * 60 * 60 * 24 * 7 * 12,
 				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
-				sameSite: 'lax',
+				sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
 				secure: environment.COOKIE_ATTRIBUTE_SECURE,
 				path: '/',
 			});
@@ -142,7 +142,7 @@ export class AuthResolver {
 			res.cookie('token', user.token, {
 				maxAge: 1000 * 60 * 60 * 24 * 7 * 12,
 				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
-				sameSite: 'lax',
+				sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
 				secure: environment.COOKIE_ATTRIBUTE_SECURE,
 				path: '/',
 			});

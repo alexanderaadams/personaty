@@ -43,7 +43,7 @@ export class AuthController {
 			res.cookie('token', user.token, {
 				maxAge: 3600000 * 24,
 				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
-				sameSite: 'lax',
+				sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
 				secure: environment.COOKIE_ATTRIBUTE_SECURE,
 				path: '/',
 			});
@@ -74,7 +74,7 @@ export class AuthController {
 	// 	res.cookie('token', user.token, {
 	// maxAge: 3600000 * 24,
 	// httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
-	// sameSite: 'lax',
+	// sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
 	// secure: environment.COOKIE_ATTRIBUTE_SECURE,
 	// 	});
 
@@ -107,7 +107,7 @@ export class AuthController {
 	// 	res.cookie('token', user.token, {
 	// maxAge: 3600000 * 24,
 	// httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
-	// sameSite: 'lax',
+	// sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
 	// secure: environment.COOKIE_ATTRIBUTE_SECURE,
 	// 	});
 	// 	return { user: user.updateUser, updatedUser: true };
@@ -131,7 +131,7 @@ export class AuthController {
 		res.cookie('token', user.token, {
 			maxAge: 3600000 * 24,
 			httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
-			sameSite: 'lax',
+			sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
 			secure: environment.COOKIE_ATTRIBUTE_SECURE,
 			path: '/',
 		});

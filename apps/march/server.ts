@@ -4,7 +4,6 @@ import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as express from 'express';
 import { join } from 'path';
 import * as compression from 'compression';
-import * as cors from 'cors';
 
 import { AppServerModule } from './src/main.server';
 import { APP_BASE_HREF } from '@angular/common';
@@ -14,13 +13,6 @@ import { environment } from './src/environments/environment';
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
 	const server = express();
-
-	// const corsOptions = {
-	// 	origin: environment.BACKEND_URL,
-	// 	credentials: true, // <-- REQUIRED backend setting
-	// };
-
-	// server.use(cors(corsOptions));
 
 	if (environment.production) {
 		server.use(compression());
