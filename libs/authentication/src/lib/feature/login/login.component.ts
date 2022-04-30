@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
@@ -43,7 +42,7 @@ export class LoginComponent
 	ngOnInit() {
 		this.formService.followAuthenticationStatus(
 			Login,
-			'Failed to Login, Please Try Again',
+			'Failed to Login... Please Try Again',
 			'Logged in successfully'
 		);
 	}

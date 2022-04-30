@@ -5,7 +5,7 @@ import { UnsubscribeOnDestroyAdapter } from '../../unsubscribe-on-destroy.adapte
 import {
 	Actions,
 	ActionType,
-	ofActionSuccessful,
+	ofActionCompleted,
 	Select,
 	Store,
 } from '@ngxs/store';
@@ -74,7 +74,7 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 	) {
 		this.actions$
 			.pipe(
-				ofActionSuccessful(action),
+				ofActionCompleted(action),
 				tap(() => {
 					this.loginExecutingLoader$.next(true);
 

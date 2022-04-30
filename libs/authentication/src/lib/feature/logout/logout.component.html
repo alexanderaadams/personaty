@@ -1,8 +1,20 @@
-<div>
-	<p>Logging out</p>
+<mat-progress-bar
+	*ngIf="loginExecutingLoader$ | async"
+	class="position-fixed top-0"
+	color="primary"
+	mode="indeterminate"
+	value="35"
+	role="progressbar"
+	aria-label="Login progressbar">
+</mat-progress-bar>
+
+<div class="container w-100 h-100">
+	<div class="d-flex justify-content-center align-items-center vh-100">
+		<div class="col-sm-8 col-md-5">
+			<div
+				class="row justify-content-center align-items-center gap-2 shadow form-box">
+				<h1 class="col-12 h1 text-center fs-2 my-4">Logging out</h1>
+			</div>
+		</div>
+	</div>
 </div>
-<!-- <lib-email-token
-	*ngIf="showModal"
-	header="Check your internet connection"
-	(dismiss)="showModal = false"
-></lib-email-token> -->

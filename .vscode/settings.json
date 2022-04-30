@@ -14,6 +14,7 @@
 		"QLISO",
 		"signedin",
 		"signin",
+		"signout",
 		"Signup"
 	],
 	"angular.enable-strict-mode-prompt": false,

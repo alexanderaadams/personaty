@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
@@ -22,6 +22,9 @@ export class LogoutComponent
 	@Select(AuthState.isAuthenticated)
 	isAuthenticated$!: Observable<boolean>;
 
+	loginExecutingLoader$: BehaviorSubject<boolean> =
+		new BehaviorSubject<boolean>(false);
+
 	constructor(
 		private store: Store,
 		private router: Router,
@@ -33,9 +36,11 @@ export class LogoutComponent
 	ngOnInit() {
 		this.formService.followAuthenticationStatus(
 			Logout,
-			'Failed to Logout, Please Try Again',
+			'Failed to Logout..., Please Try Again',
 			'Logged out successfully'
 		);
+
+		this.loginExecutingLoader$ = this.formService.loginExecutingLoader$;
 
 		this.formService.goAuthenticate(new Logout());
 	}

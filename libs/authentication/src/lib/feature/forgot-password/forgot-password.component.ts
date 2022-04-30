@@ -30,8 +30,8 @@ export class ForgotPasswordComponent implements OnInit {
 	ngOnInit() {
 		this.formService.followAuthenticationStatus(
 			SendForgotPasswordEmail,
-			'Failed to Forgot Password, Please Try Again',
-			'Please Check your Email Address'
+			'Failed to Forgot Password... Please Try Again',
+			'Email has been send successfully... Please Check your email address'
 		);
 	}
 

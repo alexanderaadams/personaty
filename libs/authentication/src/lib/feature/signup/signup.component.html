@@ -41,6 +41,8 @@
 							matInput
 							name="password"
 							label="Password"
+							[type]="hide ? 'password' : 'text'"
+							aria-label="password"
 							[formControlName]="'password'" />
 
 						<mat-icon matSuffix (click)="hide = !hide">{{

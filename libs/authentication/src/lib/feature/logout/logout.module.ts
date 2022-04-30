@@ -14,8 +14,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-
-
+	declarations: [LogoutComponent],
 	imports: [
 		CommonModule,
 		AngularMaterialModule,
