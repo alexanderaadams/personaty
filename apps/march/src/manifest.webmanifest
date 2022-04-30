@@ -1,8 +1,8 @@
 {
 	"name": "Persona",
 	"short_name": "Persona",
-	"theme_color": "#ff72aa",
-	"background_color": "#04162e",
+	"theme_color": "#f8bbd0",
+	"background_color": "#262c38",
 	"display": "standalone",
 	"scope": "/",
 	"start_url": "/",

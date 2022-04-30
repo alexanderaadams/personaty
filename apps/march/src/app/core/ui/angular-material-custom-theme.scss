@@ -34,21 +34,6 @@ $dark-theme: mat.define-dark-theme(
 	)
 );
 
-// $dark-color-config: mat.get-color-config($dark-theme);
-// $dark-primary-palette: map.get($dark-color-config, 'primary');
-// $dark-accent-palette: map.get($dark-color-config, 'accent');
-// $dark-warn-palette: map.get($dark-color-config, 'warn');
-
-// Apply the dark theme by default
-// .dark-body {
-// 	background-color: $dark-background-color;
-// }
-
-// .dark-primary-color {
-// 	color: $dark-primary;
-// }
-
-// $color-config: mat.get-color-config($theme);
 :root {
 	--bg-red-palette: #e57373;
 
@@ -68,7 +53,9 @@ $dark-theme: mat.define-dark-theme(
 
 	--bs-dark-blue-palette: #1e88e5;
 
-	--bs-dark-grey-palette: #262c38;
+	--bs-dark-grey-primary-palette: #262c38;
+
+	--bs-pink-primary-palette: ##f8bbd0;
 }
 
 .my-dark-theme {
