@@ -71,6 +71,7 @@ export class AuthResolver {
 				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 				sameSite: 'lax',
 				secure: environment.COOKIE_ATTRIBUTE_SECURE,
+				domain: environment.HOST_URL,
 				path: '/',
 			});
 
@@ -144,6 +145,7 @@ export class AuthResolver {
 				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 				sameSite: 'lax',
 				secure: environment.COOKIE_ATTRIBUTE_SECURE,
+				domain: environment.HOST_URL,
 				path: '/',
 			});
 		return {

@@ -45,6 +45,7 @@ export class AuthController {
 				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 				sameSite: 'lax',
 				secure: environment.COOKIE_ATTRIBUTE_SECURE,
+				domain: environment.HOST_URL,
 				path: '/',
 			});
 		}
@@ -133,6 +134,7 @@ export class AuthController {
 			httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 			sameSite: 'lax',
 			secure: environment.COOKIE_ATTRIBUTE_SECURE,
+			domain: environment.HOST_URL,
 			path: '/',
 		});
 		return res.redirect(`${environment.ORIGIN_URL}/auth/oauth2-success`);
