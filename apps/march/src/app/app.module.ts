@@ -60,6 +60,7 @@ import { AuthState, AngularMaterialModule } from '@march/authentication';
 					cache: new InMemoryCache(),
 					link: httpLink.create({
 						uri: `${environment.BACKEND_URL}/graphql`,
+						withCredentials: true,
 					}),
 				};
 			},

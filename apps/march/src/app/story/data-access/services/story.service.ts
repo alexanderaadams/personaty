@@ -35,9 +35,6 @@ export class StoryService {
 					id,
 				},
 				// errorPolicy: 'all',
-				context: {
-					withCredentials: true,
-				},
 			})
 			.valueChanges.pipe(
 				map(({ data }: any) => {
@@ -56,9 +53,6 @@ export class StoryService {
 					story,
 				},
 				// errorPolicy: 'all',
-				context: {
-					withCredentials: true,
-				},
 			})
 			.pipe(
 				map(({ data }: any) => {

@@ -27,9 +27,7 @@ export class ProfileService {
 					id,
 				},
 				// errorPolicy: 'all',
-				context: {
-					withCredentials: true,
-				},
+
 			})
 			.valueChanges.pipe(
 				map(({ data }: any) => {

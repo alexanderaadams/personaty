@@ -49,9 +49,6 @@ export class AuthService {
 					findUser: value,
 				},
 				// errorPolicy: 'all',
-				context: {
-					withCredentials: true,
-				},
 			})
 			.valueChanges.pipe(
 				map(({ data }: any) => {
@@ -68,9 +65,6 @@ export class AuthService {
 					user: credentials,
 				},
 				// errorPolicy: 'all',
-				context: {
-					withCredentials: true,
-				},
 			})
 			.pipe(
 				map(({ data }: any) => {
@@ -93,9 +87,6 @@ export class AuthService {
 					user: credentials,
 				},
 				// errorPolicy: 'all',
-				context: {
-					withCredentials: true,
-				},
 			})
 			.pipe(
 				map(({ data }: any) => {
@@ -138,9 +129,6 @@ export class AuthService {
 					user: email,
 				},
 				// errorPolicy: 'all',
-				context: {
-					withCredentials: true,
-				},
 			})
 
 			.pipe(
@@ -164,9 +152,6 @@ export class AuthService {
 					credentials,
 				},
 				// errorPolicy: 'all',
-				context: {
-					withCredentials: true,
-				},
 			})
 			.pipe(
 				map(({ data }: any) => {
@@ -186,9 +171,6 @@ export class AuthService {
 			.query({
 				query: LOGOUT,
 				// errorPolicy: 'all',
-				context: {
-					withCredentials: true,
-				},
 			})
 			.pipe(
 				map(({ data }: any) => {
@@ -208,9 +190,6 @@ export class AuthService {
 			.query({
 				query: IS_AUTHENTICATED,
 				// errorPolicy: 'all',
-				context: {
-					withCredentials: true,
-				},
 			})
 			.pipe(
 				map(({ data }: any) => {
