@@ -4,7 +4,7 @@ export const environment = {
 	ENVIRONMENT_NAME: 'production',
 
 	//	Cookies attributes
-	COOKIE_ATTRIBUTE_SECURE: false,
+	COOKIE_ATTRIBUTE_SECURE: true,
 	COOKIE_ATTRIBUTE_HTTP_ONLY: true,
 
 	//	URL Connection

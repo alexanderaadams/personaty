@@ -71,6 +71,7 @@ export class AuthResolver {
 				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 				sameSite: 'lax',
 				secure: environment.COOKIE_ATTRIBUTE_SECURE,
+				path: '/',
 			});
 
 		return { status: 'LOGGED_IN_SUCCESSFULLY', authenticated: true };
@@ -143,6 +144,7 @@ export class AuthResolver {
 				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 				sameSite: 'lax',
 				secure: environment.COOKIE_ATTRIBUTE_SECURE,
+				path: '/',
 			});
 		return {
 			status: 'PASSWORD_UPDATED_SUCCESSFULLY',
