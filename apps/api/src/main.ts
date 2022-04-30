@@ -1,6 +1,6 @@
 import { Logger, UnauthorizedException, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import {  NestExpressApplication } from '@nestjs/platform-express';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import * as cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 // import * as csurf from 'csurf';
@@ -10,11 +10,7 @@ import { environment } from './environments/environment';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
-
-
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
-
-app.set('trust proxy')
 
 	const whitelist = [environment.HOST_URL, environment.ORIGIN_URL, undefined];
 
@@ -29,11 +25,13 @@ app.set('trust proxy')
 	};
 
 	app.enableCors(corsOptions);
-	app.use(compression());
-	app.enable('trust proxy');
 
 	if (environment.production) {
 		app.use(helmet());
+
+		app.use(compression());
+
+		app.set('trust proxy');
 
 		// app.use(csurf());
 	}
