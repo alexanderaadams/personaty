@@ -8,6 +8,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { take, tap } from 'rxjs/operators';
 
 import { UnsubscribeOnDestroyAdapter } from '../../shared/unsubscribe-on-destroy.adapter';
 import { FormService } from '../../shared/data-access/services/form.service';
@@ -73,16 +74,29 @@ export class SignupComponent
 			.get('birthDate')
 			?.value.format('YYYY-MM-DD');
 
+		const formValue = { birthDate: birthDate.toString(), email, password };
+
+		this.formService.formValue$.next(formValue);
+
+		this.formService.formValue$
+			.pipe(
+				tap((value: unknown | null) => {
+					if (!value) {
+						this.authForm.reset();
+					}
+				}),
+				take(2)
+			)
+			.subscribe();
+
 		this.loginExecutingLoader$ = this.formService.loginExecutingLoader$;
 
-		this.formService.goAuthenticate(
-			new Signup({ birthDate: birthDate.toString(), email, password })
-		);
+		this.formService.goAuthenticate(new Signup(formValue));
 	}
 
-	inputFormControl(option: string): FormControl {
-		return this.authForm?.get(option) as FormControl;
-	}
+	// inputFormControl(option: string): FormControl {
+	// 	return this.authForm?.get(option) as FormControl;
+	// }
 
 	loginWithGoogle() {
 		this.store.dispatch(new LoginWithGoogle());

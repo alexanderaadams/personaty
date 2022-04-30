@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { tap, take } from 'rxjs/operators';
 
 import { ConfirmForgotPassword } from '../../data-access/store/auth.action';
 import { MatchPassword } from '../../data-access/validators/match-password';
@@ -60,6 +61,19 @@ export class ConfirmForgotPasswordComponent
 		}
 
 		const token: string = this.activatedRoute.snapshot.params['token'];
+
+		this.formService.formValue$.next(this.authForm.value);
+
+		this.formService.formValue$
+			.pipe(
+				tap((value: unknown | null) => {
+					if (!value) {
+						this.authForm.reset();
+					}
+				}),
+				take(2)
+			)
+			.subscribe();
 
 		this.loginExecutingLoader$ = this.formService.loginExecutingLoader$;
 

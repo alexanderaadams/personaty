@@ -44,7 +44,7 @@
 							[type]="hide ? 'password' : 'text'"
 							aria-label="password"
 							[formControlName]="'password'"
-							attr.matAutocomplete="new-password" />
+							attr.matAutocomplete="current-password" />
 
 						<mat-icon matSuffix (click)="hide = !hide">{{
 							hide ? 'visibility_off' : 'visibility'
@@ -55,7 +55,7 @@
 						<mat-error
 							*ngIf="authForm?.['controls']?.['password']?.['invalid']">
 							Password must be at least
-							{{ authForm?.['controls']?.['password']?.['errors']?.['minlength']?.requiredLength }}
+							{{ authForm?.['controls']?.['password']?.['errors']?.['minlength']?.requiredLength	|| '8' }}
 							characters.
 						</mat-error>
 					</mat-form-field>

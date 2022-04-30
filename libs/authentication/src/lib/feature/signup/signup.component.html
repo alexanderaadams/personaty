@@ -54,7 +54,7 @@
 						<mat-error
 							*ngIf="authForm?.['controls']?.['password']?.['invalid']">
 							Password must be at least
-							{{ authForm?.['controls']?.['password']?.['errors']?.['minlength']?.requiredLength }}
+							{{ authForm?.['controls']?.['password']?.['errors']?.['minlength']?.requiredLength || '8' }}
 							characters.
 						</mat-error>
 					</mat-form-field>

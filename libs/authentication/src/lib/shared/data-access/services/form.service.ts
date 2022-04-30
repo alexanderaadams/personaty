@@ -25,8 +25,12 @@ import {
 	providedIn: 'root',
 })
 export class FormService extends UnsubscribeOnDestroyAdapter {
-	loginExecutingLoader$ = new BehaviorSubject<boolean>(false);
+	loginExecutingLoader$: BehaviorSubject<boolean> =
+		new BehaviorSubject<boolean>(false);
 	isBrowser: boolean;
+	formValue$: BehaviorSubject<unknown | null> = new BehaviorSubject<
+		unknown | null
+	>('');
 
 	@Select('auth')
 	isAuthenticated$!: Observable<AuthStateModel>;
@@ -42,7 +46,8 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 		super();
 		this.isBrowser = isPlatformBrowser(platformId);
 	}
-	private ngUnsubscribeCheckIfAlreadyAuthenticated = new Subject<void>();
+	private ngUnsubscribeCheckIfAlreadyAuthenticated: Subject<void> =
+		new Subject<void>();
 
 	checkIfAlreadyAuthenticated() {
 		// let count = 0;
@@ -83,6 +88,7 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 							tap(({ status, authenticated }: any) => {
 								if (authenticated !== null && status !== null) {
 									this.loginExecutingLoader$.next(false);
+									this.formValue$.next('');
 								}
 
 								if (authenticated) {

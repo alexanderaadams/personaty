@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { tap, take } from 'rxjs/operators';
 
 import { Login, LoginWithGoogle } from '../../data-access/store/auth.action';
 import { AuthStateModel } from '../../data-access/store/auth.model';
@@ -50,6 +51,19 @@ export class LoginComponent
 	onSubmit() {
 		if (this.authForm?.invalid || !this.authForm.value)
 			return this.authForm.setErrors({ invalid: true });
+
+		this.formService.formValue$.next(this.authForm.value);
+
+		this.formService.formValue$
+			.pipe(
+				tap((value: unknown | null) => {
+					if (!value) {
+						this.authForm.reset();
+					}
+				}),
+				take(2)
+			)
+			.subscribe();
 
 		this.loginExecutingLoader$ = this.formService.loginExecutingLoader$;
 
