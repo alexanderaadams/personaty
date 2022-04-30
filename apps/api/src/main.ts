@@ -31,7 +31,7 @@ async function bootstrap() {
 
 		app.use(compression());
 
-		app.set('trust proxy');
+		app.set('trust proxy', 1);
 
 		// app.use(csurf());
 	}
