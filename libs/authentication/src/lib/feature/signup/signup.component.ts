@@ -58,8 +58,8 @@ export class SignupComponent
 	ngOnInit() {
 		this.formService.followAuthenticationStatus(
 			Signup,
-			'Failed to signup... Please Try Again',
-			'Email has been send successfully... Check your email address'
+			'Failed to signup... Please check your information',
+			'Email has been send successfully... check your email address'
 		);
 	}
 

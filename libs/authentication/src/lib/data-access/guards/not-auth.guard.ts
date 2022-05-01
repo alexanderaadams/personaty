@@ -3,11 +3,11 @@ import { CanActivate, UrlTree, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 
 import { Observable } from 'rxjs';
-import { AuthState } from '../../../data-access/store/auth.state';
-import { UnsubscribeOnDestroyAdapter } from '../../unsubscribe-on-destroy.adapter';
+import { AuthState } from '../store/auth.state';
+import { UnsubscribeOnDestroyAdapter } from '../../shared/unsubscribe-on-destroy.adapter';
 
 
-import { FormService } from '../services/form.service';
+import { FormService } from '../../shared/data-access/services/form.service';
 
 @Injectable({
 	providedIn: 'root',

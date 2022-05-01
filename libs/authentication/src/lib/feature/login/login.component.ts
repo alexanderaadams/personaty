@@ -43,7 +43,7 @@ export class LoginComponent
 	ngOnInit() {
 		this.formService.followAuthenticationStatus(
 			Login,
-			'Failed to Login... Please Try Again',
+			'Failed to Login... Please check your information',
 			'Logged in successfully'
 		);
 	}
