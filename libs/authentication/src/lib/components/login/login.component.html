@@ -1,0 +1,156 @@
+<mat-progress-bar
+	*ngIf="loginExecutingLoader$ | async"
+	class="position-fixed top-0"
+	color="primary"
+	mode="indeterminate"
+	value="35"
+	role="progressbar"
+	aria-label="Login progressbar">
+</mat-progress-bar>
+
+<div class="container w-100 h-100">
+	<div class="d-flex justify-content-center align-items-center vh-100">
+		<div class="col-sm-8 col-md-5">
+			<div
+				class="border-grey-blue row justify-content-center align-items-center gap-2 shadow box-shadow-and-border">
+				<h1 class="col-12 h1 text-center fs-2 my-4">Login</h1>
+				<form
+					(ngSubmit)="onSubmit()"
+					class="row justify-content-center align-items-center gap-2"
+					[formGroup]="authForm">
+					<mat-form-field appearance="fill">
+						<mat-label>Email</mat-label>
+						<input
+							matInput
+							class="row justify-content-center align-items-center"
+							name="email"
+							label="Email"
+							placeholder="Ex. pat@example.com"
+							type="email"
+							[formControlName]="'email'"
+							attr.matAutocomplete="email" />
+
+						<mat-error *ngIf="authForm?.['controls']?.['email']?.['invalid']">
+							Please Enter Correct Email
+						</mat-error>
+					</mat-form-field>
+
+					<mat-form-field appearance="fill" class="mb-1">
+						<mat-label>Password</mat-label>
+						<input
+							matInput
+							name="password"
+							label="Password"
+							[type]="hide ? 'password' : 'text'"
+							aria-label="password"
+							[formControlName]="'password'"
+							attr.matAutocomplete="current-password" />
+
+						<mat-icon matSuffix (click)="hide = !hide">{{
+							hide ? 'visibility_off' : 'visibility'
+						}}</mat-icon>
+
+						<mat-hint>Password must be at least 8 characters. </mat-hint>
+
+						<mat-error
+							*ngIf="authForm?.['controls']?.['password']?.['invalid']">
+							Password must be at least
+							{{ authForm?.['controls']?.['password']?.['errors']?.['minlength']?.requiredLength	|| '8' }}
+							characters.
+						</mat-error>
+					</mat-form-field>
+
+					<!-- <lib-input
+					class="row justify-content-center align-items-center mb-4"
+					name="Password"
+					label="Password"
+					placeholder="Password"
+					type="password"
+					[control]="inputFormControl('password')"
+					autocomplete="current-password"
+				>
+				</lib-input> -->
+
+					<div class="w-100 row justify-content-center align-items-center">
+						<a
+							mat-button
+							class="col-12 link m-2 text-grey d-flex justify-content-center align-items-center"
+							[routerLink]="['/auth/send-forgot-password-email']"
+							>Forgot password?</a
+						>
+					</div>
+					<div class="row justify-content-center align-items-center">
+						<!-- <div class="row"> -->
+						<button
+							[disabled]="loginExecutingLoader$ | async"
+							class="p-2 mb-3 fs-5"
+							mat-raised-button
+							color="primary"
+							type="submit">
+							Login
+						</button>
+						<!-- </div> -->
+					</div>
+				</form>
+				<!-- </div> -->
+				<div class="d-flex justify-content-center align-items-center gap-3 m-2">
+					<mat-divider class="hr w-25"> </mat-divider>
+					<span class="d-block text-center text-grey">Continue With</span>
+					<mat-divider class="hr w-25"> </mat-divider>
+				</div>
+
+				<div
+					class="d-flex justify-content-center align-items-center align-items-center gap-2">
+					<button
+						class="row justify-content-around bg-transparent p-3"
+						aria-hidden="true"
+						aria-label="Login with google"
+						mat-flat-button
+						(click)="loginWithGoogle()">
+						<svg class="icon">
+							<use xlink:href="../../assets/sprite.svg#google"></use>
+						</svg>
+					</button>
+
+					<!-- <button
+						class="row justify-content-around bg-transparent p-3"
+						aria-hidden="true"
+						aria-label="Login with facebook"
+						mat-flat-button
+						(click)="loginWithFacebook()"
+					>
+						<svg class="icon">
+							<use xlink:href="../../assets/sprite.svg#facebook"></use>
+						</svg>
+					</button> -->
+				</div>
+				<div class="row justify-content-center align-items-center gap-2 m-3">
+					<p
+						class="col-sm-4 col-md-2 text-grey text-end"
+						style="margin: 0; padding: 0; width: max-content">
+						Don't you have an account?
+					</p>
+
+					<a
+						mat-button
+						class="col-2 link text-left"
+						style="margin: 0; padding: 0; text-decoration: underline"
+						[routerLink]="['/auth/signup']"
+						>signup</a
+					>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- </div> -->
+<!-- <lib-email-token
+	*ngIf="(authForm?.['errors']?.['invalid']) && showModal"
+	header="Invalid username or password ❗️"
+	(dismiss)="showModal = false"
+></lib-email-token>
+<lib-email-token
+	*ngIf="(authForm?.['controls']?.['email']?.['errors']?.['noConnection']) && showModal"
+	header="Check your internet connection"
+	(dismiss)="showModal = false"
+></lib-email-token> -->

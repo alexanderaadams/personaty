@@ -1,0 +1,77 @@
+<div class="container">
+	<div
+		(click)="$event.stopPropagation()"
+		class="d-flex justify-content-center align-items-center vh-100">
+		<div class="col-sm-8 col-md-6">
+			<form
+				class="row justify-content-center align-items-center p-4 shadow br-04 border-grey-blue box-shadow-and-border"
+				(ngSubmit)="onSubmit()"
+				[formGroup]="storyForm"
+				enctype="multipart/form-data">
+				<div
+					class="row flex-column justify-content-center align-items-center gap-3">
+					<input
+						#storyImageInput
+						type="file"
+						[accept]="validStoryMimeType"
+						class="file-input"
+						(change)="storyImageSelected(storyImageInput)" />
+
+					<button
+						mat-mini-fab
+						color="primary"
+						class="row justify-content-center align-items-center"
+						(click)="storyImageInput.click()">
+						<mat-icon>attach_file</mat-icon>
+					</button>
+
+					<p class="row justify-content-center align-items-center">
+						{{ fileName || 'No file uploaded yet.' }}
+					</p>
+				</div>
+
+				<mat-chip-list #chipList aria-label="Category selection" class="p-5">
+					<mat-chip
+						style="background-color:{{ category.color }} ;"
+						*ngFor="let category of categories"
+						(removed)="remove(category)">
+						{{ category.text }}
+						<button matChipRemove>
+							<mat-icon>cancel</mat-icon>
+						</button>
+					</mat-chip>
+					<input
+						class="story-category"
+						[formControlName]="'category'"
+						spellcheck="true"
+						placeholder="New Category..."
+						[matChipInputFor]="chipList"
+						[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+						[matChipInputAddOnBlur]="addOnBlur"
+						(matChipInputTokenEnd)="add($event)" />
+				</mat-chip-list>
+
+				<div class="row justify-content-center align-items-center">
+					<div class="row">
+						<button
+							class="fs-5 py-1"
+							mat-raised-button
+							color="primary"
+							type="submit">
+							Post
+						</button>
+					</div>
+				</div>
+			</form>
+
+			<!-- <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Description</mat-label>
+        <input
+            spellcheck="true"
+            matInput
+            placeholder="Write your story's description here"
+        />
+    </mat-form-field> -->
+		</div>
+	</div>
+</div>

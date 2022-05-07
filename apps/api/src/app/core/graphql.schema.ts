@@ -32,13 +32,16 @@ export class Confirm_Forgot_Password_Input {
     token: string;
 }
 
+export class Test_Mutate_Input {
+    name: string;
+}
+
 export class GetStoryInput {
     id: string;
 }
 
 export class CreateStoryInput {
     category: CategoryInput[];
-    user_id: string;
 }
 
 export class UpdateStoryInput {
@@ -79,6 +82,8 @@ export abstract class IQuery {
 
     abstract logout(): Authentication_Status | Promise<Authentication_Status>;
 
+    abstract getImage(Image_Url: string): Nullable<Image_Url> | Promise<Nullable<Image_Url>>;
+
     abstract getStory(story: GetStoryInput): Story | Promise<Story>;
 
     abstract getUser(id: string): User | Promise<User>;
@@ -93,7 +98,11 @@ export abstract class IMutation {
 
     abstract confirmForgotPassword(credentials: Confirm_Forgot_Password_Input): Authentication_Status | Promise<Authentication_Status>;
 
-    abstract createStory(story: CreateStoryInput): Story | Promise<Story>;
+    abstract addProfilePicture(picture: Upload): Nullable<Image_Url> | Promise<Nullable<Image_Url>>;
+
+    abstract testMut(picture: Test_Mutate_Input): Nullable<Image_Url> | Promise<Nullable<Image_Url>>;
+
+    abstract createStory(story: CreateStoryInput, storyImage: Upload): Story | Promise<Story>;
 
     abstract updateStory(id: string, story: UpdateStoryInput): Story | Promise<Story>;
 
@@ -130,11 +139,26 @@ export class Authentication_Status {
     authenticated?: Nullable<boolean>;
 }
 
+export class File_Information {
+    status?: Nullable<string>;
+}
+
+export class File {
+    filename: string;
+    mimetype: string;
+    encoding: string;
+}
+
+export class Image_Url {
+    imageUrl: string;
+}
+
 export class Story {
-    _id?: Nullable<string>;
-    category?: Nullable<Nullable<Category>[]>;
-    created_at?: Nullable<Date>;
-    user_id?: Nullable<string>;
+    _id: string;
+    storyImageUrl: string;
+    category: Nullable<Category>[];
+    created_at: Date;
+    user_id: string;
     title?: Nullable<string>;
     description?: Nullable<string>;
     photo?: Nullable<string>;
@@ -158,4 +182,5 @@ export class Interest_And_Bio {
     color: string;
 }
 
+export type Upload = any;
 type Nullable<T> = T | null;

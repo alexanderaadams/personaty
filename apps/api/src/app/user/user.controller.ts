@@ -1,7 +1,6 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { TokenAuthGuard } from '../core/guards/is-auth.guard';
 import { UserService } from './user.service';
-
-import { TokenAuthGuard } from '../utils/guards/is-auth.guard';
 
 @Controller('user')
 @UseGuards(TokenAuthGuard)

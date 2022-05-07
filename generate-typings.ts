@@ -14,5 +14,6 @@ definitionsFactory.generate({
 		'core',
 		'graphql.schema.ts'
 	),
-	outputAs: 'class',  watch: true,
+	outputAs: 'class',
+	watch: true,
 });

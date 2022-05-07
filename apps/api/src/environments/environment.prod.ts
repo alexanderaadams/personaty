@@ -5,20 +5,23 @@ export const environment = {
 
 	//	Cookies attributes
 	COOKIE_ATTRIBUTE_SAME_SITE: 'none' as const,
-
 	COOKIE_ATTRIBUTE_SECURE: true,
-
 	COOKIE_ATTRIBUTE_HTTP_ONLY: true,
 
 	//	URL Connection
 	HOST_URL: 'https://api-persona2.herokuapp.com',
 	ORIGIN_URL: 'https://personaty.netlify.app',
 
+	//Authentication Validators
+	MIN_LENGTH: 8,
+	MAX_LENGTH: 30,
+
 	//	MongoDB Atlas Connection Information.
 	DATABASE_CONNECTION:
 		'mongodb+srv://remy:t7mjdezqWKJs6sgT@cluster0.amx9w.mongodb.net/persona',
 	DATABASE_NAME: 'persona',
 
+	////////////////
 	SECRET_SALT: 'heHYthisIStheBENshapiroSHOW',
 
 	//	Google Oauth2 Info

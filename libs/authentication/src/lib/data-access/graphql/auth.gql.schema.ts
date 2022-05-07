@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import { gql } from 'apollo-angular';
 
 export const IS_AVAILABLE = gql`
 	query ($findUser: Find_User_Input!) {

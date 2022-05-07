@@ -2,11 +2,8 @@ import { UseGuards } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { Resolver, Query, Args, Mutation, Context } from '@nestjs/graphql';
 
-import { FindUser } from '../core/shared.model';
-
+import { FindUser } from '../core/utilities/models/shared.model';
 import { AuthService } from './auth.service';
-import { TokenAuthGuard } from '../utils/guards/is-auth.guard';
-
 import { IsUserAvailable } from './entities/is-user-available';
 import { AuthenticationStatus } from './entities/authentication-status.entity';
 import { SignupDto } from './dto/signup.dto';
@@ -15,7 +12,16 @@ import { sendForgotPasswordEmailDto } from './dto/forgot-password.dto';
 import { ConfirmForgotPasswordDto } from './dto/confirm-forgot-password-with-token.dto';
 import { MyJWTService } from '../jwt/jwt.service';
 import { environment } from '../../environments/environment';
-@Resolver('auth')
+import { TokenAuthGuard } from '../core/guards/is-auth.guard';
+import { Throttle } from '@nestjs/throttler';
+import { GqlThrottlerBehindProxyGuard } from '../core/guards/throttler/gql-throttler-behind-proxy.guard';
+import { GqlThrottlerGuard } from '../core/guards/throttler/gql-throttler.guard';
+
+@UseGuards(
+	environment.production ? GqlThrottlerBehindProxyGuard : GqlThrottlerGuard
+)
+@Throttle(10, 180)
+@Resolver('Auth')
 export class AuthResolver {
 	constructor(
 		private readonly authService: AuthService,

@@ -1,20 +1,16 @@
-import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
-// import { APP_GUARD } from '@nestjs/core';
-// import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-
-import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
-
-import { AppService } from './app.service';
+import { Module } from '@nestjs/common';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { environment } from '../environments/environment';
 import { UserModule } from './user/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
 import { StoryModule } from './story/story.module';
-import { ImageModule } from './image/image.module';
+import { GraphQLWithUploadModule } from './graphql-with-upload.module';
+import { UploadScalar } from './core/graphql-data-scalar/upload.scalar';
+import { DateScalar } from './core/graphql-data-scalar/date.scalar';
+
 // import { AllExceptionsFilter } from './all-exceptions.filter';
 
 @Module({
@@ -35,46 +31,15 @@ import { ImageModule } from './image/image.module';
 			useFactory: () => ({ defaultStrategy: 'jwt' }),
 		}),
 
-		GraphQLModule.forRootAsync<ApolloDriverConfig>({
-			driver: ApolloDriver,
+		GraphQLWithUploadModule.forRoot(),
+
+		ThrottlerModule.forRootAsync({
 			useFactory: () => ({
-				include: [AuthModule, StoryModule, UserModule],
-				typePaths: ['./**/*.graphql'],
-
-				// playground: false,
-				// plugins: [ApolloServerPluginLandingPageLocalDefault()],
-				sortSchema: true,
-				cors: {
-					origin: [environment.HOST_URL, environment.ORIGIN_URL, undefined],
-					credentials: true,
-				},
-				context: ({ req, res }) => {
-					return {
-						req,
-						res,
-					};
-				},
-
-				// useGlobalPrefix: true,
+				ttl: 60,
+				limit: 100,
 			}),
 		}),
-
-		ImageModule,
-
-		// ThrottlerModule.forRootAsync({
-		// 	useFactory: () => ({
-		// 		ttl: 60,
-		// 		limit: 2000,
-		// 	}),
-		// }),
 	],
-	controllers: [],
-	providers: [
-		AppService,
-		// {
-		// 	provide: APP_GUARD,
-		// 	useClass: ThrottlerGuard,
-		// },
-	],
+	providers: [UploadScalar, DateScalar],
 })
 export class AppModule {}

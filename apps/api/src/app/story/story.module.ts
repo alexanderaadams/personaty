@@ -4,13 +4,15 @@ import { StoryResolver } from './story.resolver';
 import { UserModule } from '../user/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { StorySchema } from './story.schema';
-import { DateScalar } from '../core/date.scalar';
+import { DateScalar } from '../core/graphql-data-scalar/date.scalar';
 import { UserSchema } from '../user/user.schema';
 import { MyJWTModule } from '../jwt/jwt.module';
+import { ImageService } from '../core/utilities/image/image.service';
 
 @Module({
 	imports: [
 		UserModule,
+		MyJWTModule,
 		MongooseModule.forFeature(
 			[
 				{ name: 'Story', schema: StorySchema },
@@ -18,8 +20,7 @@ import { MyJWTModule } from '../jwt/jwt.module';
 			],
 			'persona'
 		),
-		MyJWTModule,
 	],
-	providers: [StoryResolver, StoryService, DateScalar],
+	providers: [StoryResolver, StoryService, DateScalar, ImageService],
 })
 export class StoryModule {}

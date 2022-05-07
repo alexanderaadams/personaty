@@ -12,10 +12,15 @@ export const environment = {
 	HOST_URL: 'http://localhost:3333',
 	ORIGIN_URL: 'http://localhost:4200',
 
+	//Authentication Validators
+	MIN_LENGTH: 2,
+	MAX_LENGTH: 8,
+
 	//MongoDB Atlas Connection Information.
 	DATABASE_CONNECTION: 'mongodb://localhost:27017/persona',
 	DATABASE_NAME: 'persona',
 
+	/////////////////////
 	SECRET_SALT: 'heHYthisIStheBENshapiroSHOW',
 
 	//	Google Oauth2 Info

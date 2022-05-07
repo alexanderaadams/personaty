@@ -5,13 +5,3 @@
 	stroke: var(--bs-white);
 	fill: var(--bs-white);
 }
-
-.form-box {
-	@media (min-width: 575px) {
-		border-radius: 0.8rem;
-	}
-
-	@media (max-width: 575px) {
-		box-shadow: none !important;
-	}
-}

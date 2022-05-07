@@ -10,7 +10,7 @@ import {
 	IsObject,
 } from 'class-validator';
 import { User } from '../core/graphql.schema';
-import { Gender, Role } from '../core/shared.enum';
+import { Gender, Role } from '../core/utilities/models/shared.enum';
 import { StoryModel } from '../story/story.model';
 import { InterestAndBio } from './entities/interest-and-bio.entity';
 

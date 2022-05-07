@@ -3,11 +3,12 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as cookieParser from 'cookie-parser';
 import helmet from 'helmet';
-// import * as csurf from 'csurf';
+import * as csurf from 'csurf';
 import * as compression from 'compression';
 
 import { environment } from './environments/environment';
 import { AppModule } from './app/app.module';
+import { graphqlUploadExpress } from 'graphql-upload';
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -26,6 +27,16 @@ async function bootstrap() {
 
 	app.enableCors(corsOptions);
 
+	app.use(
+		'/graphql',
+		graphqlUploadExpress({
+			maxFileSize: 10000,
+			maxFiles: 1,
+		})
+	);
+
+	app.use(cookieParser());
+
 	if (environment.production) {
 		app.use(helmet());
 
@@ -33,10 +44,8 @@ async function bootstrap() {
 
 		app.set('trust proxy', 1);
 
-		// app.use(csurf());
+		app.use(csurf({ cookie: true }));
 	}
-
-	app.use(cookieParser());
 
 	const globalPrefix = 'api/v1';
 

@@ -1,6 +1,5 @@
 export interface Category {
 	text: string;
-
 	color: string;
 }
 
@@ -9,7 +8,7 @@ export interface StoryStateModel {
 
 	category: Category[] | null;
 
-	// cover_image: string | null;
+ StoryImageUrl: string | null;
 
 	created_at: Date | null;
 

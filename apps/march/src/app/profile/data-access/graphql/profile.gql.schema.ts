@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import { gql } from 'apollo-angular';
 
 export const GET_USER_INFO = gql`
 	query ($id: ID!) {

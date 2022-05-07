@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-ignore
+import extractFiles from 'extract-files/extractFiles.mjs';
+// @ts-ignore
+import isExtractableFile from 'extract-files/isExtractableFile.mjs';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -20,6 +25,7 @@ import { ProfileState } from './profile/data-access/store/profile.state';
 import { StoryState } from './story/data-access/store/story.state';
 
 import { AuthState, AngularMaterialModule } from '@march/authentication';
+import { ExtractFiles } from 'apollo-angular/http/types';
 
 @NgModule({
 	declarations: [AppComponent],
@@ -61,6 +67,7 @@ import { AuthState, AngularMaterialModule } from '@march/authentication';
 					link: httpLink.create({
 						uri: `${environment.BACKEND_URL}/graphql`,
 						withCredentials: true,
+						extractFiles: (body) => extractFiles(body, isExtractableFile),
 					}),
 					credentials: environment.ENVIRONMENT_ORIGIN,
 					ssrMode: environment.ENVIRONMENT_SSR_MODE,

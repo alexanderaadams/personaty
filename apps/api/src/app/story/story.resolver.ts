@@ -1,6 +1,6 @@
+import { MyJWTService } from './../jwt/jwt.service';
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { TokenAuthGuard } from '../utils/guards/is-auth.guard';
 import { Request } from 'express';
 
 import { StoryService } from './story.service';
@@ -10,21 +10,47 @@ import { GetStoryDto } from './dto/get-story.dto';
 import { UpdateStoryDto } from './dto/update-story';
 import { DeleteStoryDto } from './dto/delete-story.dto';
 import { StoryStatus } from './entities/story-status.entity';
+import { TokenAuthGuard } from '../core/guards/is-auth.guard';
+import { GraphQLUpload, Upload, FileUpload } from 'graphql-upload';
+import { createWriteStream } from 'fs';
+import { join } from 'path';
+import { ImageService } from '../core/utilities/image/image.service';
+import { Throttle } from '@nestjs/throttler';
+import { environment } from '../../environments/environment';
+import { GqlThrottlerBehindProxyGuard } from '../core/guards/throttler/gql-throttler-behind-proxy.guard';
+import { GqlThrottlerGuard } from '../core/guards/throttler/gql-throttler.guard';
 
+@UseGuards(
+	environment.production ? GqlThrottlerBehindProxyGuard : GqlThrottlerGuard,
+	TokenAuthGuard
+)
+@Throttle(50, 60)
 @Resolver('Story')
-@UseGuards(TokenAuthGuard)
 export class StoryResolver {
-	constructor(private readonly storyService: StoryService) {}
+	constructor(
+		private readonly storyService: StoryService,
+
+		private readonly myJWTService: MyJWTService
+	) {}
 
 	@Mutation(() => StoryModel, {
 		name: 'createStory',
 		description: 'Create Story',
 	})
-	async create(
-		@Args('story', { type: () => CreateStoryDto }) create: CreateStoryDto,
+	async createStory(
+		@Args('story', { type: () => CreateStoryDto }) story: CreateStoryDto,
+		@Args('storyImage', { type: () => GraphQLUpload })
+		storyImage: FileUpload,
 		@Context('req') req: Request
 	): Promise<StoryModel> {
-		return await this.storyService.createStory(req.cookies.token, create);
+		console.log(story, storyImage);
+
+		return this.storyService.createStory(
+			req.cookies.token,
+			story,
+			storyImage,
+			`${req.protocol}://${req.headers.host}`
+		);
 	}
 
 	@Query(() => StoryModel, {

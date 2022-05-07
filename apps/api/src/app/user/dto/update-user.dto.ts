@@ -8,7 +8,7 @@ import {
 	IsString,
 } from 'class-validator';
 import { UpdateUserInput } from '../../core/graphql.schema';
-import { Gender } from '../../core/shared.enum';
+import { Gender } from '../../core/utilities/models/shared.enum';
 
 export class UpdateUserDto extends UpdateUserInput {
 	@IsString()

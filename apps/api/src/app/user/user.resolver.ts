@@ -1,14 +1,22 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { TokenAuthGuard } from '../utils/guards/is-auth.guard';
+import { Throttle } from '@nestjs/throttler';
+import { environment } from '../../environments/environment';
+import { GqlThrottlerBehindProxyGuard } from '../core/guards/throttler/gql-throttler-behind-proxy.guard';
+import { GqlThrottlerGuard } from '../core/guards/throttler/gql-throttler.guard';
+import { TokenAuthGuard } from '../core/guards/is-auth.guard';
 
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserStatus } from './entities/user-status.entity';
 import { UserModel } from './user.model';
 import { UserService } from './user.service';
 
+@UseGuards(
+	environment.production ? GqlThrottlerBehindProxyGuard : GqlThrottlerGuard,
+	TokenAuthGuard
+)
+@Throttle(50, 60)
 @Resolver('User')
-@UseGuards(TokenAuthGuard)
 export class UserResolver {
 	constructor(private readonly userService: UserService) {}
 

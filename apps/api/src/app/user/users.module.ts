@@ -5,7 +5,7 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { UserSchema } from './user.schema';
 import { MyJWTModule } from '../jwt/jwt.module';
-import { DateScalar } from '../core/date.scalar';
+import { DateScalar } from '../core/graphql-data-scalar/date.scalar';
 import { UserResolver } from './user.resolver';
 
 @Module({

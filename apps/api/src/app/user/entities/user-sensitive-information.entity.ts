@@ -1,5 +1,5 @@
 import { IsEnum, IsString } from 'class-validator';
-import { Role } from '../../core/shared.enum';
+import { Role } from '../../core/utilities/models/shared.enum';
 
 export class UserSensitiveInformation {
 	@IsString()

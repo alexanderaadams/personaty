@@ -2,20 +2,20 @@ import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { Action, State, StateContext, Selector } from '@ngxs/store';
 
-
 import { UnsubscribeOnDestroyAdapter } from '@march/authentication';
 
 import { StoryStateModel } from './story.model';
 import { CreateStory, GetStory } from './story.action';
 import { StoryService } from '../services/story.service';
 
-
 @State<StoryStateModel>({
 	name: 'story',
 	defaults: {
 		_id: null,
 
-		category:null,
+		category: null,
+
+		StoryImageUrl: null,
 
 		created_at: null,
 

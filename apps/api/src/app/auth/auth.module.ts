@@ -5,13 +5,16 @@ import { MyJWTModule } from '../jwt/jwt.module';
 import { GoogleStrategy } from './utilities/strategy/google.strategy';
 import { NodemailerModule } from './utilities/mail/nodemailer.module';
 import { AuthResolver } from './auth.resolver';
-import { DateScalar } from '../core/date.scalar';
 import { AuthController } from './auth.controller';
+import { GqlThrottlerGuard } from '../core/guards/throttler/gql-throttler.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { environment } from '../../environments/environment';
+import { GqlThrottlerBehindProxyGuard } from '../core/guards/throttler/gql-throttler-behind-proxy.guard';
 
 @Module({
 	imports: [UserModule, MyJWTModule, NodemailerModule],
 	controllers: [AuthController],
-	providers: [AuthService, AuthResolver, GoogleStrategy, DateScalar],
+	providers: [AuthService, AuthResolver, GoogleStrategy],
 	exports: [AuthService],
 })
 export class AuthModule {}

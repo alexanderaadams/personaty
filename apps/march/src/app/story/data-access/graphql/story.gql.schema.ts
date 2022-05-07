@@ -1,4 +1,10 @@
-import gql from 'graphql-tag';
+import { gql } from 'apollo-angular';
+
+export const UPLOAD_STORY = gql`
+	mutation ($picture: Upload!) {
+		addProfilePicture(picture: $picture)
+	}
+`;
 
 export const CREATE_STORY = gql`
 	mutation ($story: CreateStoryInput!) {

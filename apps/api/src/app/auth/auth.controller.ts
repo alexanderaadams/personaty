@@ -12,10 +12,14 @@ import { Response, Request } from 'express';
 
 import { AuthService } from './auth.service';
 import { GoogleOauth2 } from './entities/google-oauth-2.entity';
-import { FindUser } from '../core/shared.model';
+import { FindUser } from '../core/utilities/models/shared.model';
 import { AuthGuard } from '@nestjs/passport';
 import { environment } from '../../environments/environment';
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
+import { ThrottlerBehindProxyGuard } from '../core/guards/throttler/throttler-behind-proxy.guard';
 
+@UseGuards(environment.production ? ThrottlerBehindProxyGuard : ThrottlerGuard)
+@Throttle(10, 180)
 @Controller('auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
@@ -51,14 +55,14 @@ export class AuthController {
 		return res.redirect(`${environment.ORIGIN_URL}`);
 	}
 
-	@Post('is-available')
-	async findOne(@Body() findUser: FindUser) {
-		const user = await this.authService.findOne(findUser);
+	// @Post('is-available')
+	// async findOne(@Body() findUser: FindUser) {
+	// 	const user = await this.authService.findOne(findUser);
 
-		if (user) return { available: false };
+	// 	if (user) return { available: false };
 
-		return { available: true };
-	}
+	// 	return { available: true };
+	// }
 
 	// @Post('login')
 	// // @Serialize(UserSignupResponse)

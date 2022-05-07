@@ -13,6 +13,11 @@ import { StoryModel } from './story.model';
 import { UpdateStoryDto } from './dto/update-story';
 import { StoryDocument } from './story.schema';
 import { MyJWTService } from '../jwt/jwt.service';
+import { FileUpload } from 'graphql-upload';
+import { ImageService } from '../core/utilities/image/image.service';
+import { createWriteStream } from 'fs';
+import { v4 as uuidv4 } from 'uuid';
+import * as path from 'path';
 
 @Injectable()
 export class StoryService {
@@ -35,10 +40,16 @@ export class StoryService {
 	constructor(
 		@InjectModel('Story') private readonly storyModel: Model<StoryDocument>,
 		@InjectModel('User') private readonly userModel: Model<UserDocument>,
-		private myJWTService: MyJWTService
+		private myJWTService: MyJWTService,
+		private readonly imageService: ImageService
 	) {}
 
-	async createStory(token: string, story: CreateStoryDto): Promise<StoryModel> {
+	async createStory(
+		token: string,
+		story: CreateStoryDto,
+		storyImage: FileUpload,
+		hostUrl: string
+	): Promise<StoryModel> {
 		try {
 			const authenticatedUser = await this.myJWTService.verifyToken(token);
 
@@ -46,16 +57,41 @@ export class StoryService {
 
 			if (!user) throw new HttpException('User Does not exist', 404);
 
-			const newStory = (await this.storyModel.create({
+			const checkImageLegitimacy = await this.imageService.checkImageLegitimacy(
+				storyImage
+			);
+
+			if (!checkImageLegitimacy.valid)
+				throw new HttpException(checkImageLegitimacy.error, 400);
+
+			const fileExtension: string = path.extname(storyImage.filename);
+			const fileName: string = uuidv4() + fileExtension;
+
+			const storeImage = new Promise((resolve, reject) =>
+				storyImage
+					.createReadStream()
+					.pipe(
+						createWriteStream(
+							`${checkImageLegitimacy.fullImagePath}/${fileName}`
+						)
+					)
+					.on('finish', () => resolve(true))
+					.on('error', () => reject(false))
+			);
+
+			if (!(await storeImage))
+				throw new HttpException('Something went wrong', 500);
+
+			return (await this.storyModel.create({
 				...story,
+				storyImageUrl: `${hostUrl}/story/${fileName}`,
+				created_at: Date.now(),
 			})) as unknown as Promise<StoryModel>;
 
 			// await this.userModel.updateOne(
 			// 	{ _id: (await newStory).userId.toString() },
 			// 	{ $push: { stories: (await newStory)._id.toString() } }
 			// );
-
-			return newStory;
 		} catch (err) {
 			throw new HttpException('Something Went Wrong', 500);
 		}

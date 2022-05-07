@@ -1,4 +1,4 @@
-export * from './lib/feature/auth.module';
+export * from './lib/components/auth.module';
 export * from './lib/data-access/store/auth.model';
 export * from './lib/data-access/store/auth.action';
 export * from './lib/data-access/store/auth.state';

@@ -2,13 +2,17 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 import { CreateStoryDto } from '../model/create-story.dto';
-import { CREATE_STORY, GET_STORY } from '../graphql/story.gql.schema';
+import {
+	CREATE_STORY,
+	GET_STORY,
+	UPLOAD_STORY,
+} from '../graphql/story.gql.schema';
 import { StoryStateModel } from '../store/story.model';
-import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-// import { environment } from '';
+import { Observable } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
@@ -60,5 +64,32 @@ export class StoryService {
 					return data.createStory as StoryStateModel;
 				})
 			);
+	}
+
+	public uploadImage(image: File) {
+		console.log(image);
+		return this.apollo
+			.mutate({
+				mutation: UPLOAD_STORY,
+				variables: {
+					picture: image,
+				},
+				context: {
+					useMultipart: true,
+				},
+				// errorPolicy: 'all',
+			})
+			.pipe(
+				map((data: any) => {
+					console.log(data);
+					// return data.createStory as StoryStateModel;
+				})
+			)
+			.subscribe();
+		// const formData = new FormData();
+
+		// formData.append('image', image);
+
+		// return this.http.post('/api/v1/image-upload', formData);
 	}
 }

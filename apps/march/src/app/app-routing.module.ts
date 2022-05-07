@@ -5,9 +5,11 @@ import { AuthGuard } from './core/guards/auth.guard';
 const routes: Routes = [
 	{
 		path: 'profile/:id',
-		// canActivate: [AuthGuard],
+		canActivate: [AuthGuard],
 		loadChildren: () =>
-			import('./profile/feature/profile.module').then((m) => m.ProfileModule),
+			import('./profile/components/profile.module').then(
+				(m) => m.ProfileModule
+			),
 	},
 	{
 		path: 'auth',
@@ -18,18 +20,20 @@ const routes: Routes = [
 		path: '',
 		canActivate: [AuthGuard],
 		loadChildren: () =>
-			import('./home/feature/home.module').then((m) => m.HomeModule),
+			import('./home/components/home.module').then((m) => m.HomeModule),
 	},
 	{
 		path: 'story',
-		canActivate: [AuthGuard],
+		// canActivate: [AuthGuard],
 		loadChildren: () =>
-			import('./story/feature/story.module').then((m) => m.StoryModule),
+			import('./story/components/story.module').then((m) => m.StoryModule),
 	},
 	{
 		path: '**',
 		loadChildren: () =>
-			import('./not-found/not-found.module').then((m) => m.NotFoundModule),
+			import('./not-found/components/not-found.module').then(
+				(m) => m.NotFoundModule
+			),
 	},
 ];
 

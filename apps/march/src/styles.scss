@@ -93,3 +93,14 @@ body {
 	background-color: var(--bg-green-palette) !important;
 	// color: var(--bs-dark-grey-palette) !important;
 }
+
+.box-shadow-and-border {
+	@media (min-width: 575px) {
+		border-radius: 0.8rem;
+	}
+
+	@media (max-width: 575px) {
+		box-shadow: none !important;
+		border: 0;
+	}
+}

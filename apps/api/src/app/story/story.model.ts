@@ -9,8 +9,8 @@ export class StoryModel extends Story {
 	@IsArray()
 	category: Category[];
 
-	// @IsString()
-	// cover_image: string;
+	@IsString()
+	storyImageUrl: string;
 
 	@IsDate()
 	created_at: Date;
