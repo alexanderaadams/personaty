@@ -1,5 +1,5 @@
 {
-	"name": "march",
+	"name": "persona",
 	"version": "0.0.0",
 	"license": "MIT",
 	"scripts": {
@@ -9,10 +9,10 @@
 		"build": "nx build",
 		"test": "nx test",
 		"heroku-postbuild": "nx run api:build:production ",
-		"dev:ssr": "ng run march:serve-ssr",
-		"serve:ssr": "node dist/march/server/main.js",
-		"build:ssr": "ng build && ng run march:server",
-		"prerender": "ng run march:prerender",
+		"dev:ssr": "ng run persona:serve-ssr",
+		"serve:ssr": "node dist/persona/server/main.js",
+		"build:ssr": "ng build && ng run persona:server",
+		"prerender": "ng run persona:prerender",
 		"debug": "ndb dist/apps/api/main.js "
 	},
 	"private": true,
@@ -58,6 +58,7 @@
 		"@nrwl/angular": "13.4.6",
 		"@prisma/client": "^3.12.0",
 		"@types/bluebird": "^3.5.36",
+		"@types/hpp": "^0.2.2",
 		"@types/mmmagic": "^0.4.30",
 		"@types/randomcolor": "^0.5.6",
 		"apollo-angular": "^3.0.1",
@@ -82,6 +83,7 @@
 		"dotenv": "^16.0.0",
 		"express": "^4.15.2",
 		"express-handlebars": "^6.0.2",
+		"express-mongo-sanitize": "^2.2.0",
 		"express-session": "^1.17.2",
 		"extract-css": "^1.0.1",
 		"extract-files": "^12.0.0",
@@ -93,6 +95,7 @@
 		"graphql-upload": "^13.0.0",
 		"handlebars": "^4.7.7",
 		"helmet": "^5.0.2",
+		"hpp": "^0.2.3",
 		"inline-css": "^1.0.4",
 		"jsonwebtoken": "^8.5.1",
 		"list-stylesheets": "^1.0.1",
@@ -100,6 +103,7 @@
 		"mime": "^3.0.0",
 		"mmmagic": "^0.5.3",
 		"mock-aws-s3": "^4.0.2",
+		"module-alias": "^2.2.2",
 		"moment": "^2.29.3",
 		"mongoose": "^6.1.7",
 		"ngx-cookie-service": "^13.1.2",
@@ -192,6 +196,7 @@
 		"webpack-node-externals": "^3.0.0"
 	},
 	"engines": {
-		"node": "16.x"
+		"node": "16.x",
+		"npm": "8.x"
 	}
 }

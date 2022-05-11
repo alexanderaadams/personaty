@@ -1,12 +1,19 @@
 {
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
+		"baseUrl": "src",
 		"outDir": "../../dist/out-tsc",
 		"module": "CommonJS",
 		"types": ["node"],
 		"emitDecoratorMetadata": true,
-		"target": "es2017"
+		"target": "es2017",
+		"paths": {
+			"@core/*": ["app/core/*"],
+			"@modules/*": ["app/modules/*"],
+			"@features/*": ["app/features/*"],
+			"@environments/*": ["environments/*"]
+		}
 	},
 	"exclude": ["**/*.spec.ts", "**/*.test.ts"],
-	"include": ["**/*.ts", "src/app/auth/utilities/mail/email.js"]
+	"include": ["**/*.ts", "**/*.js"]
 }

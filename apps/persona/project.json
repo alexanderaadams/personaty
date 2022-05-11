@@ -1,0 +1,181 @@
+{
+	"projectType": "application",
+	"root": "apps/persona",
+	"sourceRoot": "apps/persona/src",
+	"prefix": "persona",
+	"targets": {
+		"build": {
+			"executor": "@angular-devkit/build-angular:browser",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/persona/browser",
+				"index": "apps/persona/src/index.html",
+				"main": "apps/persona/src/main.ts",
+				"polyfills": "apps/persona/src/polyfills.ts",
+				"tsConfig": "apps/persona/tsconfig.app.json",
+				"inlineStyleLanguage": "scss",
+				"assets": [
+					"apps/persona/src/assets",
+					"apps/persona/src/manifest.webmanifest",
+					"apps/persona/src/robots.txt",
+					{
+						"glob": "**/*",
+						"input": "libs/authentication/src/assets",
+						"output": "./assets"
+					},
+					{
+						"glob": "_redirects",
+						"input": "apps/persona/src",
+						"output": "/"
+					}
+				],
+				"styles": [
+					"apps/persona/src/app/core/ui/angular-material-custom-theme.scss",
+					"apps/persona/src/styles.scss"
+				],
+				"scripts": [],
+				"serviceWorker": true,
+				"ngswConfigPath": "apps/persona/ngsw-config.json"
+			},
+			"configurations": {
+				"production": {
+					"budgets": [
+						{
+							"type": "initial",
+							"maximumWarning": "500kb",
+							"maximumError": "2mb"
+						},
+						{
+							"type": "anyComponentStyle",
+							"maximumWarning": "2kb",
+							"maximumError": "10kb"
+						}
+					],
+					"fileReplacements": [
+						{
+							"replace": "apps/persona/src/environments/environment.ts",
+							"with": "apps/persona/src/environments/environment.prod.ts"
+						}
+					],
+					"aot": true,
+					"buildOptimizer": true,
+					"optimization": {
+						"scripts": true,
+						"styles": {
+							"minify": true,
+							"inlineCritical": false
+						},
+						"fonts": true
+					},
+					"outputHashing": "all"
+				},
+				"development": {
+					"buildOptimizer": false,
+					"optimization": false,
+					"vendorChunk": true,
+					"extractLicenses": false,
+					"sourceMap": true,
+					"namedChunks": true
+				}
+			},
+			"defaultConfiguration": "production"
+		},
+		"serve": {
+			"executor": "@angular-devkit/build-angular:dev-server",
+			"configurations": {
+				"production": {
+					"browserTarget": "persona:build:production"
+				},
+				"development": {
+					"browserTarget": "persona:build:development"
+				}
+			},
+			"defaultConfiguration": "development",
+			"options": {
+				"proxyConfig": "apps/persona/proxy.conf.json"
+			}
+		},
+		"extract-i18n": {
+			"executor": "@angular-devkit/build-angular:extract-i18n",
+			"options": {
+				"browserTarget": "persona:build"
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"apps/persona/src/**/*.ts",
+					"apps/persona/src/**/*.html"
+				]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/apps/persona"],
+			"options": {
+				"jestConfig": "apps/persona/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"server": {
+			"executor": "@angular-devkit/build-angular:server",
+			"options": {
+				"outputPath": "dist/persona/server",
+				"main": "apps/persona/server.ts",
+				"tsConfig": "apps/persona/tsconfig.server.json",
+				"inlineStyleLanguage": "scss"
+			},
+			"configurations": {
+				"production": {
+					"outputHashing": "media",
+					"fileReplacements": [
+						{
+							"replace": "apps/persona/src/environments/environment.ts",
+							"with": "apps/persona/src/environments/environment.prod.ts"
+						}
+					],
+					"optimization": true
+				},
+				"development": {
+					"optimization": false,
+					"sourceMap": true,
+					"extractLicenses": false
+				}
+			},
+			"defaultConfiguration": "production"
+		},
+		"serve-ssr": {
+			"executor": "@nguniversal/builders:ssr-dev-server",
+			"configurations": {
+				"development": {
+					"browserTarget": "persona:build:development",
+					"serverTarget": "persona:server:development"
+				},
+				"production": {
+					"browserTarget": "persona:build:production",
+					"serverTarget": "persona:server:production"
+				}
+			},
+			"defaultConfiguration": "development"
+		},
+		"prerender": {
+			"executor": "@nguniversal/builders:prerender",
+			"options": {
+				"routes": ["/"]
+			},
+			"configurations": {
+				"production": {
+					"browserTarget": "persona:build:production",
+					"serverTarget": "persona:server:production"
+				},
+				"development": {
+					"browserTarget": "persona:build:development",
+					"serverTarget": "persona:server:development"
+				}
+			},
+			"defaultConfiguration": "production"
+		}
+	},
+	"tags": []
+}

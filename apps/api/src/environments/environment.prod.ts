@@ -8,6 +8,9 @@ export const environment = {
 	COOKIE_ATTRIBUTE_SECURE: true,
 	COOKIE_ATTRIBUTE_HTTP_ONLY: true,
 
+	//	CORS Configuration
+	CORS_HEADERS: ['GET', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+
 	//	URL Connection
 	HOST_URL: 'https://api-persona2.herokuapp.com',
 	ORIGIN_URL: 'https://personaty.netlify.app',
@@ -21,8 +24,8 @@ export const environment = {
 		'mongodb+srv://remy:t7mjdezqWKJs6sgT@cluster0.amx9w.mongodb.net/persona',
 	DATABASE_NAME: 'persona',
 
-	////////////////
-	SECRET_SALT: 'heHYthisIStheBENshapiroSHOW',
+	//	CSRF Configuration
+	CSRF_SESSION_KEY: 'h1e$HY%th61is70-I&St*he(B)E8_Nsh7apir4oSHOW',
 
 	//	Google Oauth2 Info
 	GOOGLE_CLIENT_ID:

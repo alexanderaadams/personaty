@@ -8,20 +8,24 @@ export const environment = {
 	COOKIE_ATTRIBUTE_SECURE: false,
 	COOKIE_ATTRIBUTE_HTTP_ONLY: false,
 
+	//	CORS Configuration
+	CORS_HEADERS: ['GET', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+
 	//	URL Connection
 	HOST_URL: 'http://localhost:3333',
 	ORIGIN_URL: 'http://localhost:4200',
 
-	//Authentication Validators
+	//	Authentication Validators
 	MIN_LENGTH: 2,
 	MAX_LENGTH: 8,
 
-	//MongoDB Atlas Connection Information.
+	//	MongoDB Atlas Connection Information.
 	DATABASE_CONNECTION: 'mongodb://localhost:27017/persona',
 	DATABASE_NAME: 'persona',
 
-	/////////////////////
-	SECRET_SALT: 'heHYthisIStheBENshapiroSHOW',
+	//	CSRF Configuration
+	CSRF_SESSION_KEY:
+		'h1e$HY%GSthfFHS6JHGfs%@$SHSis70-I&St*he(B)E8_NsYFHSh7apir4#%DStersfg43oSHOW',
 
 	//	Google Oauth2 Info
 	GOOGLE_CLIENT_ID:

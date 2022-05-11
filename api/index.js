@@ -1,3 +1,3 @@
-var server = require('../dist/march/server/main');
+var server = require('../dist/persona/server/main');
 
 module.exports = server.app();

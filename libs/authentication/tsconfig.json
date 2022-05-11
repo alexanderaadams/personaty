@@ -11,15 +11,23 @@
 		}
 	],
 	"compilerOptions": {
+		"baseUrl": "../../",
 		"forceConsistentCasingInFileNames": true,
 		"strict": true,
 		"noImplicitOverride": true,
 		"noPropertyAccessFromIndexSignature": true,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
-		"lib": ["es2020", "dom"]
+		"lib": ["es2020", "dom"],
 		// NOTE manually added
-		// "composite": true
+		// "composite": true,
+		"paths": {
+			"@core/*": ["libs/authentication/src/lib/core/*"],
+			"@features/*": ["libs/authentication/src/lib/features/*"],
+			"@pages/*": ["libs/authentication/src/lib/pages/*"],
+			"@persona/shared": ["libs/shared/src/index.ts"],
+			"@persona/persona/*": ["apps/persona/src/environments/*"]
+		}
 	},
 	"angularCompilerOptions": {
 		"strictInjectionParameters": true,
@@ -27,7 +35,4 @@
 		"strictTemplates": true
 	}
 	// NOTE the paths configs has been added manually
-	// "paths": {
-	// 	"@march/shared-frontend": ["libs/shared-frontend/src/index.ts"]
-	// }
 }

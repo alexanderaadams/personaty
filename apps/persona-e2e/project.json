@@ -1,0 +1,28 @@
+{
+	"root": "apps/persona-e2e",
+	"sourceRoot": "apps/persona-e2e/src",
+	"projectType": "application",
+	"targets": {
+		"e2e": {
+			"executor": "@nrwl/cypress:cypress",
+			"options": {
+				"cypressConfig": "apps/persona-e2e/cypress.json",
+				"devServerTarget": "persona:serve:development"
+			},
+			"configurations": {
+				"production": {
+					"devServerTarget": "persona:serve:production"
+				}
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["apps/persona-e2e/**/*.{js,ts}"]
+			}
+		}
+	},
+	"tags": [],
+	"implicitDependencies": ["persona"]
+}

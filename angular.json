@@ -1,10 +1,11 @@
 {
-  "version": 2,
-  "projects": {
-    "api": "apps/api",
-    "authentication": "libs/authentication",
-    "march": "apps/march",
-    "march-e2e": "apps/march-e2e",
-    "shared-frontend": "libs/shared-frontend"
-  }
+	"version": 2,
+	"projects": {
+		"api": "apps/api",
+		"authentication": "libs/authentication",
+		"persona": "apps/persona",
+		"persona-e2e": "apps/persona-e2e",
+		"shared": "libs/shared",
+		"keys": "libs/keys"
+	}
 }

@@ -7,6 +7,12 @@
 		"moduleResolution": "node",
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
+		"exactOptionalPropertyTypes": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"alwaysStrict": true,
+		"strict": true,
 		"importHelpers": true,
 		"target": "es2015",
 		"module": "esnext",
@@ -15,13 +21,10 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
-			"@march/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-			"@march/authentication": ["libs/authentication/src/index.ts"],
-			"@march/error-handler": ["libs/error-handler/src/index.ts"],
-			"@march/keys": ["libs/keys/src/index.ts"],
-			"@march/shared-frontend": ["libs/shared-frontend/src/index.ts"]
+			"@persona/authentication": ["libs/authentication/src/index.ts"],
+			"@persona/shared": ["libs/shared/src/index.ts"],
+			"@persona/keys": ["libs/keys/src/index.ts"]
 		}
 	},
-	"keys": "libs/keys",
 	"exclude": ["node_modules", "tmp"]
 }

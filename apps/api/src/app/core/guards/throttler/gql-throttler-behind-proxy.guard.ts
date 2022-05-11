@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+
 import { GqlThrottlerGuard } from './gql-throttler.guard';
 
 @Injectable()
