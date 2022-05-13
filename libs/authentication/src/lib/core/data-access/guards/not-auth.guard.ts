@@ -4,9 +4,9 @@ import { Store } from '@ngxs/store';
 
 import { Observable } from 'rxjs';
 import { AuthState } from '../store/auth.state';
-import { UnsubscribeOnDestroyAdapter } from '../../shared/unsubscribe-on-destroy.adapter';
 
-import { FormService } from '../../features/core/data-access/form.service';
+import { FormService } from '../services/form.service';
+import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
 @Injectable({
 	providedIn: 'root',

@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { CreateStoryComponent } from './create-story/create-story.component';
 import { ReadStoryComponent } from './read-story/read-story.component';
-import { CoreModule } from '../../../core/core.module';
+import { AngularMaterialModule } from '@persona/shared';
 
 const routes: Routes = [
 	{
@@ -19,6 +21,11 @@ const routes: Routes = [
 @NgModule({
 	declarations: [ReadStoryComponent, CreateStoryComponent],
 
-	imports: [CoreModule, RouterModule.forChild(routes)],
+	imports: [
+		CommonModule,
+		RouterModule.forChild(routes),
+		ReactiveFormsModule,
+		AngularMaterialModule,
+	],
 })
 export class StoryModule {}

@@ -49,6 +49,7 @@ export class ImageService {
 			if (isFileLegit)
 				return {
 					valid: false,
+					error: null,
 					fullImagePath,
 				};
 
@@ -57,6 +58,7 @@ export class ImageService {
 			return {
 				valid: false,
 				error: 'File content does not match extension!',
+				fullImagePath: 'Error',
 			};
 		} catch (err) {
 			throw new HttpException('Something Went Wrong', 500);

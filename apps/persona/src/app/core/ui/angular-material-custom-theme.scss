@@ -68,5 +68,5 @@ $dark-theme: mat.define-dark-theme(
 .my-light-theme {
 	color: var(--bs-dark-pink-palette);
 	background-color: $light-background-color;
-	@include mat.all-component-themes($light-theme);
+	@include mat.all-component-colors($light-theme);
 }

@@ -1,7 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CoreModule } from '../../../core/core.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
 import { ProfileComponent } from './profile.component';
+import { AngularMaterialModule } from '@persona/shared';
 
 const routes: Routes = [
 	{
@@ -12,7 +15,12 @@ const routes: Routes = [
 @NgModule({
 	declarations: [ProfileComponent],
 
-	imports: [CoreModule, RouterModule.forChild(routes)],
+	imports: [
+		CommonModule,
+		AngularMaterialModule,
+		ReactiveFormsModule,
+		RouterModule.forChild(routes),
+	],
 	exports: [],
 })
 export class ProfileModule {}

@@ -1,17 +1,15 @@
-import { ProfileService } from '../data-access/services/profile.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Select, Store, Actions } from '@ngxs/store';
+
+import { ProfileService } from '../data-access/services/profile.service';
 import { GetUserInfo } from '../data-access/store/profile.action';
-import {
-	FormService,
-	UnsubscribeOnDestroyAdapter,
-} from '@persona/authentication';
 import { ProfileState } from '../data-access/store/profile.state';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ProfileStateModel } from '../data-access/store/profile.model';
+import { FormService } from '@persona/authentication';
+import { UnsubscribeOnDestroyAdapter ,environment} from '@persona/shared';
 
-import { environment } from '../../../../environments/environment';
 
 @Component({
 	selector: 'persona-profile',
@@ -22,7 +20,7 @@ export class ProfileComponent
 	extends UnsubscribeOnDestroyAdapter
 	implements OnInit
 {
-	backendUrl = environment.BACKEND_URL;
+	backendUrl: string = environment.BACKEND_URL;
 	createStory = new BehaviorSubject(false);
 
 	@Select(ProfileState.userInfo)

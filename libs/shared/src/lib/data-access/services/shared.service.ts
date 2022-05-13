@@ -1,12 +1,11 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
-import { UnsubscribeOnDestroyAdapter } from '../../unsubscribe-on-destroy.adapter';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
 })
-export class SharedService extends UnsubscribeOnDestroyAdapter {
+export class SharedService {
 	loginExecutingLoader$: BehaviorSubject<boolean> =
 		new BehaviorSubject<boolean>(false);
 
@@ -15,7 +14,6 @@ export class SharedService extends UnsubscribeOnDestroyAdapter {
 	constructor(
 		@Inject(PLATFORM_ID) private platformId: Record<string, unknown>
 	) {
-		super();
-		this.isBrowser = isPlatformBrowser(platformId);
+		this.isBrowser = isPlatformBrowser(this.platformId);
 	}
 }

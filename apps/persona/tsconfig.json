@@ -14,16 +14,31 @@
 		}
 	],
 	"compilerOptions": {
+		"baseUrl": "../../",
 		"forceConsistentCasingInFileNames": true,
 		"strict": true,
 		"noImplicitOverride": true,
 		"noPropertyAccessFromIndexSignature": true,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
-		"lib": ["es2020", "dom"]
+		"lib": ["es2020", "dom"],
+		"paths": {
+			// Local paths
+			"@core/*": ["apps/persona/src/app/core/*"],
+			"@features/*": ["apps/persona/src/app/features/*"],
+			"@pages/*": ["apps/persona/src/app/pages/*"],
 
-		//added manually
-		// "composite": true
+			//	Shared library path
+			"@persona/shared": ["libs/shared/src/index.ts"],
+
+			// NOTE This is required because of the non-relative paths in the authentication library,
+			// without this paths the compiler won't understand the authentication paths in the
+			// authentication tsconfig file
+			"@persona/authentication": ["libs/authentication/src/index.ts"],
+			"@auth/core/*": ["libs/authentication/src/lib/core/*"],
+			"@auth/features/*": ["libs/authentication/src/lib/features/*"],
+			"@auth/pages/*": ["libs/authentication/src/lib/pages/*"]
+		}
 	},
 	"angularCompilerOptions": {
 		"strictInjectionParameters": true,

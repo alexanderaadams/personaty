@@ -2,8 +2,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { APP_FILTER } from '@nestjs/core';
 
-import { environment } from '../environments/environment';
+import { environment } from '@environment';
 import { UserModule } from './features/user/users.module';
 import { AuthModule } from './features/auth/auth.module';
 import { StoryModule } from './features/story/story.module';
@@ -12,7 +13,6 @@ import { UploadScalar } from './core/utils/graphql-data-scalar/upload.scalar';
 import { DateScalar } from './core/utils/graphql-data-scalar/date.scalar';
 import { UnhandledRoutesModule } from './modules/unhandled-routes/unhandled-routes.module';
 import { CsrfMiddleware } from './core/middlewares/csrf.middleware';
-import { APP_FILTER } from '@nestjs/core';
 import { AllHttpExceptionsFilter } from './core/utils/error-handeling/all-http-exceptions-filter';
 import { AppController } from './app.controller';
 

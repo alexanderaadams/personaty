@@ -2,7 +2,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-google-oauth20';
 import { Injectable } from '@nestjs/common';
 
-import { environment } from '@environments/environment';
+import { environment } from '@environment';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -20,18 +20,19 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 		accessToken: string,
 		refreshToken: string,
 		profile: Profile
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	): Promise<any> {
 		const { id, username, emails, photos, _json, name } = profile;
 		// console.log(profile);
 		const user = {
 			googleId: id.toString(),
 			username: username,
-			email: emails[0].value || 'email Does Not Exist',
-			email_verified: Boolean(emails[0].value) || false,
+			email: (emails || [])[0]?.value || 'email Does Not Exist',
+			email_verified: Boolean((emails || [])[0]?.value) || false,
 			locale: _json.locale || 'en',
-			fullName: `${name.givenName} ${name.familyName}`,
-			profilePicture: photos[0].value || 'Profile Picture Does Not Exist',
+			fullName: `${name?.givenName} ${name?.familyName}`,
+			profilePicture:
+				(photos || [])[0]?.value || 'Profile Picture Does Not Exist',
 		};
 		return user;
 	}

@@ -27,7 +27,7 @@ export function convertErrorToApolloError(
 		);
 	}
 
-	error.stack = exception.stack;
+	error.stack = exception.stack || 'Error in the stack';
 	error.extensions['response'] = exception.getResponse();
 	return error;
 }

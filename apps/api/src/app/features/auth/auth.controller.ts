@@ -5,7 +5,7 @@ import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 
 import { AuthService } from './auth.service';
 import { GoogleOauth2 } from './models/google-oauth-2';
-import { environment } from '@environments/environment';
+import { environment } from '@environment';
 import { ThrottlerBehindProxyGuard } from '@core/guards/throttler/throttler-behind-proxy.guard';
 
 @UseGuards(environment.production ? ThrottlerBehindProxyGuard : ThrottlerGuard)

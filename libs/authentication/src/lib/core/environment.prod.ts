@@ -3,14 +3,13 @@ export const environment = {
 
 	ENVIRONMENT_TYPE: 'production',
 
-	// Apollo Configuration Options
-	APOLLO_SSR_MODE: false,
-	APOLLO_ORIGIN: 'same-origin',
-	APOLLO_ERROR_POLICY: 'all',
+	// Apollo CORS Configuration Options
+	ENVIRONMENT_SSR_MODE: true,
+	ENVIRONMENT_ORIGIN: 'include',
 
 	//	Authentication Validators
-	MIN_LENGTH: 8,
-	MAX_LENGTH: 30,
+	MIN_LENGTH: 2,
+	MAX_LENGTH: 8,
 
 	//	Backend URI
 	BACKEND_URL: 'https://api-persona2.herokuapp.com',

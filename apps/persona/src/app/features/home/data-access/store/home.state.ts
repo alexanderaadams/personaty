@@ -38,7 +38,7 @@ export class ProfileState extends UnsubscribeOnDestroyAdapter {
 	}
 
 	@Action(GetStories)
-	getUserInfo(ctx: StateContext<HomeStateModel>, action: GetStories) {
+	getUserInfo(ctx: StateContext<HomeStateModel>, _action: GetStories) {
 		// this.subs.sink = this.homeService
 		// 	.getUserInfo(action.payload)
 		// 	.pipe(

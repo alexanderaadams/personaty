@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Schema as MongooseSchema, Types, Document, model } from 'mongoose';
 
-import { User } from '../../../user/models/user-db/user-db.schema';
+import { User } from '@features/user/models/user-db/user-db.schema';
 import { Category } from '../category';
 
 export type StoryDocument = Story & Document;

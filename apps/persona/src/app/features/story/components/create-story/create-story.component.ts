@@ -5,9 +5,9 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { BehaviorSubject } from 'rxjs';
 
-import { randomColorPicker } from '../../../../core/ui/random-color-generator';
+import { randomColorPicker } from '@core/ui/random-color-generator';
 import { Category } from '../../data-access/store/story.model';
-import { validImageMimeType } from '../../../../core/models/valid-image-mime-type';
+import { validImageMimeType } from '@core/models/valid-image-mime-type';
 import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
 @Component({

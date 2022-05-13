@@ -11,8 +11,8 @@ import {
 	UPLOAD_STORY,
 } from '../graphql/story.gql.schema';
 import { StoryStateModel } from '../store/story.model';
-import { environment } from '../../../../../environments/environment';
-import { Observable } from 'rxjs';
+import { environment} from '@persona/shared';
+
 
 @Injectable({
 	providedIn: 'root',

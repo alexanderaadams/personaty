@@ -15,7 +15,7 @@ import { TokenAuthGuard } from '@core/guards/is-auth.guard';
 import { GqlThrottlerBehindProxyGuard } from '@core/guards/throttler/gql-throttler-behind-proxy.guard';
 import { GqlThrottlerGuard } from '@core/guards/throttler/gql-throttler.guard';
 import { MyJWTService } from '@modules/jwt/jwt.service';
-import { environment } from '@environments/environment';
+import { environment } from '@environment';
 import { FindUser } from '@core/models/find-user';
 
 @UseGuards(
@@ -52,12 +52,12 @@ export class AuthResolver {
 		@Args('user', { type: () => SignupDto }) signupUser: SignupDto,
 		@Context('req') req: Request
 	): Promise<AuthenticationStatus> {
-		// console.log(req.headers);
+		// console.log(req?.headers);
 		const status = await this.authService.sendSignupEmail(
 			signupUser.email,
 			signupUser.password,
 			signupUser.birthDate,
-			`${req.protocol}://${req.headers.host}`
+			`${req?.protocol}://${req?.headers?.host}`
 		);
 
 		return { status: status.status, authenticated: null };
@@ -105,8 +105,8 @@ export class AuthResolver {
 	async isAuthenticated(
 		@Context('req') req: Request
 	): Promise<AuthenticationStatus> {
-		const token = await this.myJWTService.verifyToken(req.cookies.token);
-		// console.log('auth', token, req.cookies.token);
+		const token = await this.myJWTService.verifyToken(req?.cookies.token);
+		// console.log('auth', token, req?.cookies.token);
 
 		if (token)
 			return { status: 'CORRECTLY_AUTHENTICATED', authenticated: true };
@@ -125,7 +125,7 @@ export class AuthResolver {
 	): Promise<AuthenticationStatus> {
 		await this.authService.sendForgotPasswordEmail(
 			sendForgotPasswordEmail.email,
-			req.headers.origin
+			req?.headers?.origin || ''
 		);
 		return {
 			status: 'FORGOT_PASSWORD_EMAIL_SENT_SUCCESSFULLY',

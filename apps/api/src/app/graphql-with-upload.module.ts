@@ -14,7 +14,7 @@ import { UserModule } from './features/user/users.module';
 import { AuthModule } from './features/auth/auth.module';
 import { AdminModule } from './features/admin/admin.module';
 import { StoryModule } from './features/story/story.module';
-import { environment } from '../environments/environment';
+import { environment } from '@environment';
 
 /** Wraps the GraphQLModule with an up-to-date graphql-upload middleware. */
 @Module({})

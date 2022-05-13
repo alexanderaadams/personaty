@@ -1,6 +1,6 @@
 import { IsArray, IsDate, IsString } from 'class-validator';
 
-import { Category, Story } from '../../../../core/models/graphql.schema';
+import { Category, Story } from '@core/models/graphql.schema';
 
 export class StoryDbModel extends Story {
 	@IsString()

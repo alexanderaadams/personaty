@@ -2,28 +2,24 @@
 	"compileOnSave": false,
 	"compilerOptions": {
 		"rootDir": ".",
+		"baseUrl": ".",
 		"sourceMap": true,
-		"declaration": false,
 		"moduleResolution": "node",
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"exactOptionalPropertyTypes": true,
-		"noImplicitAny": true,
-		"noImplicitReturns": true,
-		"noPropertyAccessFromIndexSignature": true,
-		"alwaysStrict": true,
-		"strict": true,
+		"strictNullChecks": true,
 		"importHelpers": true,
 		"target": "es2015",
 		"module": "esnext",
 		"lib": ["es2017", "dom"],
 		"skipLibCheck": true,
 		"skipDefaultLibCheck": true,
-		"baseUrl": ".",
+		"declaration": false,
 		"paths": {
 			"@persona/authentication": ["libs/authentication/src/index.ts"],
-			"@persona/shared": ["libs/shared/src/index.ts"],
-			"@persona/keys": ["libs/keys/src/index.ts"]
+			"@persona/keys": ["libs/keys/src/index.ts"],
+			"@persona/shared": ["libs/shared/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

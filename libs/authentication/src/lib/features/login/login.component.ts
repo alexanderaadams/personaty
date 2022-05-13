@@ -4,11 +4,14 @@ import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap, take } from 'rxjs/operators';
 
-import { Login, LoginWithGoogle } from '@core/data-access/store/auth.action';
-import { AuthStateModel } from '@core/data-access/store/auth.model';
-import { FormService } from '@core/data-access/services/form.service';
+import { environment } from '@auth/core/environment.prod';
+import { FormService } from '@auth/core/data-access/services/form.service';
+import {
+	Login,
+	LoginWithGoogle,
+} from '@auth/core/data-access/store/auth.action';
+import { AuthStateModel } from '@auth/core/data-access/store/auth.model';
 import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
-import { environment } from '@persona/persona/environment';
 
 @Component({
 	selector: 'lib-login',
@@ -38,10 +41,7 @@ export class LoginComponent
 		]),
 	});
 
-	constructor(
-		private readonly store: Store,
-		private readonly formService: FormService
-	) {
+	constructor(private readonly store: Store, private formService: FormService) {
 		super();
 	}
 

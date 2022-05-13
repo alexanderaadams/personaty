@@ -9,5 +9,17 @@
 		{
 			"path": "./tsconfig.spec.json"
 		}
-	]
+	],
+	"compilerOptions": {
+		"baseUrl": "../../",
+		"paths": {
+			//	Local paths
+			"@core/*": ["apps/api/src/app/core/*"],
+			"@modules/*": ["apps/api/src/app/modules/*"],
+			"@features/*": ["apps/api/src/app/features/*"],
+			"@environment": ["apps/api/src/environments/environment.ts"],
+			//	Keys library path
+			"@persona/keys": ["libs/keys/src/index.ts"]
+		}
+	}
 }

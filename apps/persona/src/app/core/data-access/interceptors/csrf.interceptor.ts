@@ -4,21 +4,19 @@ import {
 	HttpHandler,
 	HttpEvent,
 	HttpInterceptor,
-	HttpResponse,
 } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
-import { FormService } from '@persona/authentication';
+import { SharedService } from '@persona/shared';
 import { Observable } from 'rxjs';
 
 @Injectable()
 export class CsrfInterceptor implements HttpInterceptor {
 	constructor(
 		private cookieService: CookieService,
-		private formService: FormService
+		private sharedService: SharedService
 	) {}
 
-	isBrowser: boolean = this.formService.isBrowser;
+	isBrowser: boolean = this.sharedService.isBrowser;
 
 	intercept(
 		request: HttpRequest<unknown>,

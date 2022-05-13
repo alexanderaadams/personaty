@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, NgZone } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
 import { catchError, map } from 'rxjs/operators';
@@ -20,8 +19,8 @@ import {
 	CONFIRM_FORGOT_PASSWORD,
 	SIGNUP,
 } from '../graphql/auth.gql.schema';
+import { environment } from '@persona/shared';
 import { SharedService } from '@persona/shared';
-import { environment } from '@persona/persona/environment';
 
 @Injectable({
 	providedIn: 'root',
@@ -35,7 +34,6 @@ export class AuthService {
 	isBrowser = this.sharedService.isBrowser;
 
 	constructor(
-		private http: HttpClient,
 		private router: Router,
 		private ngZone: NgZone,
 		private apollo: Apollo,

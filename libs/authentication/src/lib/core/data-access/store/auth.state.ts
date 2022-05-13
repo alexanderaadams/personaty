@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, OnDestroy } from '@angular/core';
 import { of } from 'rxjs';
 import { Action, State, StateContext, Selector } from '@ngxs/store';
@@ -16,8 +15,8 @@ import {
 	IsAuthenticated,
 	ResetAuthStoreToDefault,
 } from './auth.action';
-import { UnsubscribeOnDestroyAdapter } from '../../shared/unsubscribe-on-destroy.adapter';
 import { AuthService } from '../services/auth.service';
+import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
 @State<AuthStateModel>({
 	name: 'auth',
@@ -131,7 +130,6 @@ export class AuthState
 			.confirmForgotPassword(action.payload)
 			.subscribe({
 				next: (res: any) => {
-
 					ctx.patchState(res as AuthStateModel);
 					// this.updateMyStorageEngineService('auth', res);
 				},

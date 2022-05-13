@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 
-import { environment } from '@environments/environment';
+import { environment } from '@environment';
 
 @Injectable()
 export class NodemailerService {
@@ -59,7 +59,7 @@ style="
 				html: html, // HTML body content
 			})
 			// .then(() => {
-				// console.log(success);
+			// console.log(success);
 			// })
 			.catch((err) => {
 				// console.log(err);

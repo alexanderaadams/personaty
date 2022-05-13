@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Response, Request } from 'express';
 
-import { environment } from '@environments/environment';
+import { environment } from '@environment';
 
 @Injectable()
 export class CsrfMiddleware implements NestMiddleware {

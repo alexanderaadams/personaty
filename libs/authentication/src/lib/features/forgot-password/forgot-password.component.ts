@@ -1,12 +1,10 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Store } from '@ngxs/store';
 import { BehaviorSubject } from 'rxjs';
 import { tap, take } from 'rxjs/operators';
 
-import { SendForgotPasswordEmail } from '../../data-access/store/auth.action';
-import { FormService } from '../core/data-access/form.service';
+import { SendForgotPasswordEmail } from '@auth/core/data-access/store/auth.action';
+import { FormService } from '@auth/core/data-access/services/form.service';
 import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
 @Component({
@@ -26,11 +24,7 @@ export class ForgotPasswordComponent
 		email: new FormControl('', [Validators.required, Validators.email]),
 	});
 
-	constructor(
-		private store: Store,
-		private router: Router,
-		private formService: FormService
-	) {
+	constructor(private formService: FormService) {
 		super();
 	}
 

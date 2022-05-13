@@ -4,9 +4,6 @@ import { SubSink } from 'subsink';
 /**
  * A class that automatically unsubscribes all observables when the object gets destroyed
  */
-// @Component({
-// 	template: '',
-// })
 @Injectable({
 	providedIn: 'root',
 })

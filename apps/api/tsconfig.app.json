@@ -1,18 +1,11 @@
 {
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
-		"baseUrl": "src",
 		"outDir": "../../dist/out-tsc",
 		"module": "CommonJS",
 		"types": ["node"],
 		"emitDecoratorMetadata": true,
-		"target": "es2017",
-		"paths": {
-			"@core/*": ["app/core/*"],
-			"@modules/*": ["app/modules/*"],
-			"@features/*": ["app/features/*"],
-			"@environments/*": ["environments/*"]
-		}
+		"target": "es2017"
 	},
 	"exclude": ["**/*.spec.ts", "**/*.test.ts"],
 	"include": ["**/*.ts", "**/*.js"]

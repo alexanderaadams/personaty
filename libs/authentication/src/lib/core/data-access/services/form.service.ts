@@ -12,9 +12,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { take, takeUntil, tap } from 'rxjs/operators';
 
-import { UnsubscribeOnDestroyAdapter, SharedService } from '@persona/shared';
 import { AuthStateModel } from '../store/auth.model';
 import { IsAuthenticated, ResetAuthStoreToDefault } from '../store/auth.action';
+import { UnsubscribeOnDestroyAdapter, SharedService } from '@persona/shared';
+// import {  } from '@shared';
 
 @Injectable({
 	providedIn: 'root',

@@ -7,5 +7,5 @@ export class AuthenticationStatus extends Authentication_Status {
 	status: string;
 
 	@Expose()
-	authenticated: boolean;
+	authenticated: boolean | null;
 }

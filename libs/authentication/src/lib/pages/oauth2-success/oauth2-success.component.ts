@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormService } from '../../features/core/data-access/form.service';
+import { SharedService } from '@persona/shared';
 
 @Component({
 	selector: 'lib-oauth2-success',
@@ -8,9 +8,9 @@ import { FormService } from '../../features/core/data-access/form.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Oauth2SuccessComponent implements OnInit {
-	isBrowser: boolean = this.formService.isBrowser;
+	isBrowser: boolean = this.sharedService.isBrowser;
 
-	constructor(private formService: FormService) {}
+	constructor(private sharedService: SharedService) {}
 
 	ngOnInit(): void {
 		setTimeout(() => {

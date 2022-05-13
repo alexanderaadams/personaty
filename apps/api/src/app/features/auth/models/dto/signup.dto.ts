@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 
 import { Signup_Input } from '@core/models/graphql.schema';
-import { environment } from '@environments/environment';
+import { environment } from '@environment';
 
 export class SignupDto extends Signup_Input {
 	@IsEmail()

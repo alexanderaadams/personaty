@@ -1,4 +1,5 @@
 {
-	"name": "@persona/authentication",
-	"version": "0.0.1"
+	"name": "authentication",
+	"version": "0.0.1",
+	"dependencies": {}
 }

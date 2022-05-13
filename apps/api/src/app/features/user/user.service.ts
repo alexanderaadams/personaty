@@ -42,7 +42,7 @@ export class UserService {
 		}
 	}
 
-	async findUserById(id: string): Promise<UserModel> {
+	async findUserById(id: string): Promise<UserModel | null> {
 		try {
 			const user = await this.userModel.findById(id).populate('stories').exec();
 
@@ -54,7 +54,7 @@ export class UserService {
 		}
 	}
 
-	async findOne(payload: object): Promise<UserInfo> {
+	async findOne(payload: object): Promise<UserInfo |null> {
 		try {
 			const user = await this.userModel.findOne(payload).exec();
 
@@ -68,7 +68,7 @@ export class UserService {
 
 	async getUserSensitiveInformation(
 		payload: object
-	): Promise<UserSensitiveInformation> {
+	): Promise<UserSensitiveInformation|null> {
 		try {
 			const user = await this.userModel
 				.findOne(payload)

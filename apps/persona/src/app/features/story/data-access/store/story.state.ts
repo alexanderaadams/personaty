@@ -39,7 +39,7 @@ export class StoryState extends UnsubscribeOnDestroyAdapter {
 		this.subs.sink = this.storyService
 			.getStory(action.payload)
 			.pipe(
-				tap((res) => {
+				tap((res: StoryStateModel) => {
 					ctx.patchState(res);
 				})
 			)
@@ -51,7 +51,7 @@ export class StoryState extends UnsubscribeOnDestroyAdapter {
 		this.subs.sink = this.storyService
 			.createStory(action.payload)
 			.pipe(
-				tap((res) => {
+				tap((res: StoryStateModel) => {
 					ctx.patchState(res);
 				})
 			)

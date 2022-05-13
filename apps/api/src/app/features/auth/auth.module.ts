@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 
 import { UserModule } from '@features/user/users.module';
-import { AuthService } from './auth.service';
 import { MyJWTModule } from '@modules/jwt/jwt.module';
+
+import { AuthService } from './auth.service';
 import { GoogleStrategy } from './utils/passport-strategies/google.strategy';
 import { NodemailerModule } from './utils/mail/nodemailer.module';
 import { AuthResolver } from './auth.resolver';

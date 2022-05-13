@@ -1,6 +1,6 @@
 import { IsString, MaxLength, MinLength } from 'class-validator';
 
-import { environment } from '@environments/environment';
+import { environment } from '@environment';
 import { Login_Input } from '@core/models/graphql.schema';
 
 export class LoginDto extends Login_Input {

@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
-import { AuthModule } from '@persona/authentication';
-import { CoreModule } from '../../../core/core.module';
+import { AngularMaterialModule } from '@persona/shared';
 import { HomeComponent } from './home.component';
 
 const routes: Routes = [
@@ -14,7 +15,11 @@ const routes: Routes = [
 
 @NgModule({
 	declarations: [HomeComponent],
-
-	imports: [CoreModule, RouterModule.forChild(routes), AuthModule],
+	imports: [
+		CommonModule,
+		AngularMaterialModule,
+		ReactiveFormsModule,
+		RouterModule.forChild(routes),
+	],
 })
 export class HomeModule {}

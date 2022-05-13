@@ -1,8 +1,8 @@
-import {  UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Throttle } from '@nestjs/throttler';
 
-import { environment } from '@environments/environment';
+import { environment } from '@environment';
 import { GqlThrottlerBehindProxyGuard } from '@core/guards/throttler/gql-throttler-behind-proxy.guard';
 import { GqlThrottlerGuard } from '@core/guards/throttler/gql-throttler.guard';
 import { TokenAuthGuard } from '@core/guards/is-auth.guard';
@@ -27,7 +27,7 @@ export class UserResolver {
 	})
 	async getStory(
 		@Args('id', { type: () => ID }) id: string
-	): Promise<UserModel> {
+	): Promise<UserModel | null> {
 		return await this.userService.findUserById(id);
 	}
 

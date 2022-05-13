@@ -10,15 +10,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
 import { Moment } from 'moment';
 
-import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
-import { FormService } from '@core/data-access/services/form.service';
-import { AuthStateModel } from '@core/data-access/store/auth.model';
-import { AuthState } from '@core/data-access/store/auth.state';
+import { FormService } from '@auth/core/data-access/services/form.service';
+import { AuthStateModel } from '@auth/core/data-access/store/auth.model';
+import { AuthState } from '@auth/core/data-access/store/auth.state';
 import {
 	LoginWithGoogle,
 	Signup,
-} from '../../core/data-access/store/auth.action';
-import { environment } from '@persona/persona/environment';
+} from '@auth/core/data-access/store/auth.action';
+import { UnsubscribeOnDestroyAdapter, environment } from '@persona/shared';
 
 @Component({
 	selector: 'lib-signup',
@@ -49,7 +48,7 @@ export class SignupComponent
 		birthDate: new FormControl('', [Validators.required]),
 	});
 
-	constructor(private store: Store, private formService: FormService) {
+	constructor(private readonly store: Store, private formService: FormService) {
 		super();
 	}
 

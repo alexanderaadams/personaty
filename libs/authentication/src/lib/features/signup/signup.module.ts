@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { AngularMaterialModule } from '@persona/shared';
 import { SignupComponent } from './signup.component';
-import { AngularMaterialModule } from '../../shared/angular-material.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
 	{
@@ -14,13 +15,11 @@ const routes: Routes = [
 
 @NgModule({
 	declarations: [SignupComponent],
-
 	imports: [
 		CommonModule,
-		AngularMaterialModule,
 		RouterModule.forChild(routes),
-		FormsModule,
 		ReactiveFormsModule,
+		AngularMaterialModule,
 	],
 })
 export class SignupModule {}

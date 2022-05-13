@@ -53,8 +53,8 @@
 					],
 					"fileReplacements": [
 						{
-							"replace": "apps/persona/src/environments/environment.ts",
-							"with": "apps/persona/src/environments/environment.prod.ts"
+							"replace": "libs/shared/src/lib/environments/environment.ts",
+							"with": "libs/shared/src/lib/environments/environment.prod.ts"
 						}
 					],
 					"aot": true,
@@ -131,8 +131,8 @@
 					"outputHashing": "media",
 					"fileReplacements": [
 						{
-							"replace": "apps/persona/src/environments/environment.ts",
-							"with": "apps/persona/src/environments/environment.prod.ts"
+							"replace": "libs/shared/src/lib/environments/environment.ts",
+							"with": "libs/shared/src/lib/environments/environment.prod.ts"
 						}
 					],
 					"optimization": true

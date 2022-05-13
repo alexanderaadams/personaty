@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { environment } from '../environments/environment';
+
+import { environment } from '@persona/shared';
 import { CsrfTokenModel } from './core/data-access/store/app.model';
 
 @Injectable({

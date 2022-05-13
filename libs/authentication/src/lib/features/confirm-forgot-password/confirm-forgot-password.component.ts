@@ -4,9 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { tap, take } from 'rxjs/operators';
 
-import { ConfirmForgotPassword } from '../../data-access/store/auth.action';
-import { MatchPassword } from '../../data-access/validators/match-password';
-import { FormService } from '../core/data-access/form.service';
+import { ConfirmForgotPassword } from '@auth/core/data-access/store/auth.action';
+import { MatchPassword } from '@auth/core/data-access/validators/match-password';
+import { FormService } from '@auth/core/data-access/services/form.service';
+import { environment } from '@auth/core/environment.prod';
 import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
 @Component({
@@ -33,15 +34,16 @@ export class ConfirmForgotPasswordComponent
 
 			confirmPassword: new FormControl('', [
 				Validators.required,
-				Validators.minLength(8),
+				Validators.minLength(environment.MIN_LENGTH),
+				Validators.maxLength(environment.MAX_LENGTH),
 			]),
 		},
 		{ validators: [this.matchPassword.validate] }
 	);
 
 	constructor(
-		private matchPassword: MatchPassword,
-		private activatedRoute: ActivatedRoute,
+		private readonly matchPassword: MatchPassword,
+		private readonly activatedRoute: ActivatedRoute,
 		private formService: FormService
 	) {
 		super();

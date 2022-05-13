@@ -5,7 +5,7 @@ import { GraphQLUpload, FileUpload } from 'graphql-upload';
 import { Throttle } from '@nestjs/throttler';
 
 import { TokenAuthGuard } from '@core/guards/is-auth.guard';
-import { environment } from '@environments/environment';
+import { environment } from '@environment';
 import { MyJWTService } from '@modules/jwt/jwt.service';
 import { GqlThrottlerBehindProxyGuard } from '@core/guards/throttler/gql-throttler-behind-proxy.guard';
 import { GqlThrottlerGuard } from '@core/guards/throttler/gql-throttler.guard';

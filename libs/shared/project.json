@@ -4,12 +4,21 @@
 	"sourceRoot": "libs/shared/src",
 	"prefix": "persona",
 	"targets": {
-		"lint": {
-			"executor": "@nrwl/linter:eslint",
-			"outputs": ["{options.outputFile}"],
+		"build": {
+			"executor": "@nrwl/angular:ng-packagr-lite",
+			"outputs": ["dist/libs/shared"],
 			"options": {
-				"lintFilePatterns": ["libs/shared/**/*.ts"]
-			}
+				"project": "libs/shared/ng-package.json"
+			},
+			"configurations": {
+				"production": {
+					"tsConfig": "libs/shared/tsconfig.lib.prod.json"
+				},
+				"development": {
+					"tsConfig": "libs/shared/tsconfig.lib.json"
+				}
+			},
+			"defaultConfiguration": "production"
 		},
 		"test": {
 			"executor": "@nrwl/jest:jest",
@@ -17,6 +26,15 @@
 			"options": {
 				"jestConfig": "libs/shared/jest.config.js",
 				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/shared/src/**/*.ts",
+					"libs/shared/src/**/*.html"
+				]
 			}
 		}
 	},

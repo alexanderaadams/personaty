@@ -1,12 +1,11 @@
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Select, Store } from '@ngxs/store';
+import { Select } from '@ngxs/store';
 
+import { AuthState } from '@auth/core/data-access/store/auth.state';
+import { FormService } from '@auth/core/data-access/services/form.service';
+import { Logout } from '@auth/core/data-access/store/auth.action';
 import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
-import { AuthState } from '@core/data-access/store/auth.state';
-import { FormService } from '@core/data-access/services/form.service';
-import { Logout } from '@core/data-access/store/auth.action';
 
 @Component({
 	// eslint-disable-next-line @angular-eslint/component-selector
@@ -25,11 +24,7 @@ export class LogoutComponent
 	loginExecutingLoader$: BehaviorSubject<boolean> =
 		new BehaviorSubject<boolean>(false);
 
-	constructor(
-		private store: Store,
-		private router: Router,
-		private formService: FormService
-	) {
+	constructor(private formService: FormService) {
 		super();
 	}
 

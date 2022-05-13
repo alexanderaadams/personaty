@@ -26,9 +26,10 @@
 							name="email"
 							label="Email"
 							spellcheck="true"
-							placeholder="Ex. pat@example.com"
+							placeholder="Email"
 							type="email"
-							[formControlName]="'email'" />
+							[formControlName]="'email'"
+							attr.matAutocomplete="email" />
 
 						<mat-error *ngIf="authForm?.['controls']?.['email']?.['invalid']">
 							Please Enter Correct Email
@@ -43,7 +44,8 @@
 							label="Password"
 							[type]="hide ? 'password' : 'text'"
 							aria-label="password"
-							[formControlName]="'password'" />
+							[formControlName]="'password'"
+							attr.matAutocomplete="new-password" />
 
 						<mat-icon matSuffix (click)="hide = !hide">{{
 							hide ? 'visibility_off' : 'visibility'

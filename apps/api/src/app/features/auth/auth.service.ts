@@ -11,10 +11,11 @@ import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 
 import { UserService } from '@features/user/user.service';
-import { NodemailerService } from './utils/mail/nodemailer.service';
-import { GoogleOauth2 } from './models/google-oauth-2';
 import { MyJWTService } from '@modules/jwt/jwt.service';
 import { UserSensitiveInformation } from '@features/user/models/user-sensitive-information';
+
+import { NodemailerService } from './utils/mail/nodemailer.service';
+import { GoogleOauth2 } from './models/google-oauth-2';
 
 const scrypt = promisify(_scrypt);
 
@@ -184,7 +185,7 @@ export class AuthService {
 			return {
 				newUser,
 				token: await this.myJWTService.signToken({
-					id: user._id.toString(),
+					id: newUser._id.toString(),
 					email: newUser.email,
 				}),
 			};

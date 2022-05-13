@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store } from '@ngxs/store';
-
-import { FormService } from '@persona/authentication';
 
 @Component({
 	selector: 'persona-home',
@@ -10,11 +7,7 @@ import { FormService } from '@persona/authentication';
 	styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
-	constructor(
-		private readonly router: Router,
-		private store: Store,
-		private formService: FormService
-	) {}
+	constructor(private readonly router: Router) {}
 
 	logout() {
 		this.router.navigate(['auth', 'logout']);

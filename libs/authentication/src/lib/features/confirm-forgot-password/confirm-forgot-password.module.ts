@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ConfirmForgotPasswordComponent } from './confirm-forgot-password.component';
 import { RouterModule, Routes } from '@angular/router';
-import { AngularMaterialModule } from '../../shared/angular-material.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { ConfirmForgotPasswordComponent } from './confirm-forgot-password.component';
+import { AngularMaterialModule } from '@persona/shared';
 
 const routes: Routes = [
 	{
@@ -17,9 +18,8 @@ const routes: Routes = [
 	imports: [
 		CommonModule,
 		RouterModule.forChild(routes),
-		AngularMaterialModule,
-		FormsModule,
 		ReactiveFormsModule,
+		AngularMaterialModule,
 	],
 })
 export class ConfirmForgotPasswordModule {}

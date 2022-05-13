@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action, State, StateContext } from '@ngxs/store';
 
-import { UnsubscribeOnDestroyAdapter } from '@persona/authentication';
+import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 import { GetCsrfToken } from './app.action';
 import { CsrfTokenModel } from './app.model';
 import { AppService } from '../../../app.service';
@@ -19,7 +19,7 @@ export class AppState extends UnsubscribeOnDestroyAdapter {
 	}
 
 	@Action(GetCsrfToken)
-	getUserInfo(ctx: StateContext<CsrfTokenModel>, action: GetCsrfToken) {
+	getUserInfo(ctx: StateContext<CsrfTokenModel>, _action: GetCsrfToken) {
 		this.subs.sink = this.appService.checkConnection().subscribe({
 			next: (res: any) => {
 				ctx.patchState(res as CsrfTokenModel);

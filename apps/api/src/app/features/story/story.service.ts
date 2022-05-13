@@ -63,7 +63,7 @@ export class StoryService {
 			);
 
 			if (!checkImageLegitimacy.valid)
-				throw new HttpException(checkImageLegitimacy.error, 400);
+				throw new HttpException(checkImageLegitimacy.error || 'Error', 400);
 
 			const fileExtension: string = path.extname(storyImage.filename);
 			const fileName: string = uuidv4() + fileExtension;
