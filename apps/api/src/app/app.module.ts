@@ -13,7 +13,7 @@ import { UploadScalar } from './core/utils/graphql-data-scalar/upload.scalar';
 import { DateScalar } from './core/utils/graphql-data-scalar/date.scalar';
 import { UnhandledRoutesModule } from './modules/unhandled-routes/unhandled-routes.module';
 import { CsrfMiddleware } from './core/middlewares/csrf.middleware';
-import { AllHttpExceptionsFilter } from './core/utils/error-handeling/all-http-exceptions-filter';
+import { AllHttpExceptionsFilter } from './core/utils/error-handling/all-http-exceptions-filter';
 import { AppController } from './app.controller';
 
 // import { APP_FILTER } from '@nestjs/core';

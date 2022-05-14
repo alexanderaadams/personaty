@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { AbstractControl, FormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 @Component({
 	selector: 'lib-input',
@@ -7,22 +7,19 @@ import { AbstractControl, FormControl } from '@angular/forms';
 	styleUrls: ['./input.component.scss'],
 })
 export class InputComponent {
-	hide = false;
-
-	@Input() formInput!: string;
 	@Input() name!: string;
 	@Input() label!: string;
-	@Input() spellcheck!: string;
-	@Input() placeholder = '';
+	@Input() placeholder!: string;
 	@Input() type!: string;
-	@Input() control!: FormControl;
+	@Input() formControl!: FormControl;
 	@Input() min!: string;
 	@Input() max!: string;
-	@Input() submit!: AbstractControl;
 	@Input() autocomplete!: string;
 
+	hide = false;
+
 	showErrors() {
-		const { dirty, touched } = this.control;
+		const { dirty, touched } = this.formControl;
 		return dirty && touched;
 	}
 }

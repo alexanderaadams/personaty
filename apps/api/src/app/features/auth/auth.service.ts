@@ -16,6 +16,7 @@ import { UserSensitiveInformation } from '@features/user/models/user-sensitive-i
 
 import { NodemailerService } from './utils/mail/nodemailer.service';
 import { GoogleOauth2 } from './models/google-oauth-2';
+// import { AppError } from '@core/utils/error-handling/app-error';
 
 const scrypt = promisify(_scrypt);
 
@@ -24,7 +25,7 @@ export class AuthService {
 	constructor(
 		private readonly usersService: UserService,
 		private myJWTService: MyJWTService,
-		private readonly nodemailerService: NodemailerService
+		private readonly nodemailerService: NodemailerService // private appError: AppError
 	) {}
 
 	async hashingPassword(password: string) {
@@ -67,14 +68,7 @@ export class AuthService {
 				'Click On The Button To Verify Your Email',
 				tokenURL
 			);
-			// const hashedPassword = await this.hashingPassword(password);
-			// const newUser = await this.usersService.createUser({
-			// 	email,
-			// 	password: hashedPassword,
-			// 	birthDate,
-			// });
 			return { status: 'SENT_SIGNUP_EMAIL_SUCCESSFULLY' };
-			// return newUser;
 		} catch (err) {
 			throw new HttpException(
 				err.response.message || 'Something Went Wrong',

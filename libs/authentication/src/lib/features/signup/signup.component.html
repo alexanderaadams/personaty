@@ -29,7 +29,7 @@
 							placeholder="Email"
 							type="email"
 							[formControlName]="'email'"
-							attr.matAutocomplete="email" />
+							autocomplete="email" />
 
 						<mat-error *ngIf="authForm?.['controls']?.['email']?.['invalid']">
 							Please Enter Correct Email
@@ -45,7 +45,7 @@
 							[type]="hide ? 'password' : 'text'"
 							aria-label="password"
 							[formControlName]="'password'"
-							attr.matAutocomplete="new-password" />
+							autocomplete="new-password" />
 
 						<mat-icon matSuffix (click)="hide = !hide">{{
 							hide ? 'visibility_off' : 'visibility'
@@ -70,7 +70,8 @@
 							name="Date"
 							label="Birthday"
 							[formControlName]="'birthDate'"
-							[matDatepicker]="picker" />
+							[matDatepicker]="picker"
+							autocomplete="bday" />
 						<mat-hint>YYYY-MM-DD</mat-hint>
 						<mat-datepicker-toggle
 							matSuffix

@@ -21,7 +21,6 @@ export function app(): express.Express {
 				maxAge: 63072000,
 				includeSubDomains: true,
 			},
-			noSniff: true,
 			contentSecurityPolicy: false,
 			crossOriginEmbedderPolicy: true,
 			crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
@@ -32,6 +31,15 @@ export function app(): express.Express {
 			referrerPolicy: {
 				policy: 'no-referrer',
 			},
+			noSniff: true,
+			originAgentCluster: true,
+			dnsPrefetchControl: {
+				allow: true,
+			},
+			permittedCrossDomainPolicies: {
+				permittedPolicies: 'by-content-type',
+			},
+			xssFilter: true,
 		})
 	);
 	server.use(compression());

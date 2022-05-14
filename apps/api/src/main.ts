@@ -28,8 +28,10 @@ async function bootstrap() {
 		credentials: true,
 	};
 
+	// CORS configuration
 	app.enableCors(corsOptions);
 
+	// Configuration for file size using graphql
 	app.use(
 		'/graphql',
 		graphqlUploadExpress({
@@ -37,44 +39,77 @@ async function bootstrap() {
 			maxFiles: 1,
 		})
 	);
-	app.use(cookieParser());
-	app.use(mongoSanitize());
-	app.use(hpp());
-	app.use(compression());
-	app.use(
-		csurf({
-			cookie: {
-				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
-				sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
-				secure: environment.COOKIE_ATTRIBUTE_SECURE,
-				path: '/',
-			},
-			sessionKey: environment.CSRF_SESSION_KEY,
-		})
-	);
 
-	app.use(
-		helmet({
-			frameguard: { action: 'DENY' },
-			hsts: {
-				maxAge: 63072000,
-				includeSubDomains: true,
-			},
-			noSniff: true,
-			crossOriginEmbedderPolicy: true,
-			crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
-			crossOriginResourcePolicy: { policy: 'same-origin' },
-		})
-	);
+	app.use(cookieParser());
+
+	// Data pollution protection
+	app.use(hpp());
+
+	//
+	app.use(compression());
+
+	// CSRF protection
+	// app.use(
+	// 	csurf({
+	// 		cookie: {
+	// 			httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
+	// 			sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
+	// 			secure: environment.COOKIE_ATTRIBUTE_SECURE,
+	// 			path: '/',
+	// 		},
+	// 		sessionKey: environment.CSRF_SESSION_KEY,
+	// 	})
+	// );
+
+	//	Data sanitization against NoSql query injection
+	app.use(mongoSanitize());
+
+	// Data sanitization against XSS
+
+	// heroku works behind a proxy
 	if (environment.production) {
 		app.set('trust proxy', 1);
+
+		// A wide range of protection policies
+		app.use(
+			helmet({
+				frameguard: { action: 'DENY' },
+				hsts: {
+					maxAge: 63072000,
+					includeSubDomains: true,
+				},
+				crossOriginEmbedderPolicy: true,
+				crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
+				crossOriginResourcePolicy: { policy: 'same-origin' },
+				expectCt: {
+					enforce: true,
+				},
+				referrerPolicy: {
+					policy: 'no-referrer',
+				},
+				noSniff: true,
+				originAgentCluster: true,
+				dnsPrefetchControl: {
+					allow: true,
+				},
+				permittedCrossDomainPolicies: {
+					permittedPolicies: 'by-content-type',
+				},
+				xssFilter: true,
+			})
+		); // handling
 	}
 
 	app.setGlobalPrefix(globalPrefix);
 
 	app.useGlobalPipes(
 		new ValidationPipe({
-			whitelist: true,
+			forbidNonWhitelisted: true,
+			stopAtFirstError: true,
+			validationError: {
+				target: true,
+				value: true,
+			},
 		})
 	);
 

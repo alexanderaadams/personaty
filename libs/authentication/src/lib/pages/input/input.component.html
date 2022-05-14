@@ -1,33 +1,16 @@
 <mat-form-field appearance="fill">
 	<mat-label>{{ label }}</mat-label>
 	<input
-		*ngIf="name !== 'Date'"
 		matInput
-		value="primary"
+		class="row justify-content-center align-items-center"
 		[name]="name"
-		[spellcheck]="spellcheck"
 		[placeholder]="placeholder"
-		required
 		[type]="type"
-		[formControl]="control"
-		[attr.matAutocomplete]="autocomplete"
-		[type]="hide ? 'password' : 'text'" />
+		[formControl]="formControl"
+		[matAutocomplete]="autocomplete" />
 
-	<!-- <div *ngIf="name === 'Date'">
-		<input
-			matInput
-			[matDatepicker]="picker"
-			required
-			[min]="min"
-			[max]="max"
-			[formControl]="control"
-			[attr.matAutocomplete]="autocomplete"
-			value="primary"
-		/>
-		<mat-hint>DD/MM/YYYY</mat-hint>
-		<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-		<mat-datepicker touchUi #picker></mat-datepicker>
-	</div> -->
+	<mat-autocomplete autoActiveFirstOption #autocomplete="matAutocomplete">
+	</mat-autocomplete>
 
 	<mat-icon *ngIf="type === 'password'" matSuffix (click)="hide = !hide">{{
 		hide ? 'visibility_off' : 'visibility'
@@ -43,31 +26,7 @@
 
 	<mat-error *ngIf="showErrors() && type === 'password'">
 		Password must be at least
-		{{ control?.['errors']?.['minlength']?.requiredLength }}
+		{{ formControl?.['errors']?.['minlength']?.requiredLength }}
 		characters.
 	</mat-error>
 </mat-form-field>
-<!--
-<div [ngClass]="{ notVisible: !showErrors() }" >
-	<p *ngIf="control?.['errors']?.['minlength']">
-		❗️ Password must be at lest
-		{{ control?.['errors']?.['minlength']?.requiredLength }}
-		characters.
-	</p>
-
-	<p *ngIf="control?.['errors']?.['maxlength']">
-		❗️ Password must be no longer than
-		{{ control?.['errors']?.['maxlength']?.requiredLength }}
-		characters.
-	</p>
-
-	<p *ngIf="control?.['errors']?.['pattern']">
-		❗️ Pleader enter a valid email
-	</p>
-
-	<p *ngIf="control?.['errors']?.['required']">❗️ This field is requierd</p>
-
-	<p *ngIf="control?.['errors']?.['notAvailable']">
-		❗️ Email is already taken
-	</p>
-</div> -->
