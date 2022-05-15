@@ -1,5 +1,6 @@
 import {
 	DynamicModule,
+	HttpStatus,
 	MiddlewareConsumer,
 	Module,
 	NestModule,
@@ -8,7 +9,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { graphqlUploadExpress } from 'graphql-upload';
-import { GraphQLError, GraphQLFormattedError } from 'graphql';
+import { GraphQLError, GraphQLFormattedError, SourceLocation } from 'graphql';
 
 import { UserModule } from './features/user/users.module';
 import { AuthModule } from './features/auth/auth.module';
@@ -52,11 +53,20 @@ export class GraphQLWithUploadModule implements NestModule {
 							};
 						},
 						formatError: (error: GraphQLError) => {
+							const exception = error.extensions?.exception;
+
 							const graphQLFormattedError: GraphQLFormattedError = {
 								message:
-									error.extensions?.exception?.['response']?.message ||
-									error.message ||
+									exception?.['response']?.message ??
+									error.message ??
 									'Something went wrong',
+								path: error.path as ReadonlyArray<string | number>,
+								extensions: error.extensions,
+								locations: (environment.production
+									? undefined
+									: error.locations ??
+									  error.stack ??
+									  undefined) as ReadonlyArray<SourceLocation>,
 							};
 							return graphQLFormattedError;
 						},

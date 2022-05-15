@@ -56,7 +56,7 @@
 						<mat-error
 							*ngIf="authForm?.['controls']?.['password']?.['invalid']">
 							Password must be at least
-							{{ authForm?.['controls']?.['password']?.['errors']?.['minlength']?.requiredLength	|| '8' }}
+							{{ authForm?.['controls']?.['password']?.['errors']?.['minlength']?.requiredLength	?? '8' }}
 							characters.
 						</mat-error>
 					</mat-form-field>
@@ -145,13 +145,13 @@
 	</div>
 </div>
 <!-- </div> -->
-<!-- <lib-email-token
+<!-- <lib-email-authToken
 	*ngIf="(authForm?.['errors']?.['invalid']) && showModal"
 	header="Invalid username or password ❗️"
 	(dismiss)="showModal = false"
-></lib-email-token>
-<lib-email-token
+></lib-email-authToken>
+<lib-email-authToken
 	*ngIf="(authForm?.['controls']?.['email']?.['errors']?.['noConnection']) && showModal"
 	header="Check your internet connection"
 	(dismiss)="showModal = false"
-></lib-email-token> -->
+></lib-email-authToken> -->

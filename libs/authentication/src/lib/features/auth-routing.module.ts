@@ -29,7 +29,7 @@ const routes: Routes = [
 			),
 	},
 	{
-		path: 'confirm-forgot-password/:token',
+		path: 'confirm-forgot-password/:authToken',
 		canActivate: [NotAuthGuard],
 		loadChildren: () =>
 			import('./confirm-forgot-password/confirm-forgot-password.module').then(

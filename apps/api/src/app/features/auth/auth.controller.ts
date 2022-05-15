@@ -27,15 +27,15 @@ export class AuthController {
 	// 	return status;
 	// }
 
-	@Get('signup/:token')
+	@Get('signup/:authToken')
 	async signupToken(
-		@Param('token') token: string,
+		@Param('authToken') authToken: string,
 		@Res({ passthrough: true }) res: Response
 	) {
-		const user = await this.authService.signupToken(token);
+		const user = await this.authService.signupToken(authToken);
 
 		if (user) {
-			res.cookie('token', user.token, {
+			res.cookie('authToken', user.authToken, {
 				maxAge: 3600000 * 24,
 				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 				sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
@@ -66,7 +66,7 @@ export class AuthController {
 	// 		loginUser.password
 	// 	);
 
-	// 	res.cookie('token', user.token, {
+	// 	res.cookie('authToken', user.authToken, {
 	// maxAge: 3600000 * 24,
 	// httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 	// sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
@@ -79,27 +79,27 @@ export class AuthController {
 	// @Get('logout')
 	// @UseGuards(TokenAuthGuard)
 	// async logout(@Res({ passthrough: true }) res: Response) {
-	// 	res.clearCookie('token', { httpOnly: true });
+	// 	res.clearCookie('authToken', { httpOnly: true });
 	// 	return { status: 'logged out', authenticated: false };
 	// }
 
 	// @Post('forgot-password')
 	// async sendResetPasswordEmail(@Body() resetPasswordEmail: { email: string }) {
-	// 	// console.log(resetPasswordEmail);
+
 	// 	await this.authService.sendResetPasswordEmail(resetPasswordEmail.email);
 	// 	return { status: 'email has been send' };
 	// }
 
-	// @Post('reset-password/:token')
+	// @Post('reset-password/:authToken')
 	// async verifyResetPassword(
 	// 	@Body()
-	// 	credentials: { password: string; confirmPassword: string; token: string },
+	// 	credentials: { password: string; confirmPassword: string; authToken: string },
 	// 	@Res({ passthrough: true }) res: Response
 	// ) {
-	// 	// console.log(credentials);
+
 	// 	const user = await this.authService.verifyResetPassword(credentials);
 
-	// 	res.cookie('token', user.token, {
+	// 	res.cookie('authToken', user.authToken, {
 	// maxAge: 3600000 * 24,
 	// httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 	// sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
@@ -123,7 +123,7 @@ export class AuthController {
 			req.user as GoogleOauth2
 		);
 
-		res.cookie('token', user.token, {
+		res.cookie('authToken', user.authToken, {
 			maxAge: 3600000 * 24,
 			httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 			sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,

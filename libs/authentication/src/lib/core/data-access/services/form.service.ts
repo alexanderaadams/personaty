@@ -68,8 +68,7 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 		snackBarFailedMessage: string,
 		snackBarSuccessMessage: string
 	) {
-		let i = 1;
-		// this.ngUnUnsubscribeFollowAuthenticationStatus.next(true);
+
 		return this.actions$.pipe(
 			ofActionCompleted(action),
 			tap(() => {
@@ -79,7 +78,7 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 					.pipe(
 						tap(({ status, authenticated }: any) => {
 							if (authenticated !== null && status !== null) {
-								console.log(authenticated, i++);
+
 								this.ngUnUnsubscribeFollowAuthenticationStatus.next(false);
 								this.loginExecutingLoader$.next(false);
 								this.formValue$.next('');

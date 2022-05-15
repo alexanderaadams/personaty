@@ -27,12 +27,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 		const user = {
 			googleId: id.toString(),
 			username: username,
-			email: (emails || [])[0]?.value || 'email Does Not Exist',
-			email_verified: Boolean((emails || [])[0]?.value) || false,
-			locale: _json.locale || 'en',
+			email: (emails ?? [])[0]?.value ?? 'email Does Not Exist',
+			email_verified: Boolean((emails ?? [])[0]?.value) ?? false,
+			locale: _json.locale ?? 'en',
 			fullName: `${name?.givenName} ${name?.familyName}`,
 			profilePicture:
-				(photos || [])[0]?.value || 'Profile Picture Does Not Exist',
+				(photos ?? [])[0]?.value ?? 'Profile Picture Does Not Exist',
 		};
 		return user;
 	}

@@ -32,8 +32,8 @@
 
 // 	@Get(':imageId')
 // 	async getImage(@Param('imageId') imageId: string, @Res() res: Response) {
-// 		// console.log(imageId);
-// 		// const { profilePicture } =
+
+// const { profilePicture } =
 
 // 		if (await this.imageService.getImage(imageId))
 // 			return res.sendFile(imageId, { root: 'upload' });

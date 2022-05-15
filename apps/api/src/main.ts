@@ -12,6 +12,20 @@ import { environment } from './environments/environment';
 import { AppModule } from './app/app.module';
 import { graphqlUploadExpress } from 'graphql-upload';
 
+process.on('uncaughtException', (err: Error) => {
+	Logger.log('UNCAUGHT EXCEPTION! 💥');
+	Logger.log(err?.name ?? 'Error', err?.message ?? 'Something went wrong');
+});
+
+process.on(
+	'unhandledRejection',
+	(err: Record<string, unknown> | null | undefined) => {
+		Logger.log('UNHANDLED REJECTION! 💥 ');
+		Logger.log(err?.name ?? 'Error', err?.message ?? 'Something went wrong');
+		process.exit(0);
+	}
+);
+
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
@@ -47,19 +61,6 @@ async function bootstrap() {
 
 	//
 	app.use(compression());
-
-	// CSRF protection
-	// app.use(
-	// 	csurf({
-	// 		cookie: {
-	// 			httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
-	// 			sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
-	// 			secure: environment.COOKIE_ATTRIBUTE_SECURE,
-	// 			path: '/',
-	// 		},
-	// 		sessionKey: environment.CSRF_SESSION_KEY,
-	// 	})
-	// );
 
 	//	Data sanitization against NoSql query injection
 	app.use(mongoSanitize());
@@ -97,7 +98,20 @@ async function bootstrap() {
 				},
 				xssFilter: true,
 			})
-		); // handling
+		);
+
+		// CSRF protection
+		app.use(
+			csurf({
+				cookie: {
+					httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
+					sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
+					secure: environment.COOKIE_ATTRIBUTE_SECURE,
+					path: '/',
+				},
+				sessionKey: environment.CSRF_SESSION_KEY,
+			})
+		);
 	}
 
 	app.setGlobalPrefix(globalPrefix);
@@ -122,8 +136,6 @@ async function bootstrap() {
 	Logger.log(
 		`🧑‍💻 Application is running on: ${environment.ENVIRONMENT_NAME} environment`
 	);
-
-	// console.log(whitelist);
 }
 
 bootstrap();

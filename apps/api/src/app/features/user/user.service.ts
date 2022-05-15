@@ -33,93 +33,61 @@ export class UserService {
 		accessToken?: string;
 		refreshToken?: string;
 	}): Promise<UserInfo> {
-		try {
-			return (await this.userModel.create(
-				user
-			)) as unknown as Promise<UserInfo>;
-		} catch (err) {
-			throw new ConflictException(err);
-		}
+		return (await this.userModel.create(user)) as unknown as Promise<UserInfo>;
 	}
 
 	async findUserById(id: string): Promise<UserModel | null> {
-		try {
-			const user = await this.userModel.findById(id).populate('stories').exec();
+		const user = await this.userModel.findById(id).populate('stories').exec();
 
-			if (!user) return null;
+		if (!user) return null;
 
-			return user as unknown as Promise<UserModel>;
-		} catch (err) {
-			throw new HttpException('Something Went Wrong', 500);
-		}
+		return user as unknown as Promise<UserModel>;
 	}
 
-	async findOne(payload: object): Promise<UserInfo |null> {
-		try {
-			const user = await this.userModel.findOne(payload).exec();
+	async findOne(payload: object): Promise<UserInfo | null> {
+		const user = await this.userModel.findOne(payload).exec();
 
-			if (!user) return null;
+		if (!user) return null;
 
-			return user as unknown as Promise<UserInfo>;
-		} catch (err) {
-			throw new HttpException('Something Went Wrong', 500);
-		}
+		return user as unknown as Promise<UserInfo>;
 	}
 
 	async getUserSensitiveInformation(
 		payload: object
-	): Promise<UserSensitiveInformation|null> {
-		try {
-			const user = await this.userModel
-				.findOne(payload)
-				.select('_id password role')
-				.exec();
+	): Promise<UserSensitiveInformation | null> {
+		const user = await this.userModel
+			.findOne(payload)
+			.select('_id password role')
+			.exec();
 
-			if (!user) return null;
+		if (!user) return null;
 
-			return user as unknown as Promise<UserSensitiveInformation>;
-		} catch (err) {
-			throw new HttpException('Something Went Wrong', 500);
-		}
+		return user as unknown as Promise<UserSensitiveInformation>;
 	}
 
 	async findAllUsers(): Promise<UserInfo> {
-		try {
-			return (await this.userModel
-				.find()
-				.exec()) as unknown as Promise<UserInfo>;
-		} catch (err) {
-			throw new HttpException('Something Went Wrong', 500);
-		}
+		return (await this.userModel.find().exec()) as unknown as Promise<UserInfo>;
 	}
 
 	async updateUser(id: string, attrs: object): Promise<UserInfo> {
-		try {
-			const user = await this.userModel
-				.findByIdAndUpdate(
-					id,
-					{ ...attrs, updatedAt: Date.now() },
-					{
-						new: true,
-					}
-				)
-				.exec();
+		const user = await this.userModel
+			.findByIdAndUpdate(
+				id,
+				{ ...attrs, updatedAt: Date.now() },
+				{
+					new: true,
+				}
+			)
+			.exec();
 
-			if (!user) throw new HttpException('Content Not Found', 203);
+		if (!user) throw new HttpException('Content Not Found', 203);
 
-			return user as unknown as Promise<UserInfo>;
-		} catch (_) {
-			throw new BadGatewayException('Something Went Wrong');
-		}
+		return user as unknown as Promise<UserInfo>;
 	}
 
 	async deleteUser(id: string): Promise<null> {
-		try {
-			await this.userModel.findByIdAndDelete(id).exec();
+		await this.userModel.findByIdAndDelete(id).exec();
 
-			return null as unknown as Promise<null>;
-		} catch (_) {
-			throw new BadGatewayException('Something Went Wrong');
-		}
+		return null as unknown as Promise<null>;
 	}
 }

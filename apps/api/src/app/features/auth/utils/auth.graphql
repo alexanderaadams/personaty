@@ -48,7 +48,7 @@ input Confirm_Forgot_Password_Input {
 
 	confirmPassword: String!
 
-	token: String!
+	authToken: String!
 }
 
 type User {

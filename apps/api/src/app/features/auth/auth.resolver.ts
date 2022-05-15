@@ -9,7 +9,6 @@ import { AuthenticationStatus } from './models/authentication-status';
 import { SignupDto } from './models/dto/signup.dto';
 import { LoginDto } from './models/dto/login.dto';
 import { sendForgotPasswordEmailDto } from './models/dto/forgot-password.dto';
-import { ConfirmForgotPasswordDto } from './models/dto/confirm-forgot-password-with-token.dto';
 
 import { TokenAuthGuard } from '@core/guards/is-auth.guard';
 import { GqlThrottlerBehindProxyGuard } from '@core/guards/throttler/gql-throttler-behind-proxy.guard';
@@ -17,6 +16,7 @@ import { GqlThrottlerGuard } from '@core/guards/throttler/gql-throttler.guard';
 import { MyJWTService } from '@modules/jwt/jwt.service';
 import { environment } from '@environment';
 import { FindUser } from '@core/models/find-user';
+import { ConfirmForgotPasswordDto } from './models/dto/confirm-forgot-password-with-token.dto';
 
 @UseGuards(
 	environment.production ? GqlThrottlerBehindProxyGuard : GqlThrottlerGuard
@@ -46,17 +46,18 @@ export class AuthResolver {
 
 	@Mutation(() => AuthenticationStatus, {
 		name: 'signup',
-		description: 'send email contains token to be used for signing up',
+		description: 'send email contains authToken to be used for signing up',
 	})
 	async signup(
 		@Args('user', { type: () => SignupDto }) signupUser: SignupDto,
 		@Context('req') req: Request
 	): Promise<AuthenticationStatus> {
-		// console.log(req?.headers);
-		const status = await this.authService.sendSignupEmail(
-			signupUser.email,
-			signupUser.password,
-			signupUser.birthDate,
+		const { email, password, birthDate } = signupUser;
+		console.log('email', email);
+		const status = await this.authService.sendSignupEmailContainsAuthToken(
+			email,
+			password,
+			birthDate,
 			`${req?.protocol}://${req?.headers?.host}`
 		);
 
@@ -65,7 +66,7 @@ export class AuthResolver {
 
 	@Mutation(() => AuthenticationStatus, {
 		name: 'login',
-		description: 'Validate account using the sended token',
+		description: 'Validate account using the sended authToken',
 	})
 	async login(
 		@Args('user', { type: () => LoginDto }) login: LoginDto,
@@ -74,7 +75,7 @@ export class AuthResolver {
 		const user = await this.authService.login(login.email, login.password);
 
 		if (user)
-			res.cookie('auth', user.token, {
+			res.cookie('auth', user.authToken, {
 				maxAge: 1000 * 60 * 60 * 24 * 7 * 12,
 				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 				sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
@@ -99,16 +100,16 @@ export class AuthResolver {
 	@Query(() => AuthenticationStatus, {
 		name: 'isAuthenticated',
 		description:
-			'Check if the user is Authenticated (Logged in and has working token)',
+			'Check if the user is Authenticated (Logged in and has working authToken)',
 	})
-	// @UseGuards(TokenAuthGuard)
 	async isAuthenticated(
 		@Context('req') req: Request
 	): Promise<AuthenticationStatus> {
-		const token = await this.myJWTService.verifyToken(req?.cookies.token);
-		// console.log('auth', token, req?.cookies.token);
+		const authToken = await this.myJWTService.verifyToken(
+			req?.cookies.authToken
+		);
 
-		if (token)
+		if (authToken)
 			return { status: 'CORRECTLY_AUTHENTICATED', authenticated: true };
 
 		return { status: 'NOT_AUTHENTICATED', authenticated: false };
@@ -116,7 +117,7 @@ export class AuthResolver {
 
 	@Mutation(() => sendForgotPasswordEmailDto, {
 		name: 'sendForgotPasswordEmail',
-		description: 'Validate account using the sended token',
+		description: 'Validate account using the sended authToken',
 	})
 	async sendForgotPasswordEmail(
 		@Args('user', { type: () => Object })
@@ -125,7 +126,7 @@ export class AuthResolver {
 	): Promise<AuthenticationStatus> {
 		await this.authService.sendForgotPasswordEmail(
 			sendForgotPasswordEmail.email,
-			req?.headers?.origin || ''
+			req?.headers?.origin ?? ''
 		);
 		return {
 			status: 'FORGOT_PASSWORD_EMAIL_SENT_SUCCESSFULLY',
@@ -135,7 +136,7 @@ export class AuthResolver {
 
 	@Mutation(() => AuthenticationStatus, {
 		name: 'confirmForgotPassword',
-		description: 'Email token to reset the password',
+		description: 'Validate the confirmPassword and Password and the authToken',
 	})
 	async confirmForgotPassword(
 		@Args('credentials', { type: () => String })
@@ -143,11 +144,10 @@ export class AuthResolver {
 
 		@Context('res') res: Response
 	): Promise<AuthenticationStatus> {
-		// console.log(credentials);
 		const user = await this.authService.confirmForgotPassword(credentials);
 
 		if (user)
-			res.cookie('auth', user.token, {
+			res.cookie('auth', user.authToken, {
 				maxAge: 1000 * 60 * 60 * 24 * 7 * 12,
 				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 				sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,

@@ -64,7 +64,7 @@ export class ConfirmForgotPasswordComponent
 			return this.authForm.setErrors({ invalid: true });
 		}
 
-		const token: string = this.activatedRoute.snapshot.params['token'];
+		const authToken: string = this.activatedRoute.snapshot.params['authToken'];
 
 		this.formService.formValue$.next(this.authForm.value);
 
@@ -84,7 +84,7 @@ export class ConfirmForgotPasswordComponent
 		this.formService.goAuthenticate(
 			new ConfirmForgotPassword({
 				...this.authForm.value,
-				token,
+				authToken,
 			})
 		);
 	}

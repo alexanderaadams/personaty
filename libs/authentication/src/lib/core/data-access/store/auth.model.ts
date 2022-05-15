@@ -26,5 +26,5 @@ export interface LoginCredentials {
 export interface ConfirmForgotPasswordCredentials {
 	password: string;
 	confirmPassword: string;
-	token: string;
+	authToken: string;
 }

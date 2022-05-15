@@ -20,7 +20,11 @@ export class SendForgotPasswordEmail {
 export class ConfirmForgotPassword {
 	static readonly type = '[Auth] Confirm Forgot Password';
 	constructor(
-		public payload: { password: string; confirmPassword: string; token: string }
+		public payload: {
+			password: string;
+			confirmPassword: string;
+			authToken: string;
+		}
 	) {}
 }
 

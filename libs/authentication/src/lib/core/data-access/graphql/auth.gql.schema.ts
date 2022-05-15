@@ -18,8 +18,8 @@ export const SIGNUP = gql`
 `;
 
 export const SIGNUP_TOKEN = gql`
-	mutation ($token: String!) {
-		signupToken(token: $token) {
+	mutation ($authToken: String!) {
+		signupToken(authToken: $authToken) {
 			status
 			authenticated
 		}

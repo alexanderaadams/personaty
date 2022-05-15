@@ -20,8 +20,8 @@ export class AdminService {
 			}),
 			catchError((err) => {
 				throw new HttpException(
-					err?.message || err?.response?.message || 'Something Went Wrong',
-					err?.status || err?.response?.statusCode || 500
+					err?.message ?? err?.response?.message ?? 'Something Went Wrong',
+					err?.status ?? err?.response?.statusCode ?? 500
 				);
 			})
 		);

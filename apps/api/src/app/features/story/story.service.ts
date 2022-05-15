@@ -1,5 +1,4 @@
 import {
-	BadGatewayException,
 	HttpException,
 	Injectable,
 	UnauthorizedException,
@@ -14,6 +13,7 @@ import * as path from 'path';
 import { MyJWTService } from '@modules/jwt/jwt.service';
 import { ImageService } from '@core/utils/image/image.service';
 import { UserDocument } from '@features/user/models/user-db/user-db.schema';
+import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 
 import { StoryDbModel } from './models/story-db/story-db.model';
 import { CreateStoryDto } from './models/dto/create-story.dto';
@@ -22,8 +22,8 @@ import { StoryDocument } from './models/story-db/story-db.schema';
 
 @Injectable()
 export class StoryService {
-	async checkUserHasStory(token: string, id: string) {
-		const authUser = await this.myJWTService.verifyToken(token);
+	async checkUserHasStory(authToken: string, id: string) {
+		const authUser = await this.myJWTService.verifyToken(authToken);
 
 		const story = await this.storyModel.findById(id);
 
@@ -45,94 +45,79 @@ export class StoryService {
 		private readonly imageService: ImageService
 	) {}
 
+	@TryCatchWrapper()
 	async createStory(
-		token: string,
+		authToken: string,
 		story: CreateStoryDto,
 		storyImage: FileUpload,
 		hostUrl: string
 	): Promise<StoryDbModel> {
-		try {
-			const authenticatedUser = await this.myJWTService.verifyToken(token);
+		const authenticatedUser = await this.myJWTService.verifyToken(authToken);
 
-			const user = await this.userModel.findById(authenticatedUser.id);
+		const user = await this.userModel.findById(authenticatedUser.id);
 
-			if (!user) throw new HttpException('User Does not exist', 404);
+		if (!user) throw new HttpException('User Does not exist', 404);
 
-			const checkImageLegitimacy = await this.imageService.checkImageLegitimacy(
-				storyImage
-			);
+		const checkImageLegitimacy = await this.imageService.checkImageLegitimacy(
+			storyImage
+		);
 
-			if (!checkImageLegitimacy.valid)
-				throw new HttpException(checkImageLegitimacy.error || 'Error', 400);
+		if (!checkImageLegitimacy.valid)
+			throw new HttpException(checkImageLegitimacy.error ?? 'Error', 400);
 
-			const fileExtension: string = path.extname(storyImage.filename);
-			const fileName: string = uuidv4() + fileExtension;
+		const fileExtension: string = path.extname(storyImage.filename);
+		const fileName: string = uuidv4() + fileExtension;
 
-			const storeImage = new Promise((resolve, reject) =>
-				storyImage
-					.createReadStream()
-					.pipe(
-						createWriteStream(
-							`${checkImageLegitimacy.fullImagePath}/${fileName}`
-						)
-					)
-					.on('finish', () => resolve(true))
-					.on('error', () => reject(false))
-			);
+		const storeImage = new Promise((resolve, reject) =>
+			storyImage
+				.createReadStream()
+				.pipe(
+					createWriteStream(`${checkImageLegitimacy.fullImagePath}/${fileName}`)
+				)
+				.on('finish', () => resolve(true))
+				.on('error', () => reject(false))
+		);
 
-			if (!(await storeImage))
-				throw new HttpException('Something went wrong', 500);
+		if (!(await storeImage))
+			throw new HttpException('Something went wrong', 500);
 
-			return (await this.storyModel.create({
-				...story,
-				storyImageUrl: `${hostUrl}/story/${fileName}`,
-				created_at: Date.now(),
-			})) as unknown as Promise<StoryDbModel>;
+		return (await this.storyModel.create({
+			...story,
+			storyImageUrl: `${hostUrl}/story/${fileName}`,
+			created_at: Date.now(),
+		})) as unknown as Promise<StoryDbModel>;
 
-			// await this.userModel.updateOne(
-			// 	{ _id: (await newStory).userId.toString() },
-			// 	{ $push: { stories: (await newStory)._id.toString() } }
-			// );
-		} catch (err) {
-			throw new HttpException('Something Went Wrong', 500);
-		}
+		// await this.userModel.updateOne(
+		// 	{ _id: (await newStory).userId.toString() },
+		// 	{ $push: { stories: (await newStory)._id.toString() } }
+		// );
 	}
 
 	async getStory(id: string): Promise<StoryDbModel> {
-		try {
-			return (await this.storyModel.findById(
-				id
-			)) as unknown as Promise<StoryDbModel>;
-		} catch (err) {
-			throw new BadGatewayException(err);
-		}
+		return (await this.storyModel.findById(
+			id
+		)) as unknown as Promise<StoryDbModel>;
 	}
 
+	@TryCatchWrapper()
 	async updateStory(
-		token: string,
+		authToken: string,
 		id: string,
 		attrs: UpdateStoryDto
 	): Promise<StoryDbModel> {
-		try {
-			await this.checkUserHasStory(token, id);
+		await this.checkUserHasStory(authToken, id);
 
-			return (await this.storyModel.findByIdAndUpdate(id, attrs, {
-				new: true,
-			})) as unknown as Promise<StoryDbModel>;
-		} catch (err) {
-			throw new HttpException('Something Went Wrong', 500);
-		}
+		return (await this.storyModel.findByIdAndUpdate(id, attrs, {
+			new: true,
+		})) as unknown as Promise<StoryDbModel>;
 	}
 
-	async deleteStory(token: string, id: string): Promise<null> {
-		try {
-			await this.checkUserHasStory(token, id);
+	@TryCatchWrapper()
+	async deleteStory(authToken: string, id: string): Promise<null> {
+		await this.checkUserHasStory(authToken, id);
 
-			return (await this.storyModel.findByIdAndRemove(
-				id
-			)) as unknown as Promise<null>;
-		} catch (err) {
-			throw new HttpException('Something Went Wrong', 500);
-		}
+		return (await this.storyModel.findByIdAndRemove(
+			id
+		)) as unknown as Promise<null>;
 	}
 }

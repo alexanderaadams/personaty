@@ -16,17 +16,17 @@ export class AdminGuard implements CanActivate {
 	) {}
 
 	async canActivate(context: ExecutionContext) {
-		try {
+
 			const request = context.switchToHttp().getRequest();
 
-			const token = await this.myJWTService.verifyToken(request.cookies.token);
+			const authToken = await this.myJWTService.verifyToken(
+				request.cookies.authToken
+			);
 			const user = await this.userService.getUserSensitiveInformation({
-				username: token.username,
+				username: authToken.username,
 			});
 
 			return user?.role === 'admin';
-		} catch (err) {
-			throw new UnauthorizedException('Try To Login');
-		}
+
 	}
 }

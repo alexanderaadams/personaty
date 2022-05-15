@@ -11,9 +11,9 @@ export class NodemailerService {
 		to: string,
 		subject: string,
 		text: string,
-		tokenURL: string
+		authTokenURL: string
 	): void {
-		// url(tokenURL);
+		console.log('to', to);
 
 		const html = `		<div
 style="
@@ -35,12 +35,12 @@ style="
 	</p>
 </div>
 <a
-href=${tokenURL}
+href=${authTokenURL}
 id="url"
 style="
 	text-decoration: none;
-	background-color: #8a2be2;
-	color: rgb(210, 210, 210);
+	background-color: #020202;
+	color: #ddd;
 	border-radius: 1rem;
 	width: 8rem;
 	padding: 1rem;
@@ -58,13 +58,8 @@ style="
 				text: text, // plaintext body
 				html: html, // HTML body content
 			})
-			// .then(() => {
-			// console.log(success);
-			// })
 			.catch((err) => {
-				// console.log(err);
 				return err;
-				// throw new HttpException('Something Went Wrong', 500);
 			});
 	}
 }

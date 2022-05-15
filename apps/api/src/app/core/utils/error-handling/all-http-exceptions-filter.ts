@@ -19,11 +19,7 @@ export class AllHttpExceptionsFilter
 		// constructor method, thus we should resolve it here.
 		const { httpAdapter } = this.httpAdapterHost;
 
-		if (host.getType<GqlContextType>() === 'graphql') {
-			throw exception;
-		}
-
-		const contextType = host.getType();
+		if (host.getType<GqlContextType>() === 'graphql') throw exception;
 
 		const checkInstanceofHttpException = exception instanceof HttpException;
 
@@ -44,13 +40,6 @@ export class AllHttpExceptionsFilter
 			message: httpMessage,
 			path: httpAdapter.getRequestUrl(ctx.getRequest()),
 		};
-
-		// eslint-disable-next-line no-constant-condition
-		// if (contextType !== 'http' || 'ws' || 'rpc') {
-		// 	ctx = GqlArgumentsHost.create(host);
-		// }
-
-		// console.log(contextType, exception);
 
 		httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
 	}

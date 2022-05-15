@@ -14,7 +14,7 @@ export class AppService {
 	checkConnection() {
 		return this.http
 			.get(
-				`${environment.BACKEND_URL}/${environment.BACKEND_BASE_URL}/csrf-token`,
+				`${environment.BACKEND_URL}/${environment.BACKEND_BASE_URL}/csrf-authToken`,
 				{
 					withCredentials: true,
 				}

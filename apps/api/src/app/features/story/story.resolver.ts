@@ -42,7 +42,6 @@ export class StoryResolver {
 		storyImage: FileUpload,
 		@Context('req') req: Request
 	): Promise<StoryDbModel> {
-		console.log(story, storyImage);
 
 		return this.storyService.createStory(
 			req.cookies.auth,

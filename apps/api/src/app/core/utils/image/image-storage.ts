@@ -2,6 +2,7 @@
 // import { v4 as uuidv4 } from 'uuid';
 // import * as path from 'path';
 // import { File } from '../models/graphql.schema';
+import { HttpException, HttpStatus } from '@nestjs/common';
 import * as fs from 'fs';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const mmm = require('mmmagic'),
@@ -20,7 +21,6 @@ const validMimeType: validMimeType[] = ['image/png', 'image/jpg', 'image/jpeg'];
 // 			const fileExtension: string = path.extname(file.filename);
 // 			const fileName: string = uuidv4() + fileExtension;
 
-// 			// console.log(file);
 // 			cb(null, fileName);
 // 		},
 // 	}),
@@ -48,7 +48,7 @@ export const isFileExtensionSafe = async (fullFilePath: string) => {
 		});
 	};
 
-	const isMimeTypeLegit = validMimeType.includes(
+	const isMimeTypeLegit: boolean = validMimeType.includes(
 		(await bitmap(fullFilePath)) as any
 	);
 
@@ -60,7 +60,16 @@ export const removeFile = (fullFilePath: string): void => {
 		fs.unlink(fullFilePath, () => {
 			return;
 		});
-	} catch (err) {
-		console.log(err);
+	} catch (error) {
+		throw new HttpException(
+			{
+				statusCode:
+					error?.response?.statusCode ?? HttpStatus.INTERNAL_SERVER_ERROR,
+				message:
+					error?.response?.message ?? error?.message ?? 'Something Went Wrong',
+				error: 'Not Found',
+			},
+			error?.response?.error ?? HttpStatus.INTERNAL_SERVER_ERROR
+		);
 	}
 };

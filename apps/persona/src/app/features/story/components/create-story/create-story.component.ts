@@ -48,7 +48,7 @@ export class CreateStoryComponent extends UnsubscribeOnDestroyAdapter {
 	}
 
 	async add(event: MatChipInputEvent): Promise<void> {
-		const value = (event.value || '').trim();
+		const value = (event.value ?? '').trim();
 
 		// Add our fruit
 		if (value) {
