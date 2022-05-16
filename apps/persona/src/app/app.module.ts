@@ -3,7 +3,11 @@
 import extractFiles from 'extract-files/extractFiles.mjs';
 // @ts-ignore
 import isExtractableFile from 'extract-files/isExtractableFile.mjs';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+	HttpClientModule,
+	HTTP_INTERCEPTORS,
+	HttpClientXsrfModule,
+} from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
@@ -25,7 +29,7 @@ import { ProfileState } from './features/profile/data-access/store/profile.state
 import { StoryState } from './features/story/data-access/store/story.state';
 
 import { AngularMaterialModule } from '@persona/shared';
-import { CsrfInterceptor } from './core/data-access/interceptors/csrf.interceptor';
+import { XsrfInterceptor } from './core/data-access/interceptors/xsrf.interceptor';
 import { AppState } from './core/data-access/store/app.state';
 import { AuthState } from '@persona/authentication';
 
@@ -77,7 +81,7 @@ import { AuthState } from '@persona/authentication';
 		},
 		{
 			provide: HTTP_INTERCEPTORS,
-			useClass: CsrfInterceptor,
+			useClass: XsrfInterceptor,
 			multi: true,
 		},
 	],

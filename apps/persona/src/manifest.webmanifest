@@ -1,7 +1,7 @@
 {
 	"name": "Persona",
 	"short_name": "Persona",
-	"theme_color": "#f8bbd0",
+	"theme_color": "#f06292",
 	"background_color": "#262c38",
 	"display": "standalone",
 	"scope": "/",
@@ -16,6 +16,16 @@
 		},
 		{
 			"src": "./assets/icons/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		},
+		{
+			"src": "./assets/icons/android-chrome-192x192-square.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "./assets/icons/android-chrome-512x512-square.png",
 			"sizes": "512x512",
 			"type": "image/png"
 		}

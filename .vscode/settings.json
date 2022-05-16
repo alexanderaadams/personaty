@@ -24,7 +24,8 @@
 		"signout",
 		"Signup",
 		"Stersfg",
-		"Sthf"
+		"Sthf",
+		"uuidv"
 	],
 	"angular.enable-strict-mode-prompt": false,
 	"files.autoSave": "onFocusChange",

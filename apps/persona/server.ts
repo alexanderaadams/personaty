@@ -42,6 +42,7 @@ export function app(): express.Express {
 			xssFilter: true,
 		})
 	);
+
 	server.use(compression());
 
 	const distFolder = join(process.cwd(), 'dist/persona/browser');

@@ -30,17 +30,22 @@ const validMimeType: validMimeType[] = ['image/png', 'image/jpg', 'image/jpeg'];
 // 	},
 // };
 
-export const isFileExtensionSafe = async (fullFilePath: string) => {
+export const isFileExtensionSafe = async (
+	fullFilePath: string
+): Promise<boolean> => {
 	const myRegex = /.(jpe?g|png)$/gi;
 
-	const fileExtensionType = myRegex.test(fullFilePath);
+	const fileExtensionType: boolean = myRegex.test(fullFilePath);
 
 	if (!fileExtensionType) return false;
 
 	const magic = new Magic(mmm.MAGIC_MIME_TYPE);
 
-	const bitmap = function (fullFilePath) {
-		return new Promise(function (resolve, reject) {
+	const bitmap = function (fullFilePath): Promise<unknown> {
+		return new Promise(function (
+			resolve: (reason?: any) => void,
+			reject: (reason?: any) => void
+		): void {
 			magic.detectFile(fullFilePath, function (err, data) {
 				if (err) reject(err);
 				else resolve(data);
@@ -57,7 +62,7 @@ export const isFileExtensionSafe = async (fullFilePath: string) => {
 
 export const removeFile = (fullFilePath: string): void => {
 	try {
-		fs.unlink(fullFilePath, () => {
+		fs.unlink(fullFilePath, (): void => {
 			return;
 		});
 	} catch (error) {

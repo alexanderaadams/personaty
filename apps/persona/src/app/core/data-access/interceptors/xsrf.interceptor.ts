@@ -10,7 +10,7 @@ import { SharedService } from '@persona/shared';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class CsrfInterceptor implements HttpInterceptor {
+export class XsrfInterceptor implements HttpInterceptor {
 	constructor(
 		private cookieService: CookieService,
 		private sharedService: SharedService
@@ -22,16 +22,23 @@ export class CsrfInterceptor implements HttpInterceptor {
 		request: HttpRequest<unknown>,
 		next: HttpHandler
 	): Observable<HttpEvent<unknown>> {
-		let CsrfTokenValue = '';
+		const cookieName = 'XSRF-TOKEN';
+		const headerName = 'X-CSRF-Token';
 
 		if (this.isBrowser) {
-			CsrfTokenValue = this.cookieService.get('X-CSRF-Token');
+			// Skip both non-mutating requests.
+			if (request.method === 'GET' || request.method === 'HEAD') {
+				return next.handle(request);
+			}
+			const CsrfToken: string = this.cookieService.get(cookieName);
 
-			const updateCsrfRequest = request.clone({
-				setHeaders: { 'X-CSRF-Token': CsrfTokenValue },
-			});
-
-			return next.handle(updateCsrfRequest);
+			// Be careful not to overwrite an existing header of the same name.
+			if (CsrfToken !== null && !request.headers.has(headerName)) {
+				request = request.clone({
+					headers: request.headers.set(headerName, CsrfToken),
+				});
+			}
+			return next.handle(request);
 		} else {
 			return next.handle(request);
 		}

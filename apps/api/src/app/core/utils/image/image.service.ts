@@ -4,22 +4,25 @@ import { readFile } from 'fs';
 import { FileUpload } from 'graphql-upload';
 
 import { isFileExtensionSafe, removeFile } from './image-storage';
-import { UserService } from '@features/user/user.service';
 import { TryCatchWrapper } from '../error-handling/try-catch-wrapper';
+
+interface ImageLegitimacy {
+	valid: boolean;
+	error: string | null;
+	fullImagePath: string;
+}
 
 @Injectable()
 export class ImageService {
-	constructor(private readonly userService: UserService) {}
-
 	@TryCatchWrapper()
 	async getImage(imageId): Promise<boolean> {
-		const imagesFolderPath = join(process.cwd(), 'upload');
+		const imagesFolderPath: string = join(process.cwd(), 'upload');
 
-		const fullImagePath = join(imagesFolderPath + '/' + imageId);
+		const fullImagePath: string = join(imagesFolderPath + '/' + imageId);
 
-		const DoesImageExist = function () {
-			return new Promise(function (resolve, reject) {
-				readFile(fullImagePath, 'utf8', function (err, data) {
+		const DoesImageExist = function (): Promise<unknown> {
+			return new Promise(function (resolve, reject): void {
+				readFile(fullImagePath, 'utf8', function (err, data): void {
 					if (err) reject(err);
 					else resolve(data);
 				});
@@ -32,24 +35,28 @@ export class ImageService {
 	}
 
 	@TryCatchWrapper()
-	async checkImageLegitimacy(file: FileUpload) {
-		const fileName = file?.filename;
+	async checkImageLegitimacy(file: FileUpload): Promise<ImageLegitimacy> {
+		const fileName: string = file?.filename;
 
 		if (!fileName)
-			return { valid: false, error: 'File must be a png, jpg/jpeg' };
+			return {
+				valid: false,
+				error: 'File must be a png, jpg/jpeg',
+				fullImagePath: 'Error',
+			};
 
-		const imagesFolderPath = join(process.cwd(), 'upload');
+		const imagesFolderPath: string = join(process.cwd(), 'upload');
 
-		const fullImagePath = join(imagesFolderPath + '/' + file.filename);
+		const fullImagePath: string = join(imagesFolderPath + '/' + file.filename);
 
-		const isFileLegit = await isFileExtensionSafe(fullImagePath);
+		const isFileLegit: boolean = await isFileExtensionSafe(fullImagePath);
 
 		if (isFileLegit)
 			return {
 				valid: false,
 				error: null,
 				fullImagePath,
-			};
+			} as ImageLegitimacy;
 
 		removeFile(fullImagePath);
 
@@ -57,6 +64,6 @@ export class ImageService {
 			valid: false,
 			error: 'File content does not match extension!',
 			fullImagePath: 'Error',
-		};
+		} as ImageLegitimacy;
 	}
 }

@@ -34,6 +34,7 @@
 					"apps/persona/src/styles.scss"
 				],
 				"scripts": [],
+
 				"serviceWorker": true,
 				"ngswConfigPath": "apps/persona/ngsw-config.json"
 			},

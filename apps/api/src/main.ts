@@ -99,20 +99,16 @@ async function bootstrap() {
 				xssFilter: true,
 			})
 		);
-
-		// CSRF protection
-		app.use(
-			csurf({
-				cookie: {
-					httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
-					sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
-					secure: environment.COOKIE_ATTRIBUTE_SECURE,
-					path: '/',
-				},
-				sessionKey: environment.CSRF_SESSION_KEY,
-			})
-		);
 	}
+	// CSRF protection
+	app.use(
+		csurf({
+			cookie: {
+				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
+			},
+			sessionKey: environment.CSRF_SESSION_KEY,
+		})
+	);
 
 	app.setGlobalPrefix(globalPrefix);
 

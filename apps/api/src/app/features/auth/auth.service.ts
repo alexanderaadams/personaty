@@ -1,6 +1,5 @@
 import {
 	Injectable,
-	HttpException,
 	UnauthorizedException,
 	NotFoundException,
 	BadRequestException,
@@ -31,7 +30,7 @@ export class AuthService {
 	) {}
 
 	@TryCatchWrapper()
-	async hashingPassword(password: string) {
+	async hashingPassword(password: string):Promise<string> {
 		// Hash the users password
 		// Generate a salt
 		const salt: string = randomBytes(32).toString('hex');

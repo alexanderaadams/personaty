@@ -7,7 +7,7 @@
 
 body {
 	font-family: Roboto, 'Helvetica Neue', sans-serif;
-	font-size: 62.5%;
+	font-size: clamp(105%, calc(100% + 0.5vw), 150%);
 	margin: 0;
 	color: currentColor;
 	// background-color: map_get(mat.$blue-grey-palette, 900);
