@@ -97,14 +97,14 @@ export class User {
 	interests: InterestAndBio[];
 }
 
-export const UserDbSchema = SchemaFactory.createForClass(User);
+export const UserSchema = SchemaFactory.createForClass(User);
 
-UserDbSchema.virtual('stories', {
+UserSchema.virtual('stories', {
 	ref: 'Story', //The Model to use
 	localField: '_id', //Find in Model, where localField
 	foreignField: 'user_id', // is equal to foreignField
 });
 
 // Set Object and Json property to true. Default is set to false
-UserDbSchema.set('toObject', { virtuals: true });
-UserDbSchema.set('toJSON', { virtuals: true });
+UserSchema.set('toObject', { virtuals: true });
+UserSchema.set('toJSON', { virtuals: true });

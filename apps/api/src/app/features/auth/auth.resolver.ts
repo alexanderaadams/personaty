@@ -54,7 +54,7 @@ export class AuthResolver {
 	): Promise<AuthenticationStatus> {
 		const { email, password, birthDate } = signupUser;
 
-		const status = await this.authService.sendSignupEmailContainsAuthToken({
+		const status = await this.authService.createSignupEmailContainsAuthToken({
 			email,
 			password,
 			birthDate,

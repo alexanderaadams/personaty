@@ -32,7 +32,7 @@ export class AuthController {
 		@Param('authToken') authToken: string,
 		@Res({ passthrough: true }) res: Response
 	) {
-		const user = await this.authService.signupToken(authToken);
+		const user = await this.authService.confirmSignupWithAuthToken(authToken);
 
 		if (user) {
 			res.cookie('auth', user.auth, {
@@ -43,7 +43,7 @@ export class AuthController {
 				path: '/',
 			});
 		}
-		return res.redirect(`${environment.ORIGIN_URL}`);
+		return res.redirect(environment.ORIGIN_URL);
 	}
 
 	// @Post('is-available')

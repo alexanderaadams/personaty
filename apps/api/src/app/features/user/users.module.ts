@@ -6,13 +6,13 @@ import { DateScalar } from '@core/utils/graphql-data-scalar/date.scalar';
 
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { UserDbSchema } from './models/user-db/user-db.schema';
+import { UserSchema } from './models/user/user.schema';
 import { UserResolver } from './user.resolver';
 
 @Module({
 	imports: [
 		MongooseModule.forFeature(
-			[{ name: 'User', schema: UserDbSchema }],
+			[{ name: 'User', schema: UserSchema }],
 			'persona'
 		),
 		MyJWTModule,

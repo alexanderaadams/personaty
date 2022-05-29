@@ -3,11 +3,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { UserModule } from '@features/user/users.module';
 import { DateScalar } from '@core/utils/graphql-data-scalar/date.scalar';
-import { UserDbSchema } from '@features/user/models/user-db/user-db.schema';
+import { UserSchema } from '@features/user/models/user/user.schema';
 import { MyJWTModule } from '@modules/jwt/jwt.module';
-import { ImageService } from '@core/utils/image/image.service';
+import { ImageModule } from '@modules/image/image.module';
 
-import { StoryDbSchema } from './models/story-db/story-db.schema';
+import { StorySchema } from './models/story/story.schema';
 import { StoryService } from './story.service';
 import { StoryResolver } from './story.resolver';
 
@@ -15,14 +15,15 @@ import { StoryResolver } from './story.resolver';
 	imports: [
 		UserModule,
 		MyJWTModule,
+		ImageModule,
 		MongooseModule.forFeature(
 			[
-				{ name: 'Story', schema: StoryDbSchema },
-				{ name: 'User', schema: UserDbSchema },
+				{ name: 'Story', schema: StorySchema },
+				{ name: 'User', schema: UserSchema },
 			],
 			'persona'
 		),
 	],
-	providers: [StoryResolver, StoryService, DateScalar, ImageService],
+	providers: [StoryResolver, StoryService, DateScalar],
 })
 export class StoryModule {}

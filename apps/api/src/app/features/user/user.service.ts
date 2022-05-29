@@ -1,6 +1,4 @@
 import {
-	BadGatewayException,
-	ConflictException,
 	HttpException,
 	Injectable,
 } from '@nestjs/common';
@@ -9,8 +7,8 @@ import { Model } from 'mongoose';
 
 import { UserInfo } from '@core/models/user-info';
 
-import { UserDocument } from './models/user-db/user-db.schema';
-import { UserModel } from './models/user-db/user-db.model';
+import { UserDocument } from './models/user/user.schema';
+import { UserModel } from './models/user/user.model';
 import { UserSensitiveInformation } from './models/user-sensitive-information';
 
 @Injectable()

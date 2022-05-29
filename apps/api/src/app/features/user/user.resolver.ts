@@ -8,7 +8,7 @@ import { GqlThrottlerGuard } from '@core/guards/throttler/gql-throttler.guard';
 import { TokenAuthGuard } from '@core/guards/is-auth.guard';
 
 import { UpdateUserDto } from './models/dto/update-user.dto';
-import { UserModel } from './models/user-db/user-db.model';
+import { UserModel } from './models/user/user.model';
 import { UserService } from './user.service';
 
 @UseGuards(

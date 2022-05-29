@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Schema as MongooseSchema, Types, Document, model } from 'mongoose';
 
-import { User } from '@features/user/models/user-db/user-db.schema';
+import { User } from '@features/user/models/user/user.schema';
 import { Category } from '../category';
 
 export type StoryDocument = Story & Document;
@@ -30,4 +30,4 @@ export class Story extends Document {
 	created_at: Date;
 }
 
-export const StoryDbSchema = SchemaFactory.createForClass(Story);
+export const StorySchema = SchemaFactory.createForClass(Story);

@@ -17,8 +17,10 @@ import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 
 import { GoogleOauth2 } from './models/google-oauth-2';
 import { UserInfo } from '@core/models/user-info';
-import { UserModel } from '@features/user/models/user-db/user-db.model';
+import { UserModel } from '@features/user/models/user/user.model';
 import { ISendSignupEmailContainsAuthToken } from './models/dto/send-signup-email-contains-auth-token';
+import { FileStorageService } from '../../core/utils/file-storage.service';
+import { join } from 'path';
 
 const scrypt = promisify(_scrypt);
 
@@ -26,8 +28,9 @@ const scrypt = promisify(_scrypt);
 export class AuthService {
 	constructor(
 		private readonly usersService: UserService,
-		private myJWTService: MyJWTService,
-		private readonly nodemailerService: NodemailerService
+		private readonly myJWTService: MyJWTService,
+		private readonly nodemailerService: NodemailerService,
+		private readonly fileStorageService: FileStorageService
 	) {}
 
 	@TryCatchWrapper()
@@ -42,7 +45,7 @@ export class AuthService {
 	}
 
 	@TryCatchWrapper()
-	async sendSignupEmailContainsAuthToken(
+	async createSignupEmailContainsAuthToken(
 		signupUser: ISendSignupEmailContainsAuthToken
 	): Promise<{ status: string }> {
 		const { email, password, birthDate, requestHeadersHost } = signupUser;
@@ -83,18 +86,19 @@ export class AuthService {
 	}
 
 	@TryCatchWrapper()
-	async signupToken(
+	async confirmSignupWithAuthToken(
 		signupToken: string
 	): Promise<{ user: UserInfo; auth: string }> {
 		const { email, password, birthDate } = await this.myJWTService.verifyToken(
 			signupToken
 		);
 
-		const user: UserInfo | null = await this.usersService.findOne({ email });
+		const [user, hashedPassword] = await Promise.all([
+			this.usersService.findOne({ email }),
+			this.hashingPassword(password),
+		]);
 
 		if (user) throw new ConflictException('User already exists');
-
-		const hashedPassword: string = await this.hashingPassword(password);
 
 		const newUser: UserInfo = await this.usersService.createUser({
 			email,
@@ -102,9 +106,16 @@ export class AuthService {
 			birthDate,
 			email_verified: true,
 		});
+
 		const authToken: string = await this.myJWTService.signToken({
 			id: newUser._id.toString(),
 			email,
+		});
+
+		this.fileStorageService.makeDirectoryIfDoesNotExist({
+			idFolderPath: join(process.cwd(), 'upload', newUser._id.toString()),
+			folderType: ['images', 'videos'],
+			folderName: ['story', 'profile'],
 		});
 
 		return {

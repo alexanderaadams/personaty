@@ -4,26 +4,19 @@ import { readFile, ReadStream } from 'fs';
 import { FileUpload, Upload } from 'graphql-upload';
 import { v5 as uuidv5 } from 'uuid';
 import path = require('path');
-import BufferListStream = require('bl');
-import buffer = require('get-stream');
 
 import { environment } from '@environment';
+import { FileStorageService } from '@core/utils/file-storage.service';
+import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 
-import {
-	isFileExtensionSafe,
-	isMimeTypeSafe,
-	makeDirectoryIfDoesNotExist,
-	removeDirectoryIfDoesExist,
-} from '../file-storage';
-import { TryCatchWrapper } from '../error-handling/try-catch-wrapper';
 import { TValidImageMimeType } from './utils/types/valid-image-mime.type';
 import { TImage } from './utils/types/image.type';
 import { TValidImageExtensions } from './utils/types/valid-image-extensions';
-import { TImageFolder } from './utils/types/image-folder.type';
 import { IImage } from './utils/image.interface';
 
 @Injectable()
 export class ImageService {
+	constructor(private fileStorage: FileStorageService) {}
 	@TryCatchWrapper()
 	async getImage(imageId: string): Promise<boolean> {
 		const imagesFolderPath: string = join(process.cwd(), 'upload');
@@ -66,7 +59,7 @@ export class ImageService {
 		const readBuffer = await this.stream2buffer(readStream);
 
 		if (
-			!(await isMimeTypeSafe<TValidImageMimeType>(
+			!(await this.fileStorage.isMimeTypeSafe<TValidImageMimeType>(
 				readBuffer,
 				validImageMimeType
 			))
@@ -86,10 +79,8 @@ export class ImageService {
 
 		const myRegex = /.(jpe?g|png)$/gi;
 
-		const checkedFileExtensionIfNotSafe = await isFileExtensionSafe(
-			image.filename,
-			myRegex
-		);
+		const checkedFileExtensionIfNotSafe =
+			await this.fileStorage.isFileExtensionSafe(image.filename, myRegex);
 
 		if (!checkedFileExtensionIfNotSafe) {
 			throw new HttpException('File must be a png, jpg/jpeg' ?? 'Error', 400);
@@ -115,12 +106,6 @@ export class ImageService {
 			'story',
 			fileName
 		);
-		// makeDirectoryIfDoesNotExist({
-		// 	idFolderPath: join(process.cwd(), 'upload', id),
-		// 	types: ['images', 'videos'],
-		// 	folders: ['story', 'profile'],
-		// });
-		removeDirectoryIfDoesExist(join(process.cwd(), 'upload', id));
 
 		return { fileName, fullImagePath, image };
 	}
