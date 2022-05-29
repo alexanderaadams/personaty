@@ -8,7 +8,6 @@ import { Logout } from '@auth/core/data-access/store/auth.action';
 import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
 @Component({
-	// eslint-disable-next-line @angular-eslint/component-selector
 	selector: 'lib-signout',
 	templateUrl: './logout.component.html',
 	styleUrls: ['./logout.component.scss'],
@@ -20,9 +19,6 @@ export class LogoutComponent
 {
 	@Select(AuthState.isAuthenticated)
 	isAuthenticated$!: Observable<boolean>;
-
-	loginExecutingLoader$: BehaviorSubject<boolean> =
-		new BehaviorSubject<boolean>(false);
 
 	constructor(private formService: FormService) {
 		super();
@@ -36,8 +32,6 @@ export class LogoutComponent
 				'Logged out successfully'
 			)
 			.subscribe();
-
-		this.loginExecutingLoader$ = this.formService.loginExecutingLoader$;
 
 		this.formService.goAuthenticate(new Logout());
 	}

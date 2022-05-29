@@ -1,4 +1,13 @@
-import { IsArray, IsDate, IsString } from 'class-validator';
+import {
+	ArrayMaxSize,
+	ArrayMinSize,
+	IsArray,
+	IsDate,
+	IsOptional,
+	IsString,
+	ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 import { Category, Story } from '@core/models/graphql.schema';
 
@@ -7,12 +16,17 @@ export class StoryDbModel extends Story {
 	_id: string;
 
 	@IsArray()
-	category: Category[];
+	@ValidateNested({ each: true, always: true })
+	@ArrayMinSize(2)
+	@ArrayMaxSize(25)
+	@Type(() => Category)
+	category: Array<Category>;
 
 	@IsString()
-	storyImageUrl: string;
+	story_image_url: string;
 
 	@IsDate()
+	@IsOptional()
 	created_at: Date;
 
 	@IsString()

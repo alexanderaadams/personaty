@@ -6,7 +6,7 @@ import { ProfileService } from '../data-access/services/profile.service';
 import { GetUserInfo } from '../data-access/store/profile.action';
 import { ProfileState } from '../data-access/store/profile.state';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ProfileStateModel } from '../data-access/store/profile.model';
+import { IProfileStateModel } from '../data-access/store/profile.model';
 import { FormService } from '@persona/authentication';
 import { UnsubscribeOnDestroyAdapter ,environment} from '@persona/shared';
 
@@ -24,7 +24,7 @@ export class ProfileComponent
 	createStory = new BehaviorSubject(false);
 
 	@Select(ProfileState.userInfo)
-	user$!: Observable<ProfileStateModel>;
+	user$!: Observable<IProfileStateModel>;
 
 	id = this.activatedRoute.snapshot.params['id'];
 

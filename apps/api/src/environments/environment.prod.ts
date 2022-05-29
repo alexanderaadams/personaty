@@ -3,6 +3,12 @@ export const environment = {
 
 	ENVIRONMENT_NAME: 'production',
 
+	PROJECT_NAME: 'persona',
+
+	//uuidv5
+	V5_NAMESPACE_CUSTOM: 'e2d571b9-4338-5548-ab01-a66903c65aad',
+	V5_NAME: 'persona',
+
 	//	Cookies attributes
 	COOKIE_ATTRIBUTE_SAME_SITE: 'none' as const,
 	COOKIE_ATTRIBUTE_SECURE: true,

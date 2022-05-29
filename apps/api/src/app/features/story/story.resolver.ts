@@ -1,12 +1,11 @@
-import {  UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { Args, Context, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Request } from 'express';
-import { GraphQLUpload, FileUpload } from 'graphql-upload';
+import { GraphQLUpload } from 'graphql-upload';
 import { Throttle } from '@nestjs/throttler';
 
 import { TokenAuthGuard } from '@core/guards/is-auth.guard';
 import { environment } from '@environment';
-import { MyJWTService } from '@modules/jwt/jwt.service';
 import { GqlThrottlerBehindProxyGuard } from '@core/guards/throttler/gql-throttler-behind-proxy.guard';
 import { GqlThrottlerGuard } from '@core/guards/throttler/gql-throttler.guard';
 
@@ -17,6 +16,7 @@ import { UpdateStoryDto } from './models/dto/update-story';
 import { DeleteStoryDto } from './models/dto/delete-story.dto';
 import { StoryStatus } from './models/story-status';
 import { StoryDbModel } from './models/story-db/story-db.model';
+import { TImage } from '@core/utils/image/utils/types/image.type';
 
 @UseGuards(
 	environment.production ? GqlThrottlerBehindProxyGuard : GqlThrottlerGuard,
@@ -26,30 +26,31 @@ import { StoryDbModel } from './models/story-db/story-db.model';
 // @UseFilters(GqlAllHttpExceptionFilter)
 @Resolver('Story')
 export class StoryResolver {
-	constructor(
-		private readonly storyService: StoryService,
-
-		private readonly myJWTService: MyJWTService
-	) {}
+	constructor(private readonly storyService: StoryService) {}
 
 	@Mutation(() => StoryDbModel, {
 		name: 'createStory',
 		description: 'Create Story',
 	})
 	async createStory(
-		@Args('story', { type: () => CreateStoryDto }) story: CreateStoryDto,
+		@Args('story', { type: () => CreateStoryDto }) createStory: CreateStoryDto,
 		@Args('storyImage', { type: () => GraphQLUpload })
-		storyImage: FileUpload,
+		storyImage: TImage,
 		@Context('req') req: Request
 	): Promise<StoryDbModel> {
-
-		return this.storyService.createStory(
-			req.cookies.auth,
-			story,
+		return this.storyService.createStory({
+			authToken: req.cookies.auth,
+			category: createStory.category,
 			storyImage,
-			`${req.protocol}://${req.headers.host}`
-		);
+			requestHeadersHostUrl: `${req.protocol}://${req.headers.host}`,
+		});
 	}
+
+	// @Get('stream-file')
+	// getFile(): StreamableFile {
+	// 	const file = createReadStream(join(process.cwd(), 'package.json'));
+	// 	return new StreamableFile(file);
+	// }
 
 	@Query(() => StoryDbModel, {
 		name: 'getStory',
@@ -70,11 +71,11 @@ export class StoryResolver {
 		@Args('story', { type: () => UpdateStoryDto }) updateStory: UpdateStoryDto,
 		@Context('req') req: Request
 	): Promise<StoryDbModel> {
-		return await this.storyService.updateStory(
-			req.cookies.auth,
+		return await this.storyService.updateStory({
+			authToken: req.cookies.auth,
 			id,
-			updateStory
-		);
+			updateStory,
+		});
 	}
 
 	@Mutation(() => StoryStatus, {

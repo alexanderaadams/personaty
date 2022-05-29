@@ -1,12 +1,12 @@
 import { IsEnum, IsString } from 'class-validator';
 
-import { Role } from '@core/enums/role.enum';
+import { ERole } from '@core/enums/role.enum';
 
 export class UserSensitiveInformation {
 	@IsString()
 	_id: string;
 
-	@IsEnum(Role)
+	@IsEnum(ERole)
 	role: 'admin' | 'user';
 
 	@IsString()

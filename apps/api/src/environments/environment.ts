@@ -3,6 +3,12 @@ export const environment = {
 
 	ENVIRONMENT_NAME: 'development',
 
+	PROJECT_NAME: 'persona',
+
+	//uuidv5
+	V5_NAMESPACE_CUSTOM: 'e2d571b9-4338-5548-ab01-a66903c65aad',
+	V5_NAME: 'persona',
+
 	//	Cookies attributes
 	COOKIE_ATTRIBUTE_SAME_SITE: 'strict' as const,
 	COOKIE_ATTRIBUTE_SECURE: false,
@@ -38,5 +44,5 @@ export const environment = {
 	NODEMAILER_EMAIL_PORT: 2525,
 	NODEMAILER_EMAIL_USER: '92a6a2d9696386',
 	NODEMAILER_EMAIL_PASSWORD: '053988b5ba3c61',
-	NODEMAILER_SECURE_EMAIL_SERVICE: false,
+	NODEMAILER_SECURE_EMAIL_SERVICE: true,
 };

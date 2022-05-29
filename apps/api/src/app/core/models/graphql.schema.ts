@@ -29,7 +29,7 @@ export class Find_User_Input {
 export class Confirm_Forgot_Password_Input {
     password: string;
     confirmPassword: string;
-    token: string;
+    auth: string;
 }
 
 export class GetStoryInput {
@@ -94,7 +94,7 @@ export abstract class IMutation {
 
     abstract createStory(story: CreateStoryInput, storyImage: Upload): Story | Promise<Story>;
 
-    abstract updateStory(id: string, story: UpdateStoryInput): Story | Promise<Story>;
+    abstract updateStory(id: string, story: UpdateStoryInput, storyImage?: Nullable<Upload>): Story | Promise<Story>;
 
     abstract deleteStory(story: DeleteStoryInput): Story_Status | Promise<Story_Status>;
 
@@ -131,7 +131,7 @@ export class Authentication_Status {
 
 export class Story {
     _id: string;
-    storyImageUrl: string;
+    story_image_url: string;
     category: Nullable<Category>[];
     created_at: Date;
     user_id: string;

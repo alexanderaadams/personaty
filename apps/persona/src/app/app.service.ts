@@ -3,14 +3,14 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-import { environment } from '@persona/shared';
+import { environment, SharedService } from '@persona/shared';
 import { CsrfTokenModel } from './core/data-access/store/app.model';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class AppService {
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient,private readonly sharedService :SharedService) {}
 
 	checkConnection(): Observable<CsrfTokenModel> {
 		return this.http
@@ -22,6 +22,7 @@ export class AppService {
 			)
 			.pipe(
 				map(({ data }: any): CsrfTokenModel => {
+					this.sharedService.executingLoader$.next(false);
 					return data.status as CsrfTokenModel;
 				})
 			);

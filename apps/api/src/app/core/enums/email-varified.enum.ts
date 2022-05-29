@@ -1,4 +1,4 @@
-export enum EmailVerified {
+export enum EEmailVerified {
 	'true',
 	'false',
 }

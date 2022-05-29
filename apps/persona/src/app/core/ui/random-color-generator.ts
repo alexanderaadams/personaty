@@ -1,7 +1,7 @@
 export const randomColorPicker = () => {
 	// const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-	const colorPicker = Math.floor(Math.random() * 11);
-	return '#' + colors[colorPicker];
+	const colorPicker = Math.floor(Math.random() * 10);
+	return colors[colorPicker];
 };
 export const colors = [
 	'#0d6efd',

@@ -4,11 +4,13 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { BehaviorSubject } from 'rxjs';
+import randomColor from 'randomcolor';
 
-import { randomColorPicker } from '@core/ui/random-color-generator';
-import { Category } from '../../data-access/store/story.model';
+import { ICategory } from '../../data-access/store/story.model';
 import { validImageMimeType } from '@core/models/valid-image-mime-type';
 import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
+import { CreateStory } from '@features/story/data-access/store/story.action';
+import { Store } from '@ngxs/store';
 
 @Component({
 	selector: 'persona-create-story',
@@ -18,43 +20,36 @@ import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 export class CreateStoryComponent extends UnsubscribeOnDestroyAdapter {
 	readonly separatorKeysCodes: readonly [13, 188] = [ENTER, COMMA] as const;
 	addOnBlur = true;
-	categories: Category[] = [];
+	categories: ICategory[] = [];
 	fileName = '';
+	storyImage!: File;
 	id: string = this.activatedRoute.snapshot.params['id'];
 	validStoryMimeType: string = validImageMimeType;
 	isStoryMimeTypeValid = new BehaviorSubject(false);
 
 	storyForm: FormGroup = new FormGroup({
 		category: new FormControl([''], [Validators.required]),
+		storyImage: new FormControl('', [Validators.required]),
 	});
 
-	constructor(private activatedRoute: ActivatedRoute) {
+	constructor(
+		private activatedRoute: ActivatedRoute,
+		private readonly store: Store
+	) {
 		super();
 	}
 
-	onSubmit() {
-		console.log({ ...this.storyForm.value, user_id: this.id });
-		if (
-			this.storyForm?.invalid ||
-			!this.storyForm.value ||
-			this.isStoryMimeTypeValid.value
-		) {
-			return this.storyForm.setErrors({ invalid: true });
-		}
-
-		// this.store.dispatch(
-		// new CreateStory({ ...this.storyForm.value, user_id: this.id })
-		// );
-	}
-
 	async add(event: MatChipInputEvent): Promise<void> {
-		const value = (event.value ?? '').trim();
+		const value: string = (event.value ?? '').trim();
 
 		// Add our fruit
 		if (value) {
 			this.categories.push({
 				text: value,
-				color: randomColorPicker(),
+				color: randomColor({
+					luminosity: 'light',
+					hue: 'random',
+				}),
 			});
 			this.storyForm.controls['category'].setValue(this.categories);
 		}
@@ -63,16 +58,16 @@ export class CreateStoryComponent extends UnsubscribeOnDestroyAdapter {
 		event.chipInput?.clear();
 	}
 
-	remove(category: Category): void {
-		const index = this.categories.indexOf(category);
+	remove(category: ICategory): void {
+		const index: number = this.categories.indexOf(category);
 
 		if (index >= 0) {
 			this.categories.splice(index, 1);
 		}
 	}
 
-	storyImageSelected(imageInput: any) {
-		const storyImage: File = imageInput.files[0];
+	storyImageSelected(imageInput: any): void {
+		this.storyImage = imageInput.files[0];
 
 		// const reader = new FileReader();
 
@@ -80,11 +75,25 @@ export class CreateStoryComponent extends UnsubscribeOnDestroyAdapter {
 
 		// console.log(reader.error);
 
-		this.fileName = storyImage.name;
+		this.fileName = this.storyImage.name;
 
-		if (this.validStoryMimeType.includes(storyImage.type))
+		if (this.validStoryMimeType.includes(this.storyImage.type))
 			this.isStoryMimeTypeValid.next(true);
 
-		console.log(storyImage, imageInput);
+		// console.log(this.storyImage, imageInput);
+		this.storyForm.controls['storyImage'].setValue(this.storyImage);
+	}
+
+	onSubmit(): void {
+		console.log({ ...this.storyForm.value });
+		if (
+			this.storyForm?.invalid ||
+			!this.storyForm.value ||
+			this.isStoryMimeTypeValid.value
+		) {
+			this.storyForm.setErrors({ invalid: true });
+		}
+
+		this.store.dispatch(new CreateStory({ ...this.storyForm.value }));
 	}
 }

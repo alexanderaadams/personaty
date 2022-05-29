@@ -8,7 +8,7 @@ import { ConfirmForgotPassword } from '@auth/core/data-access/store/auth.action'
 import { MatchPassword } from '@auth/core/data-access/validators/match-password';
 import { FormService } from '@auth/core/data-access/services/form.service';
 import { environment } from '@auth/core/environment.prod';
-import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
+import { SharedService, UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
 @Component({
 	selector: 'lib-confirm-forgot-password',
@@ -22,14 +22,12 @@ export class ConfirmForgotPasswordComponent
 {
 	hide = true;
 
-	loginExecutingLoader$: BehaviorSubject<boolean> =
-		new BehaviorSubject<boolean>(false);
-
 	authForm: FormGroup = new FormGroup(
 		{
 			password: new FormControl('', [
 				Validators.required,
-				Validators.minLength(8),
+				Validators.minLength(environment.MIN_LENGTH),
+				Validators.maxLength(environment.MAX_LENGTH),
 			]),
 
 			confirmPassword: new FormControl('', [
@@ -44,7 +42,8 @@ export class ConfirmForgotPasswordComponent
 	constructor(
 		private readonly matchPassword: MatchPassword,
 		private readonly activatedRoute: ActivatedRoute,
-		private formService: FormService
+		private formService: FormService,
+		public readonly sharedService: SharedService
 	) {
 		super();
 	}
@@ -78,8 +77,6 @@ export class ConfirmForgotPasswordComponent
 				take(2)
 			)
 			.subscribe();
-
-		this.loginExecutingLoader$ = this.formService.loginExecutingLoader$;
 
 		this.formService.goAuthenticate(
 			new ConfirmForgotPassword({

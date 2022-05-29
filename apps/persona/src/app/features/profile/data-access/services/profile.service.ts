@@ -5,7 +5,7 @@ import { Apollo } from 'apollo-angular';
 import { map } from 'rxjs';
 
 import { GET_USER_INFO } from '../graphql/profile.gql.schema';
-import { ProfileStateModel } from '../store/profile.model';
+import { IProfileStateModel } from '../store/profile.model';
 
 @Injectable({
 	providedIn: 'root',
@@ -27,11 +27,10 @@ export class ProfileService {
 					id,
 				},
 				// errorPolicy: 'all',
-
 			})
 			.valueChanges.pipe(
 				map(({ data }: any) => {
-					return data.getUser as ProfileStateModel;
+					return data.getUser as IProfileStateModel;
 				})
 			);
 	}

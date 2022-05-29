@@ -5,7 +5,7 @@ import { tap, take } from 'rxjs/operators';
 
 import { SendForgotPasswordEmail } from '@auth/core/data-access/store/auth.action';
 import { FormService } from '@auth/core/data-access/services/form.service';
-import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
+import { SharedService, UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
 @Component({
 	selector: 'lib-forgot-password',
@@ -17,14 +17,14 @@ export class ForgotPasswordComponent
 	extends UnsubscribeOnDestroyAdapter
 	implements OnInit
 {
-	loginExecutingLoader$: BehaviorSubject<boolean> =
-		new BehaviorSubject<boolean>(false);
-
 	authForm: FormGroup = new FormGroup({
 		email: new FormControl('', [Validators.required, Validators.email]),
 	});
 
-	constructor(private formService: FormService) {
+	constructor(
+		private formService: FormService,
+		public readonly sharedService: SharedService
+	) {
 		super();
 	}
 
@@ -54,8 +54,6 @@ export class ForgotPasswordComponent
 				take(2)
 			)
 			.subscribe();
-
-		this.loginExecutingLoader$ = this.formService.loginExecutingLoader$;
 
 		this.formService.goAuthenticate(
 			new SendForgotPasswordEmail(this.authForm.value)

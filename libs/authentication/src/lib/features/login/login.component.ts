@@ -10,8 +10,8 @@ import {
 	Login,
 	LoginWithGoogle,
 } from '@auth/core/data-access/store/auth.action';
-import { AuthStateModel } from '@auth/core/data-access/store/auth.model';
-import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
+import { IAuthStateModel } from '@auth/core/data-access/store/auth.model';
+import { SharedService, UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
 @Component({
 	selector: 'lib-login',
@@ -25,11 +25,8 @@ export class LoginComponent
 {
 	hide = true;
 
-	loginExecutingLoader$: BehaviorSubject<boolean> =
-		new BehaviorSubject<boolean>(false);
-
 	@Select('auth')
-	isAuthenticated$!: Observable<AuthStateModel>;
+	isAuthenticated$!: Observable<IAuthStateModel>;
 
 	authForm: FormGroup = new FormGroup({
 		email: new FormControl('', [Validators.required, Validators.email]),
@@ -41,7 +38,11 @@ export class LoginComponent
 		]),
 	});
 
-	constructor(private readonly store: Store, private formService: FormService) {
+	constructor(
+		private readonly store: Store,
+		private formService: FormService,
+		public readonly sharedService: SharedService
+	) {
 		super();
 	}
 
@@ -71,8 +72,6 @@ export class LoginComponent
 				take(2)
 			)
 			.subscribe();
-
-		this.loginExecutingLoader$ = this.formService.loginExecutingLoader$;
 
 		this.formService.goAuthenticate(new Login(this.authForm.value));
 	}

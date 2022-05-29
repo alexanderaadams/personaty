@@ -6,20 +6,22 @@
 			<form
 				class="row justify-content-center align-items-center p-4 shadow br-04 border-grey-blue box-shadow-and-border"
 				(ngSubmit)="onSubmit()"
+				type="submit"
 				[formGroup]="storyForm"
 				enctype="multipart/form-data">
 				<div
+					(click)="$event.stopPropagation()"
 					class="row flex-column justify-content-center align-items-center gap-3">
 					<input
 						#storyImageInput
 						type="file"
-						[accept]="validStoryMimeType"
 						class="file-input"
 						(change)="storyImageSelected(storyImageInput)" />
-
+					<!-- [accept]="validStoryMimeType" -->
 					<button
 						mat-mini-fab
 						color="primary"
+						type="button"
 						class="row justify-content-center align-items-center"
 						(click)="storyImageInput.click()">
 						<mat-icon>attach_file</mat-icon>
@@ -32,7 +34,7 @@
 
 				<mat-chip-list #chipList aria-label="Category selection" class="p-5">
 					<mat-chip
-						style="background-color:{{ category.color }} ;"
+						style.background-color="  {{ category.color }}"
 						*ngFor="let category of categories"
 						(removed)="remove(category)">
 						{{ category.text }}

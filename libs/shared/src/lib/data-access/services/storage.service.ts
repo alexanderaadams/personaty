@@ -5,12 +5,12 @@ import { Observable, of } from 'rxjs';
 @Injectable({
 	providedIn: 'root',
 })
-export class MyStorageEngineService implements StorageEngine {
+export class LocalStorageService implements StorageEngine {
 	get length(): number {
 		return localStorage.length;
 	}
 
-	getItem(key: string): Observable<any> {
+	getItem<T>(key: string): Observable<T | any> {
 		return of(localStorage.getItem(key));
 	}
 
@@ -26,7 +26,7 @@ export class MyStorageEngineService implements StorageEngine {
 		localStorage.clear();
 	}
 
-	key(val: number): Observable<any> {
+	key<T>(val: number): Observable<T | any> {
 		return of(localStorage.key(val));
 	}
 }

@@ -28,12 +28,16 @@ export class NotAuthGuard
 		| UrlTree
 		| Observable<boolean | UrlTree>
 		| Promise<boolean | UrlTree> {
-		const authenticated = this.store.selectSnapshot(AuthState.isAuthenticated);
-
-		if (!authenticated) return true;
+		const authenticated: boolean = this.store.selectSnapshot(
+			AuthState.isAuthenticated
+		);
 
 		this.formService.checkIfAlreadyAuthenticated();
 
-		return this.router.navigate(['']);
+		if (authenticated) return this.router.navigate(['']);
+
+		return true;
+
+		// return this.router.navigate(['']);
 	}
 }

@@ -1,4 +1,4 @@
-import { StoryStateModel } from '../../../story/data-access/store/story.model';
+import { IStoryStateModel } from '../../../story/data-access/store/story.model';
 
 export interface tag {
 	text: string;
@@ -6,7 +6,7 @@ export interface tag {
 	color: string;
 }
 
-export interface ProfileStateModel {
+export interface IProfileStateModel {
 	fullName: string | null;
 
 	username: string | null;
@@ -15,7 +15,7 @@ export interface ProfileStateModel {
 
 	created_at: Date | null;
 
-	stories: StoryStateModel[] | null;
+	stories: IStoryStateModel[] | null;
 
 	bio: tag | null;
 

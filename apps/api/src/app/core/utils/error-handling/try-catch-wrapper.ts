@@ -17,14 +17,17 @@ export function TryCatchWrapper() {
 				throw new HttpException(
 					{
 						statusCode:
-							error?.response?.statusCode ?? HttpStatus.INTERNAL_SERVER_ERROR,
+							error?.response?.statusCode ??
+							error?.status ??
+							HttpStatus.INTERNAL_SERVER_ERROR,
 						message:
 							error?.response?.message ??
 							error?.message ??
 							'Something Went Wrong',
-						error: 'Not Found',
 					},
-					error?.response?.error ?? HttpStatus.INTERNAL_SERVER_ERROR
+					error?.response?.error ??
+						error?.status ??
+						HttpStatus.INTERNAL_SERVER_ERROR
 				);
 			}
 		};

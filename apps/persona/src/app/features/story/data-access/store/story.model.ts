@@ -1,12 +1,12 @@
-export interface Category {
+export interface ICategory {
 	text: string;
 	color: string;
 }
 
-export interface StoryStateModel {
+export interface IStoryStateModel {
 	_id: string | null;
 
-	category: Category[] | null;
+	category: ICategory[] | null;
 
  StoryImageUrl: string | null;
 

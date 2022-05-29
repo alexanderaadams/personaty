@@ -4,7 +4,7 @@ import { Action, State, StateContext, Selector } from '@ngxs/store';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 
-import { AuthStateModel } from './auth.model';
+import { IAuthStateModel } from './auth.model';
 import {
 	Login,
 	Logout,
@@ -18,7 +18,7 @@ import {
 import { AuthService } from '../services/auth.service';
 import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
-@State<AuthStateModel>({
+@State<IAuthStateModel>({
 	name: 'auth',
 	defaults: {
 		status: null,
@@ -31,7 +31,7 @@ export class AuthState
 	implements OnDestroy
 {
 	@Selector()
-	static isAuthenticated(state: AuthStateModel): boolean {
+	static isAuthenticated(state: IAuthStateModel): boolean {
 		return !!state.authenticated;
 	}
 
@@ -49,10 +49,10 @@ export class AuthState
 	// }
 
 	@Action(Signup, { cancelUncompleted: true })
-	signup(ctx: StateContext<AuthStateModel>, action: Signup) {
+	signup(ctx: StateContext<IAuthStateModel>, action: Signup) {
 		this.subs.sink = this.authService.signup(action.payload).subscribe({
 			next: (res: any) => {
-				ctx.patchState(res as AuthStateModel);
+				ctx.patchState(res as IAuthStateModel);
 				// this.updateMyStorageEngineService('auth', res);
 			},
 			error: () => {
@@ -65,10 +65,10 @@ export class AuthState
 	}
 
 	@Action(Login, { cancelUncompleted: true })
-	login(ctx: StateContext<AuthStateModel>, action: Login) {
+	login(ctx: StateContext<IAuthStateModel>, action: Login) {
 		this.subs.sink = this.authService.login(action.payload).subscribe({
 			next: (res: any) => {
-				ctx.patchState(res as AuthStateModel);
+				ctx.patchState(res as IAuthStateModel);
 				// this.updateMyStorageEngineService('auth', res);
 			},
 			error: () => {
@@ -81,7 +81,7 @@ export class AuthState
 	}
 
 	@Action(LoginWithGoogle, { cancelUncompleted: true })
-	loginWithGoogle(ctx: StateContext<AuthStateModel>) {
+	loginWithGoogle(ctx: StateContext<IAuthStateModel>) {
 		this.subs.sink = of(this.authService.loginWithGoogle()).subscribe({
 			next: (res: any) => {
 				ctx.patchState({
@@ -102,14 +102,14 @@ export class AuthState
 
 	@Action(SendForgotPasswordEmail, { cancelUncompleted: true })
 	sendForgotPasswordEmail(
-		ctx: StateContext<AuthStateModel>,
+		ctx: StateContext<IAuthStateModel>,
 		action: SendForgotPasswordEmail
 	) {
 		this.subs.sink = this.authService
 			.sendForgotPasswordEmail(action.payload)
 			.subscribe({
 				next: (res: any) => {
-					ctx.patchState(res as AuthStateModel);
+					ctx.patchState(res as IAuthStateModel);
 					// this.updateMyStorageEngineService('auth', res);
 				},
 				error: () => {
@@ -123,14 +123,14 @@ export class AuthState
 
 	@Action(ConfirmForgotPassword, { cancelUncompleted: true })
 	confirmForgotPassword(
-		ctx: StateContext<AuthStateModel>,
+		ctx: StateContext<IAuthStateModel>,
 		action: ConfirmForgotPassword
 	) {
 		this.subs.sink = this.authService
 			.confirmForgotPassword(action.payload)
 			.subscribe({
 				next: (res: any) => {
-					ctx.patchState(res as AuthStateModel);
+					ctx.patchState(res as IAuthStateModel);
 					// this.updateMyStorageEngineService('auth', res);
 				},
 				error: () => {
@@ -143,10 +143,10 @@ export class AuthState
 	}
 
 	@Action(Logout, { cancelUncompleted: true })
-	logout(ctx: StateContext<AuthStateModel>) {
+	logout(ctx: StateContext<IAuthStateModel>) {
 		this.subs.sink = this.authService.logout().subscribe({
 			next: (res: any) => {
-				ctx.patchState(res as AuthStateModel);
+				ctx.patchState(res as IAuthStateModel);
 				// this.updateMyStorageEngineService('auth', res);
 			},
 			error: () => {
@@ -159,10 +159,10 @@ export class AuthState
 	}
 
 	@Action(IsAuthenticated, { cancelUncompleted: true })
-	isAuthenticated(ctx: StateContext<AuthStateModel>) {
+	isAuthenticated(ctx: StateContext<IAuthStateModel>) {
 		this.subs.sink = this.authService.isAuthenticated().subscribe({
 			next: (res: any) => {
-				ctx.patchState(res as AuthStateModel);
+				ctx.patchState(res as IAuthStateModel);
 				// this.updateMyStorageEngineService('auth', res);
 			},
 			error: () => {
@@ -175,7 +175,7 @@ export class AuthState
 	}
 
 	@Action(ResetAuthStoreToDefault, { cancelUncompleted: true })
-	resetAuthStoreToDefault(ctx: StateContext<AuthStateModel>) {
+	resetAuthStoreToDefault(ctx: StateContext<IAuthStateModel>) {
 		ctx.patchState({
 			status: 'Reset Auth Store To Default',
 			authenticated: null,

@@ -23,7 +23,7 @@ import { ConfirmForgotPasswordDto } from './models/dto/confirm-forgot-password-w
 )
 @Throttle(10, 180)
 // @UseFilters(GqlAllHttpExceptionFilter)
-@Resolver('Auth')
+@Resolver('auth')
 export class AuthResolver {
 	constructor(
 		private readonly authService: AuthService,
@@ -53,20 +53,20 @@ export class AuthResolver {
 		@Context('req') req: Request
 	): Promise<AuthenticationStatus> {
 		const { email, password, birthDate } = signupUser;
-		console.log('email', email);
-		const status = await this.authService.sendSignupEmailContainsAuthToken(
+
+		const status = await this.authService.sendSignupEmailContainsAuthToken({
 			email,
 			password,
 			birthDate,
-			`${req?.protocol}://${req?.headers?.host}`
-		);
+			requestHeadersHost: `${req?.protocol}://${req?.headers?.host}`,
+		});
 
 		return { status: status.status, authenticated: null };
 	}
 
 	@Mutation(() => AuthenticationStatus, {
 		name: 'login',
-		description: 'Validate account using the sended authToken',
+		description: 'Validate account using the sended auth',
 	})
 	async login(
 		@Args('user', { type: () => LoginDto }) login: LoginDto,
@@ -75,7 +75,7 @@ export class AuthResolver {
 		const user = await this.authService.login(login.email, login.password);
 
 		if (user)
-			res.cookie('auth', user.authToken, {
+			res.cookie('auth', user.auth, {
 				maxAge: 1000 * 60 * 60 * 24 * 7 * 12,
 				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 				sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
@@ -105,9 +105,7 @@ export class AuthResolver {
 	async isAuthenticated(
 		@Context('req') req: Request
 	): Promise<AuthenticationStatus> {
-		const authToken = await this.myJWTService.verifyToken(
-			req?.cookies.authToken
-		);
+		const authToken = await this.myJWTService.verifyToken(req?.cookies.auth);
 
 		if (authToken)
 			return { status: 'CORRECTLY_AUTHENTICATED', authenticated: true };
@@ -147,7 +145,7 @@ export class AuthResolver {
 		const user = await this.authService.confirmForgotPassword(credentials);
 
 		if (user)
-			res.cookie('auth', user.authToken, {
+			res.cookie('auth', user.auth, {
 				maxAge: 1000 * 60 * 60 * 24 * 7 * 12,
 				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 				sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,

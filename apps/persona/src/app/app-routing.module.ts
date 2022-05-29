@@ -26,7 +26,7 @@ const routes: Routes = [
 	},
 	{
 		path: 'story',
-		// canActivate: [AuthGuard],
+		canActivate: [AuthGuard],
 		loadChildren: () =>
 			import('./features/story/components/story.module').then(
 				(m) => m.StoryModule

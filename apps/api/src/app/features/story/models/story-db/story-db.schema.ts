@@ -9,16 +9,15 @@ export type StoryDocument = Story & Document;
 @Schema()
 export class Story extends Document {
 	@Prop({
-		type: { text: String, color: String },
-		default: { text: '', color: '#fff' },
+		type: [{ text: String, color: String }],
 		required: true,
 	})
-	category: Category[];
+	category: Array<Category>;
 
 	@Prop({
 		type: String,
 	})
-	cover_image: string;
+	story_image_url: string;
 
 	@Prop({
 		type: MongooseSchema.Types.ObjectId,

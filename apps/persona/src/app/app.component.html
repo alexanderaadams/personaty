@@ -1,1 +1,25 @@
+<mat-progress-bar
+	*ngIf="executingLoader$ | async"
+	class="position-fixed top-0"
+	color="primary"
+	mode="indeterminate"
+	role="progressbar"
+	aria-label="progressbar">
+</mat-progress-bar>
+
+<div
+	style="background-color: #2921258c; z-index: 2000"
+	class="vh-100 vw-100 row justify-content-center align-items-center position-fixed"
+	*personaAppShellRender>
+	<h1
+		style="
+			font-family: system-ui, cursive;
+			font-size: calc(3rem + 4vw);
+			font-weight: 600;
+		"
+		class="text-center">
+		persona
+	</h1>
+</div>
+
 <router-outlet></router-outlet>

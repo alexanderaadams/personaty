@@ -35,7 +35,7 @@ export class AuthController {
 		const user = await this.authService.signupToken(authToken);
 
 		if (user) {
-			res.cookie('authToken', user.authToken, {
+			res.cookie('auth', user.auth, {
 				maxAge: 3600000 * 24,
 				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 				sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
@@ -66,7 +66,7 @@ export class AuthController {
 	// 		loginUser.password
 	// 	);
 
-	// 	res.cookie('authToken', user.authToken, {
+	// 	res.cookie('auth', user.auth, {
 	// maxAge: 3600000 * 24,
 	// httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 	// sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
@@ -79,7 +79,7 @@ export class AuthController {
 	// @Get('logout')
 	// @UseGuards(TokenAuthGuard)
 	// async logout(@Res({ passthrough: true }) res: Response) {
-	// 	res.clearCookie('authToken', { httpOnly: true });
+	// 	res.clearCookie('auth', { httpOnly: true });
 	// 	return { status: 'logged out', authenticated: false };
 	// }
 
@@ -99,7 +99,7 @@ export class AuthController {
 
 	// 	const user = await this.authService.verifyResetPassword(credentials);
 
-	// 	res.cookie('authToken', user.authToken, {
+	// 	res.cookie('auth', user.auth, {
 	// maxAge: 3600000 * 24,
 	// httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 	// sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
@@ -123,7 +123,7 @@ export class AuthController {
 			req.user as GoogleOauth2
 		);
 
-		res.cookie('authToken', user.authToken, {
+		res.cookie('auth', user.auth, {
 			maxAge: 3600000 * 24,
 			httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 			sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,

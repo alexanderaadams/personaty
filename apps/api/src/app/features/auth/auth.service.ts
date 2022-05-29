@@ -12,12 +12,13 @@ import { promisify } from 'util';
 import { UserService } from '@features/user/user.service';
 import { MyJWTService } from '@modules/jwt/jwt.service';
 import { UserSensitiveInformation } from '@features/user/models/user-sensitive-information';
-import { NodemailerService } from '@core/utils/mail/nodemailer.service';
+import { NodemailerService } from '@modules/mail/nodemailer.service';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 
 import { GoogleOauth2 } from './models/google-oauth-2';
 import { UserInfo } from '@core/models/user-info';
 import { UserModel } from '@features/user/models/user-db/user-db.model';
+import { ISendSignupEmailContainsAuthToken } from './models/dto/send-signup-email-contains-auth-token';
 
 const scrypt = promisify(_scrypt);
 
@@ -30,7 +31,7 @@ export class AuthService {
 	) {}
 
 	@TryCatchWrapper()
-	async hashingPassword(password: string):Promise<string> {
+	async hashingPassword(password: string): Promise<string> {
 		// Hash the users password
 		// Generate a salt
 		const salt: string = randomBytes(32).toString('hex');
@@ -42,11 +43,10 @@ export class AuthService {
 
 	@TryCatchWrapper()
 	async sendSignupEmailContainsAuthToken(
-		email: string,
-		password: string,
-		birthDate: string,
-		reqHeadersHost: string
+		signupUser: ISendSignupEmailContainsAuthToken
 	): Promise<{ status: string }> {
+		const { email, password, birthDate, requestHeadersHost } = signupUser;
+
 		const user: UserInfo | null = await this.usersService.findOne({ email });
 
 		if (user) throw new ConflictException();
@@ -58,16 +58,20 @@ export class AuthService {
 			}
 		);
 
-		const authTokenURL = `${reqHeadersHost}/api/v1/auth/signup/${authToken}`;
+		const authTokenURL = `${requestHeadersHost}/api/v1/auth/signup/${authToken}`;
 
-		console.log('email', email);
-
-		this.nodemailerService.sendEmail(
-			email,
-			'Confirm Your Email Now!',
-			'Click On The Button Bellow To Verify Your Email',
-			authTokenURL
-		);
+		this.nodemailerService.sendEmail({
+			to: email,
+			subject: 'Confirm Your Email Now!',
+			additionalInfo: {
+				bodyText:
+					'Please confirm your email address by clicking on the button bellow.',
+				expiresDate: '24 hour',
+				creationConfirmation: '',
+				buttonText: 'Confirm your email',
+			},
+			authTokenURL: authTokenURL,
+		});
 		// const hashedPassword = await this.hashingPassword(password);
 		// const newUser = await this.usersService.createUser({
 		// 	email,
@@ -81,7 +85,7 @@ export class AuthService {
 	@TryCatchWrapper()
 	async signupToken(
 		signupToken: string
-	): Promise<{ user: UserInfo; authToken: string }> {
+	): Promise<{ user: UserInfo; auth: string }> {
 		const { email, password, birthDate } = await this.myJWTService.verifyToken(
 			signupToken
 		);
@@ -105,7 +109,7 @@ export class AuthService {
 
 		return {
 			user: newUser,
-			authToken,
+			auth: authToken,
 		};
 	}
 
@@ -113,7 +117,7 @@ export class AuthService {
 	async login(
 		email: string,
 		password: string
-	): Promise<{ user: UserSensitiveInformation; authToken: string }> {
+	): Promise<{ user: UserSensitiveInformation; auth: string }> {
 		const user: UserSensitiveInformation | null =
 			await this.usersService.getUserSensitiveInformation({
 				email,
@@ -139,7 +143,7 @@ export class AuthService {
 
 		return {
 			user,
-			authToken,
+			auth: authToken,
 		};
 	}
 
@@ -151,7 +155,7 @@ export class AuthService {
 	@TryCatchWrapper()
 	async googleOauth2Login(
 		googleUser: GoogleOauth2
-	): Promise<{ user?: UserInfo; newUser?: UserInfo; authToken: string }> {
+	): Promise<{ user?: UserInfo; newUser?: UserInfo; auth: string }> {
 		if (!googleUser) {
 			throw new NotFoundException('Did not get any user from google');
 		}
@@ -163,7 +167,7 @@ export class AuthService {
 		if (user)
 			return {
 				user,
-				authToken: await this.myJWTService.signToken({
+				auth: await this.myJWTService.signToken({
 					id: user._id,
 					email: user.email,
 				}),
@@ -179,7 +183,7 @@ export class AuthService {
 
 		return {
 			newUser,
-			authToken: await this.myJWTService.signToken({
+			auth: await this.myJWTService.signToken({
 				id: newUser._id.toString(),
 				email: newUser.email,
 			}),
@@ -189,7 +193,7 @@ export class AuthService {
 	@TryCatchWrapper()
 	async sendForgotPasswordEmail(
 		email: string,
-		reqHeadersOrigin: string
+		requestHeadersOrigin: string
 	): Promise<{ status: string }> {
 		const user: UserInfo | null = await this.usersService.findOne({ email });
 
@@ -202,14 +206,19 @@ export class AuthService {
 			}
 		);
 
-		const tokenURL = `${reqHeadersOrigin}/auth/confirm-forgot-password/${authToken}`;
+		const authTokenURL = `${requestHeadersOrigin}/auth/confirm-forgot-password/${authToken}`;
 
-		this.nodemailerService.sendEmail(
-			email,
-			'Forgot Your Password',
-			'Click On The Button To Reset Your Password',
-			tokenURL
-		);
+		this.nodemailerService.sendEmail({
+			to: email,
+			subject: 'Forgot Your Password',
+			additionalInfo: {
+				bodyText: 'Reset your password by clicking on the button bellow.',
+				expiresDate: '1 hour',
+				buttonText: 'Reset your password',
+			},
+			authTokenURL: authTokenURL,
+		});
+
 		return { status: 'Email has ben send' };
 	}
 
@@ -218,7 +227,7 @@ export class AuthService {
 		password: string;
 		confirmPassword: string;
 		authToken: string;
-	}): Promise<{ updateUser: UserInfo; authToken: string }> {
+	}): Promise<{ updateUser: UserInfo; auth: string }> {
 		const { password, confirmPassword, authToken } = passwords;
 
 		if (password !== confirmPassword)
@@ -232,7 +241,7 @@ export class AuthService {
 
 		if (!user) throw new BadGatewayException('User Can Not Be Found');
 
-		const signToken: string = await this.myJWTService.signToken({
+		const newAuthToken: string = await this.myJWTService.signToken({
 			email: user.email,
 		});
 
@@ -244,7 +253,7 @@ export class AuthService {
 
 		return {
 			updateUser,
-			authToken: signToken,
+			auth: newAuthToken,
 		};
 	}
 }

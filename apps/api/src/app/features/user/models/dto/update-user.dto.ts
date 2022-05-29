@@ -8,7 +8,7 @@ import {
 	IsString,
 } from 'class-validator';
 
-import { Gender } from '@core/enums/gender.enum';
+import { EGender } from '@core/enums/gender.enum';
 import { UpdateUserInput } from '@core/models/graphql.schema';
 
 export class UpdateUserDto extends UpdateUserInput {
@@ -28,7 +28,7 @@ export class UpdateUserDto extends UpdateUserInput {
 	@IsOptional()
 	password?: string;
 
-	@IsEnum(Gender)
+	@IsEnum(EGender)
 	@IsOptional()
 	gender?: string;
 

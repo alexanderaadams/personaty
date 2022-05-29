@@ -11,13 +11,17 @@ import { take, tap } from 'rxjs/operators';
 import { Moment } from 'moment';
 
 import { FormService } from '@auth/core/data-access/services/form.service';
-import { AuthStateModel } from '@auth/core/data-access/store/auth.model';
+import { IAuthStateModel } from '@auth/core/data-access/store/auth.model';
 import { AuthState } from '@auth/core/data-access/store/auth.state';
 import {
 	LoginWithGoogle,
 	Signup,
 } from '@auth/core/data-access/store/auth.action';
-import { UnsubscribeOnDestroyAdapter, environment } from '@persona/shared';
+import {
+	UnsubscribeOnDestroyAdapter,
+	environment,
+	SharedService,
+} from '@persona/shared';
 
 @Component({
 	selector: 'lib-signup',
@@ -30,11 +34,9 @@ export class SignupComponent
 	implements OnDestroy, OnInit
 {
 	hide = true;
-	loginExecutingLoader$: BehaviorSubject<boolean> =
-		new BehaviorSubject<boolean>(false);
 
 	@Select(AuthState.isAuthenticated)
-	isAuthenticated$!: Observable<AuthStateModel>;
+	isAuthenticated$!: Observable<IAuthStateModel>;
 
 	authForm: FormGroup = new FormGroup({
 		email: new FormControl('', [Validators.required, Validators.email]),
@@ -48,7 +50,11 @@ export class SignupComponent
 		birthDate: new FormControl('', [Validators.required]),
 	});
 
-	constructor(private readonly store: Store, private formService: FormService) {
+	constructor(
+		private readonly store: Store,
+		private formService: FormService,
+		public readonly sharedService: SharedService
+	) {
 		super();
 	}
 
@@ -87,8 +93,6 @@ export class SignupComponent
 				take(2)
 			)
 			.subscribe();
-
-		this.loginExecutingLoader$ = this.formService.loginExecutingLoader$;
 
 		this.formService.goAuthenticate(new Signup(formValue));
 	}

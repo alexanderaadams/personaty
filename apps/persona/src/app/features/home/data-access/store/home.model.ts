@@ -1,4 +1,4 @@
-import { StoryStateModel } from '../../../story/data-access/store/story.model';
+import { IStoryStateModel } from '../../../story/data-access/store/story.model';
 
 export interface HomeStateModel {
 	fullName: string | null;
@@ -9,7 +9,7 @@ export interface HomeStateModel {
 
 	created_at: Date | null;
 
-	stories: StoryStateModel[] | null;
+	stories: IStoryStateModel[] | null;
 
 	bio: string | null;
 

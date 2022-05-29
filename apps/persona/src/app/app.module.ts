@@ -3,11 +3,7 @@
 import extractFiles from 'extract-files/extractFiles.mjs';
 // @ts-ignore
 import isExtractableFile from 'extract-files/isExtractableFile.mjs';
-import {
-	HttpClientModule,
-	HTTP_INTERCEPTORS,
-	HttpClientXsrfModule,
-} from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
@@ -21,7 +17,6 @@ import { CookieService } from 'ngx-cookie-service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
-
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from '@persona/shared';
@@ -29,12 +24,15 @@ import { ProfileState } from './features/profile/data-access/store/profile.state
 import { StoryState } from './features/story/data-access/store/story.state';
 
 import { AngularMaterialModule } from '@persona/shared';
-import { XsrfInterceptor } from './core/data-access/interceptors/xsrf.interceptor';
-import { AppState } from './core/data-access/store/app.state';
+import { AppShellRenderDirective } from '@core/directives/app-shell-render.directive';
 import { AuthState } from '@persona/authentication';
 
+import { XsrfInterceptor } from './core/data-access/interceptors/xsrf.interceptor';
+import { AppState } from './core/data-access/store/app.state';
+import { ProgressInterceptor } from '@core/data-access/interceptors/progress.interceptor';
+
 @NgModule({
-	declarations: [AppComponent],
+	declarations: [AppComponent, AppShellRenderDirective],
 	imports: [
 		BrowserModule.withServerTransition({ appId: 'serverApp' }),
 		BrowserAnimationsModule,
@@ -42,10 +40,11 @@ import { AuthState } from '@persona/authentication';
 		ApolloModule,
 		AppRoutingModule,
 		ReactiveFormsModule,
+		AngularMaterialModule,
 		NgxsModule.forRoot([AuthState, ProfileState, StoryState, AppState], {
 			developmentMode: !environment.production,
 		}),
-		NgxsReduxDevtoolsPluginModule.forRoot(),
+		NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production }),
 		NgxsSelectSnapshotModule.forRoot(),
 		// NgxsStoragePluginModule.forRoot({
 		// 	key: 'auth',
@@ -58,7 +57,6 @@ import { AuthState } from '@persona/authentication';
 			// or after 30 seconds (whichever comes first).
 			registrationStrategy: 'registerWhenStable:30000',
 		}),
-		AngularMaterialModule,
 	],
 
 	providers: [
@@ -82,6 +80,11 @@ import { AuthState } from '@persona/authentication';
 		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: XsrfInterceptor,
+			multi: true,
+		},
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: ProgressInterceptor,
 			multi: true,
 		},
 	],

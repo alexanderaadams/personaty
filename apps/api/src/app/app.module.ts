@@ -5,6 +5,8 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { APP_FILTER } from '@nestjs/core';
 
 import { environment } from '@environment';
+import { NodemailerModule } from '@modules/mail/nodemailer.module';
+
 import { UserModule } from './features/user/users.module';
 import { AuthModule } from './features/auth/auth.module';
 import { StoryModule } from './features/story/story.module';
@@ -28,6 +30,7 @@ import { AppController } from './app.controller';
 		GraphQLWithUploadModule.forRoot(),
 		// NOTE Order of the routes is important for route handler
 		UnhandledRoutesModule,
+		NodemailerModule,
 
 		MongooseModule.forRootAsync({
 			connectionName: 'persona',

@@ -8,7 +8,7 @@ type Query {
 type Mutation {
 	createStory(story: CreateStoryInput!, storyImage: Upload!): Story!
 
-	updateStory(id: ID!, story: UpdateStoryInput!): Story!
+	updateStory(id: ID!, story: UpdateStoryInput!, storyImage: Upload): Story!
 
 	deleteStory(story: DeleteStoryInput!): Story_Status!
 }
@@ -32,7 +32,7 @@ input DeleteStoryInput {
 type Story {
 	_id: String!
 
-	storyImageUrl: String!
+	story_image_url: String!
 
 	category: [Category]!
 

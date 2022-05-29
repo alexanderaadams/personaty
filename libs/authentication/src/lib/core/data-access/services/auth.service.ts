@@ -5,10 +5,10 @@ import { Apollo } from 'apollo-angular';
 import { catchError, map } from 'rxjs/operators';
 
 import {
-	LoginCredentials,
-	ConfirmForgotPasswordCredentials,
-	SignupCredentials,
-	UserAvailableRequest,
+	ILoginCredentials,
+	IConfirmForgotPasswordCredentials,
+	ISignupCredentials,
+	IUserAvailableRequest,
 } from '../store/auth.model';
 import {
 	SEND_FORGOT_PASSWORD_EMAIL,
@@ -40,7 +40,7 @@ export class AuthService {
 		private sharedService: SharedService
 	) {}
 
-	userAvailable(value: UserAvailableRequest) {
+	userAvailable(value: IUserAvailableRequest) {
 		return this.apollo
 			.watchQuery({
 				query: IS_AVAILABLE,
@@ -56,7 +56,7 @@ export class AuthService {
 			);
 	}
 
-	signup(credentials: SignupCredentials) {
+	signup(credentials: ISignupCredentials) {
 		return this.apollo
 			.mutate({
 				mutation: SIGNUP,
@@ -78,7 +78,7 @@ export class AuthService {
 			);
 	}
 
-	login(credentials: LoginCredentials) {
+	login(credentials: ILoginCredentials) {
 		return this.apollo
 			.mutate({
 				mutation: LOGIN,
@@ -143,7 +143,7 @@ export class AuthService {
 			);
 	}
 
-	confirmForgotPassword(credentials: ConfirmForgotPasswordCredentials) {
+	confirmForgotPassword(credentials: IConfirmForgotPasswordCredentials) {
 		return this.apollo
 			.mutate({
 				mutation: CONFIRM_FORGOT_PASSWORD,

@@ -8,13 +8,13 @@ import { SharedService } from '@persona/shared';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Oauth2SuccessComponent implements OnInit {
-	isBrowser: boolean = this.sharedService.isBrowser;
+	// isBrowser: BehaviorSubject<boolean> = this.sharedService.isBrowser;
 
 	constructor(private sharedService: SharedService) {}
 
 	ngOnInit(): void {
 		setTimeout(() => {
-			if (this.isBrowser) window.close();
+			if (this.sharedService.isBrowser.value) window.close();
 		}, 2000);
 	}
 }

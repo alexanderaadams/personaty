@@ -5,9 +5,5 @@ import { Category, UpdateStoryInput } from '@core/models/graphql.schema';
 export class UpdateStoryDto extends UpdateStoryInput {
 	@IsArray()
 	@IsOptional()
-	category?: Category[];
-
-	@IsString()
-	@IsOptional()
-	photo?: string;
+	category: Array<Category>;
 }

@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { Action, State, StateContext, Selector } from '@ngxs/store';
 
-import { StoryStateModel } from './story.model';
+import { IStoryStateModel } from './story.model';
 import { CreateStory, GetStory } from './story.action';
 import { StoryService } from '../services/story.service';
 import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
-@State<StoryStateModel>({
+@State<IStoryStateModel>({
 	name: 'story',
 	defaults: {
 		_id: null,
@@ -26,7 +26,7 @@ export class StoryState extends UnsubscribeOnDestroyAdapter {
 	// private querySubscription!: Subscription;
 
 	@Selector()
-	static userInfo(userInfo: StoryStateModel) {
+	static userInfo(userInfo: IStoryStateModel) {
 		return userInfo;
 	}
 
@@ -35,11 +35,11 @@ export class StoryState extends UnsubscribeOnDestroyAdapter {
 	}
 
 	@Action(GetStory)
-	getUserInfo(ctx: StateContext<StoryStateModel>, action: GetStory) {
+	getUserInfo(ctx: StateContext<IStoryStateModel>, action: GetStory) {
 		this.subs.sink = this.storyService
 			.getStory(action.payload)
 			.pipe(
-				tap((res: StoryStateModel) => {
+				tap((res: IStoryStateModel) => {
 					ctx.patchState(res);
 				})
 			)
@@ -47,14 +47,14 @@ export class StoryState extends UnsubscribeOnDestroyAdapter {
 	}
 
 	@Action(CreateStory)
-	createStoryDto(ctx: StateContext<StoryStateModel>, action: CreateStory) {
+	createStoryDto(ctx: StateContext<IStoryStateModel>, action: CreateStory) {
 		this.subs.sink = this.storyService
 			.createStory(action.payload)
-			.pipe(
-				tap((res: StoryStateModel) => {
-					ctx.patchState(res);
-				})
-			)
+			// .pipe(
+			// 	tap((res: IStoryStateModel) => {
+			// 		ctx.patchState(res);
+			// 	})
+			// )
 			.subscribe();
 	}
 }

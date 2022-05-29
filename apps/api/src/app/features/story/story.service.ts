@@ -5,20 +5,17 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { FileUpload } from 'graphql-upload';
-import { createWriteStream } from 'fs';
-import { v4 as uuidv4 } from 'uuid';
-import * as path from 'path';
 
 import { MyJWTService } from '@modules/jwt/jwt.service';
 import { ImageService } from '@core/utils/image/image.service';
 import { UserDocument } from '@features/user/models/user-db/user-db.schema';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
+import { GqlSaveFileToStorage } from '@core/utils/file-storage';
 
 import { StoryDbModel } from './models/story-db/story-db.model';
-import { CreateStoryDto } from './models/dto/create-story.dto';
-import { UpdateStoryDto } from './models/dto/update-story';
 import { StoryDocument } from './models/story-db/story-db.schema';
+import { ICreateStoryService } from './models/services-dto/create-story-service';
+import { IUpdateStoryService } from './models/services-dto/update-story-service';
 
 @Injectable()
 export class StoryService {
@@ -47,50 +44,30 @@ export class StoryService {
 
 	@TryCatchWrapper()
 	async createStory(
-		authToken: string,
-		story: CreateStoryDto,
-		storyImage: FileUpload,
-		hostUrl: string
+		createStoryService: ICreateStoryService
 	): Promise<StoryDbModel> {
-		const authenticatedUser = await this.myJWTService.verifyToken(authToken);
+		const { authToken, category, storyImage, requestHeadersHostUrl } =
+			createStoryService;
 
-		const user = await this.userModel.findById(authenticatedUser.id);
+		const { id } = await this.myJWTService.verifyToken(authToken);
 
-		if (!user) throw new HttpException('User Does not exist', 404);
+		const user = await this.userModel.findById(id);
 
-		const checkImageLegitimacy = await this.imageService.checkImageLegitimacy(
-			storyImage
-		);
+		if (!user) throw new HttpException('User does not exist', 404);
 
-		if (!checkImageLegitimacy.valid)
-			throw new HttpException(checkImageLegitimacy.error ?? 'Error', 400);
+		const { fullImagePath, fileName, image } =
+			await this.imageService.checkImageLegitimacy(storyImage, id);
 
-		const fileExtension: string = path.extname(storyImage.filename);
-		const fileName: string = uuidv4() + fileExtension;
+		const [story] = await Promise.all([
+			this.storyModel.create({
+				category,
+				story_image_url: `${requestHeadersHostUrl}/story/${fileName}`,
+				user_id: id,
+			}),
+			GqlSaveFileToStorage(image, fullImagePath),
+		]);
 
-		const storeImage = new Promise((resolve, reject) =>
-			storyImage
-				.createReadStream()
-				.pipe(
-					createWriteStream(`${checkImageLegitimacy.fullImagePath}/${fileName}`)
-				)
-				.on('finish', () => resolve(true))
-				.on('error', () => reject(false))
-		);
-
-		if (!(await storeImage))
-			throw new HttpException('Something went wrong', 500);
-
-		return (await this.storyModel.create({
-			...story,
-			storyImageUrl: `${hostUrl}/story/${fileName}`,
-			created_at: Date.now(),
-		})) as unknown as Promise<StoryDbModel>;
-
-		// await this.userModel.updateOne(
-		// 	{ _id: (await newStory).userId.toString() },
-		// 	{ $push: { stories: (await newStory)._id.toString() } }
-		// );
+		return story as unknown as Promise<StoryDbModel>;
 	}
 
 	async getStory(id: string): Promise<StoryDbModel> {
@@ -101,13 +78,13 @@ export class StoryService {
 
 	@TryCatchWrapper()
 	async updateStory(
-		authToken: string,
-		id: string,
-		attrs: UpdateStoryDto
+		updateStoryService: IUpdateStoryService
 	): Promise<StoryDbModel> {
+		const { authToken, id, updateStory } = updateStoryService;
+
 		await this.checkUserHasStory(authToken, id);
 
-		return (await this.storyModel.findByIdAndUpdate(id, attrs, {
+		return (await this.storyModel.findByIdAndUpdate(id, updateStory, {
 			new: true,
 		})) as unknown as Promise<StoryDbModel>;
 	}

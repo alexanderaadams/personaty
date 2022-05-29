@@ -4,10 +4,10 @@ import { Action, State, StateContext, Selector } from '@ngxs/store';
 
 import { GetUserInfo } from './profile.action';
 import { ProfileService } from '../services/profile.service';
-import { ProfileStateModel } from './profile.model';
+import { IProfileStateModel } from './profile.model';
 import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
-@State<ProfileStateModel>({
+@State<IProfileStateModel>({
 	name: 'profile',
 
 	defaults: {
@@ -29,7 +29,7 @@ import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 @Injectable()
 export class ProfileState extends UnsubscribeOnDestroyAdapter {
 	@Selector()
-	static userInfo(userInfo: ProfileStateModel) {
+	static userInfo(userInfo: IProfileStateModel) {
 		return userInfo;
 	}
 
@@ -38,7 +38,7 @@ export class ProfileState extends UnsubscribeOnDestroyAdapter {
 	}
 
 	@Action(GetUserInfo)
-	getUserInfo(ctx: StateContext<ProfileStateModel>, action: GetUserInfo) {
+	getUserInfo(ctx: StateContext<IProfileStateModel>, action: GetUserInfo) {
 		this.subs.sink = this.profileService
 			.getUserInfo(action.payload)
 			.pipe(

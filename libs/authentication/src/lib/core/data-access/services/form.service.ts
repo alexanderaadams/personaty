@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { take, takeUntil, tap } from 'rxjs/operators';
 
-import { AuthStateModel } from '../store/auth.model';
+import { IAuthStateModel } from '../store/auth.model';
 import { IsAuthenticated, ResetAuthStoreToDefault } from '../store/auth.action';
 import { UnsubscribeOnDestroyAdapter, SharedService } from '@persona/shared';
 // import {  } from '@shared';
@@ -22,10 +22,7 @@ import { UnsubscribeOnDestroyAdapter, SharedService } from '@persona/shared';
 })
 export class FormService extends UnsubscribeOnDestroyAdapter {
 	@Select('auth')
-	isAuthenticated$!: Observable<AuthStateModel>;
-
-	loginExecutingLoader$: BehaviorSubject<boolean> =
-		this.sharedService.loginExecutingLoader$;
+	isAuthenticated$!: Observable<IAuthStateModel>;
 
 	formValue$: BehaviorSubject<unknown | null> = new BehaviorSubject<
 		unknown | null
@@ -47,13 +44,15 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 		new BehaviorSubject<boolean>(true);
 
 	checkIfAlreadyAuthenticated() {
-		// let count = 0;
-
 		this.isAuthenticated$
 			.pipe(
 				tap(({ status }: any) => {
 					if (status === 'NOT_AUTHENTICATED') {
 						this.router.navigateByUrl('/auth/login');
+						this.sharedService.executingLoader$.next(false);
+					}
+					if (status === 'CORRECTLY_AUTHENTICATED') {
+						this.sharedService.executingLoader$.next(false);
 					}
 				}),
 				takeUntil(this.ngUnsubscribeCheckIfAlreadyAuthenticated)
@@ -71,14 +70,12 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 		return this.actions$.pipe(
 			ofActionCompleted(action),
 			tap(() => {
-				this.loginExecutingLoader$.next(true);
-
 				this.isAuthenticated$
 					.pipe(
 						tap(({ status, authenticated }: any) => {
 							if (authenticated !== null && status !== null) {
 								this.ngUnUnsubscribeFollowAuthenticationStatus.next(false);
-								this.loginExecutingLoader$.next(false);
+								this.sharedService.executingLoader$.next(false);
 							}
 
 							if (authenticated) {
@@ -97,7 +94,6 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 								});
 
 							if (status === 'SENT_SIGNUP_EMAIL_SUCCESSFULLY') {
-								this.loginExecutingLoader$.next(false);
 								this._snackBar.open(snackBarSuccessMessage, '', {
 									duration: 3000,
 									panelClass: 'snack-bar-success',

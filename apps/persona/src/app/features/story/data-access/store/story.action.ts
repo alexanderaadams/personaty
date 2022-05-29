@@ -1,12 +1,11 @@
-import { CreateStoryDto } from "../model/create-story.dto";
-
+import { ICreateStory } from '../../model/create-story';
 
 export class GetStory {
-	static readonly type = '[Profile] Get Story';
+	static readonly type = '[Story] Get Story';
 	constructor(public payload: string) {}
 }
 
 export class CreateStory {
-	static readonly type = '[Profile] Create Story';
-	constructor(public payload: CreateStoryDto) {}
+	static readonly type = '[Story] Create Story';
+	constructor(public payload: ICreateStory) {}
 }

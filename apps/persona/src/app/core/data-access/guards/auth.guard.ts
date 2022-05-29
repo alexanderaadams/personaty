@@ -4,7 +4,7 @@ import { CanActivate, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Select } from '@ngxs/store';
 import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
-import { AuthStateModel, FormService } from '@persona/authentication';
+import { IAuthStateModel, FormService } from '@persona/authentication';
 
 @Injectable({
 	providedIn: 'root',
@@ -14,7 +14,7 @@ export class AuthGuard
 	implements CanActivate
 {
 	@Select('auth')
-	isAuthenticated$!: Observable<AuthStateModel>;
+	isAuthenticated$!: Observable<IAuthStateModel>;
 
 	constructor(private formService: FormService) {
 		super();

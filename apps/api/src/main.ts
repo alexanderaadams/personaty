@@ -13,16 +13,23 @@ import { AppModule } from './app/app.module';
 import { graphqlUploadExpress } from 'graphql-upload';
 
 process.on('uncaughtException', (err: Error) => {
-	Logger.log('UNCAUGHT EXCEPTION! 💥');
-	Logger.log(err?.name ?? 'Error', err?.message ?? 'Something went wrong');
+	Logger.error('UNCAUGHT EXCEPTION! 💥');
+	Logger.error(err?.name ?? 'Error', err?.message ?? 'Something went wrong');
 });
 
 process.on(
 	'unhandledRejection',
-	(err: Record<string, unknown> | null | undefined) => {
-		Logger.log('UNHANDLED REJECTION! 💥 ');
-		Logger.log(err?.name ?? 'Error', err?.message ?? 'Something went wrong');
-		process.exit(0);
+	(
+		reason: Record<string, unknown> | null | undefined,
+		promise: Promise<unknown>
+	) => {
+		Logger.error('UNHANDLED REJECTION! 💥 ');
+		Logger.error(reason);
+		Logger.error(
+			reason?.name ?? 'Error',
+			reason?.message ?? 'Something went wrong'
+		);
+		process.exit(1);
 	}
 );
 
@@ -33,7 +40,7 @@ async function bootstrap() {
 	const globalPrefix = 'api/v1';
 
 	const corsOptions = {
-		origin: function (origin, callback) {
+		origin: function (origin: any, callback: any) {
 			if (whitelist.indexOf(origin) !== -1) return callback(null, true);
 
 			throw new UnauthorizedException('Not allowed by CORS');
@@ -49,7 +56,7 @@ async function bootstrap() {
 	app.use(
 		'/graphql',
 		graphqlUploadExpress({
-			maxFileSize: 10000,
+			maxFileSize: 500000,
 			maxFiles: 1,
 		})
 	);
@@ -99,16 +106,16 @@ async function bootstrap() {
 				xssFilter: true,
 			})
 		);
+		// CSRF protection
+		app.use(
+			csurf({
+				cookie: {
+					httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
+				},
+				sessionKey: environment.CSRF_SESSION_KEY,
+			})
+		);
 	}
-	// CSRF protection
-	app.use(
-		csurf({
-			cookie: {
-				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
-			},
-			sessionKey: environment.CSRF_SESSION_KEY,
-		})
-	);
 
 	app.setGlobalPrefix(globalPrefix);
 

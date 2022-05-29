@@ -8,8 +8,8 @@ import {
 	IsObject,
 } from 'class-validator';
 
-import { Role } from '@core/enums/role.enum';
-import { Gender } from '@core/enums/gender.enum';
+import { ERole } from '@core/enums/role.enum';
+import { EGender } from '@core/enums/gender.enum';
 import { User } from '@core/models/graphql.schema';
 import { StoryDbModel } from '@features/story/models/story-db/story-db.model';
 import { InterestAndBio } from '../interest-and-bio';
@@ -42,10 +42,10 @@ export class UserModel extends User {
 	@IsDateString()
 	birthDate: string;
 
-	@IsEnum(Gender)
+	@IsEnum(EGender)
 	gender: string;
 
-	@IsEnum(Role)
+	@IsEnum(ERole)
 	role: string;
 
 	@IsDate()

@@ -1,29 +1,29 @@
-export interface AuthStateModel {
+export interface IAuthStateModel {
 	status: string | null;
 	authenticated: boolean | null | unknown;
 }
 
-export interface UserAvailableResponse {
+export interface IUserAvailableResponse {
 	available: boolean;
 }
 
-export interface UserAvailableRequest {
+export interface IUserAvailableRequest {
 	username?: string;
 	email?: string;
 }
 
-export interface SignupCredentials {
+export interface ISignupCredentials {
 	email: string;
 	password: string;
 	birthDate: string;
 }
 
-export interface LoginCredentials {
+export interface ILoginCredentials {
 	username: string;
 	password: string;
 }
 
-export interface ConfirmForgotPasswordCredentials {
+export interface IConfirmForgotPasswordCredentials {
 	password: string;
 	confirmPassword: string;
 	authToken: string;
