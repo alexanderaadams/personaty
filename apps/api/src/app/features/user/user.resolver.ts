@@ -16,7 +16,6 @@ import { UserService } from './user.service';
 	TokenAuthGuard
 )
 @Throttle(50, 60)
-// @UseFilters(GqlAllHttpExceptionFilter)
 @Resolver('User')
 export class UserResolver {
 	constructor(private readonly userService: UserService) {}
