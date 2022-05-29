@@ -16,7 +16,8 @@ import { IImage } from './utils/image.interface';
 
 @Injectable()
 export class ImageService {
-	constructor(private fileStorage: FileStorageService) {}
+	constructor(private fileStorageService: FileStorageService) {}
+
 	@TryCatchWrapper()
 	async getImage(imageId: string): Promise<boolean> {
 		const imagesFolderPath: string = join(process.cwd(), 'upload');
@@ -38,28 +39,19 @@ export class ImageService {
 	}
 
 	@TryCatchWrapper()
-	async stream2buffer(stream): Promise<Buffer> {
-		return new Promise((resolve, reject) => {
-			const _buf: any[] = [];
-
-			stream.on('data', (chunk: any) => _buf.push(chunk));
-			stream.on('end', () => resolve(Buffer.concat(_buf)));
-			stream.on('error', (err) => reject(err));
-		});
-	}
-
-	@TryCatchWrapper()
-	async isMimeTypeSafe(readStream: ReadStream) {
+	async isMimeTypeSafe(readStream: ReadStream): Promise<boolean> {
 		const validImageMimeType: Array<TValidImageMimeType> = [
 			'image/png',
 			'image/jpg',
 			'image/jpeg',
 		];
 
-		const readBuffer = await this.stream2buffer(readStream);
+		const readBuffer: Buffer = await this.fileStorageService.stream2buffer(
+			readStream
+		);
 
 		if (
-			!(await this.fileStorage.isMimeTypeSafe<TValidImageMimeType>(
+			!(await this.fileStorageService.isMimeTypeSafe<TValidImageMimeType>(
 				readBuffer,
 				validImageMimeType
 			))
@@ -79,8 +71,11 @@ export class ImageService {
 
 		const myRegex = /.(jpe?g|png)$/gi;
 
-		const checkedFileExtensionIfNotSafe =
-			await this.fileStorage.isFileExtensionSafe(image.filename, myRegex);
+		const checkedFileExtensionIfNotSafe: boolean =
+			await this.fileStorageService.isFileExtensionSafe(
+				image.filename,
+				myRegex
+			);
 
 		if (!checkedFileExtensionIfNotSafe) {
 			throw new HttpException('File must be a png, jpg/jpeg' ?? 'Error', 400);
@@ -89,14 +84,14 @@ export class ImageService {
 		if (!(await this.isMimeTypeSafe(image.createReadStream())))
 			throw new HttpException('File must be a png, jpg/jpeg', 400);
 
-		const fileExtension: string = path.extname(
-			image.filename
-		) as TValidImageExtensions;
+		// const fileExtension: string = path.extname(
+		// 	image.filename
+		// ) as TValidImageExtensions;
 
-		const fileName = `${environment.PROJECT_NAME}_${Date.now()}_${uuidv5(
+		const imageFileName = `${environment.PROJECT_NAME}_${Date.now()}_${uuidv5(
 			environment.V5_NAME,
 			environment.V5_NAMESPACE_CUSTOM
-		)}${fileExtension}`;
+		)}.jpeg`;
 
 		const fullImagePath: string = join(
 			process.cwd(),
@@ -104,9 +99,9 @@ export class ImageService {
 			id,
 			'images',
 			'story',
-			fileName
+			imageFileName
 		);
 
-		return { fileName, fullImagePath, image };
+		return { imageFileName, fullImagePath, image };
 	}
 }

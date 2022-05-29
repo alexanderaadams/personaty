@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import {
 	createWriteStream,
 	ReadStream,
@@ -9,11 +9,14 @@ import {
 	Stats,
 	rm,
 } from 'fs';
+import sharp = require('sharp');
+
 import { FileUpload } from 'graphql-upload';
 import { finished } from 'stream/promises';
 import * as mmm from 'mmmagic';
 import { join } from 'path';
 import { TryCatchWrapper } from './error-handling/try-catch-wrapper';
+import { Readable } from 'stream';
 
 const Magic = mmm.Magic;
 
@@ -25,27 +28,40 @@ interface TImageDirectory {
 
 @Injectable()
 export class FileStorageService {
+	@TryCatchWrapper()
+	async stream2buffer(stream): Promise<Buffer> {
+		return new Promise((resolve, reject) => {
+			const _buf: any[] = [];
+
+			stream.on('data', (chunk: any) => _buf.push(chunk));
+			stream.on('end', () => resolve(Buffer.concat(_buf)));
+			stream.on('error', (err) => reject(err));
+		});
+	}
 
 	@TryCatchWrapper()
 	async graphqlSaveFileToStorage(
 		file: FileUpload,
 		fullFilePath: string
 	): Promise<void> {
-		new Promise((resolve, reject) => {
-			const storedFile: ReadStream = file.createReadStream();
+		const streamFile: ReadStream = file.createReadStream();
 
-			const out: WriteStream = createWriteStream(fullFilePath);
+		const stream2buffer = await this.stream2buffer(streamFile);
 
-			storedFile.pipe(out).on('error', (err) => {
-				reject(err);
-				throw new HttpException('Something went wrong', 500);
-			});
+		const convertImage2JpegAsBuffer: Buffer = await sharp(stream2buffer)
+			.jpeg()
+			.toBuffer();
 
-			finished(out);
-			resolve(out);
+		const buffer2stream = Readable.from(convertImage2JpegAsBuffer);
+
+		const out: WriteStream = createWriteStream(fullFilePath);
+
+		buffer2stream.pipe(out).on('error', (err) => {
+			throw new HttpException('Something went wrong', 500);
 		});
-	}
 
+		finished(out);
+	}
 
 	@TryCatchWrapper()
 	async isFileExtensionSafe(fileName: string, regex: RegExp): Promise<boolean> {
@@ -86,29 +102,24 @@ export class FileStorageService {
 		folderType,
 		folderName,
 	}: TImageDirectory) {
-
-			for (const type of folderType) {
-				for (const folder of folderName) {
-					const folderPath = join(idFolderPath, type, folder);
-					stat(folderPath, (err: any, stats: Stats) => {
-						if (err) {
-							mkdir(
-								folderPath,
-								{ recursive: true },
-								(
-									err: NodeJS.ErrnoException | null,
-									path: string | undefined
-								) => {
-									//
-								}
-							);
-						} else {
-							return;
-						}
-					});
-				}
+		for (const type of folderType) {
+			for (const folder of folderName) {
+				const folderPath = join(idFolderPath, type, folder);
+				stat(folderPath, (err: any, stats: Stats) => {
+					if (err) {
+						mkdir(
+							folderPath,
+							{ recursive: true },
+							(err: NodeJS.ErrnoException | null, path: string | undefined) => {
+								//
+							}
+						);
+					} else {
+						return;
+					}
+				});
 			}
-
+		}
 	}
 
 	@TryCatchWrapper()

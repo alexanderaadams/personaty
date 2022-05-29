@@ -6,6 +6,7 @@ import { DateScalar } from '@core/utils/graphql-data-scalar/date.scalar';
 import { UserSchema } from '@features/user/models/user/user.schema';
 import { MyJWTModule } from '@modules/jwt/jwt.module';
 import { ImageModule } from '@modules/image/image.module';
+import { FileStorageService } from '@core/utils/file-storage.service';
 
 import { StorySchema } from './models/story/story.schema';
 import { StoryService } from './story.service';
@@ -24,6 +25,6 @@ import { StoryResolver } from './story.resolver';
 			'persona'
 		),
 	],
-	providers: [StoryResolver, StoryService, DateScalar],
+	providers: [StoryResolver, StoryService, DateScalar, FileStorageService],
 })
 export class StoryModule {}

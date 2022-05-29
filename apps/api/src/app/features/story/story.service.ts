@@ -13,17 +13,27 @@ import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 import { StoryModel } from './models/story/story-model';
 import { StoryDocument } from './models/story/story.schema';
 import { ImageService } from '@modules/image/image.service';
-import { ICreateStoryService } from './interfaces/create-story-service'
-import { IUpdateStoryService } from './interfaces/update-story-service'
+import { ICreateStoryService } from './interfaces/create-story-service';
+import { IUpdateStoryService } from './interfaces/update-story-service';
+import { FileStorageService } from '../../core/utils/file-storage.service';
 
 @Injectable()
 export class StoryService {
+	constructor(
+		@InjectModel('Story') private readonly storyModel: Model<StoryDocument>,
+		@InjectModel('User') private readonly userModel: Model<UserDocument>,
+		private readonly myJWTService: MyJWTService,
+		private readonly imageService: ImageService,
+		private readonly fileStorageService: FileStorageService
+	) {}
+
 	async checkUserHasStory(authToken: string, id: string) {
 		const authUser = await this.myJWTService.verifyToken(authToken);
 
-		const story = await this.storyModel.findById(id);
-
-		const user = await this.userModel.findById(authUser.id);
+		const [story, user] = await Promise.all([
+			this.storyModel.findById(id),
+			this.userModel.findById(authUser.id),
+		]);
 
 		if (!user || !story)
 			throw new HttpException('User Or Story Does not exist', 404);
@@ -33,13 +43,6 @@ export class StoryService {
 				'You are not authorized to update this field'
 			);
 	}
-
-	constructor(
-		@InjectModel('Story') private readonly storyModel: Model<StoryDocument>,
-		@InjectModel('User') private readonly userModel: Model<UserDocument>,
-		private myJWTService: MyJWTService,
-		private readonly imageService: ImageService
-	) {}
 
 	@TryCatchWrapper()
 	async createStory(
@@ -54,16 +57,16 @@ export class StoryService {
 
 		if (!user) throw new HttpException('User does not exist', 404);
 
-		const { fullImagePath, fileName, image } =
+		const { fullImagePath, imageFileName, image } =
 			await this.imageService.checkImageLegitimacy(storyImage, id);
 
 		const [story] = await Promise.all([
 			this.storyModel.create({
 				category,
-				story_image_url: `${requestHeadersHostUrl}/story/${fileName}`,
+				story_image_url: `${requestHeadersHostUrl}/story/${imageFileName}`,
 				user_id: id,
 			}),
-			// GqlSaveFileToStorage(image, fullImagePath),
+			this.fileStorageService.graphqlSaveFileToStorage(image, fullImagePath),
 		]);
 
 		return story as unknown as Promise<StoryModel>;
