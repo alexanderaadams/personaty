@@ -52,7 +52,7 @@ export class GraphQLWithUploadModule implements NestModule {
 								res,
 							};
 						},
-						formatError: (error: GraphQLError) => {
+						formatError: (error: GraphQLError): GraphQLFormattedError => {
 							const exception = error.extensions?.exception;
 
 							const graphQLFormattedError: GraphQLFormattedError = {

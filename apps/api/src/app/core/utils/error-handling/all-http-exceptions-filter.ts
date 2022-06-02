@@ -28,11 +28,11 @@ export class AllHttpExceptionsFilter
 		const ctx = host.switchToHttp();
 
 		const httpStatus = checkInstanceofHttpException
-			? exception?.getStatus()
-			: HttpStatus.INTERNAL_SERVER_ERROR;
+			? exception?.getStatus() ?? exception?.['response']?.statusCode
+			: exception?.['response']?.statusCode ?? HttpStatus.INTERNAL_SERVER_ERROR;
 
 		const httpMessage = checkInstanceofError
-			? exception?.message
+			? exception?.message ?? exception?.['response']?.message
 			: 'Something went wrong';
 
 		const responseBody = {
