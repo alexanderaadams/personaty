@@ -14,35 +14,35 @@ import { existsSync } from 'fs';
 export function app(): express.Express {
 	const server = express();
 
-	server.use(
-		helmet({
-			frameguard: { action: 'DENY' },
-			hsts: {
-				maxAge: 63072000,
-				includeSubDomains: true,
-			},
-			contentSecurityPolicy: false,
-			crossOriginEmbedderPolicy: true,
-			crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
-			crossOriginResourcePolicy: { policy: 'same-origin' },
-			expectCt: {
-				enforce: true,
-			},
-			referrerPolicy: {
-				policy: 'no-referrer',
-			},
-			noSniff: true,
-			originAgentCluster: true,
-			dnsPrefetchControl: {
-				allow: true,
-			},
-			permittedCrossDomainPolicies: {
-				permittedPolicies: 'by-content-type',
-			},
-			xssFilter: true,
-		})
-	);
-
+	// server.use(
+	// 	helmet({
+	// 		frameguard: { action: 'DENY' },
+	// 		hsts: {
+	// 			maxAge: 63072000,
+	// 			includeSubDomains: true,
+	// 		},
+	// 		contentSecurityPolicy: false,
+	// 		crossOriginEmbedderPolicy: false,
+	// 		crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
+	// 		crossOriginResourcePolicy: false,
+	// 		expectCt: {
+	// 			enforce: true,
+	// 		},
+	// 		referrerPolicy: {
+	// 			policy: 'no-referrer',
+	// 		},
+	// 		noSniff: true,
+	// 		originAgentCluster: true,
+	// 		dnsPrefetchControl: {
+	// 			allow: true,
+	// 		},
+	// 		permittedCrossDomainPolicies: {
+	// 			permittedPolicies: 'by-content-type',
+	// 		},
+	// 		xssFilter: true,
+	// 	})
+	// );
+	//
 	server.use(compression());
 
 	const distFolder = join(process.cwd(), 'dist/persona/browser');
