@@ -13,6 +13,8 @@ export class CsrfMiddleware implements NestMiddleware {
 				path: '/',
 			});
 
+			//
+
 		next();
 	}
 }
