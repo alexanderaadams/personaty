@@ -111,6 +111,9 @@ async function bootstrap() {
 			csurf({
 				cookie: {
 					httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
+					sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
+					secure: environment.COOKIE_ATTRIBUTE_SECURE,
+					path: '/',
 				},
 				sessionKey: environment.CSRF_SESSION_KEY,
 			})
