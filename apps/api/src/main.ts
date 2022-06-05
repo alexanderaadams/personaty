@@ -35,7 +35,9 @@ process.on(
 );
 
 async function bootstrap(): Promise<void> {
-	const app = await NestFactory.create<NestExpressApplication>(AppModule);
+	const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+		bufferLogs: true,
+	});
 
 	const whitelist = [environment.HOST_URL, environment.ORIGIN_URL, undefined];
 	const globalPrefix = 'api/v1';

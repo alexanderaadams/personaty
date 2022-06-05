@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-// const { graphqlUploadExpress } = require('graphql-upload');
+
 // import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 // import { graphqlUploadExpress } from 'graphql-upload';
 import * as graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
@@ -21,8 +21,9 @@ import { environment } from '@environment';
 /** Wraps the GraphQLModule with an up-to-date graphql-upload middleware. */
 @Module({})
 export class GraphQLWithUploadModule implements NestModule {
-	async configure(consumer: MiddlewareConsumer) {
-		await new Promise((resolve, reject) =>
+	async configure(consumer: MiddlewareConsumer): Promise<void> {
+		return;
+		await new Promise((resolve, reject): void =>
 			resolve(consumer.apply(graphqlUploadExpress()).forRoutes('/graphql'))
 		);
 	}
@@ -54,7 +55,7 @@ export class GraphQLWithUploadModule implements NestModule {
 							};
 						},
 						formatError: (error: GraphQLError): GraphQLFormattedError => {
-							const exception = error.extensions?.exception;
+							const exception: any = error?.extensions?.exception;
 
 							const graphQLFormattedError: GraphQLFormattedError = {
 								message:
