@@ -8,5 +8,5 @@
 		// "composite": true
 	},
 	"files": ["src/test-setup.ts"],
-	"include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts"]
+	"include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts","**/*.config.js"]
 }
