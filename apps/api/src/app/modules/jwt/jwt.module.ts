@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 
 import { PRIV_KEY, PUB_KEY } from '@persona/keys';
@@ -6,6 +6,7 @@ import { PRIV_KEY, PUB_KEY } from '@persona/keys';
 import { JwtStrategy } from './jwt.strategy';
 import { MyJWTService } from './jwt.service';
 
+@Global()
 @Module({
 	imports: [
 		JwtModule.registerAsync({

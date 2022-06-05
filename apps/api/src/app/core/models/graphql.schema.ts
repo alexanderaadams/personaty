@@ -103,23 +103,6 @@ export abstract class IMutation {
     abstract deleteUser(id: string): User_Status | Promise<User_Status>;
 }
 
-export class User {
-    _id: string;
-    username?: Nullable<string>;
-    email: string;
-    locale?: Nullable<string>;
-    profilePicture?: Nullable<string>;
-    birthDate: string;
-    gender?: Nullable<string>;
-    createdAt?: Nullable<Date>;
-    fullName?: Nullable<string>;
-    created_at: Date;
-    role?: Nullable<string>;
-    stories: Nullable<Story>[];
-    bio: Interest_And_Bio;
-    interests: Nullable<Interest_And_Bio>[];
-}
-
 export class Is_User_Available {
     available: boolean;
 }
@@ -135,9 +118,6 @@ export class Story {
     category: Nullable<Category>[];
     created_at: Date;
     user_id: string;
-    title?: Nullable<string>;
-    description?: Nullable<string>;
-    photo?: Nullable<string>;
 }
 
 export class Story_Status {
@@ -147,6 +127,22 @@ export class Story_Status {
 export class Category {
     text: string;
     color: string;
+}
+
+export class User {
+    _id: string;
+    fullName?: Nullable<string>;
+    username?: Nullable<string>;
+    email: string;
+    locale?: Nullable<string>;
+    profilePicture?: Nullable<string>;
+    created_at: Date;
+    birthDate: string;
+    gender?: Nullable<string>;
+    role?: Nullable<string>;
+    stories: Nullable<Story>[];
+    bio: Interest_And_Bio;
+    interests: Nullable<Interest_And_Bio>[];
 }
 
 export class User_Status {

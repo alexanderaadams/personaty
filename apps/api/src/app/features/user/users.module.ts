@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { MyJWTModule } from '@modules/jwt/jwt.module';
 import { DateScalar } from '@core/utils/graphql-data-scalar/date.scalar';
 
 import { UserController } from './user.controller';
@@ -15,7 +14,6 @@ import { UserResolver } from './user.resolver';
 			[{ name: 'User', schema: UserSchema }],
 			'persona'
 		),
-		MyJWTModule,
 	],
 	controllers: [UserController],
 	providers: [UserService, UserResolver, DateScalar],

@@ -10,7 +10,8 @@ import * as mongoSanitize from 'express-mongo-sanitize';
 
 import { environment } from './environments/environment';
 import { AppModule } from './app/app.module';
-import { graphqlUploadExpress } from 'graphql-upload';
+// import { graphqlUploadExpress } from 'graphql-upload';
+import * as graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 
 process.on('uncaughtException', (err: Error) => {
 	Logger.error('UNCAUGHT EXCEPTION! 💥');
@@ -109,7 +110,7 @@ async function bootstrap() {
 		// CSRF protection
 		app.use(
 			csurf({
-				cookie:  {
+				cookie: {
 					httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 					sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
 					secure: environment.COOKIE_ATTRIBUTE_SECURE,

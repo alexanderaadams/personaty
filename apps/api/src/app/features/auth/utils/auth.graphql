@@ -51,23 +51,6 @@ input Confirm_Forgot_Password_Input {
 	auth: String!
 }
 
-type User {
-	_id: String
-
-	username: String
-
-	email: String
-
-	locale: String
-
-	profilePicture: String
-
-	birthDate: String
-
-	gender: String
-
-	createdAt: Date
-}
 
 type Is_User_Available {
 	available: Boolean!

@@ -1,7 +1,8 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Request } from 'express';
-import { GraphQLUpload } from 'graphql-upload';
+// import { GraphQLUpload } from 'graphql-upload';
+import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { Throttle } from '@nestjs/throttler';
 
 import { TokenAuthGuard } from '@core/guards/is-auth.guard';

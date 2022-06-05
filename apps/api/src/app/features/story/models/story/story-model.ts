@@ -19,7 +19,7 @@ export class StoryModel extends Story {
 	@ValidateNested({ each: true, always: true })
 	@ArrayMinSize(2)
 	@ArrayMaxSize(25)
-	@Type(() => Category)
+	@Type((): typeof Category => Category)
 	category: Array<Category>;
 
 	@IsString()

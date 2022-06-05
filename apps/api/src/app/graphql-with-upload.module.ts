@@ -1,19 +1,20 @@
 import {
 	DynamicModule,
-	HttpStatus,
 	MiddlewareConsumer,
 	Module,
 	NestModule,
 } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
-import { graphqlUploadExpress } from 'graphql-upload';
+// const { graphqlUploadExpress } = require('graphql-upload');
+// import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
+// import { graphqlUploadExpress } from 'graphql-upload';
+import * as graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import { GraphQLError, GraphQLFormattedError, SourceLocation } from 'graphql';
 
 import { UserModule } from './features/user/users.module';
 import { AuthModule } from './features/auth/auth.module';
-import { AdminModule } from './features/admin/admin.module';
+// import { AdminModule } from './features/admin/admin.module';
 import { StoryModule } from './features/story/story.module';
 import { environment } from '@environment';
 
@@ -33,7 +34,7 @@ export class GraphQLWithUploadModule implements NestModule {
 				GraphQLModule.forRootAsync<ApolloDriverConfig>({
 					driver: ApolloDriver,
 					useFactory: () => ({
-						include: [AuthModule, StoryModule, UserModule],
+						include: [AuthModule, UserModule, StoryModule],
 						typePaths: ['./**/*.graphql'],
 						sortSchema: true,
 						uploads: false,

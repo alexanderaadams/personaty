@@ -7,7 +7,7 @@ import { Category } from '../category';
 export type StoryDocument = Story & Document;
 
 @Schema()
-export class Story extends Document {
+export class Story {
 	@Prop({
 		type: [{ text: String, color: String }],
 		required: true,

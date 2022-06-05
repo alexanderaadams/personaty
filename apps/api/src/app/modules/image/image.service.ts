@@ -1,7 +1,9 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { join } from 'path';
 import { readFile, ReadStream } from 'fs';
-import { FileUpload, Upload } from 'graphql-upload';
+// import { FileUpload, Upload } from 'graphql-upload';
+import type { FileUpload } from 'graphql-upload/processRequest.js';
+import type { Upload } from 'graphql-upload/processRequest.js';
 import { v5 as uuidv5 } from 'uuid';
 import path = require('path');
 
@@ -11,7 +13,7 @@ import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 
 import { TValidImageMimeType } from './utils/types/valid-image-mime.type';
 import { TImage } from './utils/types/image.type';
-import { TValidImageExtensions } from './utils/types/valid-image-extensions';
+// import { TValidImageExtensions } from './utils/types/valid-image-extensions';
 import { IImage } from './utils/image.interface';
 
 @Injectable()

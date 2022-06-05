@@ -18,6 +18,7 @@ import { UnhandledRoutesModule } from './modules/unhandled-routes/unhandled-rout
 import { CsrfMiddleware } from './core/middlewares/csrf.middleware';
 import { AllHttpExceptionsFilter } from './core/utils/error-handling/all-http-exceptions-filter';
 import { AppController } from './app.controller';
+import { MyJWTModule } from '@modules/jwt/jwt.module';
 
 // import { APP_FILTER } from '@nestjs/core';
 // import { AllHttpExceptionsFilter } from './core/interceptors/all-http-exceptions-filter';
@@ -28,11 +29,13 @@ import { AppController } from './app.controller';
 		AuthModule,
 		UserModule,
 		StoryModule,
-		GraphQLWithUploadModule.forRoot(),
 		// NOTE The order of the routes is important for route handler
 		UnhandledRoutesModule,
 		NodemailerModule,
 		ImageModule,
+		MyJWTModule,
+
+		GraphQLWithUploadModule.forRoot(),
 
 		MongooseModule.forRootAsync({
 			connectionName: 'persona',
@@ -40,7 +43,7 @@ import { AppController } from './app.controller';
 				uri: environment.DATABASE_CONNECTION,
 				retryAttempts: 5,
 				retryDelay: 1000,
-				autoIndex: environment.production,
+				autoIndex: true,
 			}),
 		}),
 

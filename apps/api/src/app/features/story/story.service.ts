@@ -7,24 +7,24 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { MyJWTService } from '@modules/jwt/jwt.service';
-import { UserDocument } from '@features/user/models/user/user.schema';
+import { UserDocument, User } from '@features/user/models/user/user.schema';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
+import { ImageService } from '@modules/image/image.service';
+import { FileStorageService } from '@core/utils/file-storage.service';
 
 import { StoryModel } from './models/story/story-model';
-import { StoryDocument } from './models/story/story.schema';
-import { ImageService } from '@modules/image/image.service';
+import { StoryDocument, Story } from './models/story/story.schema';
 import { ICreateStoryService } from './interfaces/create-story-service';
 import { IUpdateStoryService } from './interfaces/update-story-service';
-import { FileStorageService } from '../../core/utils/file-storage.service';
 
 @Injectable()
 export class StoryService {
 	constructor(
-		@InjectModel('Story') private readonly storyModel: Model<StoryDocument>,
-		@InjectModel('User') private readonly userModel: Model<UserDocument>,
-		private readonly myJWTService: MyJWTService,
-		private readonly imageService: ImageService,
-		private readonly fileStorageService: FileStorageService
+		@InjectModel(Story.name) private storyModel: Model<StoryDocument>,
+		@InjectModel(User.name) private userModel: Model<UserDocument>,
+		private myJWTService: MyJWTService,
+		private imageService: ImageService,
+		private fileStorageService: FileStorageService
 	) {}
 
 	async checkUserHasStory(authToken: string, id: string) {
