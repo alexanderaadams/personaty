@@ -2,6 +2,7 @@
 	"extends": "../../tsconfig.base.json",
 	"files": [],
 	"include": [],
+	"exclude": ["**/jest.config.ts"],
 	"references": [
 		{
 			"path": "./tsconfig.lib.json"
