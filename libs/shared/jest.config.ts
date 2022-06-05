@@ -1,5 +1,6 @@
+/* eslint-disable */
 module.exports = {
-	displayName: 'authentication',
+	displayName: 'shared',
 	preset: '../../jest.preset.js',
 	setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
 	globals: {
@@ -8,7 +9,7 @@ module.exports = {
 			stringifyContentPathRegex: '\\.(html|svg)$',
 		},
 	},
-	coverageDirectory: '../../coverage/libs/authentication',
+	coverageDirectory: '../../coverage/libs/shared',
 	transform: {
 		'^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
 	},

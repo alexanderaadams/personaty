@@ -1,6 +1,5 @@
 {
 	"projectType": "application",
-	"root": "apps/persona",
 	"sourceRoot": "apps/persona/src",
 	"prefix": "persona",
 	"targets": {
@@ -34,7 +33,6 @@
 					"apps/persona/src/styles.scss"
 				],
 				"scripts": [],
-
 				"serviceWorker": true,
 				"ngswConfigPath": "apps/persona/ngsw-config.json"
 			},
@@ -115,7 +113,7 @@
 			"executor": "@nrwl/jest:jest",
 			"outputs": ["coverage/apps/persona"],
 			"options": {
-				"jestConfig": "apps/persona/jest.config.js",
+				"jestConfig": "apps/persona/jest.config.ts",
 				"passWithNoTests": true
 			}
 		},

@@ -4,10 +4,8 @@
 		"outDir": "../../dist/out-tsc",
 		"module": "commonjs",
 		"types": ["jest", "node"]
-		// NOTE manually added
-		// "composite": true
 	},
 	"files": ["src/test-setup.ts"],
-	"include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts"],
+	"include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts", "jest.config.ts"],
 	"exclude": ["**/jest.config.ts"]
 }

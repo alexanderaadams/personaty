@@ -1,6 +1,5 @@
 {
 	"projectType": "library",
-	"root": "libs/authentication",
 	"sourceRoot": "libs/authentication/src",
 	"prefix": "persona",
 	"targets": {
@@ -24,7 +23,7 @@
 			"executor": "@nrwl/jest:jest",
 			"outputs": ["coverage/libs/authentication"],
 			"options": {
-				"jestConfig": "libs/authentication/jest.config.js",
+				"jestConfig": "libs/authentication/jest.config.ts",
 				"passWithNoTests": true
 			}
 		},
