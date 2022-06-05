@@ -9,8 +9,6 @@
 		"experimentalDecorators": true,
 		"exactOptionalPropertyTypes": true,
 		"strictNullChecks": true,
-		//"alwaysStrict": true,
-		// "strict": true,
 		"importHelpers": true,
 		"target": "es2015",
 		"module": "esnext",
