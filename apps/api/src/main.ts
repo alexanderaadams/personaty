@@ -13,7 +13,7 @@ import { AppModule } from './app/app.module';
 // import { graphqlUploadExpress } from 'graphql-upload';
 import * as graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 
-process.on('uncaughtException', (err: Error) => {
+process.on('uncaughtException', (err: Error): void => {
 	Logger.error('UNCAUGHT EXCEPTION! 💥');
 	Logger.error(err?.name ?? 'Error', err?.message ?? 'Something went wrong');
 });
@@ -23,7 +23,7 @@ process.on(
 	(
 		reason: Record<string, unknown> | null | undefined,
 		promise: Promise<unknown>
-	) => {
+	): never => {
 		Logger.error('UNHANDLED REJECTION! 💥 ');
 		Logger.error(reason);
 		Logger.error(
@@ -34,14 +34,14 @@ process.on(
 	}
 );
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
 	const whitelist = [environment.HOST_URL, environment.ORIGIN_URL, undefined];
 	const globalPrefix = 'api/v1';
 
 	const corsOptions = {
-		origin: function (origin: any, callback: any) {
+		origin: function (origin: any, callback: any): any {
 			if (whitelist.indexOf(origin) !== -1) return callback(null, true);
 
 			throw new UnauthorizedException('Not allowed by CORS');
@@ -114,7 +114,6 @@ async function bootstrap() {
 					httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
 					sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
 					secure: environment.COOKIE_ATTRIBUTE_SECURE,
-					path: '/',
 				},
 				sessionKey: environment.CSRF_SESSION_KEY,
 			})

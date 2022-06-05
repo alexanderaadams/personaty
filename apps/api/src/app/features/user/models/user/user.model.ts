@@ -12,7 +12,7 @@ import { ERole } from '@core/enums/role.enum';
 import { EGender } from '@core/enums/gender.enum';
 import { User } from '@core/models/graphql.schema';
 import { InterestAndBio } from '../interest-and-bio';
-import { StoryModel } from '@features/story/models/story/story-model'
+import { Story_Model } from '@features/story/models/story/story-model';
 
 export class UserModel extends User {
 	@IsString()
@@ -52,7 +52,7 @@ export class UserModel extends User {
 	created_at: Date;
 
 	@IsArray()
-	stories: Array<StoryModel>;
+	stories: Array<Story_Model>;
 
 	@IsObject()
 	bio: InterestAndBio;

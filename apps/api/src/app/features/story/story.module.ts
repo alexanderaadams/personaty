@@ -6,16 +6,20 @@ import { DateScalar } from '@core/utils/graphql-data-scalar/date.scalar';
 import { UserSchema, User } from '@features/user/models/user/user.schema';
 import { FileStorageService } from '@core/utils/file-storage.service';
 
-import { StorySchema, Story } from './models/story/story.schema';
+import { Story_Schema, Story } from './models/story/story.schema';
 import { StoryService } from './story.service';
 import { StoryResolver } from './story.resolver';
+import { ImageModule } from '@modules/image/image.module';
+import { MyJWTModule } from '@modules/jwt/jwt.module';
 
 @Module({
 	imports: [
 		UserModule,
+		MyJWTModule,
+		ImageModule,
 		MongooseModule.forFeature(
 			[
-				{ name: Story.name, schema: StorySchema },
+				{ name: Story.name, schema: Story_Schema },
 				{ name: User.name, schema: UserSchema },
 			],
 			'persona'

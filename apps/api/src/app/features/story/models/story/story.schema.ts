@@ -30,4 +30,4 @@ export class Story {
 	created_at: Date;
 }
 
-export const StorySchema = SchemaFactory.createForClass(Story);
+export const Story_Schema = SchemaFactory.createForClass(Story);

@@ -12,7 +12,7 @@ import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 import { ImageService } from '@modules/image/image.service';
 import { FileStorageService } from '@core/utils/file-storage.service';
 
-import { StoryModel } from './models/story/story-model';
+import { Story_Model } from './models/story/story-model';
 import { StoryDocument, Story } from './models/story/story.schema';
 import { ICreateStoryService } from './interfaces/create-story-service';
 import { IUpdateStoryService } from './interfaces/update-story-service';
@@ -47,7 +47,7 @@ export class StoryService {
 	@TryCatchWrapper()
 	async createStory(
 		createStoryService: ICreateStoryService
-	): Promise<StoryModel> {
+	): Promise<Story_Model> {
 		const { authToken, category, storyImage, requestHeadersHostUrl } =
 			createStoryService;
 
@@ -69,26 +69,26 @@ export class StoryService {
 			this.fileStorageService.graphqlSaveFileToStorage(image, fullImagePath),
 		]);
 
-		return story as unknown as Promise<StoryModel>;
+		return story as unknown as Promise<Story_Model>;
 	}
 
-	async getStory(id: string): Promise<StoryModel> {
+	async getStory(id: string): Promise<Story_Model> {
 		return (await this.storyModel.findById(
 			id
-		)) as unknown as Promise<StoryModel>;
+		)) as unknown as Promise<Story_Model>;
 	}
 
 	@TryCatchWrapper()
 	async updateStory(
 		updateStoryService: IUpdateStoryService
-	): Promise<StoryModel> {
+	): Promise<Story_Model> {
 		const { authToken, id, updateStory } = updateStoryService;
 
 		await this.checkUserHasStory(authToken, id);
 
 		return (await this.storyModel.findByIdAndUpdate(id, updateStory, {
 			new: true,
-		})) as unknown as Promise<StoryModel>;
+		})) as unknown as Promise<Story_Model>;
 	}
 
 	@TryCatchWrapper()
