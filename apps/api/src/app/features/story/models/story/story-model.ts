@@ -11,7 +11,7 @@ import { Type } from 'class-transformer';
 
 import { Category, Story } from '@core/models/graphql.schema';
 
-export class Story_Model extends Story {
+export class StoryModel extends Story {
 	@IsString()
 	_id: string;
 

@@ -16,7 +16,7 @@ import { GetStoryDto } from './models/dto/get-story.dto';
 import { UpdateStoryDto } from './models/dto/update-story';
 import { DeleteStoryDto } from './models/dto/delete-story.dto';
 import { StoryStatus } from './models/story-status';
-import { Story_Model } from './models/story/story-model';
+import { StoryModel } from './models/story/story-model';
 import { TImage } from '@modules/image/utils/types/image.type';
 
 @UseGuards(
@@ -29,7 +29,7 @@ import { TImage } from '@modules/image/utils/types/image.type';
 export class StoryResolver {
 	constructor(private readonly storyService: StoryService) {}
 
-	@Mutation(() => Story_Model, {
+	@Mutation(() => StoryModel, {
 		name: 'createStory',
 		description: 'Create Story',
 	})
@@ -38,7 +38,7 @@ export class StoryResolver {
 		@Args('storyImage', { type: () => GraphQLUpload })
 		storyImage: TImage,
 		@Context('req') req: Request
-	): Promise<Story_Model> {
+	): Promise<StoryModel> {
 		return this.storyService.createStory({
 			authToken: req.cookies.auth,
 			category: createStory.category,
@@ -53,17 +53,17 @@ export class StoryResolver {
 	// 	return new StreamableFile(file);
 	// }
 
-	@Query(() => Story_Model, {
+	@Query(() => StoryModel, {
 		name: 'getStory',
 		description: 'Get Story',
 	})
 	async getStory(
 		@Args('story', { type: () => GetStoryDto }) getStory: GetStoryDto
-	): Promise<Story_Model> {
+	): Promise<StoryModel> {
 		return await this.storyService.getStory(getStory.id);
 	}
 
-	@Mutation(() => Story_Model, {
+	@Mutation(() => StoryModel, {
 		name: 'updateStory',
 		description: 'Update Story',
 	})
@@ -71,7 +71,7 @@ export class StoryResolver {
 		@Args('id', { type: () => ID }) id: string,
 		@Args('story', { type: () => UpdateStoryDto }) updateStory: UpdateStoryDto,
 		@Context('req') req: Request
-	): Promise<Story_Model> {
+	): Promise<StoryModel> {
 		return await this.storyService.updateStory({
 			authToken: req.cookies.auth,
 			id,

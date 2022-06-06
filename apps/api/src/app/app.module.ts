@@ -7,9 +7,10 @@ import { APP_FILTER } from '@nestjs/core';
 import { environment } from '@environment';
 import { NodemailerModule } from '@modules/mail/nodemailer.module';
 import { ImageModule } from '@modules/image/image.module';
+import { MyJWTModule } from '@modules/jwt/jwt.module';
 
-import { UserModule } from './features/user/users.module';
 import { AuthModule } from './features/auth/auth.module';
+import { UserModule } from './features/user/users.module';
 import { StoryModule } from './features/story/story.module';
 import { GraphQLWithUploadModule } from './graphql-with-upload.module';
 import { UploadScalar } from './core/utils/graphql-data-scalar/upload.scalar';
@@ -18,7 +19,6 @@ import { UnhandledRoutesModule } from './modules/unhandled-routes/unhandled-rout
 import { CsrfMiddleware } from './core/middlewares/csrf.middleware';
 import { AllHttpExceptionsFilter } from './core/utils/error-handling/all-http-exceptions-filter';
 import { AppController } from './app.controller';
-import { MyJWTModule } from '@modules/jwt/jwt.module';
 
 // import { APP_FILTER } from '@nestjs/core';
 // import { AllHttpExceptionsFilter } from './core/interceptors/all-http-exceptions-filter';
@@ -35,17 +35,17 @@ import { MyJWTModule } from '@modules/jwt/jwt.module';
 		ImageModule,
 		MyJWTModule,
 
-		GraphQLWithUploadModule.forRoot(),
-
 		MongooseModule.forRootAsync({
-			connectionName: 'persona',
+			connectionName: environment.DATABASE_CONNECTION_NAME,
 			useFactory: () => ({
 				uri: environment.DATABASE_CONNECTION,
 				retryAttempts: 5,
 				retryDelay: 1000,
-				autoIndex: true,
+				autoIndex: environment.production,
 			}),
 		}),
+
+		GraphQLWithUploadModule.forRoot(),
 
 		PassportModule.registerAsync({
 			useFactory: () => ({ defaultStrategy: 'jwt' }),

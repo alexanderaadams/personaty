@@ -27,7 +27,7 @@ export const environment = {
 
 	//	MongoDB Atlas Connection Information.
 	DATABASE_CONNECTION: 'mongodb://localhost:27017/persona',
-	DATABASE_NAME: 'persona',
+	DATABASE_CONNECTION_NAME: 'persona',
 
 	//	CSRF Configuration
 	CSRF_SESSION_KEY:

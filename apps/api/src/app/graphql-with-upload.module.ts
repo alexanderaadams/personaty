@@ -21,9 +21,8 @@ import { environment } from '@environment';
 /** Wraps the GraphQLModule with an up-to-date graphql-upload middleware. */
 @Module({})
 export class GraphQLWithUploadModule implements NestModule {
-	async configure(consumer: MiddlewareConsumer): Promise<void> {
-		return;
-		await new Promise((resolve, reject): void =>
+	async configure(consumer: MiddlewareConsumer): Promise<unknown> {
+		return await new Promise((resolve, reject): void =>
 			resolve(consumer.apply(graphqlUploadExpress()).forRoutes('/graphql'))
 		);
 	}

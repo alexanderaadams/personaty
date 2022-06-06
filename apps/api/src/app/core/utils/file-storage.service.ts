@@ -16,12 +16,12 @@ import type { FileUpload } from 'graphql-upload/processRequest.js';
 // import { finished } from 'stream/promises';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const finished = require('stream').promises;
-// import * as mmm from 'mmmagic';
+import * as mmm from 'mmmagic';
 import { join } from 'path';
 import { TryCatchWrapper } from './error-handling/try-catch-wrapper';
 import { Readable } from 'stream';
 
-// const Magic = mmm.Magic;
+const Magic = mmm.Magic;
 
 interface TImageDirectory {
 	idFolderPath: string;
@@ -80,25 +80,25 @@ export class FileStorageService {
 		file: Buffer,
 		validFileMimeType: Array<T>
 	): Promise<boolean> {
-		// const magic = new Magic(mmm.MAGIC_MIME_TYPE);
+		const magic = new Magic(mmm.MAGIC_MIME_TYPE);
 
-		// const bitmap = function (file: Buffer): Promise<any> {
-		// 	return new Promise(function (resolve, reject): void {
-		// 		magic.detect(
-		// 			file,
-		// 			function (err: Error, data: string | string[]): void {
-		// 				if (err) reject(err);
-		// 				else resolve(data);
-		// 			}
-		// 		);
-		// 	});
-		// };
+		const bitmap = function (file: Buffer): Promise<any> {
+			return new Promise(function (resolve, reject): void {
+				magic.detect(
+					file,
+					function (err: Error, data: string | string[]): void {
+						if (err) reject(err);
+						else resolve(data);
+					}
+				);
+			});
+		};
 
-		// const isFileMimeTypeLegit: boolean = validFileMimeType.includes(
-		// 	(await bitmap(file)) as T
-		// );
+		const isFileMimeTypeLegit: boolean = validFileMimeType.includes(
+			(await bitmap(file)) as T
+		);
 
-		return true;
+		return isFileMimeTypeLegit;
 	}
 
 	@TryCatchWrapper()

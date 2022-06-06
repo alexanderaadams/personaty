@@ -1,20 +1,19 @@
-import {
-	HttpException,
-	Injectable,
-} from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { UserInfo } from '@core/models/user-info';
 
-import { UserDocument } from './models/user/user.schema';
+import { UserDocument, User } from './models/user/user.schema';
 import { UserModel } from './models/user/user.model';
 import { UserSensitiveInformation } from './models/user-sensitive-information';
+import { environment } from '@environment';
 
 @Injectable()
 export class UserService {
 	constructor(
-		@InjectModel('User') private readonly userModel: Model<UserDocument>
+		@InjectModel(User.name, environment.DATABASE_CONNECTION_NAME)
+		public readonly userModel: Model<UserDocument>
 	) {}
 
 	async createUser(user: {
