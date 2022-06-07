@@ -23,7 +23,7 @@ import { TImage } from '@modules/image/utils/types/image.type';
 	environment.production ? GqlThrottlerBehindProxyGuard : GqlThrottlerGuard,
 	TokenAuthGuard
 )
-@Throttle(50, 60)
+@Throttle(120, environment.THROTTLER_DEFAULT_TIME_TO_LIVE_LIMIT)
 // @UseFilters(GqlAllHttpExceptionFilter)
 @Resolver('Story')
 export class StoryResolver {

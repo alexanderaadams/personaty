@@ -23,14 +23,13 @@ process.on(
 	(
 		reason: Record<string, unknown> | null | undefined,
 		promise: Promise<unknown>
-	): never => {
+	) => {
 		Logger.error('UNHANDLED REJECTION! 💥 ');
 		Logger.error(reason);
 		Logger.error(
 			reason?.name ?? 'Error',
 			reason?.message ?? 'Something went wrong'
 		);
-		process.exit(1);
 	}
 );
 
@@ -48,7 +47,9 @@ async function bootstrap(): Promise<void> {
 
 			throw new UnauthorizedException('Not allowed by CORS');
 		},
-		methods: environment.CORS_HEADERS,
+		methods: environment.CORS_METHOD_HEADERS,
+		exposedHeaders: environment.CORS_EXPOSED_HEADERS,
+
 		credentials: true,
 	};
 
@@ -109,18 +110,18 @@ async function bootstrap(): Promise<void> {
 				xssFilter: true,
 			})
 		);
-		// CSRF protection
-		app.use(
-			csurf({
-				cookie: {
-					httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
-					sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
-					secure: environment.COOKIE_ATTRIBUTE_SECURE,
-				},
-				sessionKey: environment.CSRF_SESSION_KEY,
-			})
-		);
 	}
+	// CSRF protection
+	app.use(
+		csurf({
+			cookie: {
+				httpOnly: environment.COOKIE_ATTRIBUTE_HTTP_ONLY,
+				sameSite: environment.COOKIE_ATTRIBUTE_SAME_SITE,
+				secure: environment.COOKIE_ATTRIBUTE_SECURE,
+			},
+			sessionKey: environment.CSRF_SESSION_KEY,
+		})
+	);
 
 	app.setGlobalPrefix(globalPrefix);
 

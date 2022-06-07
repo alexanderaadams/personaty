@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { EMPTY, Observable } from 'rxjs';
 
 import { environment, SharedService } from '@persona/shared';
 import { CsrfTokenModel } from './core/data-access/store/app.model';
@@ -10,7 +10,10 @@ import { CsrfTokenModel } from './core/data-access/store/app.model';
 	providedIn: 'root',
 })
 export class AppService {
-	constructor(private http: HttpClient,private readonly sharedService :SharedService) {}
+	constructor(
+		private http: HttpClient,
+		private readonly sharedService: SharedService
+	) {}
 
 	checkConnection(): Observable<CsrfTokenModel> {
 		return this.http
@@ -21,6 +24,9 @@ export class AppService {
 				}
 			)
 			.pipe(
+				catchError(() => {
+					return EMPTY;
+				}),
 				map(({ data }: any): CsrfTokenModel => {
 					this.sharedService.executingLoader$.next(false);
 					return data.status as CsrfTokenModel;

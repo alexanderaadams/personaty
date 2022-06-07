@@ -53,11 +53,12 @@ import { AppController } from './app.controller';
 
 		ThrottlerModule.forRootAsync({
 			useFactory: () => ({
-				ttl: 60,
-				limit: 100,
+				ttl: environment.THROTTLER_DEFAULT_TIME_TO_LIVE_LIMIT,
+				limit: environment.THROTTLER_DEFAULT_TRYING_RATE_LIMIT,
 			}),
 		}),
 	],
+
 	providers: [
 		UploadScalar,
 		DateScalar,

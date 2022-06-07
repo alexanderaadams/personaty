@@ -28,7 +28,7 @@ export class AllHttpExceptionsFilter
 		const ctx = host.switchToHttp();
 
 		const httpStatus = checkInstanceofHttpException
-			? exception?.getStatus()
+			? exception?.getStatus() ?? exception?.['response'].statusCode
 			: HttpStatus.INTERNAL_SERVER_ERROR;
 
 		const httpMessage = checkInstanceofError
@@ -40,7 +40,7 @@ export class AllHttpExceptionsFilter
 			message: httpMessage,
 			path: httpAdapter.getRequestUrl(ctx.getRequest()),
 		};
-
+		console.log(exception);
 		httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
 	}
 }

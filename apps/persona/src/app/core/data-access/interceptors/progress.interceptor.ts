@@ -7,8 +7,7 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { SharedService } from '@persona/shared'
-
+import { SharedService } from '@persona/shared';
 
 @Injectable()
 export class ProgressInterceptor implements HttpInterceptor {

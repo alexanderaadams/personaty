@@ -4,9 +4,12 @@ import {
 	HttpHandler,
 	HttpEvent,
 	HttpInterceptor,
+	HttpResponse,
+	HttpErrorResponse,
 } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
+import { EMPTY, Observable } from 'rxjs';
 
 @Injectable()
 export class XsrfInterceptor implements HttpInterceptor {
@@ -18,14 +21,14 @@ export class XsrfInterceptor implements HttpInterceptor {
 		request: HttpRequest<unknown>,
 		next: HttpHandler
 	): Observable<HttpEvent<unknown>> {
-		const cookieName = 'XSRF-TOKEN';
+		const csrfCookieName = 'XSRF-TOKEN';
 		const headerName = 'X-CSRF-Token';
 
 		// Skip both non-mutating requests.
-		if (request.method === 'GET' || request.method === 'HEAD') {
+		if (request.method === 'GET' || request.method === 'HEAD')
 			return next.handle(request);
-		}
-		const CsrfToken: string = this.cookieService.get(cookieName);
+
+		const CsrfToken: string = this.cookieService.get(csrfCookieName);
 
 		// Be careful not to overwrite an existing header of the same name.
 		if (CsrfToken !== null && !request.headers.has(headerName)) {
@@ -33,6 +36,19 @@ export class XsrfInterceptor implements HttpInterceptor {
 				headers: request.headers.set(headerName, CsrfToken),
 			});
 		}
-		return next.handle(request);
+		return next.handle(request).pipe(
+			tap((response) => {
+				if (response instanceof HttpResponse) {
+					this.cookieService.set(
+						'csrfCookieName',
+						response.headers.get(headerName) ?? ''
+					);
+					console.log(
+						response.headers.keys(),
+						response.headers.get(headerName)
+					);
+				}
+			})
+		);
 	}
 }

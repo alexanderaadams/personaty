@@ -15,7 +15,7 @@ import { UserService } from './user.service';
 	environment.production ? GqlThrottlerBehindProxyGuard : GqlThrottlerGuard,
 	TokenAuthGuard
 )
-@Throttle(50, 60)
+@Throttle(120, environment.THROTTLER_DEFAULT_TIME_TO_LIVE_LIMIT)
 @Resolver('User')
 export class UserResolver {
 	constructor(private readonly userService: UserService) {}

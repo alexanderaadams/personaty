@@ -44,7 +44,8 @@ export class GraphQLWithUploadModule implements NestModule {
 						introspection: environment.production ? false : true,
 						cors: {
 							origin: [environment.HOST_URL, environment.ORIGIN_URL, undefined],
-							methods: environment.CORS_HEADERS,
+							methods: environment.CORS_METHOD_HEADERS,
+							exposedHeaders: environment.CORS_EXPOSED_HEADERS,
 							credentials: true,
 						},
 						context: ({ req, res }) => {

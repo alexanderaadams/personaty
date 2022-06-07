@@ -9,7 +9,10 @@ import { environment } from '@environment';
 import { ThrottlerBehindProxyGuard } from '@core/guards/throttler/throttler-behind-proxy.guard';
 
 @UseGuards(environment.production ? ThrottlerBehindProxyGuard : ThrottlerGuard)
-@Throttle(10, 180)
+@Throttle(
+	environment.THROTTLER_DEFAULT_TRYING_RATE_LIMIT,
+	environment.THROTTLER_DEFAULT_TIME_TO_LIVE_LIMIT
+)
 // @UseFilters(AllHttpExceptionsFilter)
 @Controller('auth')
 export class AuthController {

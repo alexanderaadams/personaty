@@ -21,7 +21,10 @@ import { ConfirmForgotPasswordDto } from './models/dto/confirm-forgot-password-w
 @UseGuards(
 	environment.production ? GqlThrottlerBehindProxyGuard : GqlThrottlerGuard
 )
-@Throttle(10, 180)
+@Throttle(
+	environment.THROTTLER_DEFAULT_TRYING_RATE_LIMIT,
+	environment.THROTTLER_DEFAULT_TIME_TO_LIVE_LIMIT
+)
 // @UseFilters(GqlAllHttpExceptionFilter)
 @Resolver('auth')
 export class AuthResolver {

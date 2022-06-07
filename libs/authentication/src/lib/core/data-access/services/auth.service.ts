@@ -21,6 +21,7 @@ import {
 } from '../graphql/auth.gql.schema';
 import { environment } from '@persona/shared';
 import { SharedService } from '@persona/shared';
+import { EMPTY } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
@@ -50,6 +51,9 @@ export class AuthService {
 				// errorPolicy: 'all',
 			})
 			.valueChanges.pipe(
+				catchError(() => {
+					return EMPTY;
+				}),
 				map(({ data }: any) => {
 					return data.isAvailable;
 				})
@@ -66,14 +70,14 @@ export class AuthService {
 				// errorPolicy: 'all',
 			})
 			.pipe(
+				catchError((error: any) => {
+					return error;
+				}),
 				map(({ data }: any) => {
 					return {
 						status: data?.signup?.status,
 						authenticated: data?.signup?.authenticated,
 					};
-				}),
-				catchError((error: any) => {
-					return error;
 				})
 			);
 	}
@@ -88,14 +92,14 @@ export class AuthService {
 				// errorPolicy: 'all',
 			})
 			.pipe(
+				catchError((error: any) => {
+					return error;
+				}),
 				map(({ data }: any) => {
 					return {
 						status: data?.login?.status,
 						authenticated: data?.login?.authenticated,
 					};
-				}),
-				catchError((error: any) => {
-					return error;
 				})
 			);
 	}
@@ -131,14 +135,14 @@ export class AuthService {
 			})
 
 			.pipe(
+				catchError((error: any) => {
+					return error;
+				}),
 				map(({ data }: any) => {
 					return {
 						status: data?.sendForgotPasswordEmail?.status,
 						authenticated: data?.sendForgotPasswordEmail?.authenticated,
 					};
-				}),
-				catchError((error: any) => {
-					return error;
 				})
 			);
 	}
@@ -153,14 +157,14 @@ export class AuthService {
 				// errorPolicy: 'all',
 			})
 			.pipe(
+				catchError((error: any) => {
+					return error;
+				}),
 				map(({ data }: any) => {
 					return {
 						status: data?.confirmForgotPassword?.status,
 						authenticated: data?.confirmForgotPassword?.authenticated,
 					};
-				}),
-				catchError((error: any) => {
-					return error;
 				})
 			);
 	}
@@ -172,14 +176,14 @@ export class AuthService {
 				// errorPolicy: 'all',
 			})
 			.pipe(
+				catchError((error: any) => {
+					return error;
+				}),
 				map(({ data }: any) => {
 					return {
 						status: data?.logout?.status,
 						authenticated: data?.logout?.authenticated,
 					};
-				}),
-				catchError((error: any) => {
-					return error;
 				})
 			);
 	}
@@ -191,14 +195,14 @@ export class AuthService {
 				// errorPolicy: 'all',
 			})
 			.pipe(
+				catchError((error: any) => {
+					return error;
+				}),
 				map(({ data }: any) => {
 					return {
 						status: data?.isAuthenticated?.status,
 						authenticated: data?.isAuthenticated?.authenticated,
 					};
-				}),
-				catchError((error: any) => {
-					return error;
 				})
 			);
 	}
