@@ -79,38 +79,38 @@ async function bootstrap(): Promise<void> {
 	// Data sanitization against XSS
 
 	// heroku works behind a proxy
-	if (environment.production) {
-		app.set('trust proxy', 1);
+	// if (environment.production) {
+	// app.set('trust proxy', 1);
 
-		// A wide range of protection policies
-		app.use(
-			helmet({
-				frameguard: { action: 'DENY' },
-				hsts: {
-					maxAge: 63072000,
-					includeSubDomains: true,
-				},
-				crossOriginEmbedderPolicy: true,
-				crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
-				crossOriginResourcePolicy: { policy: 'same-origin' },
-				expectCt: {
-					enforce: true,
-				},
-				referrerPolicy: {
-					policy: 'no-referrer',
-				},
-				noSniff: true,
-				originAgentCluster: true,
-				dnsPrefetchControl: {
-					allow: true,
-				},
-				permittedCrossDomainPolicies: {
-					permittedPolicies: 'by-content-type',
-				},
-				xssFilter: true,
-			})
-		);
-	}
+	// A wide range of protection policies
+	app.use(
+		helmet({
+			frameguard: { action: 'DENY' },
+			hsts: {
+				maxAge: 63072000,
+				includeSubDomains: true,
+			},
+			crossOriginEmbedderPolicy: true,
+			crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
+			crossOriginResourcePolicy: { policy: 'same-origin' },
+			expectCt: {
+				enforce: true,
+			},
+			referrerPolicy: {
+				policy: 'no-referrer',
+			},
+			noSniff: true,
+			originAgentCluster: true,
+			dnsPrefetchControl: {
+				allow: true,
+			},
+			permittedCrossDomainPolicies: {
+				permittedPolicies: 'by-content-type',
+			},
+			xssFilter: true,
+		})
+	);
+	// }
 	// CSRF protection
 	app.use(
 		csurf({

@@ -15,7 +15,12 @@ export const environment = {
 	COOKIE_ATTRIBUTE_HTTP_ONLY: true,
 
 	//	CORS Configuration
-	CORS_HEADERS: ['GET', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+	CORS_METHOD_HEADERS: ['GET', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+	CORS_EXPOSED_HEADERS: ['X-CSRF-Token'],
+
+	// Throttler Configuration
+	THROTTLER_DEFAULT_TRYING_RATE_LIMIT: 60,
+	THROTTLER_DEFAULT_TIME_TO_LIVE_LIMIT: 60,
 
 	//	URL Connection
 	HOST_URL: 'https://api-persona2.herokuapp.com',
