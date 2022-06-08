@@ -21,7 +21,7 @@ export function app(): express.Express {
 				maxAge: 63072000,
 				includeSubDomains: true,
 			},
-			contentSecurityPolicy: true,
+			contentSecurityPolicy: false,
 			crossOriginEmbedderPolicy: true,
 			crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
 			crossOriginResourcePolicy: true,

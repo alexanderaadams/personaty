@@ -12,7 +12,7 @@ const routes: Routes = [
 	},
 	{
 		path: 'login',
-		canActivate: [NotAuthGuard],
+		// canActivate: [NotAuthGuard],
 		loadChildren: () =>
 			import('./login/login.module').then((m) => m.LoginModule),
 	},

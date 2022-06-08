@@ -1,5 +1,5 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-// import { environment } from '@environment';
+import { environment } from '@environment';
 import { Response, Request } from 'express';
 
 @Injectable()

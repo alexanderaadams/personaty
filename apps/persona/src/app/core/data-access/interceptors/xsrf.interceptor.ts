@@ -26,7 +26,15 @@ export class XsrfInterceptor implements HttpInterceptor {
 
 		// Skip both non-mutating requests.
 		if (request.method === 'GET' || request.method === 'HEAD')
-			return next.handle(request);
+			return next.handle(request).pipe(
+				tap((response) => {
+					if (response instanceof HttpResponse)
+						this.cookieService.set(
+							csrfCookieName,
+							response.headers.get(headerName) ?? ''
+						);
+				})
+			);
 
 		const CsrfToken: string = this.cookieService.get(csrfCookieName);
 
@@ -38,16 +46,11 @@ export class XsrfInterceptor implements HttpInterceptor {
 		}
 		return next.handle(request).pipe(
 			tap((response) => {
-				if (response instanceof HttpResponse) {
+				if (response instanceof HttpResponse)
 					this.cookieService.set(
-						'csrfCookieName',
+						csrfCookieName,
 						response.headers.get(headerName) ?? ''
 					);
-					console.log(
-						response.headers.keys(),
-						response.headers.get(headerName)
-					);
-				}
 			})
 		);
 	}
