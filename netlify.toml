@@ -1,0 +1,6 @@
+[build]
+  command = "ng build --configuration production && ng run persona:serverless:production"
+  publish = "dist/persona/browser"
+
+[[plugins]]
+  package = "@netlify/plugin-angular-universal"
