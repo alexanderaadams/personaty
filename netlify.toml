@@ -1,4 +1,9 @@
 [build]
+	base = "/"
   command = "ng build --configuration production && ng run persona:serverless:production"
   publish = "dist/persona/browser"
 
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
