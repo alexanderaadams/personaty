@@ -3,32 +3,35 @@ import {
 	Injectable,
 	UnauthorizedException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { MyJWTService } from '@modules/jwt/jwt.service';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 import { ImageService } from '@modules/image/image.service';
-import { FileStorageService } from '@core/utils/file-storage.service';
+import { FileStorageService } from '@core/services/file-storage.service';
+import { InjectedMongooseModelsService } from '@modules/injected-mongoose-models/injected-mongoose-models.service';
+import { UserService } from '@features/user/user.service';
 
 import { StoryModel } from './models/story/story-model';
-import { StoryDocument, Story } from './models/story/story.schema';
-import { ICreateStoryService } from './interfaces/create-story-service';
-import { IUpdateStoryService } from './interfaces/update-story-service';
-import { environment } from '@environment';
-import { UserService } from '@features/user/user.service';
+import { StoryDocument } from './models/story/story.schema';
+import { ICreateStory } from './interfaces/create-story';
+import { IUpdateStory } from './interfaces/update-story';
 
 @Injectable()
 export class StoryService {
+	storyModel: Model<StoryDocument>;
+
 	constructor(
-		@InjectModel(Story.name, environment.DATABASE_CONNECTION_NAME)
-		private readonly storyModel: Model<StoryDocument>,
 		private readonly userService: UserService,
 		private readonly myJWTService: MyJWTService,
 		private readonly imageService: ImageService,
-		private readonly fileStorageService: FileStorageService
-	) {}
+		private readonly fileStorageService: FileStorageService,
+		private readonly injectedMongooseModelsService: InjectedMongooseModelsService
+	) {
+		this.storyModel = this.injectedMongooseModelsService.storyModel;
+	}
 
+	@TryCatchWrapper()
 	async checkUserHasStory(authToken: string, id: string) {
 		const authUser = await this.myJWTService.verifyToken(authToken);
 
@@ -47,11 +50,9 @@ export class StoryService {
 	}
 
 	@TryCatchWrapper()
-	async createStory(
-		createStoryService: ICreateStoryService
-	): Promise<StoryModel> {
+	async createStory(createStory: ICreateStory): Promise<StoryModel> {
 		const { authToken, category, storyImage, requestHeadersHostUrl } =
-			createStoryService;
+			createStory;
 
 		const { id } = await this.myJWTService.verifyToken(authToken);
 
@@ -60,7 +61,7 @@ export class StoryService {
 		if (!user) throw new HttpException('User does not exist', 404);
 
 		const { fullImagePath, imageFileName, image } =
-			await this.imageService.checkImageLegitimacy(storyImage, id);
+			await this.imageService.checkImageLegitimacy(storyImage, id, 'story');
 
 		const [story] = await Promise.all([
 			this.storyModel.create({
@@ -81,16 +82,18 @@ export class StoryService {
 	}
 
 	@TryCatchWrapper()
-	async updateStory(
-		updateStoryService: IUpdateStoryService
-	): Promise<StoryModel> {
-		const { authToken, id, updateStory } = updateStoryService;
+	async updateStory(updateStory: IUpdateStory): Promise<StoryModel> {
+		const { authToken, id } = updateStory;
 
 		await this.checkUserHasStory(authToken, id);
 
-		return (await this.storyModel.findByIdAndUpdate(id, updateStory, {
-			new: true,
-		})) as unknown as Promise<StoryModel>;
+		return (await this.storyModel.findByIdAndUpdate(
+			id,
+			updateStory.updateStory,
+			{
+				new: true,
+			}
+		)) as unknown as Promise<StoryModel>;
 	}
 
 	@TryCatchWrapper()

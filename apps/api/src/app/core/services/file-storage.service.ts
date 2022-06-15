@@ -18,14 +18,14 @@ import type { FileUpload } from 'graphql-upload/processRequest.js';
 const finished = require('stream').promises;
 // import * as mmm from 'mmmagic';
 import { join } from 'path';
-import { TryCatchWrapper } from './error-handling/try-catch-wrapper';
+import { TryCatchWrapper } from '../utils/error-handling/try-catch-wrapper';
 import { Readable } from 'stream';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 // const { fileTypeFromBuffer } = require('file-type');
 
 // const Magic = mmm.Magic;
 
-interface TImageDirectory {
+interface IImageDirectory {
 	idFolderPath: string;
 	folderType: ['images', 'videos'];
 	folderName: ['story', 'profile'];
@@ -108,7 +108,7 @@ export class FileStorageService {
 		idFolderPath,
 		folderType,
 		folderName,
-	}: TImageDirectory) {
+	}: IImageDirectory) {
 		for (const type of folderType) {
 			for (const folder of folderName) {
 				const folderPath = join(idFolderPath, type, folder);

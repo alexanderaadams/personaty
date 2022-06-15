@@ -5,16 +5,17 @@ import {
 	ArrayMinSize,
 	ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer'
+import { Type } from 'class-transformer';
 
-import { Category, UpdateStoryInput } from '@core/models/graphql.schema';
+import { UpdateStoryInput } from '@core/models/graphql.schema';
+import { InterestAndBioAndCategory } from '@core/models/interest-and-bio-and-category';
 
 export class UpdateStoryDto extends UpdateStoryInput {
 	@IsArray()
 	@ValidateNested({ each: true, always: true })
 	@ArrayMinSize(1)
 	@ArrayMaxSize(25)
-	@Type(() => Category)
+	@Type(() => InterestAndBioAndCategory)
 	@IsOptional()
-	category: Array<Category>;
+	category: Array<InterestAndBioAndCategory>;
 }

@@ -3,7 +3,6 @@ import { Response, Request } from 'express';
 import { Resolver, Query, Args, Mutation, Context } from '@nestjs/graphql';
 import { Throttle } from '@nestjs/throttler';
 
-import { AuthService } from './auth.service';
 import { IsUserAvailable } from './models/is-user-available';
 import { AuthenticationStatus } from './models/authentication-status';
 import { SignupDto } from './models/dto/signup.dto';
@@ -17,6 +16,10 @@ import { MyJWTService } from '@modules/jwt/jwt.service';
 import { environment } from '@environment';
 import { FindUser } from '@core/models/find-user';
 import { ConfirmForgotPasswordDto } from './models/dto/confirm-forgot-password-with-token.dto';
+import { ForgotPasswordService } from './services/forgot-password.service';
+import { LoginService } from './services/login.service';
+import { SignupService } from './services/signup.service';
+import { UserService } from '../user/user.service';
 
 @UseGuards(
 	environment.production ? GqlThrottlerBehindProxyGuard : GqlThrottlerGuard
@@ -29,8 +32,11 @@ import { ConfirmForgotPasswordDto } from './models/dto/confirm-forgot-password-w
 @Resolver('auth')
 export class AuthResolver {
 	constructor(
-		private readonly authService: AuthService,
-		private myJWTService: MyJWTService
+		private readonly loginService: LoginService,
+		private readonly signupService: SignupService,
+		private readonly forgotPasswordService: ForgotPasswordService,
+		private readonly myJWTService: MyJWTService,
+		private readonly userService: UserService
 	) {}
 
 	@Query(() => IsUserAvailable, {
@@ -40,7 +46,7 @@ export class AuthResolver {
 	async isAvailable(
 		@Args('findUser', { type: () => FindUser }) findUser: FindUser
 	): Promise<IsUserAvailable> {
-		const user = await this.authService.findOne(findUser);
+		const user = await this.userService.findOne(findUser);
 
 		if (user) return { available: false };
 
@@ -57,7 +63,7 @@ export class AuthResolver {
 	): Promise<AuthenticationStatus> {
 		const { email, password, birthDate } = signupUser;
 
-		const status = await this.authService.createSignupEmailContainsAuthToken({
+		const status = await this.signupService.createSignupEmail({
 			email,
 			password,
 			birthDate,
@@ -75,7 +81,10 @@ export class AuthResolver {
 		@Args('user', { type: () => LoginDto }) login: LoginDto,
 		@Context('res') res: Response
 	) {
-		const user = await this.authService.login(login.email, login.password);
+		const user = await this.loginService.credentialLogin(
+			login.email,
+			login.password
+		);
 
 		if (user)
 			res.cookie('auth', user.auth, {
@@ -125,7 +134,7 @@ export class AuthResolver {
 		sendForgotPasswordEmail: { email: string },
 		@Context('req') req: Request
 	): Promise<AuthenticationStatus> {
-		await this.authService.sendForgotPasswordEmail(
+		await this.forgotPasswordService.sendEmailToResetPassword(
 			sendForgotPasswordEmail.email,
 			req?.headers?.origin ?? ''
 		);
@@ -145,7 +154,9 @@ export class AuthResolver {
 
 		@Context('res') res: Response
 	): Promise<AuthenticationStatus> {
-		const user = await this.authService.confirmForgotPassword(credentials);
+		const user = await this.forgotPasswordService.confirmNewPassword(
+			credentials
+		);
 
 		if (user)
 			res.cookie('auth', user.auth, {

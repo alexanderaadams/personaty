@@ -39,7 +39,7 @@ export class StoryResolver {
 		storyImage: TImage,
 		@Context('req') req: Request
 	): Promise<StoryModel> {
-		return this.storyService.createStory({
+		return await this.storyService.createStory({
 			authToken: req.cookies.auth,
 			category: createStory.category,
 			storyImage,

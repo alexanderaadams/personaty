@@ -23,7 +23,6 @@ import { MyJWTService } from './jwt.service';
 			}),
 		}),
 	],
-	controllers: [],
 	providers: [MyJWTService, JwtStrategy],
 	exports: [MyJWTService],
 })

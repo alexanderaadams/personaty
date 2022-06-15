@@ -1,0 +1,9 @@
+input Interest_And_Bio_And_Category_Input {
+	text: String!
+	color: String!
+}
+
+type Interest_And_Bio_And_Category {
+	text: String!
+	color: String!
+}

@@ -9,7 +9,8 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { Category, Story } from '@core/models/graphql.schema';
+import { Story } from '@core/models/graphql.schema';
+import { InterestAndBioAndCategory } from '@core/models/interest-and-bio-and-category';
 
 export class StoryModel extends Story {
 	@IsString()
@@ -19,8 +20,8 @@ export class StoryModel extends Story {
 	@ValidateNested({ each: true, always: true })
 	@ArrayMinSize(2)
 	@ArrayMaxSize(25)
-	@Type((): typeof Category => Category)
-	category: Array<Category>;
+	@Type((): typeof InterestAndBioAndCategory => InterestAndBioAndCategory)
+	category: Array<InterestAndBioAndCategory>;
 
 	@IsString()
 	story_image_url: string;

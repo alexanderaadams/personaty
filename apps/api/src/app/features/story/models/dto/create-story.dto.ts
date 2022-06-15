@@ -4,16 +4,16 @@ import {
 	IsArray,
 	ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 import { CreateStoryInput } from '@core/models/graphql.schema';
-import { Category } from '../category';
-import { Type } from 'class-transformer';
+import { InterestAndBioAndCategory } from '@core/models/interest-and-bio-and-category';
 
 export class CreateStoryDto extends CreateStoryInput {
 	@IsArray()
 	@ValidateNested({ each: true, always: true })
 	@ArrayMinSize(1)
 	@ArrayMaxSize(25)
-	@Type(() => Category)
-	category: Array<Category>;
+	@Type(() => InterestAndBioAndCategory)
+	category: Array<InterestAndBioAndCategory>;
 }

@@ -6,22 +6,25 @@ import {
 	IsDate,
 	IsArray,
 	IsObject,
+	IsOptional,
 } from 'class-validator';
 
 import { ERole } from '@core/enums/role.enum';
 import { EGender } from '@core/enums/gender.enum';
 import { User } from '@core/models/graphql.schema';
-import { InterestAndBio } from '../interest-and-bio';
 import { StoryModel } from '@features/story/models/story/story-model';
+import { InterestAndBioAndCategory } from '../../../../core/models/interest-and-bio-and-category';
 
 export class UserModel extends User {
 	@IsString()
 	_id: string;
 
 	@IsString()
-	fullName: string;
+	@IsOptional()
+	fullName?: string;
 
 	@IsString()
+	@IsOptional()
 	username: string;
 
 	@IsEmail()
@@ -34,10 +37,8 @@ export class UserModel extends User {
 	locale: string;
 
 	@IsString()
-	profilePicture: string;
-
-	@IsString()
-	profileCover: string;
+	@IsOptional()
+	profilePicture?: string;
 
 	@IsDateString()
 	birthDate: string;
@@ -55,8 +56,8 @@ export class UserModel extends User {
 	stories: Array<StoryModel>;
 
 	@IsObject()
-	bio: InterestAndBio;
+	bio: InterestAndBioAndCategory;
 
 	@IsArray()
-	interests: Array<InterestAndBio>;
+	interests: Array<InterestAndBioAndCategory>;
 }

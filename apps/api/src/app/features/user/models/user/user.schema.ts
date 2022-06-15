@@ -1,7 +1,6 @@
+import { InterestAndBioAndCategory } from '@core/models/interest-and-bio-and-category';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Schema as MongooseSchema, Document, Types } from 'mongoose';
-
-import { InterestAndBio } from '../interest-and-bio';
 
 export type UserDocument = User & Document;
 
@@ -91,10 +90,10 @@ export class User {
 		type: { text: String, color: String },
 		default: { text: '', color: '#fff' },
 	})
-	bio: InterestAndBio;
+	bio: InterestAndBioAndCategory;
 
 	@Prop({ type: [{ text: String, color: String }], default: [''] })
-	interests: InterestAndBio[];
+	interests: Array<InterestAndBioAndCategory>;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

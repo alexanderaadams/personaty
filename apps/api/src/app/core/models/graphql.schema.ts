@@ -7,6 +7,11 @@
 
 /* tslint:disable */
 /* eslint-disable */
+export class Interest_And_Bio_And_Category_Input {
+    text: string;
+    color: string;
+}
+
 export class Signup_Input {
     email: string;
     password: string;
@@ -37,20 +42,15 @@ export class GetStoryInput {
 }
 
 export class CreateStoryInput {
-    category: CategoryInput[];
+    category: Interest_And_Bio_And_Category_Input[];
 }
 
 export class UpdateStoryInput {
-    category?: Nullable<Nullable<CategoryInput>[]>;
+    category?: Nullable<Nullable<Interest_And_Bio_And_Category_Input>[]>;
 }
 
 export class DeleteStoryInput {
     id: string;
-}
-
-export class CategoryInput {
-    text: string;
-    color: string;
 }
 
 export class UpdateUserInput {
@@ -61,12 +61,11 @@ export class UpdateUserInput {
     gender?: Nullable<string>;
     birthDate?: Nullable<Date>;
     locale?: Nullable<string>;
-    profilePicture?: Nullable<string>;
-    bio?: Nullable<Interest_And_Bio_Input>;
-    interests?: Nullable<Nullable<Interest_And_Bio_Input>[]>;
+    bio?: Nullable<Interest_And_Bio_And_Category_Input>;
+    interests?: Nullable<Nullable<Interest_And_Bio_And_Category_Input>[]>;
 }
 
-export class Interest_And_Bio_Input {
+export class Interest_And_Bio_And_Category {
     text: string;
     color: string;
 }
@@ -98,9 +97,9 @@ export abstract class IMutation {
 
     abstract deleteStory(story: DeleteStoryInput): Story_Status | Promise<Story_Status>;
 
-    abstract updateUser(id: string, user: UpdateUserInput): User | Promise<User>;
+    abstract updateUser(user: UpdateUserInput, profilePicture?: Nullable<Upload>): User | Promise<User>;
 
-    abstract deleteUser(id: string): User_Status | Promise<User_Status>;
+    abstract deleteUser(): User_Status | Promise<User_Status>;
 }
 
 export class Is_User_Available {
@@ -115,7 +114,7 @@ export class Authentication_Status {
 export class Story {
     _id: string;
     story_image_url: string;
-    category: Nullable<Category>[];
+    category: Nullable<Interest_And_Bio_And_Category>[];
     created_at: Date;
     user_id: string;
 }
@@ -124,34 +123,24 @@ export class Story_Status {
     status: string;
 }
 
-export class Category {
-    text: string;
-    color: string;
-}
-
 export class User {
     _id: string;
     fullName?: Nullable<string>;
     username?: Nullable<string>;
     email: string;
-    locale?: Nullable<string>;
+    locale: string;
     profilePicture?: Nullable<string>;
     created_at: Date;
     birthDate: string;
-    gender?: Nullable<string>;
-    role?: Nullable<string>;
+    gender: string;
+    role: string;
     stories: Nullable<Story>[];
-    bio: Interest_And_Bio;
-    interests: Nullable<Interest_And_Bio>[];
+    bio: Interest_And_Bio_And_Category;
+    interests: Nullable<Interest_And_Bio_And_Category>[];
 }
 
 export class User_Status {
     status: string;
-}
-
-export class Interest_And_Bio {
-    text: string;
-    color: string;
 }
 
 export type Upload = any;

@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Schema as MongooseSchema, Types, Document, model } from 'mongoose';
 
 import { User } from '@features/user/models/user/user.schema';
-import { Category } from '../category';
+import { InterestAndBioAndCategory } from '@core/models/interest-and-bio-and-category';
 
 export type StoryDocument = Story & Document;
 
@@ -12,7 +12,7 @@ export class Story {
 		type: [{ text: String, color: String }],
 		required: true,
 	})
-	category: Array<Category>;
+	category: Array<InterestAndBioAndCategory>;
 
 	@Prop({
 		type: String,

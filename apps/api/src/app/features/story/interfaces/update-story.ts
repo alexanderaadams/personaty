@@ -1,9 +1,8 @@
 import { TImage } from '@modules/image/utils/types/image.type';
 
-import { Category } from '../models/category';
 import { UpdateStoryDto } from '../models/dto/update-story';
 
-export interface IUpdateStoryService {
+export interface IUpdateStory {
 	authToken: string;
 
 	id: string;

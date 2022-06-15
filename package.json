@@ -103,6 +103,7 @@
 		"@angular/compiler-cli": "^13.3.4",
 		"@angular/language-service": "^13.3.4",
 		"@graphql-eslint/eslint-plugin": "^3.8.0",
+		"@nestjs/testing": "^8.4.6",
 		"@ngxs/devtools-plugin": "^3.7.3",
 		"@nrwl/cli": "14.1.9",
 		"@nrwl/cypress": "14.1.9",

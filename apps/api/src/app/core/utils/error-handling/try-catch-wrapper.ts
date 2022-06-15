@@ -10,7 +10,7 @@ export function TryCatchWrapper() {
 	): any {
 		const originalMethod = descriptor.value;
 
-		descriptor.value = async function (...args: any[]): Promise<any> {
+		descriptor.value = async function (...args: Array<any>): Promise<any> {
 			try {
 				return await originalMethod.apply(this, args);
 			} catch (error) {

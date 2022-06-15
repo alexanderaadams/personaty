@@ -8,7 +8,7 @@ import { v5 as uuidv5 } from 'uuid';
 import path = require('path');
 
 import { environment } from '@environment';
-import { FileStorageService } from '@core/utils/file-storage.service';
+import { FileStorageService } from '@core/services/file-storage.service';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 
 import { TValidImageMimeType } from './utils/types/valid-image-mime.type';
@@ -44,7 +44,6 @@ export class ImageService {
 	async isMimeTypeSafe(readStream: ReadStream): Promise<boolean> {
 		const validImageMimeType: Array<TValidImageMimeType> = [
 			'image/png',
-			'image/jpg',
 			'image/jpeg',
 		];
 
@@ -66,12 +65,13 @@ export class ImageService {
 	@TryCatchWrapper()
 	async checkImageLegitimacy(
 		graphqlImage: TImage,
-		id: string
+		id: string,
+		folderToStore: 'story' | 'profile'
 	): Promise<IImage> {
 		const image: FileUpload = (await (graphqlImage as Upload)
 			.promise) as FileUpload;
 
-		const myRegex = /.(jpe?g|png)$/gi;
+		const myRegex = /.(jpeg|png)$/gi;
 
 		const checkedFileExtensionIfNotSafe: boolean =
 			await this.fileStorageService.isFileExtensionSafe(
@@ -80,7 +80,7 @@ export class ImageService {
 			);
 
 		if (!checkedFileExtensionIfNotSafe) {
-			throw new HttpException('File must be a png, jpg/jpeg' ?? 'Error', 400);
+			throw new HttpException('File must be a png, jpeg' ?? 'Error', 400);
 		}
 
 		if (!(await this.isMimeTypeSafe(image.createReadStream())))
@@ -100,7 +100,7 @@ export class ImageService {
 			'upload',
 			id,
 			'images',
-			'story',
+			folderToStore,
 			imageFileName
 		);
 

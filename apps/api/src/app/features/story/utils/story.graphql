@@ -18,11 +18,11 @@ input GetStoryInput {
 }
 
 input CreateStoryInput {
-	category: [CategoryInput!]!
+	category: [Interest_And_Bio_And_Category_Input!]!
 }
 
 input UpdateStoryInput {
-	category: [CategoryInput]
+	category: [Interest_And_Bio_And_Category_Input]
 }
 
 input DeleteStoryInput {
@@ -34,7 +34,7 @@ type Story {
 
 	story_image_url: String!
 
-	category: [Category]!
+	category: [Interest_And_Bio_And_Category]!
 
 	created_at: Date!
 
@@ -43,14 +43,4 @@ type Story {
 
 type Story_Status {
 	status: String!
-}
-
-input CategoryInput {
-	text: String!
-	color: String!
-}
-
-type Category {
-	text: String!
-	color: String!
 }

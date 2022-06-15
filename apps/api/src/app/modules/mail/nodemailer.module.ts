@@ -46,7 +46,6 @@ import { NodemailerService } from './nodemailer.service';
 			}),
 		}),
 	],
-	controllers: [],
 	providers: [NodemailerService],
 	exports: [NodemailerService],
 })

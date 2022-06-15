@@ -6,7 +6,7 @@ export interface ICategory {
 export interface IStoryStateModel {
 	_id: string | null;
 
-	category: ICategory[] | null;
+	category: Array<ICategory> | null;
 
  StoryImageUrl: string | null;
 

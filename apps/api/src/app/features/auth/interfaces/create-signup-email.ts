@@ -1,4 +1,4 @@
-export interface ISendSignupEmailContainsAuthToken {
+export interface ICreateSignupEmail {
 	email: string;
 
 	password: string;

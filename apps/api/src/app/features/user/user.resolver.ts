@@ -1,6 +1,9 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Throttle } from '@nestjs/throttler';
+import { Request } from 'express';
+
+import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 
 import { environment } from '@environment';
 import { GqlThrottlerBehindProxyGuard } from '@core/guards/throttler/gql-throttler-behind-proxy.guard';
@@ -10,6 +13,7 @@ import { TokenAuthGuard } from '@core/guards/is-auth.guard';
 import { UpdateUserDto } from './models/dto/update-user.dto';
 import { UserModel } from './models/user/user.model';
 import { UserService } from './user.service';
+import { TImage } from '@modules/image/utils/types/image.type';
 
 @UseGuards(
 	environment.production ? GqlThrottlerBehindProxyGuard : GqlThrottlerGuard,
@@ -22,9 +26,9 @@ export class UserResolver {
 
 	@Query(() => UserModel, {
 		name: 'getUser',
-		description: 'Get Story',
+		description: 'Get User if exists',
 	})
-	async getStory(
+	async getUser(
 		@Args('id', { type: () => ID }) id: string
 	): Promise<UserModel | null> {
 		return await this.userService.findUserById(id);
@@ -32,16 +36,22 @@ export class UserResolver {
 
 	@Mutation(() => UserModel, {
 		name: 'updateUser',
-		description: 'Create Story',
+		description: 'Update User profile ',
 	})
 	async updateUser(
-		@Args('id', { type: () => ID }) id: string,
+		@Context('req') req: Request,
+		@Args('profilePicture', { type: () => GraphQLUpload })
+		profilePicture: TImage,
 		@Args('user', {
 			type: () => UpdateUserDto,
 		})
-		updateUser: UpdateUserDto
+		attrs: UpdateUserDto
 	) {
-		return await this.userService.updateUser(id, updateUser);
+		return await this.userService.updateUser({
+			authToken: req.cookies.auth,
+			profilePicture,
+			attrs,
+		});
 	}
 
 	// @Mutation(() => UserStatus, {

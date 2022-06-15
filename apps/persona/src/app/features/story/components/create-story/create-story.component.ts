@@ -20,7 +20,7 @@ import { Store } from '@ngxs/store';
 export class CreateStoryComponent extends UnsubscribeOnDestroyAdapter {
 	readonly separatorKeysCodes: readonly [13, 188] = [ENTER, COMMA] as const;
 	addOnBlur = true;
-	categories: ICategory[] = [];
+	categories: Array<ICategory> = [];
 	fileName = '';
 	storyImage!: File;
 	id: string = this.activatedRoute.snapshot.params['id'];

@@ -12,7 +12,7 @@ export function CheckLocalStorageCache<T>(localStorageCacheKey: string) {
 		const localStorageService = new LocalStorageService();
 		const originalMethod = descriptor.value;
 
-		descriptor.value = function (...args: any[]) {
+		descriptor.value = function (...args: Array<any>) {
 			const cacheKey = localStorageCacheKey + args?.slice(0, 1).pop() ?? '';
 			return localStorageService.getItem(cacheKey).pipe(
 				switchMap((value) => {

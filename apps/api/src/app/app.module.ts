@@ -19,6 +19,7 @@ import { UnhandledRoutesModule } from './modules/unhandled-routes/unhandled-rout
 import { CsrfMiddleware } from './core/middlewares/csrf.middleware';
 import { AllHttpExceptionsFilter } from './core/utils/error-handling/all-http-exceptions-filter';
 import { AppController } from './app.controller';
+import { InjectedMongooseModelsModule } from '@modules/injected-mongoose-models/injected-mongoose-models.module';
 
 // import { APP_FILTER } from '@nestjs/core';
 // import { AllHttpExceptionsFilter } from './core/interceptors/all-http-exceptions-filter';
@@ -34,6 +35,7 @@ import { AppController } from './app.controller';
 		NodemailerModule,
 		ImageModule,
 		MyJWTModule,
+		InjectedMongooseModelsModule,
 
 		MongooseModule.forRootAsync({
 			connectionName: environment.DATABASE_CONNECTION_NAME,

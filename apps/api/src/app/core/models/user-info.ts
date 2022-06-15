@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 
-export class UserInfo {
+export class ExposedUserModel {
 	@Expose()
 	_id: string;
 
@@ -17,7 +17,7 @@ export class UserInfo {
 	createdAt: Date;
 
 	@Expose()
-	stories: string[];
+	stories: Array<string>;
 
 	@Expose()
 	gender: string;

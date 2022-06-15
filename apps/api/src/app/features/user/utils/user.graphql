@@ -2,16 +2,12 @@ scalar Date
 
 type Query {
 	getUser(id: ID!): User!
-
-	# getImage(id: ID!): StatusReturn!
 }
 
 type Mutation {
-	updateUser(id: ID!, user: UpdateUserInput!): User!
+	updateUser(user: UpdateUserInput!, profilePicture: Upload): User!
 
-	deleteUser(id: ID!): User_Status!
-
-	# uploadProfilePicture(id: ID!): StatusReturn!
+	deleteUser: User_Status!
 }
 
 input UpdateUserInput {
@@ -29,11 +25,9 @@ input UpdateUserInput {
 
 	locale: String
 
-	profilePicture: String
+	bio: Interest_And_Bio_And_Category_Input
 
-	bio: Interest_And_Bio_Input
-
-	interests: [Interest_And_Bio_Input]
+	interests: [Interest_And_Bio_And_Category_Input]
 }
 
 type User {
@@ -45,7 +39,7 @@ type User {
 
 	email: String!
 
-	locale: String
+	locale: String!
 
 	profilePicture: String
 
@@ -53,27 +47,17 @@ type User {
 
 	birthDate: String!
 
-	gender: String
+	gender: String!
 
-	role: String
+	role: String!
 
 	stories: [Story]!
 
-	bio: Interest_And_Bio!
+	bio: Interest_And_Bio_And_Category!
 
-	interests: [Interest_And_Bio]!
+	interests: [Interest_And_Bio_And_Category]!
 }
 
 type User_Status {
 	status: String!
-}
-
-input Interest_And_Bio_Input {
-	text: String!
-	color: String!
-}
-
-type Interest_And_Bio {
-	text: String!
-	color: String!
 }
