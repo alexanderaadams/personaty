@@ -5,12 +5,16 @@ type Query {
 }
 
 type Mutation {
-	updateUser(user: UpdateUserInput!, profilePicture: Upload): User!
+	updateUser(user: Update_User_Input!, profilePicture: Upload): User!
 
-	deleteUser: User_Status!
+	deleteUser(confirmDeleteUser: Confirm_Delete_User_Input!): User_Status!
 }
 
-input UpdateUserInput {
+input Confirm_Delete_User_Input {
+	confirmDeleteUser: Boolean!
+}
+
+input Update_User_Input {
 	username: String
 
 	fullName: String

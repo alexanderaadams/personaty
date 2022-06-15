@@ -4,10 +4,10 @@ import { UserService } from '@features/user/user.service';
 import { MyJWTService } from '@modules/jwt/jwt.service';
 import { NodemailerService } from '@modules/mail/nodemailer.service';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
-
 import { FileStorageService } from '@core/services/file-storage.service';
 import { join } from 'path';
-import { ExposedUserModel } from '@core/models/user-info';
+import { ExposedUserModel } from '@core/models/exposed-user-model';
+
 import { HashingService } from './hashing.service';
 import { ICreateSignupEmail } from '../interfaces/create-signup-email';
 

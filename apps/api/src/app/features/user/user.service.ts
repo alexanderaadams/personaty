@@ -1,10 +1,12 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 
-import { ExposedUserModel } from '@core/models/user-info';
 import { InjectedMongooseModelsService } from '@modules/injected-mongoose-models/injected-mongoose-models.service';
 import { MyJWTService } from '@modules/jwt/jwt.service';
+import { ImageService } from '@modules/image/image.service';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
+import { FileStorageService } from '@core/services/file-storage.service';
+import { ExposedUserModel } from '@core/models/exposed-user-model';
 import { GoogleOauth2 } from '@features/auth/models/google-oauth-2';
 
 import { UserModel } from './models/user/user.model';
@@ -12,8 +14,6 @@ import { ExposedUserModelSensitiveInformation } from './models/exposed-user-mode
 import { ICreateUser } from './interfaces/create-user.interface';
 import { UserDocument } from './models/user/user.schema';
 import { IUpdateUser } from './interfaces/update-user.interface';
-import { ImageService } from '../../modules/image/image.service';
-import { FileStorageService } from '../../core/services/file-storage.service';
 
 @Injectable()
 export class UserService {
@@ -106,9 +106,17 @@ export class UserService {
 	}
 
 	@TryCatchWrapper()
-	async deleteUser(id: string): Promise<null> {
-		await this.userModel.findByIdAndDelete(id).exec();
+	async deleteUser(
+		confirmDeleteUser: boolean,
+		authToken: string
+	): Promise<null | boolean> {
+		if (confirmDeleteUser) {
+			const { id } = await this.myJWTService.verifyToken(authToken);
+			await this.userModel.findByIdAndDelete(id).exec();
 
-		return null as unknown as Promise<null>;
+			return null as unknown as Promise<null>;
+		}
+
+		return false as unknown as Promise<boolean>;
 	}
 }

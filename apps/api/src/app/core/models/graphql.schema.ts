@@ -53,7 +53,11 @@ export class DeleteStoryInput {
     id: string;
 }
 
-export class UpdateUserInput {
+export class Confirm_Delete_User_Input {
+    confirmDeleteUser: boolean;
+}
+
+export class Update_User_Input {
     username?: Nullable<string>;
     fullName?: Nullable<string>;
     email?: Nullable<string>;
@@ -97,9 +101,9 @@ export abstract class IMutation {
 
     abstract deleteStory(story: DeleteStoryInput): Story_Status | Promise<Story_Status>;
 
-    abstract updateUser(user: UpdateUserInput, profilePicture?: Nullable<Upload>): User | Promise<User>;
+    abstract updateUser(user: Update_User_Input, profilePicture?: Nullable<Upload>): User | Promise<User>;
 
-    abstract deleteUser(): User_Status | Promise<User_Status>;
+    abstract deleteUser(confirmDeleteUser: Confirm_Delete_User_Input): User_Status | Promise<User_Status>;
 }
 
 export class Is_User_Available {

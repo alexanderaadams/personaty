@@ -24,6 +24,6 @@ import { SignupService } from './services/signup.service';
 		GoogleStrategy,
 		FileStorageService,
 	],
-	exports: [ForgotPasswordService],
+	exports: [],
 })
 export class AuthModule {}

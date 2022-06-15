@@ -10,7 +10,7 @@ import { promisify } from 'util';
 import { UserService } from '@features/user/user.service';
 import { MyJWTService } from '@modules/jwt/jwt.service';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
-import { ExposedUserModel } from '@core/models/user-info';
+import { ExposedUserModel } from '@core/models/exposed-user-model';
 
 import { GoogleOauth2 } from '../models/google-oauth-2';
 import { ExposedUserModelSensitiveInformation } from '@features/user/models/exposed-user-model-sensitive-information';

@@ -16,14 +16,14 @@ import type { FileUpload } from 'graphql-upload/processRequest.js';
 // import { finished } from 'stream/promises';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const finished = require('stream').promises;
-// import * as mmm from 'mmmagic';
+import * as mmm from 'mmmagic';
 import { join } from 'path';
 import { TryCatchWrapper } from '../utils/error-handling/try-catch-wrapper';
 import { Readable } from 'stream';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 // const { fileTypeFromBuffer } = require('file-type');
 
-// const Magic = mmm.Magic;
+const Magic = mmm.Magic;
 
 interface IImageDirectory {
 	idFolderPath: string;
@@ -82,25 +82,25 @@ export class FileStorageService {
 		file: Buffer,
 		validFileMimeType: Array<T>
 	): Promise<boolean> {
-		// const magic = new Magic(mmm.MAGIC_MIME_TYPE);
+		const magic = new Magic(mmm.MAGIC_MIME_TYPE);
 
-		// const bitmap = function (file: Buffer): Promise<any> {
-		// 	return new Promise(function (resolve, reject): void {
-		// 		magic.detect(
-		// 			file,
-		// 			function (err: Error, data: string | string[]): void {
-		// 				if (err) reject(err);
-		// 				else resolve(data);
-		// 			}
-		// 		);
-		// 	});
-		// };
+		const bitmap = function (file: Buffer): Promise<any> {
+			return new Promise(function (resolve, reject): void {
+				magic.detect(
+					file,
+					function (err: Error, data: string | string[]): void {
+						if (err) reject(err);
+						else resolve(data);
+					}
+				);
+			});
+		};
 
-		// const isFileMimeTypeLegit: boolean = validFileMimeType.includes(
-		// 	(await fileTypeFromBuffer(file))?.mime as unknown as T
-		// );
+		const isFileMimeTypeLegit: boolean = validFileMimeType.includes(
+			(await bitmap(file))?.mime as unknown as T
+		);
 
-		return true;
+		return isFileMimeTypeLegit;
 	}
 
 	@TryCatchWrapper()

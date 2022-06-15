@@ -15,12 +15,12 @@ import {
 } from 'class-validator';
 
 import { EGender } from '@core/enums/gender.enum';
-import { UpdateUserInput } from '@core/models/graphql.schema';
+import { Update_User_Input } from '@core/models/graphql.schema';
 import { environment } from '@environment';
 import { InterestAndBioAndCategory } from '@core/models/interest-and-bio-and-category';
 import { Type } from 'class-transformer';
 
-export class UpdateUserDto extends UpdateUserInput {
+export class UpdateUserDto extends Update_User_Input {
 	@IsString()
 	@IsNotEmpty()
 	@IsOptional()

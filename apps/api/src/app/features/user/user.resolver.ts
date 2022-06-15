@@ -14,6 +14,8 @@ import { UpdateUserDto } from './models/dto/update-user.dto';
 import { UserModel } from './models/user/user.model';
 import { UserService } from './user.service';
 import { TImage } from '@modules/image/utils/types/image.type';
+import { UserStatus } from './models/user-status';
+import { ConfirmDeleteUser } from './models/dto/confirm-delete-user.dto';
 
 @UseGuards(
 	environment.production ? GqlThrottlerBehindProxyGuard : GqlThrottlerGuard,
@@ -54,12 +56,23 @@ export class UserResolver {
 		});
 	}
 
-	// @Mutation(() => UserStatus, {
-	// 	name: 'deleteUser',
-	// 	description: 'Create Story',
-	// })
-	// async deleteUser(@Args('id', { type: () => ID }) id: string) {
-	// 	await this.userService.deleteUser(id);
-	// 	return { status: 'User has been deleted successfully' };
-	// }
+	@Mutation(() => UserStatus, {
+		name: 'deleteUser',
+		description: 'Create Story',
+	})
+	async deleteUser(
+		@Args('confirmDeleteUser', { type: () => ConfirmDeleteUser })
+		confirmDeleteUser: boolean,
+		@Context('req') req: Request
+	) {
+		const hasUserBeenDeleted = await this.userService.deleteUser(
+			confirmDeleteUser,
+			req.cookies.auth
+		);
+
+		if (hasUserBeenDeleted)
+			return { status: 'User has been deleted successfully' };
+
+		return { status: 'Failed to delete User' };
+	}
 }

@@ -9,10 +9,11 @@ import { UserService } from '@features/user/user.service';
 import { MyJWTService } from '@modules/jwt/jwt.service';
 import { NodemailerService } from '@modules/mail/nodemailer.service';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
-import { ExposedUserModel } from '@core/models/user-info';
+import { ExposedUserModel } from '@core/models/exposed-user-model';
 import { UserModel } from '@features/user/models/user/user.model';
-import { HashingService } from './hashing.service';
 import { InjectedMongooseModelsService } from '@modules/injected-mongoose-models/injected-mongoose-models.service';
+
+import { HashingService } from './hashing.service';
 
 @Injectable()
 export class ForgotPasswordService {
