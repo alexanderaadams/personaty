@@ -62,8 +62,8 @@ export class SignupComponent
 		this.subs.sink = this.formService
 			.followAuthenticationStatus(
 				Signup,
-				'Failed to signup... Please check your information',
-				'Email has been send successfully... check your email address'
+				'Failed to signup',
+				'Email has been send successfully'
 			)
 			.subscribe();
 	}

@@ -39,7 +39,7 @@ export function app(): express.Express {
 			permittedCrossDomainPolicies: {
 				permittedPolicies: 'by-content-type',
 			},
-			xssFilter: true,
+			xssFilter: false,
 		})
 	);
 

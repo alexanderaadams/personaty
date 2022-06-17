@@ -51,7 +51,7 @@
 				<a
 					mat-button
 					class="col-12 link m-2 text-grey d-flex justify-content-center align-items-center"
-					[routerLink]="['/auth/send-forgot-password-email']"
+					[routerLink]="['/', 'auth', 'reset-password']"
 					>Forgot password?</a
 				>
 			</div>
@@ -98,7 +98,7 @@
 				mat-button
 				class="col-2 link text-left"
 				style="margin: 0; padding: 0; text-decoration: underline"
-				[routerLink]="['/auth/signup']"
+				[routerLink]="['/', 'auth', 'signup']"
 				>signup</a
 			>
 		</div>

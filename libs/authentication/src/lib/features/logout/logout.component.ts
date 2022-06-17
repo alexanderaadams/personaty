@@ -28,7 +28,7 @@ export class LogoutComponent
 		this.subs.sink = this.formService
 			.followAuthenticationStatus(
 				Logout,
-				'Failed to Logout..., Please Try Again',
+				'Failed to Logout',
 				'Logged out successfully'
 			)
 			.subscribe();

@@ -32,7 +32,10 @@ export class XsrfInterceptor implements HttpInterceptor {
 					if (response instanceof HttpResponse)
 						this.cookieService.set(
 							csrfCookieName,
-							response.headers.get(headerName) ?? ''
+							response.headers.get(headerName) ?? '',
+							{
+								path: '/',
+							}
 						);
 				})
 			);
@@ -50,7 +53,10 @@ export class XsrfInterceptor implements HttpInterceptor {
 				if (response instanceof HttpResponse)
 					this.cookieService.set(
 						csrfCookieName,
-						response.headers.get(headerName) ?? ''
+						response.headers.get(headerName) ?? '',
+						{
+							path: '/',
+						}
 					);
 			})
 		);

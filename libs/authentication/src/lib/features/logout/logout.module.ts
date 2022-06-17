@@ -4,8 +4,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { LogoutComponent } from './logout.component';
-import { AngularMaterialModule } from '@persona/shared';
 import { FormModule } from '../../pages/form/form.module';
+
 
 const routes: Routes = [
 	{
@@ -19,7 +19,6 @@ const routes: Routes = [
 	imports: [
 		CommonModule,
 		RouterModule.forChild(routes),
-		AngularMaterialModule,
 		ReactiveFormsModule,
 		FormModule,
 	],

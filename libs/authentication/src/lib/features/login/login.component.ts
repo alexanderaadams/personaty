@@ -51,7 +51,7 @@ export class LoginComponent
 		this.subs.sink = this.formService
 			.followAuthenticationStatus(
 				Login,
-				'Failed to Login... Please check your information',
+				'Failed to Login',
 				'Logged in successfully'
 			)
 			.subscribe();

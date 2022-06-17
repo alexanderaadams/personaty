@@ -4,8 +4,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { ConfirmNewPasswordComponent } from './confirm-new-password.component';
-import { AngularMaterialModule } from '@persona/shared';
 import { FormModule } from '../../pages/form/form.module';
+import { ConfirmNewPasswordMaterialModule } from './utils/confirm-new-password-material.module';
 
 const routes: Routes = [
 	{
@@ -20,7 +20,7 @@ const routes: Routes = [
 		CommonModule,
 		RouterModule.forChild(routes),
 		ReactiveFormsModule,
-		AngularMaterialModule,
+		ConfirmNewPasswordMaterialModule,
 		FormModule,
 	],
 })

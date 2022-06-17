@@ -6,11 +6,10 @@ import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { GoogleOauth2 } from './models/google-oauth-2';
 import { environment } from '@environment';
 import { ThrottlerBehindProxyGuard } from '@core/guards/throttler/throttler-behind-proxy.guard';
+import { MyJWTService } from '@modules/jwt/jwt.service';
 
 import { SignupService } from './services/signup.service';
 import { LoginService } from './services/login.service';
-import { InjectedMongooseModelsService } from '@modules/injected-mongoose-models/injected-mongoose-models.service';
-import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 
 @UseGuards(environment.production ? ThrottlerBehindProxyGuard : ThrottlerGuard)
 @Throttle(
@@ -22,7 +21,7 @@ export class AuthController {
 	constructor(
 		private readonly signupService: SignupService,
 		private readonly loginService: LoginService,
-		private injectedMongooseModelsService: InjectedMongooseModelsService
+		private readonly myJWTService: MyJWTService
 	) {}
 
 	@Get('signup/:authToken')
@@ -69,6 +68,15 @@ export class AuthController {
 		return res.redirect(`${environment.ORIGIN_URL}/auth/oauth2-success`);
 	}
 
+	@Get('is-authenticated')
+	async isAuthenticated(@Req() req: Request) {
+		const authToken = await this.myJWTService.verifyToken(req?.cookies.auth);
+
+		if (authToken)
+			return { status: 'CORRECTLY_AUTHENTICATED', authenticated: true };
+
+		return { status: 'NOT_AUTHENTICATED', authenticated: false };
+	}
 	// @Post('signup')
 	// // @Serialize(UserSignupResponse)
 	// async signup(@Body() signupUser: SignupUser, @Res() res: Response) {

@@ -7,7 +7,7 @@ import {
 	HttpResponse,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 
 import { SharedService } from '@persona/shared';
 
@@ -20,6 +20,10 @@ export class ProgressInterceptor implements HttpInterceptor {
 		next: HttpHandler
 	): Observable<HttpEvent<unknown>> {
 		return next.handle(request).pipe(
+			catchError((error) => {
+				this.sharedService.executingLoader$.next(false);
+				return error;
+			}),
 			tap((response: any) => {
 				if (response instanceof HttpResponse)
 					this.sharedService.executingLoader$.next(false);

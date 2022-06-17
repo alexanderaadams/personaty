@@ -107,7 +107,7 @@ async function bootstrap(): Promise<void> {
 			permittedCrossDomainPolicies: {
 				permittedPolicies: 'by-content-type',
 			},
-			xssFilter: true,
+			xssFilter: false,
 		})
 	);
 	// }

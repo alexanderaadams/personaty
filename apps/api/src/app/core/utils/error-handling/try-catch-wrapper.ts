@@ -14,10 +14,14 @@ export function TryCatchWrapper() {
 			try {
 				return await originalMethod.apply(this, args);
 			} catch (error) {
+				let statusCode: number | null = null;
+				if (error?.message == 'jwt must be provided') statusCode = 403;
+
 				throw new HttpException(
 					error?.response?.message ?? error?.message ?? 'Something Went Wrong',
 					error?.response?.statusCode ??
 						error?.status ??
+						statusCode ??
 						HttpStatus.INTERNAL_SERVER_ERROR
 				);
 			}

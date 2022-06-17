@@ -31,8 +31,8 @@ export class ResetPasswordComponent
 		this.subs.sink = this.formService
 			.followAuthenticationStatus(
 				SendForgotPasswordEmail,
-				'Failed to Forgot Password... Please Try Again',
-				'Email has been send successfully... Please Check your email address'
+				'Failed to Forgot Password',
+				'Email has been send successfully'
 			)
 			.subscribe();
 	}

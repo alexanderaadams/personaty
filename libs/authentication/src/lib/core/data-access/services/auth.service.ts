@@ -22,6 +22,7 @@ import {
 import { environment } from '@persona/shared';
 import { SharedService } from '@persona/shared';
 import { EMPTY } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
 	providedIn: 'root',
@@ -33,7 +34,8 @@ export class AuthService {
 		private router: Router,
 		private ngZone: NgZone,
 		private apollo: Apollo,
-		private sharedService: SharedService
+		private sharedService: SharedService,
+		private http: HttpClient
 	) {}
 
 	userAvailable(value: IUserAvailableRequest) {
@@ -160,7 +162,7 @@ export class AuthService {
 						authenticated: data?.confirmForgotPassword?.authenticated,
 					};
 				}),
-				retry(1)
+				retry({ count: 1, delay: 200, resetOnSuccess: true })
 			);
 	}
 
@@ -181,26 +183,39 @@ export class AuthService {
 						authenticated: data?.logout?.authenticated,
 					};
 				}),
-				retry(1)
+				retry({ count: 1, delay: 200, resetOnSuccess: true })
 			);
 	}
 
 	isAuthenticated() {
-		return this.apollo
-			.query({
-				query: IS_AUTHENTICATED,
-			})
+		return this.http
+			.get(
+				`${environment.BACKEND_URL}/${environment.BACKEND_BASE_URL}/auth/is-authenticated`
+			)
 			.pipe(
 				catchError((error: any) => {
 					return error;
 				}),
-				map(({ data }: any) => {
-					return {
-						status: data?.isAuthenticated?.status,
-						authenticated: data?.isAuthenticated?.authenticated,
-					};
+				tap((res) => {
+					console.log(res);
 				}),
-				retry(1)
+				retry({ count: 1, delay: 200, resetOnSuccess: true })
 			);
+		// return this.apollo
+		// 	.query({
+		// 		query: IS_AUTHENTICATED,
+		// 	})
+		// 	.pipe(
+		// 		catchError((error: any) => {
+		// 			return error;
+		// 		}),
+		// 		map(({ data }: any) => {
+		// 			return {
+		// 				status: data?.isAuthenticated?.status,
+		// 				authenticated: data?.isAuthenticated?.authenticated,
+		// 			};
+		// 		}),
+		// 		retry({ count: 1, delay: 200, resetOnSuccess: true })
+		// 	);
 	}
 }
