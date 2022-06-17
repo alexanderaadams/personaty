@@ -3,19 +3,19 @@ import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { ConfirmForgotPasswordComponent } from './confirm-forgot-password.component';
+import { ConfirmNewPasswordComponent } from './confirm-new-password.component';
 import { AngularMaterialModule } from '@persona/shared';
 import { FormModule } from '../../pages/form/form.module';
 
 const routes: Routes = [
 	{
 		path: '',
-		component: ConfirmForgotPasswordComponent,
+		component: ConfirmNewPasswordComponent,
 	},
 ];
 
 @NgModule({
-	declarations: [ConfirmForgotPasswordComponent],
+	declarations: [ConfirmNewPasswordComponent],
 	imports: [
 		CommonModule,
 		RouterModule.forChild(routes),
@@ -24,4 +24,4 @@ const routes: Routes = [
 		FormModule,
 	],
 })
-export class ConfirmForgotPasswordModule {}
+export class ConfirmNewPasswordModule {}

@@ -3,19 +3,19 @@ import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { ForgotPasswordComponent } from './forgot-password.component';
+import { ResetPasswordComponent } from './reset-password.component';
 import { AngularMaterialModule } from '@persona/shared';
 import { FormModule } from '../../pages/form/form.module';
 
 const routes: Routes = [
 	{
 		path: '',
-		component: ForgotPasswordComponent,
+		component: ResetPasswordComponent,
 	},
 ];
 
 @NgModule({
-	declarations: [ForgotPasswordComponent],
+	declarations: [ResetPasswordComponent],
 	imports: [
 		CommonModule,
 		RouterModule.forChild(routes),
@@ -24,4 +24,4 @@ const routes: Routes = [
 		FormModule,
 	],
 })
-export class ForgotPasswordModule {}
+export class ResetPasswordModule {}

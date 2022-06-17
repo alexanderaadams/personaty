@@ -1,6 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
 import { tap, take } from 'rxjs/operators';
 
 import { SendForgotPasswordEmail } from '@auth/core/data-access/store/auth.action';
@@ -8,12 +7,12 @@ import { FormService } from '@auth/core/data-access/services/form.service';
 import { SharedService, UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
 @Component({
-	selector: 'lib-forgot-password',
-	templateUrl: './forgot-password.component.html',
-	styleUrls: ['./forgot-password.component.scss'],
+	selector: 'lib-reset-password',
+	templateUrl: './reset-password.component.html',
+	styleUrls: ['./reset-password.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ForgotPasswordComponent
+export class ResetPasswordComponent
 	extends UnsubscribeOnDestroyAdapter
 	implements OnInit
 {

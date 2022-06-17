@@ -22,18 +22,18 @@ const routes: Routes = [
 			import('./logout/logout.module').then((m) => m.LogoutModule),
 	},
 	{
-		path: 'send-forgot-password-email',
+		path: 'reset-password',
 		loadChildren: () =>
-			import('./forgot-password/forgot-password.module').then(
-				(m) => m.ForgotPasswordModule
+			import('./reset-password/reset-password.module').then(
+				(m) => m.ResetPasswordModule
 			),
 	},
 	{
-		path: 'confirm-forgot-password/:authToken',
+		path: 'confirm-new-password/:authToken',
 		canActivate: [NotAuthGuard],
 		loadChildren: () =>
-			import('./confirm-forgot-password/confirm-forgot-password.module').then(
-				(m) => m.ConfirmForgotPasswordModule
+			import('./confirm-new-password/confirm-new-password.module').then(
+				(m) => m.ConfirmNewPasswordModule
 			),
 	},
 	{

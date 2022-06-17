@@ -12,15 +12,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { take, takeUntil, tap } from 'rxjs/operators';
 
-import { UnsubscribeOnDestroyAdapter, SharedService } from '@persona/shared';
-
 import { IAuthStateModel } from '../store/auth.model';
 import { IsAuthenticated, ResetAuthStoreToDefault } from '../store/auth.action';
 
 @Injectable({
 	providedIn: 'root',
 })
-export class FormService extends UnsubscribeOnDestroyAdapter {
+export class FormService {
 	@Select('auth')
 	isAuthenticated$!: Observable<IAuthStateModel>;
 
@@ -33,9 +31,7 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 		private readonly _snackBar: MatSnackBar,
 		private readonly router: Router,
 		private readonly store: Store
-	) {
-		super();
-	}
+	) {}
 	private ngUnsubscribeCheckIfAlreadyAuthenticated: Subject<void> =
 		new Subject<void>();
 

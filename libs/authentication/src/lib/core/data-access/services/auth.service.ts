@@ -2,7 +2,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, retry, tap } from 'rxjs/operators';
 
 import {
 	ILoginCredentials,
@@ -27,7 +27,6 @@ import { EMPTY } from 'rxjs';
 	providedIn: 'root',
 })
 export class AuthService {
-
 	isBrowser = this.sharedService.isBrowser;
 
 	constructor(
@@ -160,7 +159,8 @@ export class AuthService {
 						status: data?.confirmForgotPassword?.status,
 						authenticated: data?.confirmForgotPassword?.authenticated,
 					};
-				})
+				}),
+				retry(1)
 			);
 	}
 
@@ -180,7 +180,8 @@ export class AuthService {
 						status: data?.logout?.status,
 						authenticated: data?.logout?.authenticated,
 					};
-				})
+				}),
+				retry(1)
 			);
 	}
 
@@ -188,7 +189,6 @@ export class AuthService {
 		return this.apollo
 			.query({
 				query: IS_AUTHENTICATED,
-				// errorPolicy: 'all',
 			})
 			.pipe(
 				catchError((error: any) => {
@@ -199,7 +199,8 @@ export class AuthService {
 						status: data?.isAuthenticated?.status,
 						authenticated: data?.isAuthenticated?.authenticated,
 					};
-				})
+				}),
+				retry(1)
 			);
 	}
 }

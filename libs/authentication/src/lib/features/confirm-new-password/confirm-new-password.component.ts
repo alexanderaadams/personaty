@@ -1,22 +1,24 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
 import { tap, take } from 'rxjs/operators';
 
 import { ConfirmForgotPassword } from '@auth/core/data-access/store/auth.action';
 import { MatchPassword } from '@auth/core/data-access/validators/match-password';
 import { FormService } from '@auth/core/data-access/services/form.service';
-import { environment } from '@auth/core/environment.prod';
-import { SharedService, UnsubscribeOnDestroyAdapter } from '@persona/shared';
+import {
+	SharedService,
+	UnsubscribeOnDestroyAdapter,
+	environment,
+} from '@persona/shared';
 
 @Component({
-	selector: 'lib-confirm-forgot-password',
-	templateUrl: './confirm-forgot-password.component.html',
-	styleUrls: ['./confirm-forgot-password.component.scss'],
+	selector: 'lib-confirm-new-password',
+	templateUrl: './confirm-new-password.component.html',
+	styleUrls: ['./confirm-new-password.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfirmForgotPasswordComponent
+export class ConfirmNewPasswordComponent
 	extends UnsubscribeOnDestroyAdapter
 	implements OnInit
 {

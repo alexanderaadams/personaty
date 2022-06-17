@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {  Observable } from 'rxjs';
 import { tap, take } from 'rxjs/operators';
 
-import { environment } from '@auth/core/environment.prod';
+
 import { FormService } from '@auth/core/data-access/services/form.service';
 import {
 	Login,
 	LoginWithGoogle,
 } from '@auth/core/data-access/store/auth.action';
 import { IAuthStateModel } from '@auth/core/data-access/store/auth.model';
-import { SharedService, UnsubscribeOnDestroyAdapter } from '@persona/shared';
+import { SharedService, UnsubscribeOnDestroyAdapter,environment } from '@persona/shared';
 
 @Component({
 	selector: 'lib-login',
