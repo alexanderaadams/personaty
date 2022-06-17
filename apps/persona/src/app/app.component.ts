@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.store.dispatch(new GetCsrfToken());
+
 		this.executingLoader$ = this.sharedService.executingLoader$;
 	}
 }

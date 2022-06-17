@@ -7,15 +7,23 @@ import {
 	IsArray,
 	IsObject,
 	IsOptional,
+	ArrayMaxSize,
+	ArrayMinSize,
+	ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 import { ERole } from '@core/enums/role.enum';
 import { EGender } from '@core/enums/gender.enum';
 import { User } from '@core/models/graphql.schema';
 import { StoryModel } from '@features/story/models/story/story-model';
-import { InterestAndBioAndCategory } from '../../../../core/models/interest-and-bio-and-category';
+import { InterestAndBioAndCategory } from '@core/models/interest-and-bio-and-category';
 
 export class UserModel extends User {
+	@IsString()
+	@IsOptional()
+	googleId?: string;
+
 	@IsString()
 	_id: string;
 
@@ -25,7 +33,7 @@ export class UserModel extends User {
 
 	@IsString()
 	@IsOptional()
-	username: string;
+	username?: string;
 
 	@IsEmail()
 	email: string;
@@ -40,6 +48,10 @@ export class UserModel extends User {
 	@IsOptional()
 	profilePicture?: string;
 
+	@IsString()
+	@IsOptional()
+	profileCover?: string;
+
 	@IsDateString()
 	birthDate: string;
 
@@ -53,11 +65,16 @@ export class UserModel extends User {
 	created_at: Date;
 
 	@IsArray()
-	stories: Array<StoryModel>;
+	@IsOptional()
+	stories?: Array<StoryModel>;
 
 	@IsObject()
 	bio: InterestAndBioAndCategory;
 
 	@IsArray()
+	@ValidateNested({ each: true, always: true })
+	@ArrayMinSize(2)
+	@ArrayMaxSize(25)
+	@Type((): typeof InterestAndBioAndCategory => InterestAndBioAndCategory)
 	interests: Array<InterestAndBioAndCategory>;
 }

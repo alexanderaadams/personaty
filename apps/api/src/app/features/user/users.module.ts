@@ -8,6 +8,7 @@ import { UserService } from './user.service';
 import { UserResolver } from './user.resolver';
 
 @Module({
+	imports: [],
 	controllers: [UserController],
 	providers: [UserService, UserResolver, DateScalar, FileStorageService],
 	exports: [UserService],

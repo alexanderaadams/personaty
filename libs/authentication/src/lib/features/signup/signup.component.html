@@ -1,163 +1,115 @@
-<div class="container bg-svg">
-	<div class="d-flex justify-content-center align-items-center vh-100">
-		<div class="col-sm-8 col-md-6">
-			<div
-				class="border-grey-blue row justify-content-center align-items-center gap-2 shadow box-shadow-and-border">
-				<h1 class="col-12 h1 text-center fs-2 my-4">Signup</h1>
+<lib-form>
+	<ng-container id="form">
+		<h1 class="col-12 h1 text-center fs-2 my-4">Signup</h1>
 
-				<form
-					(ngSubmit)="onSubmit()"
-					class="row justify-content-center align-items-center gap-2"
-					[formGroup]="authForm">
-					<mat-form-field appearance="fill">
-						<mat-label>Email</mat-label>
-						<input
-							matInput
-							name="email"
-							label="Email"
-							spellcheck="true"
-							placeholder="Email"
-							type="email"
-							[formControlName]="'email'"
-							autocomplete="email" />
+		<form
+			(ngSubmit)="onSubmit()"
+			class="row justify-content-center align-items-center gap-2"
+			[formGroup]="authForm">
+			<mat-form-field appearance="fill">
+				<mat-label>Email</mat-label>
+				<input
+					matInput
+					name="email"
+					label="Email"
+					spellcheck="true"
+					placeholder="Email"
+					type="email"
+					[formControlName]="'email'"
+					autocomplete="email" />
 
-						<mat-error *ngIf="authForm?.['controls']?.['email']?.['invalid']">
-							Please Enter Correct Email
-						</mat-error>
-					</mat-form-field>
+				<mat-error *ngIf="authForm?.['controls']?.['email']?.['invalid']">
+					Please Enter Correct Email
+				</mat-error>
+			</mat-form-field>
 
-					<mat-form-field appearance="fill">
-						<mat-label>Password</mat-label>
-						<input
-							matInput
-							name="password"
-							label="Password"
-							[type]="hide ? 'password' : 'text'"
-							aria-label="password"
-							[formControlName]="'password'"
-							autocomplete="new-password" />
+			<mat-form-field appearance="fill">
+				<mat-label>Password</mat-label>
+				<input
+					matInput
+					name="password"
+					label="Password"
+					[type]="hide ? 'password' : 'text'"
+					aria-label="password"
+					[formControlName]="'password'"
+					autocomplete="new-password" />
 
-						<mat-icon matSuffix (click)="hide = !hide">{{
-							hide ? 'visibility_off' : 'visibility'
-						}}</mat-icon>
+				<mat-icon matSuffix (click)="hide = !hide">{{
+					hide ? 'visibility_off' : 'visibility'
+				}}</mat-icon>
 
-						<mat-hint>Password must be at least 8 characters. </mat-hint>
+				<mat-hint>Password must be at least 8 characters. </mat-hint>
 
-						<mat-error
-							*ngIf="authForm?.['controls']?.['password']?.['invalid']">
-							Password must be at least
-							{{ authForm?.['controls']?.['password']?.['errors']?.['minlength']?.requiredLength ?? '8' }}
-							characters.
-						</mat-error>
-					</mat-form-field>
+				<mat-error *ngIf="authForm?.['controls']?.['password']?.['invalid']">
+					Password must be at least
+					{{ authForm?.['controls']?.['password']?.['errors']?.['minlength']?.requiredLength ?? '8' }}
+					characters.
+				</mat-error>
+			</mat-form-field>
 
-					<mat-form-field class="mb-4" appearance="fill">
-						<mat-label>Birthday</mat-label>
-						<input
-							min="1930-02-02"
-							max="2009-02-02"
-							matInput
-							name="Date"
-							label="Birthday"
-							[formControlName]="'birthDate'"
-							[matDatepicker]="picker"
-							autocomplete="bday" />
-						<mat-hint>YYYY-MM-DD</mat-hint>
-						<mat-datepicker-toggle
-							matSuffix
-							[for]="picker"></mat-datepicker-toggle>
-						<mat-datepicker touchUi #picker></mat-datepicker>
-					</mat-form-field>
+			<mat-form-field class="mb-4" appearance="fill">
+				<mat-label>Birthday</mat-label>
+				<input
+					min="1930-02-02"
+					max="2009-02-02"
+					matInput
+					name="Date"
+					label="Birthday"
+					[formControlName]="'birthDate'"
+					[matDatepicker]="picker"
+					autocomplete="bday" />
+				<mat-hint>YYYY-MM-DD</mat-hint>
+				<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+				<mat-datepicker touchUi #picker></mat-datepicker>
+			</mat-form-field>
 
-					<div class="row justify-content-center align-items-center">
-						<div class="row">
-							<button
-								[disabled]="sharedService.executingLoader$ | async"
-								class="p-2 mb-3 fs-5"
-								mat-raised-button
-								color="primary"
-								type="submit">
-								Signup
-							</button>
-						</div>
-					</div>
-				</form>
-				<div class="d-flex justify-content-center align-items-center gap-3 m-2">
-					<mat-divider class="hr w-25"> </mat-divider>
-					<span class="d-block text-center text-gray">Continue With</span>
-					<mat-divider class="hr w-25"> </mat-divider>
-				</div>
-
-				<div
-					class="d-flex justify-content-center align-items-center align-items-center gap-2">
+			<div class="row justify-content-center align-items-center">
+				<div class="row">
 					<button
-						class="row justify-content-around bg-transparent p-3"
-						aria-hidden="true"
-						aria-label="Login with google"
-						mat-flat-button
-						(click)="loginWithGoogle()">
-						<svg class="icon">
-							<use xlink:href="../../assets/sprite.svg#google"></use>
-						</svg>
+						[disabled]="sharedService.executingLoader$ | async"
+						class="p-2 mb-3 fs-5"
+						mat-raised-button
+						color="primary"
+						type="submit">
+						Signup
 					</button>
-
-					<!-- <button
-						class="row justify-content-around bg-transparent p-3"
-						aria-hidden="true"
-								aria-label="Login with facebook"
-						mat-flat-button
-						(click)="loginWithFacebook()"
-					>
-						<svg class="icon">
-							<use xlink:href="../../assets/sprite.svg#facebook"></use>
-						</svg>
-					</button> -->
-				</div>
-				<div class="row justify-content-center align-items-center gap-2 m-3">
-					<p
-						class="col-sm-4 col-md-2 text-gray text-end"
-						style="margin: 0; padding: 0; width: max-content">
-						Do have an account?
-					</p>
-
-					<a
-						mat-button
-						class="col-2 link text-left"
-						style="margin: 0; padding: 0; text-decoration: underline"
-						[routerLink]="['/auth/login']"
-						>login</a
-					>
 				</div>
 			</div>
-		</div>
+		</form>
+	</ng-container>
+	<div class="d-flex justify-content-center align-items-center gap-3 m-2">
+		<mat-divider class="hr w-25"> </mat-divider>
+		<span class="d-block text-center text-gray">Continue With</span>
+		<mat-divider class="hr w-25"> </mat-divider>
 	</div>
-</div>
-<!-- <lib-email-authToken
-				*ngIf="(authForm?.['errors']?.['invalid']) && showModal"
-				header="Invalid username or password ❗️"
-				(dismiss)="showModal = false"
-			></lib-email-authToken>
-			<lib-email-authToken
-				*ngIf="(authForm?.['controls']?.['email']?.['errors']?.['noConnection']) && showModal"
-				header="Check your internet connection"
-				(dismiss)="showModal = false"
-			></lib-email-authToken> -->
+	<ng-container id="below-form">
+		<div
+			class="d-flex justify-content-center align-items-center align-items-center gap-2">
+			<button
+				class="row justify-content-around bg-transparent p-3"
+				aria-hidden="true"
+				aria-label="Login with google"
+				mat-flat-button
+				(click)="loginWithGoogle()">
+				<svg class="icon">
+					<use xlink:href="../../assets/sprite.svg#google"></use>
+				</svg>
+			</button>
+		</div>
+		<div class="row justify-content-center align-items-center gap-2 m-3">
+			<p
+				class="col-sm-4 col-md-2 text-gray text-end"
+				style="margin: 0; padding: 0; width: max-content">
+				Do have an account?
+			</p>
 
-<!-- <lib-email-authToken
-	header="Please Check Your email address"
-	[authForm]="emailToken"
-	(dismiss)="showModal = false"
-	*ngIf="showModal"
-></lib-email-authToken>
-
-<lib-email-authToken
-	*ngIf="(authForm?.['errors']?.['invalid']) && showModal"
-	header="Please enter a valid information ❗️"
-	(dismiss)="showModal = false"
-></lib-email-authToken>
-
-<lib-email-authToken
-	*ngIf="(authForm?.['controls']?.['email']?.['errors']?.['noConnection']) && showModal"
-	header="Check your internet connection"
-	(dismiss)="showModal = false"
-></lib-email-authToken> -->
+			<a
+				mat-button
+				class="col-2 link text-left"
+				style="margin: 0; padding: 0; text-decoration: underline"
+				[routerLink]="['auth', 'login']"
+				>login</a
+			>
+		</div>
+	</ng-container>
+</lib-form>

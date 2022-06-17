@@ -1,5 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { of } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Action, State, StateContext, Selector } from '@ngxs/store';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
@@ -16,7 +17,6 @@ import {
 	ResetAuthStoreToDefault,
 } from './auth.action';
 import { AuthService } from '../services/auth.service';
-import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
 @State<IAuthStateModel>({
 	name: 'auth',
@@ -26,10 +26,7 @@ import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 	},
 })
 @Injectable()
-export class AuthState
-	extends UnsubscribeOnDestroyAdapter
-	implements OnDestroy
-{
+export class AuthState {
 	@Selector()
 	static isAuthenticated(state: IAuthStateModel): boolean {
 		return !!state.authenticated;
@@ -39,9 +36,7 @@ export class AuthState
 		private authService: AuthService,
 		private cookieService: CookieService,
 		private router: Router // private myStorageEngineService: MyStorageEngineService
-	) {
-		super();
-	}
+	) {}
 
 	// updateMyStorageEngineService(key: string, value: any) {
 	// 	this.myStorageEngineService.removeItem(key);
@@ -50,54 +45,60 @@ export class AuthState
 
 	@Action(Signup, { cancelUncompleted: true })
 	signup(ctx: StateContext<IAuthStateModel>, action: Signup) {
-		this.subs.sink = this.authService.signup(action.payload).subscribe({
-			next: (res: any) => {
-				ctx.patchState(res as IAuthStateModel);
-				// this.updateMyStorageEngineService('auth', res);
-			},
-			error: () => {
-				ctx.patchState({
-					status: 'FAILED_TO_SIGNUP',
-					authenticated: false,
-				});
-			},
-		});
+		this.authService
+			.signup(action.payload)
+			.pipe(take(1))
+			.subscribe({
+				next: (res: any) => {
+					ctx.patchState(res as IAuthStateModel);
+					// this.updateMyStorageEngineService('auth', res);
+				},
+				error: () => {
+					ctx.patchState({
+						status: 'FAILED_TO_SIGNUP',
+						authenticated: false,
+					});
+				},
+			});
 	}
 
 	@Action(Login, { cancelUncompleted: true })
 	login(ctx: StateContext<IAuthStateModel>, action: Login) {
-		this.subs.sink = this.authService.login(action.payload).subscribe({
-			next: (res: any) => {
-				ctx.patchState(res as IAuthStateModel);
-				// this.updateMyStorageEngineService('auth', res);
-			},
-			error: () => {
-				ctx.patchState({
-					status: 'FAILED_TO_LOGIN',
-					authenticated: false,
-				});
-			},
-		});
+		this.authService
+			.login(action.payload)
+			.pipe(take(1))
+			.subscribe({
+				next: (res: any) => {
+					ctx.patchState(res as IAuthStateModel);
+					// this.updateMyStorageEngineService('auth', res);
+				},
+				error: () => {
+					ctx.patchState({
+						status: 'FAILED_TO_LOGIN',
+						authenticated: false,
+					});
+				},
+			});
 	}
 
 	@Action(LoginWithGoogle, { cancelUncompleted: true })
 	loginWithGoogle(ctx: StateContext<IAuthStateModel>) {
-		this.subs.sink = of(this.authService.loginWithGoogle()).subscribe({
-			next: (res: any) => {
-				ctx.patchState({
-					status: 'SUPPOSEDLY_LOGGED_IN_WITH_GOOGLE',
-					authenticated: null,
-				});
-
-				// this.updateMyStorageEngineService('auth', res);
-			},
-			error: () => {
-				ctx.patchState({
-					status: 'FAILED_TO_LOG_IN_WITH_GOOGLE',
-					authenticated: false,
-				});
-			},
-		});
+		of(this.authService.loginWithGoogle())
+			.pipe(take(1))
+			.subscribe({
+				next: (res: any) => {
+					ctx.patchState({
+						status: 'SUPPOSEDLY_LOGGED_IN_WITH_GOOGLE',
+						authenticated: null,
+					});
+				},
+				error: () => {
+					ctx.patchState({
+						status: 'FAILED_TO_LOG_IN_WITH_GOOGLE',
+						authenticated: false,
+					});
+				},
+			});
 	}
 
 	@Action(SendForgotPasswordEmail, { cancelUncompleted: true })
@@ -105,20 +106,18 @@ export class AuthState
 		ctx: StateContext<IAuthStateModel>,
 		action: SendForgotPasswordEmail
 	) {
-		this.subs.sink = this.authService
-			.sendForgotPasswordEmail(action.payload)
-			.subscribe({
-				next: (res: any) => {
-					ctx.patchState(res as IAuthStateModel);
-					// this.updateMyStorageEngineService('auth', res);
-				},
-				error: () => {
-					ctx.patchState({
-						status: 'FAILED_TO_SEND_FORGOT_PASSWORD_EMAIL',
-						authenticated: false,
-					});
-				},
-			});
+		this.authService.sendForgotPasswordEmail(action.payload).subscribe({
+			next: (res: any) => {
+				ctx.patchState(res as IAuthStateModel);
+				// this.updateMyStorageEngineService('auth', res);
+			},
+			error: () => {
+				ctx.patchState({
+					status: 'FAILED_TO_SEND_FORGOT_PASSWORD_EMAIL',
+					authenticated: false,
+				});
+			},
+		});
 	}
 
 	@Action(ConfirmForgotPassword, { cancelUncompleted: true })
@@ -126,8 +125,25 @@ export class AuthState
 		ctx: StateContext<IAuthStateModel>,
 		action: ConfirmForgotPassword
 	) {
-		this.subs.sink = this.authService
-			.confirmForgotPassword(action.payload)
+		this.authService.confirmForgotPassword(action.payload).subscribe({
+			next: (res: any) => {
+				ctx.patchState(res as IAuthStateModel);
+				// this.updateMyStorageEngineService('auth', res);
+			},
+			error: () => {
+				ctx.patchState({
+					status: `FAILED_TO_CONFIRM_FORGOT_PASSWORD`,
+					authenticated: false,
+				});
+			},
+		});
+	}
+
+	@Action(Logout, { cancelUncompleted: true })
+	logout(ctx: StateContext<IAuthStateModel>) {
+		this.authService
+			.logout()
+			.pipe(take(1))
 			.subscribe({
 				next: (res: any) => {
 					ctx.patchState(res as IAuthStateModel);
@@ -135,49 +151,36 @@ export class AuthState
 				},
 				error: () => {
 					ctx.patchState({
-						status: `FAILED_TO_CONFIRM_FORGOT_PASSWORD`,
+						status: `EITHER_LOGGED_OUT_ALREADY_OR_INTERNET_PROBLEM`,
+						authenticated: null,
+					});
+				},
+			});
+	}
+
+	@Action(IsAuthenticated, { cancelUncompleted: true })
+	isAuthenticated(ctx: StateContext<IAuthStateModel>) {
+		this.authService
+			.isAuthenticated()
+			.pipe(take(1))
+			.subscribe({
+				next: (res: any) => {
+					ctx.patchState(res as IAuthStateModel);
+					// this.updateMyStorageEngineService('auth', res);
+				},
+				error: () => {
+					ctx.patchState({
+						status: 'NOT_AUTHENTICATED',
 						authenticated: false,
 					});
 				},
 			});
 	}
 
-	@Action(Logout, { cancelUncompleted: true })
-	logout(ctx: StateContext<IAuthStateModel>) {
-		this.subs.sink = this.authService.logout().subscribe({
-			next: (res: any) => {
-				ctx.patchState(res as IAuthStateModel);
-				// this.updateMyStorageEngineService('auth', res);
-			},
-			error: () => {
-				ctx.patchState({
-					status: `EITHER_LOGGED_OUT_ALREADY_OR_INTERNET_PROBLEM`,
-					authenticated: null,
-				});
-			},
-		});
-	}
-
-	@Action(IsAuthenticated, { cancelUncompleted: true })
-	isAuthenticated(ctx: StateContext<IAuthStateModel>) {
-		this.subs.sink = this.authService.isAuthenticated().subscribe({
-			next: (res: any) => {
-				ctx.patchState(res as IAuthStateModel);
-				// this.updateMyStorageEngineService('auth', res);
-			},
-			error: () => {
-				ctx.patchState({
-					status: 'NOT_AUTHENTICATED',
-					authenticated: false,
-				});
-			},
-		});
-	}
-
 	@Action(ResetAuthStoreToDefault, { cancelUncompleted: true })
 	resetAuthStoreToDefault(ctx: StateContext<IAuthStateModel>) {
 		ctx.patchState({
-			status: 'Reset Auth Store To Default',
+			status: 'RESET_AUTH_STORE_TO_DEFAULT',
 			authenticated: null,
 		});
 		// this.updateMyStorageEngineService('auth', {

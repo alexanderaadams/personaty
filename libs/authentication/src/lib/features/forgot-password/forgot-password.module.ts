@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 
 import { ForgotPasswordComponent } from './forgot-password.component';
 import { AngularMaterialModule } from '@persona/shared';
+import { FormModule } from '../../pages/form/form.module';
 
 const routes: Routes = [
 	{
@@ -20,6 +21,7 @@ const routes: Routes = [
 		RouterModule.forChild(routes),
 		ReactiveFormsModule,
 		AngularMaterialModule,
+		FormModule,
 	],
 })
 export class ForgotPasswordModule {}

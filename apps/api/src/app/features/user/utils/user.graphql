@@ -35,6 +35,8 @@ input Update_User_Input {
 }
 
 type User {
+	googleId: String
+
 	_id: String!
 
 	fullName: String
@@ -47,6 +49,8 @@ type User {
 
 	profilePicture: String
 
+	profileCover: String
+
 	created_at: Date!
 
 	birthDate: String!
@@ -55,7 +59,7 @@ type User {
 
 	role: String!
 
-	stories: [Story]!
+	stories: [Story]
 
 	bio: Interest_And_Bio_And_Category!
 

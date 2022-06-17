@@ -15,17 +15,8 @@ export function TryCatchWrapper() {
 				return await originalMethod.apply(this, args);
 			} catch (error) {
 				throw new HttpException(
-					{
-						statusCode:
-							error?.response?.statusCode ??
-							error?.status ??
-							HttpStatus.INTERNAL_SERVER_ERROR,
-						message:
-							error?.response?.message ??
-							error?.message ??
-							'Something Went Wrong',
-					},
-					error?.response?.error ??
+					error?.response?.message ?? error?.message ?? 'Something Went Wrong',
+					error?.response?.statusCode ??
 						error?.status ??
 						HttpStatus.INTERNAL_SERVER_ERROR
 				);

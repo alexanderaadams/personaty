@@ -20,7 +20,7 @@ export class AppState extends UnsubscribeOnDestroyAdapter {
 
 	@Action(GetCsrfToken)
 	getUserInfo(ctx: StateContext<CsrfTokenModel>, _action: GetCsrfToken) {
-		this.subs.sink = this.appService.checkConnection().subscribe({
+		this.subs.sink = this.appService.getCsrfToken().subscribe({
 			next: (res: any) => {
 				ctx.patchState(res as CsrfTokenModel);
 			},

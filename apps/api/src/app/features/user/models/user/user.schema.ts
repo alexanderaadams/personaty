@@ -1,11 +1,12 @@
 import { InterestAndBioAndCategory } from '@core/models/interest-and-bio-and-category';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Schema as MongooseSchema, Document, Types } from 'mongoose';
+import { environment } from '@environment';
 
 export type UserDocument = User & Document;
 
 @Schema()
-export class User {
+export class User  {
 	@Prop({ type: String, select: false })
 	googleId: string;
 
@@ -21,8 +22,8 @@ export class User {
 	@Prop({
 		type: String,
 		required: true,
-		min: 2,
-		max: 50,
+		min: environment.MIN_LENGTH,
+		max: environment.MAX_LENGTH,
 		select: false,
 	})
 	password: string;
@@ -45,20 +46,15 @@ export class User {
 	})
 	profileCover: string;
 
-	@Prop({ type: String })
+	@Prop({ type: String, required: true })
 	birthDate: Date;
 
 	@Prop({
-		type: String,
+		type: Boolean,
 		select: false,
-
-		enum: {
-			values: ['true', 'false'],
-			message: 'Email Verified is either: true, false',
-		},
-		default: 'false',
+		default: false,
 	})
-	email_verified: string;
+	email_verified: boolean;
 
 	@Prop({
 		type: String,
@@ -92,18 +88,18 @@ export class User {
 	})
 	bio: InterestAndBioAndCategory;
 
-	@Prop({ type: [{ text: String, color: String }], default: [''] })
+	@Prop({ type: [{ text: String, color: String }] })
 	interests: Array<InterestAndBioAndCategory>;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-UserSchema.virtual('stories', {
-	ref: 'Story', //The Model to use
-	localField: '_id', //Find in Model, where localField
-	foreignField: 'user_id', // is equal to foreignField
-});
+// UserSchema.virtual('stories', {
+// 	ref: 'Story', //The Model to use
+// 	localField: '_id', //Find in Model, where localField
+// 	foreignField: 'user_id', // is equal to foreignField
+// });
 
 // Set Object and Json property to true. Default is set to false
-UserSchema.set('toObject', { virtuals: true });
-UserSchema.set('toJSON', { virtuals: true });
+// UserSchema.set('toObject', { virtuals: true });
+// UserSchema.set('toJSON', { virtuals: true });

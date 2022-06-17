@@ -11,17 +11,15 @@ import { NodemailerService } from '@modules/mail/nodemailer.service';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 import { ExposedUserModel } from '@core/models/exposed-user-model';
 import { UserModel } from '@features/user/models/user/user.model';
-import { InjectedMongooseModelsService } from '@modules/injected-mongoose-models/injected-mongoose-models.service';
 
 import { HashingService } from './hashing.service';
 
 @Injectable()
 export class ForgotPasswordService {
 	constructor(
-		private readonly usersService: UserService,
+		private readonly userService: UserService,
 		private readonly myJWTService: MyJWTService,
-		private readonly nodemailerService: NodemailerService,
-		private readonly injectedMongooseModelsService: InjectedMongooseModelsService
+		private readonly nodemailerService: NodemailerService
 	) {}
 
 	@TryCatchWrapper()
@@ -29,7 +27,7 @@ export class ForgotPasswordService {
 		email: string,
 		requestHeadersOrigin: string
 	): Promise<{ status: string }> {
-		const user: ExposedUserModel | null = await this.usersService.findOne({
+		const user: ExposedUserModel | null = await this.userService.findOne({
 			email,
 		});
 
@@ -63,7 +61,7 @@ export class ForgotPasswordService {
 		password: string;
 		confirmPassword: string;
 		authToken: string;
-	}): Promise<{ updateUser: ExposedUserModel; auth: string }> {
+	}): Promise<any> {
 		const { password, confirmPassword, authToken } = passwords;
 
 		if (password !== confirmPassword)
@@ -71,7 +69,7 @@ export class ForgotPasswordService {
 
 		const verifyToken = await this.myJWTService.verifyToken(authToken);
 
-		const user: UserModel | null = await this.usersService.findUserById(
+		const user: UserModel | null = await this.userService.findUserById(
 			verifyToken.id
 		);
 
@@ -84,19 +82,19 @@ export class ForgotPasswordService {
 			HashingService.hashingPassword(password),
 		]);
 
-		const updateUser = (await this.injectedMongooseModelsService.userModel
-			.findByIdAndUpdate(
-				user._id.toString(),
-				{ password: hashedPassword, updatedAt: Date.now() },
-				{
-					new: true,
-				}
-			)
-			.exec()) as unknown as ExposedUserModel;
+		// const updateUser = (await this.userService
+		// 	.updateUser(
+		// 		user._id.toString(),
+		// 		{ password: hashedPassword, updatedAt: Date.now() },
+		// 		{
+		// 			new: true,
+		// 		}
+		// 	)
+		// 	.exec()) as unknown as ExposedUserModel;
 
-		return {
-			updateUser,
-			auth: newAuthToken,
-		};
+		// return {
+		// updateUser,
+		// auth: newAuthToken,
+		// };
 	}
 }

@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { ConfirmForgotPasswordComponent } from './confirm-forgot-password.component';
 import { AngularMaterialModule } from '@persona/shared';
+import { FormModule } from '../../pages/form/form.module';
 
 const routes: Routes = [
 	{
@@ -20,6 +21,7 @@ const routes: Routes = [
 		RouterModule.forChild(routes),
 		ReactiveFormsModule,
 		AngularMaterialModule,
+		FormModule,
 	],
 })
 export class ConfirmForgotPasswordModule {}

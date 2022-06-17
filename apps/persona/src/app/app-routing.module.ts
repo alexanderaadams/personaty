@@ -2,10 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './core/data-access/guards/auth.guard';
 
+
 const routes: Routes = [
 	{
 		path: 'profile/:id',
-		canActivate: [AuthGuard],
+		// canActivate: [AuthGuard],
 		loadChildren: () =>
 			import('./features/profile/components/profile.module').then(
 				(m) => m.ProfileModule
@@ -44,6 +45,8 @@ const routes: Routes = [
 @NgModule({
 	imports: [
 		RouterModule.forRoot(routes, {
+			// enableTracing: !environment.production,
+			initialNavigation: 'enabledBlocking',
 			onSameUrlNavigation: 'ignore',
 		}),
 	],

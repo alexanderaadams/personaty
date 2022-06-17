@@ -128,17 +128,19 @@ export class Story_Status {
 }
 
 export class User {
+    googleId?: Nullable<string>;
     _id: string;
     fullName?: Nullable<string>;
     username?: Nullable<string>;
     email: string;
     locale: string;
     profilePicture?: Nullable<string>;
+    profileCover?: Nullable<string>;
     created_at: Date;
     birthDate: string;
     gender: string;
     role: string;
-    stories: Nullable<Story>[];
+    stories?: Nullable<Nullable<Story>[]>;
     bio: Interest_And_Bio_And_Category;
     interests: Nullable<Interest_And_Bio_And_Category>[];
 }

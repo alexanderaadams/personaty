@@ -9,6 +9,8 @@ import { ThrottlerBehindProxyGuard } from '@core/guards/throttler/throttler-behi
 
 import { SignupService } from './services/signup.service';
 import { LoginService } from './services/login.service';
+import { InjectedMongooseModelsService } from '@modules/injected-mongoose-models/injected-mongoose-models.service';
+import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 
 @UseGuards(environment.production ? ThrottlerBehindProxyGuard : ThrottlerGuard)
 @Throttle(
@@ -19,7 +21,8 @@ import { LoginService } from './services/login.service';
 export class AuthController {
 	constructor(
 		private readonly signupService: SignupService,
-		private readonly loginService: LoginService
+		private readonly loginService: LoginService,
+		private injectedMongooseModelsService: InjectedMongooseModelsService
 	) {}
 
 	@Get('signup/:authToken')

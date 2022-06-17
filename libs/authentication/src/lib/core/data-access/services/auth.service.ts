@@ -2,7 +2,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 
 import {
 	ILoginCredentials,
@@ -27,11 +27,7 @@ import { EMPTY } from 'rxjs';
 	providedIn: 'root',
 })
 export class AuthService {
-	// rootUrlProduction = 'https://api-persona2.herokuapp.com/api/v1';
-	// rootUrlDevelopment = 'http://localhost:3333/api/v1';
-	// signedin$ = new BehaviorSubject(false);
-	// username = '';
-	// email = '';
+
 	isBrowser = this.sharedService.isBrowser;
 
 	constructor(
@@ -42,13 +38,13 @@ export class AuthService {
 	) {}
 
 	userAvailable(value: IUserAvailableRequest) {
+		this.sharedService.executingLoader$.next(true);
 		return this.apollo
 			.watchQuery({
 				query: IS_AVAILABLE,
 				variables: {
 					findUser: value,
 				},
-				// errorPolicy: 'all',
 			})
 			.valueChanges.pipe(
 				catchError(() => {
@@ -61,13 +57,13 @@ export class AuthService {
 	}
 
 	signup(credentials: ISignupCredentials) {
+		this.sharedService.executingLoader$.next(true);
 		return this.apollo
 			.mutate({
 				mutation: SIGNUP,
 				variables: {
 					user: credentials,
 				},
-				// errorPolicy: 'all',
 			})
 			.pipe(
 				catchError((error: any) => {
@@ -83,13 +79,13 @@ export class AuthService {
 	}
 
 	login(credentials: ILoginCredentials) {
+		this.sharedService.executingLoader$.next(true);
 		return this.apollo
 			.mutate({
 				mutation: LOGIN,
 				variables: {
 					user: credentials,
 				},
-				// errorPolicy: 'all',
 			})
 			.pipe(
 				catchError((error: any) => {
@@ -125,15 +121,14 @@ export class AuthService {
 	}
 
 	sendForgotPasswordEmail(email: { email: string }) {
+		this.sharedService.executingLoader$.next(true);
 		return this.apollo
 			.mutate({
 				mutation: SEND_FORGOT_PASSWORD_EMAIL,
 				variables: {
 					user: email,
 				},
-				// errorPolicy: 'all',
 			})
-
 			.pipe(
 				catchError((error: any) => {
 					return error;
@@ -148,13 +143,13 @@ export class AuthService {
 	}
 
 	confirmForgotPassword(credentials: IConfirmForgotPasswordCredentials) {
+		this.sharedService.executingLoader$.next(true);
 		return this.apollo
 			.mutate({
 				mutation: CONFIRM_FORGOT_PASSWORD,
 				variables: {
 					credentials,
 				},
-				// errorPolicy: 'all',
 			})
 			.pipe(
 				catchError((error: any) => {
@@ -170,6 +165,7 @@ export class AuthService {
 	}
 
 	logout() {
+		this.sharedService.executingLoader$.next(true);
 		return this.apollo
 			.query({
 				query: LOGOUT,

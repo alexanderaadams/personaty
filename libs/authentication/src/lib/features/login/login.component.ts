@@ -23,6 +23,7 @@ export class LoginComponent
 	extends UnsubscribeOnDestroyAdapter
 	implements OnInit
 {
+	login="Login"
 	hide = true;
 
 	@Select('auth')

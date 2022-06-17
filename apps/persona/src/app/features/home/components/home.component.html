@@ -1,3 +1,23 @@
 <div>
-	<a (click)="logout()">Logout</a>
+	<a
+		mat-button
+		class="col-2 link text-left"
+		style="margin: 0; padding: 0; text-decoration: underline"
+		(click)="logout()"
+		>Logout</a
+	>
+	<a
+		mat-button
+		class="col-2 link text-left"
+		style="margin: 0; padding: 0; text-decoration: underline"
+		[routerLink]="['profile']"
+		>Profile</a
+	>
+	<a
+		mat-flat-button
+		class="col-2 link text-left"
+		style="margin: 0; padding: 0; text-decoration: underline"
+		[routerLink]="['story']"
+		><mat-icon>add</mat-icon></a
+	>
 </div>

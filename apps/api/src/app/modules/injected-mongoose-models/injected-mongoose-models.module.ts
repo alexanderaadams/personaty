@@ -9,19 +9,33 @@ import { InjectedMongooseModelsService } from './injected-mongoose-models.servic
 @Global()
 @Module({
 	imports: [
-		MongooseModule.forFeatureAsync(
+		// NOTE the async config is fucked up with complexxty
+		MongooseModule.forFeature(
 			[
 				{
 					name: User.name,
-					useFactory: () => ({ schema: UserSchema }),
+					schema: UserSchema,
 				},
 				{
 					name: Story.name,
-					useFactory: () => ({ schema: StorySchema }),
+					schema: StorySchema,
 				},
 			],
 			environment.DATABASE_CONNECTION_NAME
 		),
+		// MongooseModule.forFeatureAsync(
+		// 	[
+		// 		{
+		// 			name: User.name,
+		// 			useFactory: () => ({ schema: UserSchema }),
+		// 		},
+		// 		{
+		// 			name: Story.name,
+		// 			useFactory: () => ({ schema: StorySchema }),
+		// 		},
+		// 	],
+		// 	environment.DATABASE_CONNECTION_NAME
+		// ),
 	],
 	providers: [InjectedMongooseModelsService],
 	exports: [InjectedMongooseModelsService],

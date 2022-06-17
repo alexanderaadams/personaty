@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, retry } from 'rxjs/operators';
 import { EMPTY, Observable } from 'rxjs';
 
 import { environment, SharedService } from '@persona/shared';
@@ -15,7 +15,7 @@ export class AppService {
 		private readonly sharedService: SharedService
 	) {}
 
-	checkConnection(): Observable<CsrfTokenModel> {
+	getCsrfToken(): Observable<CsrfTokenModel> {
 		return this.http
 			.get(
 				`${environment.BACKEND_URL}/${environment.BACKEND_BASE_URL}/csrf-token`,
@@ -28,9 +28,9 @@ export class AppService {
 					return EMPTY;
 				}),
 				map(({ data }: any): CsrfTokenModel => {
-					this.sharedService.executingLoader$.next(false);
 					return data.status as CsrfTokenModel;
-				})
+				}),
+				retry(1)
 			);
 	}
 }

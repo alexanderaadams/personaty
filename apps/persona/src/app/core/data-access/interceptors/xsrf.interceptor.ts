@@ -10,6 +10,7 @@ import {
 import { CookieService } from 'ngx-cookie-service';
 import { tap, catchError } from 'rxjs/operators';
 import { EMPTY, Observable } from 'rxjs';
+import { environment } from '@persona/shared';
 
 @Injectable()
 export class XsrfInterceptor implements HttpInterceptor {

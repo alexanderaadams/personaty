@@ -27,6 +27,10 @@ import { InjectedMongooseModelsModule } from '@modules/injected-mongoose-models/
 @Module({
 	controllers: [AppController],
 	imports: [
+		// MongooseModule.forRoot(environment.DATABASE_CONNECTION, {
+		// 	retryAttempts: 5,
+		// 	retryDelay: 1000,
+		// }),
 		AuthModule,
 		UserModule,
 		StoryModule,
@@ -43,7 +47,6 @@ import { InjectedMongooseModelsModule } from '@modules/injected-mongoose-models/
 				uri: environment.DATABASE_CONNECTION,
 				retryAttempts: 5,
 				retryDelay: 1000,
-				autoIndex: environment.production,
 			}),
 		}),
 

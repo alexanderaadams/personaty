@@ -1,10 +1,9 @@
 <div *ngIf="user$ | async as user" class="container">
-	<div class="row justify-content-center align-content-center mt-5">
-		<header class="row justify-content-center align-content-center my-5 gap-3">
+	<div class="row justify-content-center align-content-center">
+		<header class="row justify-content-center align-content-center mb-5 gap-3">
 			<div
 				class="position-relative w-100 row justify-content-center align-content-center"
-				style="height: 40vh"
-			>
+				style="height: 40vh">
 				<div class="bg-unknown w-100 h-50"></div>
 
 				<img
@@ -18,27 +17,23 @@
 					"
 					class="bottom-0 shadow-sm img-fluid rounded-circle position-absolute border-info"
 					[src]="backendUrl + '/api/v1/image/picture/' + user?.profilePicture"
-					alt="Profile Picture"
-				/>
+					alt="Profile Picture" />
 			</div>
 			<h2 class="text-center">{{ user?.fullName }}</h2>
 
 			<p
 				[style]="'width: max-content; background-color:' + user?.bio?.color"
-				class="text-center br-04 p-3 fst-italic"
-			>
+				class="text-center br-04 p-3 fst-italic">
 				{{ user?.bio?.text }}
 			</p>
 
 			<mat-chip-list
 				class="row justify-content-center align-items-center"
-				aria-label="Specialty selection"
-			>
+				aria-label="Specialty selection">
 				<mat-chip
 					*ngFor="let interest of user?.interests; let i = index"
 					[style]="'background-color:' + interest.color"
-					class="col p-4 d-flex justify-content-center align-content-center"
-				>
+					class="col p-4 d-flex justify-content-center align-content-center">
 					<span class="text-center">
 						{{ interest.text }}
 					</span>
@@ -48,17 +43,13 @@
 		<section
 			(click)="onCreateStory()"
 			*ngIf="(createStory | async) === false"
-			class="row justify-content-center align-items-center my-3 bg-unknown vh-25 br-04 shadow-sm"
-		></section>
+			class="row justify-content-center align-items-center my-3 bg-unknown vh-25 br-04 shadow-sm"></section>
 
 		<section
 			*ngIf="createStory | async"
 			style="background-color: #c2185c20"
 			(dismiss)="onCancelStory()"
-			class="position-fixed vh-100 vw-100 top-0"
-		>
-		
-		</section>
+			class="position-fixed vh-100 vw-100 top-0"></section>
 
 		<section class="row justify-content-center align-items-center mt-3">
 			<div class="col" *ngFor="let story of user?.stories">

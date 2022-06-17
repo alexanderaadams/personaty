@@ -5,5 +5,5 @@ export interface ICreateUser {
 
 	birthDate: string;
 
-	email_verified?: boolean;
+	email_verified: boolean;
 }

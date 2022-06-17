@@ -12,8 +12,10 @@ import { GoogleOauth2 } from '@features/auth/models/google-oauth-2';
 import { UserModel } from './models/user/user.model';
 import { ExposedUserModelSensitiveInformation } from './models/exposed-user-model-sensitive-information';
 import { ICreateUser } from './interfaces/create-user.interface';
-import { UserDocument } from './models/user/user.schema';
+import { User, UserDocument } from './models/user/user.schema';
 import { IUpdateUser } from './interfaces/update-user.interface';
+import { environment } from '@environment';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class UserService {
@@ -23,18 +25,24 @@ export class UserService {
 		private readonly injectedMongooseModelsService: InjectedMongooseModelsService,
 		private readonly myJWTService: MyJWTService,
 		private readonly imageService: ImageService,
-		private readonly fileStorageService: FileStorageService
+		private readonly fileStorageService: FileStorageService,
+		// @InjectModel(User.name, environment.DATABASE_CONNECTION_NAME)
+		// public readonly userModel: Model<UserDocument>
 	) {
 		this.userModel = this.injectedMongooseModelsService.userModel;
 	}
 
-	@TryCatchWrapper()
+	// @TryCatchWrapper()
 	async createUser(
 		user: ICreateUser | GoogleOauth2
 	): Promise<ExposedUserModel> {
-		return (await this.userModel.create(
+		console.log(user);
+		const newUser = (await this.userModel.create(
 			user
 		)) as unknown as Promise<ExposedUserModel>;
+
+		console.log(newUser);
+		return newUser;
 	}
 
 	@TryCatchWrapper()

@@ -20,10 +20,10 @@ $light-theme: mat.define-light-theme(
 ////////////////////////////////////////////////////////////
 
 // Define a dark theme
-$dark-primary: mat.define-palette(mat.$pink-palette, 200);
-$dark-accent: mat.define-palette(mat.$blue-palette, 200);
-$dark-warn: mat.define-palette(mat.$red-palette, 300);
-$dark-background-color: #262c38;
+$dark-primary: mat.define-palette(mat.$pink-palette, 500);
+$dark-accent: mat.define-palette(mat.$blue-palette, 500);
+$dark-warn: mat.define-palette(mat.$red-palette, 600);
+$dark-background-color: #263238;
 $dark-theme: mat.define-dark-theme(
 	(
 		color: (

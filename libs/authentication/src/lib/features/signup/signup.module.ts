@@ -5,6 +5,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { AngularMaterialModule } from '@persona/shared';
 import { SignupComponent } from './signup.component';
+// import { FormComponent } from '../../pages/form/form.component';
+import { FormModule } from '../../pages/form/form.module';
 
 const routes: Routes = [
 	{
@@ -20,6 +22,7 @@ const routes: Routes = [
 		RouterModule.forChild(routes),
 		ReactiveFormsModule,
 		AngularMaterialModule,
+		FormModule,
 	],
 })
 export class SignupModule {}

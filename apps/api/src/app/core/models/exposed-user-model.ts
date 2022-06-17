@@ -1,8 +1,9 @@
 import { Expose } from 'class-transformer';
+import { ObjectId } from 'mongoose';
 
 export class ExposedUserModel {
 	@Expose()
-	_id: string;
+	_id: ObjectId;
 
 	@Expose()
 	username: string;

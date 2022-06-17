@@ -12,10 +12,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { take, takeUntil, tap } from 'rxjs/operators';
 
+import { UnsubscribeOnDestroyAdapter, SharedService } from '@persona/shared';
+
 import { IAuthStateModel } from '../store/auth.model';
 import { IsAuthenticated, ResetAuthStoreToDefault } from '../store/auth.action';
-import { UnsubscribeOnDestroyAdapter, SharedService } from '@persona/shared';
-// import {  } from '@shared';
 
 @Injectable({
 	providedIn: 'root',
@@ -32,8 +32,7 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 		private readonly actions$: Actions,
 		private readonly _snackBar: MatSnackBar,
 		private readonly router: Router,
-		private readonly store: Store,
-		private readonly sharedService: SharedService
+		private readonly store: Store
 	) {
 		super();
 	}
@@ -48,12 +47,12 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 			.pipe(
 				tap(({ status }: any) => {
 					if (status === 'NOT_AUTHENTICATED') {
-						this.router.navigateByUrl('/auth/login');
-						this.sharedService.executingLoader$.next(false);
+						if (!this.router.url.includes('/auth/'))
+							this.router.navigateByUrl('/auth/login');
 					}
-					if (status === 'CORRECTLY_AUTHENTICATED') {
-						this.sharedService.executingLoader$.next(false);
-					}
+					// if (status === 'CORRECTLY_AUTHENTICATED') {
+
+					// }
 				}),
 				takeUntil(this.ngUnsubscribeCheckIfAlreadyAuthenticated)
 			)
@@ -75,7 +74,6 @@ export class FormService extends UnsubscribeOnDestroyAdapter {
 						tap(({ status, authenticated }: any) => {
 							if (authenticated !== null && status !== null) {
 								this.ngUnUnsubscribeFollowAuthenticationStatus.next(false);
-								this.sharedService.executingLoader$.next(false);
 							}
 
 							if (authenticated) {
