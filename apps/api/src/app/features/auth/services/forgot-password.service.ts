@@ -40,7 +40,7 @@ export class ForgotPasswordService {
 			}
 		);
 
-		const authTokenURL = `${requestHeadersOrigin}/auth/confirm-forgot-password/${authToken}`;
+		const authTokenURL = `${requestHeadersOrigin}/auth/confirm-new-password/${authToken}`;
 
 		this.nodemailerService.sendEmail({
 			to: email,
