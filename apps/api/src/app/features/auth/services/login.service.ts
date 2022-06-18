@@ -47,7 +47,7 @@ export class LoginService {
 		if (storedHash !== hash.toString('hex'))
 			throw new UnauthorizedException('bad password');
 
-		console.log(user._id.toString());
+
 
 		const authToken: string = await this.myJWTService.signToken({
 			id: user._id.toString(),

@@ -25,9 +25,8 @@ export class UserService {
 		private readonly injectedMongooseModelsService: InjectedMongooseModelsService,
 		private readonly myJWTService: MyJWTService,
 		private readonly imageService: ImageService,
-		private readonly fileStorageService: FileStorageService
-	) // @InjectModel(User.name, environment.DATABASE_CONNECTION_NAME)
-	// public readonly userModel: Model<UserDocument>
+		private readonly fileStorageService: FileStorageService // @InjectModel(User.name, environment.DATABASE_CONNECTION_NAME)
+	) // public readonly userModel: Model<UserDocument>
 	{
 		this.userModel = this.injectedMongooseModelsService.userModel;
 	}
@@ -36,12 +35,10 @@ export class UserService {
 	async createUser(
 		user: ICreateUser | GoogleOauth2
 	): Promise<ExposedUserModel> {
-		console.log(user);
 		const newUser = (await this.userModel.create(
 			user
 		)) as unknown as Promise<ExposedUserModel>;
 
-		console.log(newUser);
 		return newUser;
 	}
 

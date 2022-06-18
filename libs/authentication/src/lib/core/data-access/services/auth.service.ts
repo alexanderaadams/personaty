@@ -190,7 +190,8 @@ export class AuthService {
 	isAuthenticated() {
 		return this.http
 			.get(
-				`${environment.BACKEND_URL}/${environment.BACKEND_BASE_URL}/auth/is-authenticated`
+				`${environment.BACKEND_URL}/${environment.BACKEND_BASE_URL}/auth/is-authenticated`,
+				{ withCredentials: true }
 			)
 			.pipe(
 				catchError((error: any) => {

@@ -85,7 +85,6 @@ export class CreateStoryComponent extends UnsubscribeOnDestroyAdapter {
 	}
 
 	onSubmit(): void {
-		console.log({ ...this.storyForm.value });
 		if (
 			this.storyForm?.invalid ||
 			!this.storyForm.value ||

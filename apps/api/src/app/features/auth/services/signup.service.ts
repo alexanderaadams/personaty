@@ -32,8 +32,6 @@ export class SignupService {
 				email,
 			});
 
-		console.log(user);
-
 		if (user) throw new ConflictException();
 
 		const authToken: string = await this.myJWTService.signToken(
@@ -42,8 +40,6 @@ export class SignupService {
 				expiresIn: '24h',
 			}
 		);
-
-		console.log(authToken);
 
 		const authTokenURL = `${requestHeadersHost}/api/v1/auth/signup/${authToken}`;
 
@@ -82,8 +78,6 @@ export class SignupService {
 			HashingService.hashingPassword(password),
 		]);
 
-		console.log(user);
-
 		if (user) throw new ConflictException('User already exists');
 		const newUser: ExposedUserModel =
 			(await this.injectedMongooseModelsService.userModel.create({
@@ -92,8 +86,6 @@ export class SignupService {
 				birthDate,
 				email_verified: true,
 			})) as unknown as ExposedUserModel;
-
-		console.log(newUser);
 
 		const authToken = await this.myJWTService.signToken({
 			id: newUser._id.toString(),

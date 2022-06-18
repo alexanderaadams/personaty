@@ -29,8 +29,8 @@ export class AppService {
 				}),
 				map(({ data }: any): CsrfTokenModel => {
 					return data.status as CsrfTokenModel;
-				}),
-				retry(1)
+				})
+				// retry(1)
 			);
 	}
 }

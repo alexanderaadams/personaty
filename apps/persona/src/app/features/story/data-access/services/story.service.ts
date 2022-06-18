@@ -70,7 +70,7 @@ export class StoryService {
 				}),
 				map(({ data }: any) => {
 					this.sharedService.executingLoader$.next(false);
-					console.log(data);
+
 					// return data.createStory as IStoryStateModel;
 				})
 			);

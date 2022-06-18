@@ -8,7 +8,7 @@ export class MyJWTService {
 
 	@TryCatchWrapper()
 	async signToken(payload: object, options?: JwtSignOptions): Promise<string> {
-		console.log(payload, options);
+
 		if (options) return await this.jwtService.signAsync(payload, options);
 
 		return await this.jwtService.signAsync(payload);
@@ -16,7 +16,7 @@ export class MyJWTService {
 
 	@TryCatchWrapper()
 	async verifyToken(authToken: string): Promise<any> {
-		console.log(authToken);
+
 		return await this.jwtService.verifyAsync(authToken);
 	}
 }

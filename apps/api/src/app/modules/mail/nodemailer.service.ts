@@ -49,7 +49,6 @@ export class NodemailerService {
 				// console.log('res', res);
 			})
 			.catch((err) => {
-				console.log('err', err);
 				return err;
 			});
 	}
