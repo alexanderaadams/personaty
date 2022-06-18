@@ -198,8 +198,7 @@ export class AuthService {
 				}),
 				tap((res) => {
 					console.log(res);
-				}),
-				retry({ count: 1, delay: 200, resetOnSuccess: true })
+				})
 			);
 		// return this.apollo
 		// 	.query({

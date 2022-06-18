@@ -12,6 +12,7 @@ import { HashingService } from './services/hashing.service';
 import { LoginService } from './services/login.service';
 import { SignupService } from './services/signup.service';
 
+
 @Module({
 	imports: [UserModule],
 	controllers: [AuthController],

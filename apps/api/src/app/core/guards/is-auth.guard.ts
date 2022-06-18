@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
-import { MyJWTService } from '@modules/jwt/jwt.service';
+import { MyJWTService } from '@modules/my-jwt/my-jwt.service';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 
 @Injectable()

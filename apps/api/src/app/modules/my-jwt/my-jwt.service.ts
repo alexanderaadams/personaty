@@ -7,14 +7,16 @@ export class MyJWTService {
 	constructor(private jwtService: JwtService) {}
 
 	@TryCatchWrapper()
-	async signToken(payload: object, options?: JwtSignOptions) {
-		if (options) return this.jwtService.signAsync(payload, options);
+	async signToken(payload: object, options?: JwtSignOptions): Promise<string> {
+		console.log(payload, options);
+		if (options) return await this.jwtService.signAsync(payload, options);
 
 		return await this.jwtService.signAsync(payload);
 	}
 
 	@TryCatchWrapper()
-	async verifyToken(authToken: string) {
+	async verifyToken(authToken: string): Promise<any> {
+		console.log(authToken);
 		return await this.jwtService.verifyAsync(authToken);
 	}
 }

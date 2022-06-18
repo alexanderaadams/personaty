@@ -14,14 +14,22 @@ export function TryCatchWrapper() {
 			try {
 				return await originalMethod.apply(this, args);
 			} catch (error) {
+				console.log(error);
 				let statusCode: number | null = null;
-				if (error?.message == 'jwt must be provided') statusCode = 403;
+				let message: string | null = null;
+				if (error?.message == 'jwt must be provided') {
+					statusCode = 401;
+					message = 'Please sign in';
+				}
 
 				throw new HttpException(
-					error?.response?.message ?? error?.message ?? 'Something Went Wrong',
+					message ??
+						error?.response?.message ??
+						error?.message ??
+						'Something Went Wrong',
 					error?.response?.statusCode ??
-						error?.status ??
 						statusCode ??
+						error?.status ??
 						HttpStatus.INTERNAL_SERVER_ERROR
 				);
 			}

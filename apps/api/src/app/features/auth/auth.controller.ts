@@ -6,7 +6,7 @@ import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { GoogleOauth2 } from './models/google-oauth-2';
 import { environment } from '@environment';
 import { ThrottlerBehindProxyGuard } from '@core/guards/throttler/throttler-behind-proxy.guard';
-import { MyJWTService } from '@modules/jwt/jwt.service';
+import { MyJWTService } from '@modules/my-jwt/my-jwt.service';
 
 import { SignupService } from './services/signup.service';
 import { LoginService } from './services/login.service';

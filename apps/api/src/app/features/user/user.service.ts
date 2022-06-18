@@ -2,7 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 
 import { InjectedMongooseModelsService } from '@modules/injected-mongoose-models/injected-mongoose-models.service';
-import { MyJWTService } from '@modules/jwt/jwt.service';
+import { MyJWTService } from '@modules/my-jwt/my-jwt.service';
 import { ImageService } from '@modules/image/image.service';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 import { FileStorageService } from '@core/services/file-storage.service';
@@ -25,10 +25,10 @@ export class UserService {
 		private readonly injectedMongooseModelsService: InjectedMongooseModelsService,
 		private readonly myJWTService: MyJWTService,
 		private readonly imageService: ImageService,
-		private readonly fileStorageService: FileStorageService,
-		// @InjectModel(User.name, environment.DATABASE_CONNECTION_NAME)
-		// public readonly userModel: Model<UserDocument>
-	) {
+		private readonly fileStorageService: FileStorageService
+	) // @InjectModel(User.name, environment.DATABASE_CONNECTION_NAME)
+	// public readonly userModel: Model<UserDocument>
+	{
 		this.userModel = this.injectedMongooseModelsService.userModel;
 	}
 

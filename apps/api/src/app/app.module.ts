@@ -7,7 +7,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { environment } from '@environment';
 import { NodemailerModule } from '@modules/mail/nodemailer.module';
 import { ImageModule } from '@modules/image/image.module';
-import { MyJWTModule } from '@modules/jwt/jwt.module';
+import { MyJWTModule } from '@modules/my-jwt/my-jwt.module';
 
 import { AuthModule } from './features/auth/auth.module';
 import { UserModule } from './features/user/users.module';

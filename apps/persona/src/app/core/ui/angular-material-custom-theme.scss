@@ -35,11 +35,11 @@ $dark-theme: mat.define-dark-theme(
 );
 
 :root {
-	--bg-red-palette: #d32f2f;
+	--bg-red-palette: #ff5252;
 
 	--bs-red-palette: #ffcdd2;
 
-	--bg-green-palette: #2e7d32;
+	--bg-green-palette: #69f0ae;
 
 	--bs-green-palette: #c8e6c9;
 
@@ -52,6 +52,10 @@ $dark-theme: mat.define-dark-theme(
 	--bs-light-blue-palette: #e3f2fd;
 
 	--bs-dark-blue-palette: #1e88e5;
+
+	--bs-dark-green-palette: #1b5e20;
+
+	--bs-dark-red-palette: #b71c1c;
 
 	--bs-dark-grey-primary-palette: #262c38;
 

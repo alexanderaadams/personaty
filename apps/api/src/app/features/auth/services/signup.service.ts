@@ -2,7 +2,7 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import { join } from 'path';
 
 // import { UserService } from '@features/user/user.service';
-import { MyJWTService } from '@modules/jwt/jwt.service';
+import { MyJWTService } from '@modules/my-jwt/my-jwt.service';
 import { NodemailerService } from '@modules/mail/nodemailer.service';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 import { FileStorageService } from '@core/services/file-storage.service';
@@ -32,6 +32,8 @@ export class SignupService {
 				email,
 			});
 
+		console.log(user);
+
 		if (user) throw new ConflictException();
 
 		const authToken: string = await this.myJWTService.signToken(
@@ -40,6 +42,8 @@ export class SignupService {
 				expiresIn: '24h',
 			}
 		);
+
+		console.log(authToken);
 
 		const authTokenURL = `${requestHeadersHost}/api/v1/auth/signup/${authToken}`;
 
@@ -78,8 +82,9 @@ export class SignupService {
 			HashingService.hashingPassword(password),
 		]);
 
-		if (user) throw new ConflictException('User already exists');
+		console.log(user);
 
+		if (user) throw new ConflictException('User already exists');
 		const newUser: ExposedUserModel =
 			(await this.injectedMongooseModelsService.userModel.create({
 				email,
@@ -88,17 +93,21 @@ export class SignupService {
 				email_verified: true,
 			})) as unknown as ExposedUserModel;
 
-		const [authToken] = await Promise.all([
-			this.myJWTService.signToken({
-				id: newUser._id.toString(),
-				email,
-			}),
-			this.fileStorageService.makeDirectoryIfDoesNotExist({
-				idFolderPath: join(process.cwd(), 'upload', newUser._id.toString()),
-				folderType: ['images', 'videos'],
-				folderName: ['story', 'profile'],
-			}),
-		]);
+		console.log(newUser);
+
+		const authToken = await this.myJWTService.signToken({
+			id: newUser._id.toString(),
+			email,
+		});
+
+		// const [] = await Promise.all([
+
+		// ]);
+		await this.fileStorageService.makeDirectoryIfDoesNotExist({
+			idFolderPath: join(process.cwd(), 'upload', newUser._id.toString()),
+			folderType: ['images', 'videos'],
+			folderName: ['story', 'profile'],
+		});
 
 		return {
 			user: newUser,

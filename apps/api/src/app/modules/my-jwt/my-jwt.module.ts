@@ -3,8 +3,8 @@ import { JwtModule } from '@nestjs/jwt';
 
 import { PRIV_KEY, PUB_KEY } from '@persona/keys';
 
-import { JwtStrategy } from './jwt.strategy';
-import { MyJWTService } from './jwt.service';
+import { JwtStrategy } from './my-jwt.strategy';
+import { MyJWTService } from './my-jwt.service';
 
 @Global()
 @Module({

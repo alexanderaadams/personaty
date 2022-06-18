@@ -12,7 +12,7 @@ import { sendForgotPasswordEmailDto } from './models/dto/forgot-password.dto';
 import { TokenAuthGuard } from '@core/guards/is-auth.guard';
 import { GqlThrottlerBehindProxyGuard } from '@core/guards/throttler/gql-throttler-behind-proxy.guard';
 import { GqlThrottlerGuard } from '@core/guards/throttler/gql-throttler.guard';
-import { MyJWTService } from '@modules/jwt/jwt.service';
+import { MyJWTService } from '@modules/my-jwt/my-jwt.service';
 import { environment } from '@environment';
 import { FindUser } from '@core/models/find-user';
 import { ConfirmForgotPasswordDto } from './models/dto/confirm-forgot-password-with-token.dto';

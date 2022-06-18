@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { Model } from 'mongoose';
 
-import { MyJWTService } from '@modules/jwt/jwt.service';
+import { MyJWTService } from '@modules/my-jwt/my-jwt.service';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 import { ImageService } from '@modules/image/image.service';
 import { FileStorageService } from '@core/services/file-storage.service';

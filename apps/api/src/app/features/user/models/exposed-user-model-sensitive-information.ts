@@ -1,11 +1,12 @@
 import { IsEnum, IsString,IsNotEmpty } from 'class-validator';
 
 import { ERole } from '@core/enums/role.enum';
+import { ObjectId } from 'mongoose';
 
 export class ExposedUserModelSensitiveInformation {
-	@IsString()
+
 	@IsNotEmpty()
-	_id: string;
+	_id: ObjectId;
 
 	@IsEnum(ERole)
 	@IsNotEmpty()

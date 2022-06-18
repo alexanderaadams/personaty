@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 
 import { UserService } from '@features/user/user.service';
-import { MyJWTService } from '@modules/jwt/jwt.service';
+import { MyJWTService } from '@modules/my-jwt/my-jwt.service';
 import { NodemailerService } from '@modules/mail/nodemailer.service';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 import { ExposedUserModel } from '@core/models/exposed-user-model';

@@ -8,7 +8,7 @@ import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 
 import { UserService } from '@features/user/user.service';
-import { MyJWTService } from '@modules/jwt/jwt.service';
+import { MyJWTService } from '@modules/my-jwt/my-jwt.service';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 import { ExposedUserModel } from '@core/models/exposed-user-model';
 
@@ -46,6 +46,8 @@ export class LoginService {
 
 		if (storedHash !== hash.toString('hex'))
 			throw new UnauthorizedException('bad password');
+
+		console.log(user._id.toString());
 
 		const authToken: string = await this.myJWTService.signToken({
 			id: user._id.toString(),
