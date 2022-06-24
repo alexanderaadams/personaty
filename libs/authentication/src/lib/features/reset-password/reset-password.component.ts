@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { tap, take } from 'rxjs/operators';
 
-import { SendForgotPasswordEmail } from '@auth/core/data-access/store/auth.action';
+import { SendForgotPasswordEmail } from '@auth/core/data-access/state/auth.action';
 import { FormService } from '@auth/core/data-access/services/form.service';
 import { SharedService, UnsubscribeOnDestroyAdapter } from '@persona/shared';
 

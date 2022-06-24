@@ -1,8 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 // @import url('https://fonts.googleapis.com/css2?family=Chewy&display=swap');
 
-// @import 'bootstrap/scss/bootstrap.scss';
-
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
 body {
@@ -10,7 +8,6 @@ body {
 	font-size: clamp(105%, calc(100% + 0.5vw), 150%);
 	margin: 0;
 	color: currentColor;
-	// background-color: map_get(mat.$blue-grey-palette, 900);
 }
 
 button {
@@ -22,41 +19,16 @@ body {
 	height: 100%;
 }
 
-// :root {
-// --mat-bg: #ff72aa;
-
-// --bg-primary: #04162e;
-
-// --bg-primary-darker: #020f1f;
-// --font-primary-dark-color: #1d2129;
-
-// --font-primary-color: #fff;
-
-// --font-primary-bg: #ff5757;
-
-// --font-hover-primary-color: #c6c6c6;
-
-// --font-hover-primary-dark-color: #0c0e13;
-
-// --font-hover-primary-bg: #b83d3d;
-
-// --border: #bcbcbc;
-
-// --box-shadow: #d7d7d780;
-
-// --hover-box-shadow: #ffbcbc80;
-
-// --focus-primary-color: rgb(26, 58, 75);
-
-// --resend-color: #144166;
-// }
-
 .link {
 	text-decoration: none;
 	background-color: transparent;
 }
 
-.br-04 {
+.border-radius-2 {
+	border-radius: 2rem;
+}
+
+.border-radius-4 {
 	border-radius: 4rem;
 }
 
@@ -68,12 +40,20 @@ body {
 	height: 25vh;
 }
 
-.text-grey {
-	color: var(--bs-grey-palette) !important;
+.text-dark {
+	color: var(--ion-color-dark) !important;
+}
+
+.text-light {
+	color: var(--ion-color-light-shade) !important;
 }
 
 .bg-unknown {
-	background-color: var(--bs-red-palette) !important;
+	background-color: var(--ion-color-danger-shade) !important;
+}
+
+.ion-color-dark {
+	color: var(--ion-color-dark) !important;
 }
 
 .dark-primary-bg {
@@ -85,14 +65,11 @@ body {
 }
 
 .snack-bar-danger {
-	background-color: var(--bg-red-palette) !important;
-	// color: var(--bs-dark-red-palette) !important;
+	background-color: var(--ion-color-danger-shade) !important;
 }
 
 .snack-bar-success {
-	background-color: var(--bg-green-palette) !important;
-
-	// color: var(--bs-dark-green-palette) !important;
+	background-color: var(--ion-color-success-shade) !important;
 }
 
 .box-shadow-and-border {
@@ -104,4 +81,8 @@ body {
 		box-shadow: none !important;
 		border: 0;
 	}
+}
+
+.cursor-pointer {
+	cursor: pointer !important;
 }

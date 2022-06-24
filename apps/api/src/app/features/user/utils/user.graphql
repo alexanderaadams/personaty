@@ -5,7 +5,11 @@ type Query {
 }
 
 type Mutation {
-	updateUser(user: Update_User_Input!, profilePicture: Upload): User!
+	updateUser(
+		user: Update_User_Input!
+		profilePicture: Upload
+		profileCover: Upload
+	): User!
 
 	deleteUser(confirmDeleteUser: Confirm_Delete_User_Input!): User_Status!
 }
@@ -35,9 +39,7 @@ input Update_User_Input {
 }
 
 type User {
-	googleId: String
-
-	_id: String!
+	id: ID!
 
 	fullName: String
 
@@ -51,17 +53,15 @@ type User {
 
 	profileCover: String
 
-	created_at: Date!
+	createdAt: Date!
 
 	birthDate: String!
 
 	gender: String!
 
-	role: String!
+	stories: [Story]!
 
-	stories: [Story]
-
-	bio: Interest_And_Bio_And_Category!
+	bio: Interest_And_Bio_And_Category
 
 	interests: [Interest_And_Bio_And_Category]!
 }

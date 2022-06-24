@@ -29,7 +29,8 @@
 					}
 				],
 				"styles": [
-					"apps/persona/src/app/core/ui/angular-material-custom-theme.scss",
+					"apps/persona/src/app/core/themes/angular-material-custom-theme.scss",
+					"apps/persona/src/app/core/themes/variables.scss",
 					"apps/persona/src/styles.scss"
 				],
 				"scripts": [],

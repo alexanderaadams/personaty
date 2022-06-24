@@ -2,10 +2,9 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './core/data-access/guards/auth.guard';
 
-
 const routes: Routes = [
 	{
-		path: 'profile/:id',
+		path: 'profile',
 		// canActivate: [AuthGuard],
 		loadChildren: () =>
 			import('./features/profile/components/profile.module').then(
@@ -18,19 +17,19 @@ const routes: Routes = [
 			import('@persona/authentication').then((m) => m.AuthModule),
 	},
 	{
-		path: '',
-		canActivate: [AuthGuard],
-		loadChildren: () =>
-			import('./features/home/components/home.module').then(
-				(m) => m.HomeModule
-			),
-	},
-	{
 		path: 'story',
 		canActivate: [AuthGuard],
 		loadChildren: () =>
 			import('./features/story/components/story.module').then(
 				(m) => m.StoryModule
+			),
+	},
+	{
+		path: '',
+		canActivate: [AuthGuard],
+		loadChildren: () =>
+			import('./features/home/components/home.module').then(
+				(m) => m.HomeModule
 			),
 	},
 	{

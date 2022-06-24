@@ -6,17 +6,17 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
 import { Moment } from 'moment';
 
 import { FormService } from '@auth/core/data-access/services/form.service';
-import { IAuthStateModel } from '@auth/core/data-access/store/auth.model';
-import { AuthState } from '@auth/core/data-access/store/auth.state';
+import { IAuthStateModel } from '@auth/core/data-access/state/auth.model';
+import { AuthState } from '@auth/core/data-access/state/auth.state';
 import {
 	LoginWithGoogle,
 	Signup,
-} from '@auth/core/data-access/store/auth.action';
+} from '@auth/core/data-access/state/auth.action';
 import {
 	UnsubscribeOnDestroyAdapter,
 	environment,

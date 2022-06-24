@@ -1,9 +1,11 @@
+import { StoryModel } from '@features/story/models/story/story-model';
 import { Expose } from 'class-transformer';
-import { ObjectId } from 'mongoose';
+import { User } from './graphql.schema';
+import { InterestAndBioAndCategory } from './interest-and-bio-and-category';
 
-export class ExposedUserModel {
+export class ExposedUserModel extends User {
 	@Expose()
-	_id: ObjectId;
+	id: string;
 
 	@Expose()
 	username: string;
@@ -18,14 +20,23 @@ export class ExposedUserModel {
 	createdAt: Date;
 
 	@Expose()
-	stories: Array<string>;
+	stories: Array<StoryModel>;
 
 	@Expose()
-	gender: string;
+	gender: 'female' | 'male' | 'other';
 
 	@Expose()
 	locale: string;
 
 	@Expose()
 	profilePicture: string;
+
+	@Expose()
+	profileCover: string;
+
+	@Expose()
+	bio: InterestAndBioAndCategory;
+
+	@Expose()
+	interests: Array<InterestAndBioAndCategory>;
 }

@@ -10,6 +10,7 @@ import {
 	ArrayMaxSize,
 	ArrayMinSize,
 	ValidateNested,
+	IsNotEmpty,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -21,11 +22,13 @@ import { InterestAndBioAndCategory } from '@core/models/interest-and-bio-and-cat
 
 export class UserModel extends User {
 	@IsString()
+	@IsNotEmpty()
 	@IsOptional()
 	googleId?: string;
 
 	@IsString()
-	_id: string;
+	@IsNotEmpty()
+	id: string;
 
 	@IsString()
 	@IsOptional()
@@ -36,12 +39,15 @@ export class UserModel extends User {
 	username?: string;
 
 	@IsEmail()
+	@IsNotEmpty()
 	email: string;
 
 	@IsString()
+	@IsNotEmpty()
 	password: string;
 
 	@IsString()
+	@IsNotEmpty()
 	locale: string;
 
 	@IsString()
@@ -53,20 +59,23 @@ export class UserModel extends User {
 	profileCover?: string;
 
 	@IsDateString()
+	@IsNotEmpty()
 	birthDate: string;
 
 	@IsEnum(EGender)
+	@IsNotEmpty()
 	gender: string;
 
 	@IsEnum(ERole)
+	@IsNotEmpty()
 	role: string;
 
 	@IsDate()
-	created_at: Date;
+	@IsNotEmpty()
+	createdAt: Date;
 
 	@IsArray()
-	@IsOptional()
-	stories?: Array<StoryModel>;
+	stories: Array<StoryModel>;
 
 	@IsObject()
 	bio: InterestAndBioAndCategory;

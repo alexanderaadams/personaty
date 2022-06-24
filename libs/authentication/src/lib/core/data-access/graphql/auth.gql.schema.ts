@@ -1,13 +1,5 @@
 import { gql } from 'apollo-angular';
 
-export const IS_AVAILABLE = gql`
-	query ($findUser: Find_User_Input!) {
-		isAvailable(findUser: $findUser) {
-			available
-		}
-	}
-`;
-
 export const SIGNUP = gql`
 	mutation ($user: Signup_Input!) {
 		signup(user: $user) {
@@ -31,6 +23,7 @@ export const LOGIN = gql`
 		login(user: $user) {
 			status
 			authenticated
+			userId
 		}
 	}
 `;
@@ -52,18 +45,10 @@ export const CONFIRM_FORGOT_PASSWORD = gql`
 		}
 	}
 `;
+
 export const LOGOUT = gql`
 	query {
 		logout {
-			status
-			authenticated
-		}
-	}
-`;
-
-export const IS_AUTHENTICATED = gql`
-	query {
-		isAuthenticated {
 			status
 			authenticated
 		}

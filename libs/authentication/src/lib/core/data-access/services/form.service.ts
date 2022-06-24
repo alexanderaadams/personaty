@@ -12,8 +12,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { take, takeUntil, tap } from 'rxjs/operators';
 
-import { IAuthStateModel } from '../store/auth.model';
-import { IsAuthenticated, ResetAuthStoreToDefault } from '../store/auth.action';
+import { IAuthStateModel } from '../state/auth.model';
+import { IsAuthenticated, ResetAuthStoreToDefault } from '../state/auth.action';
 
 @Injectable({
 	providedIn: 'root',
@@ -44,11 +44,11 @@ export class FormService {
 				tap(({ status }: any) => {
 					if (status === 'NOT_AUTHENTICATED') {
 						if (!this.router.url.includes('/auth/'))
-							this.router.navigateByUrl('/auth/login');
+							this.router.navigate(['/', 'auth', 'login']);
 					}
-					// if (status === 'CORRECTLY_AUTHENTICATED') {
-
-					// }
+					if (status === 'CORRECTLY_AUTHENTICATED') {
+						if (this.router.url.includes('/auth/')) this.router.navigate(['']);
+					}
 				}),
 				takeUntil(this.ngUnsubscribeCheckIfAlreadyAuthenticated)
 			)

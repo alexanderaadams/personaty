@@ -31,3 +31,19 @@ export class Story {
 }
 
 export const StorySchema = SchemaFactory.createForClass(Story);
+
+StorySchema.virtual('userId').get(function () {
+	return this.user_id;
+});
+
+StorySchema.virtual('createdAt').get(function () {
+	return this.created_at;
+});
+
+StorySchema.virtual('storyImageUrl').get(function () {
+	return this.story_image_url;
+});
+
+// Set Object and Json property to true. Default is set to false
+StorySchema.set('toObject', { virtuals: true });
+StorySchema.set('toJSON', { virtuals: true });

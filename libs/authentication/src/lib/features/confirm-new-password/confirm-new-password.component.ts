@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { tap, take } from 'rxjs/operators';
 
-import { ConfirmForgotPassword } from '@auth/core/data-access/store/auth.action';
+import { ConfirmForgotPassword } from '@auth/core/data-access/state/auth.action';
 import { MatchPassword } from '@auth/core/data-access/validators/match-password';
 import { FormService } from '@auth/core/data-access/services/form.service';
 import {

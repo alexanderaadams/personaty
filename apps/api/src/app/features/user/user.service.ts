@@ -25,9 +25,8 @@ export class UserService {
 		private readonly injectedMongooseModelsService: InjectedMongooseModelsService,
 		private readonly myJWTService: MyJWTService,
 		private readonly imageService: ImageService,
-		private readonly fileStorageService: FileStorageService // @InjectModel(User.name, environment.DATABASE_CONNECTION_NAME)
-	) // public readonly userModel: Model<UserDocument>
-	{
+		private readonly fileStorageService: FileStorageService // @InjectModel(User.name, environment.DATABASE_CONNECTION_NAME) // public readonly userModel: Model<UserDocument>
+	) {
 		this.userModel = this.injectedMongooseModelsService.userModel;
 	}
 
@@ -82,7 +81,7 @@ export class UserService {
 	}
 
 	async updateUser(updateUser: IUpdateUser): Promise<ExposedUserModel> {
-		const { authToken, attrs, profilePicture } = updateUser;
+		const { authToken, attrs, profilePicture, profileCover } = updateUser;
 
 		const { id } = await this.myJWTService.verifyToken(authToken);
 
@@ -98,14 +97,23 @@ export class UserService {
 
 		if (!user) throw new HttpException('Content Not Found', 203);
 
-		const { fullImagePath, imageFileName, image } =
-			await this.imageService.checkImageLegitimacy(
-				profilePicture,
-				id,
-				'profile'
-			);
+		const [checkProfilePictureLegitimacy, checkProfileCoverLegitimacy] =
+			await Promise.all([
+				this.imageService.checkImageLegitimacy(profilePicture, id, 'profile'),
+				this.imageService.checkImageLegitimacy(profileCover, id, 'profile'),
+			]);
 
-		this.fileStorageService.graphqlSaveFileToStorage(image, fullImagePath);
+		Promise.all([
+			this.fileStorageService.graphqlSaveFileToStorage(
+				checkProfilePictureLegitimacy.image,
+				checkProfilePictureLegitimacy.fullImagePath
+			),
+
+			this.fileStorageService.graphqlSaveFileToStorage(
+				checkProfileCoverLegitimacy.image,
+				checkProfileCoverLegitimacy.fullImagePath
+			),
+		]);
 
 		return user as unknown as Promise<ExposedUserModel>;
 	}

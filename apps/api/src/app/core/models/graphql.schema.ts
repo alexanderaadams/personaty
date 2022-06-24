@@ -41,15 +41,15 @@ export class GetStoryInput {
     id: string;
 }
 
-export class CreateStoryInput {
+export class Create_Story_Input {
     category: Interest_And_Bio_And_Category_Input[];
 }
 
-export class UpdateStoryInput {
+export class Update_Story_Input {
     category?: Nullable<Nullable<Interest_And_Bio_And_Category_Input>[]>;
 }
 
-export class DeleteStoryInput {
+export class Delete_Story_Input {
     id: string;
 }
 
@@ -95,13 +95,13 @@ export abstract class IMutation {
 
     abstract confirmForgotPassword(credentials: Confirm_Forgot_Password_Input): Authentication_Status | Promise<Authentication_Status>;
 
-    abstract createStory(story: CreateStoryInput, storyImage: Upload): Story | Promise<Story>;
+    abstract createStory(story: Create_Story_Input, storyImage: Upload): Story | Promise<Story>;
 
-    abstract updateStory(id: string, story: UpdateStoryInput, storyImage?: Nullable<Upload>): Story | Promise<Story>;
+    abstract updateStory(id: string, story: Update_Story_Input, storyImage?: Nullable<Upload>): Story | Promise<Story>;
 
-    abstract deleteStory(story: DeleteStoryInput): Story_Status | Promise<Story_Status>;
+    abstract deleteStory(story: Delete_Story_Input): Story_Status | Promise<Story_Status>;
 
-    abstract updateUser(user: Update_User_Input, profilePicture?: Nullable<Upload>): User | Promise<User>;
+    abstract updateUser(user: Update_User_Input, profilePicture?: Nullable<Upload>, profileCover?: Nullable<Upload>): User | Promise<User>;
 
     abstract deleteUser(confirmDeleteUser: Confirm_Delete_User_Input): User_Status | Promise<User_Status>;
 }
@@ -113,14 +113,15 @@ export class Is_User_Available {
 export class Authentication_Status {
     status: string;
     authenticated?: Nullable<boolean>;
+    userId?: Nullable<string>;
 }
 
 export class Story {
-    _id: string;
-    story_image_url: string;
+    id: string;
+    storyImageUrl: string;
     category: Nullable<Interest_And_Bio_And_Category>[];
-    created_at: Date;
-    user_id: string;
+    createdAt: Date;
+    userId: string;
 }
 
 export class Story_Status {
@@ -128,20 +129,18 @@ export class Story_Status {
 }
 
 export class User {
-    googleId?: Nullable<string>;
-    _id: string;
+    id: string;
     fullName?: Nullable<string>;
     username?: Nullable<string>;
     email: string;
     locale: string;
     profilePicture?: Nullable<string>;
     profileCover?: Nullable<string>;
-    created_at: Date;
+    createdAt: Date;
     birthDate: string;
     gender: string;
-    role: string;
-    stories?: Nullable<Nullable<Story>[]>;
-    bio: Interest_And_Bio_And_Category;
+    stories: Nullable<Story>[];
+    bio?: Nullable<Interest_And_Bio_And_Category>;
     interests: Nullable<Interest_And_Bio_And_Category>[];
 }
 

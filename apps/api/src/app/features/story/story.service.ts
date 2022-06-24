@@ -10,25 +10,27 @@ import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 import { ImageService } from '@modules/image/image.service';
 import { FileStorageService } from '@core/services/file-storage.service';
 import { InjectedMongooseModelsService } from '@modules/injected-mongoose-models/injected-mongoose-models.service';
-import { UserService } from '@features/user/user.service';
+import { UserDocument } from '@features/user/models/user/user.schema';
 
 import { StoryModel } from './models/story/story-model';
 import { StoryDocument } from './models/story/story.schema';
 import { ICreateStory } from './interfaces/create-story';
 import { IUpdateStory } from './interfaces/update-story';
+import { UserModel } from '../user/models/user/user.model';
 
 @Injectable()
 export class StoryService {
 	storyModel: Model<StoryDocument>;
+	userModel: Model<UserDocument>;
 
 	constructor(
-		private readonly userService: UserService,
 		private readonly myJWTService: MyJWTService,
 		private readonly imageService: ImageService,
 		private readonly fileStorageService: FileStorageService,
 		private readonly injectedMongooseModelsService: InjectedMongooseModelsService
 	) {
 		this.storyModel = this.injectedMongooseModelsService.storyModel;
+		this.userModel = this.injectedMongooseModelsService.userModel;
 	}
 
 	@TryCatchWrapper()
@@ -36,14 +38,14 @@ export class StoryService {
 		const authUser = await this.myJWTService.verifyToken(authToken);
 
 		const [story, user] = await Promise.all([
-			this.storyModel.findById(id),
-			this.userService.userModel.findById(authUser.id),
+			this.storyModel.findById(id).exec() as unknown as StoryModel,
+			this.userModel.findById(authUser.id).exec() as unknown as UserModel,
 		]);
 
 		if (!user || !story)
 			throw new HttpException('User Or Story Does not exist', 404);
 
-		if (user._id.toString() !== story.user_id.toString())
+		if (user.id !== story.userId)
 			throw new UnauthorizedException(
 				'You are not authorized to update this field'
 			);
@@ -56,7 +58,9 @@ export class StoryService {
 
 		const { id } = await this.myJWTService.verifyToken(authToken);
 
-		const user = await this.userService.userModel.findById(id);
+		const user = (await this.userModel
+			.findById(id)
+			.exec()) as unknown as UserModel;
 
 		if (!user) throw new HttpException('User does not exist', 404);
 
@@ -67,7 +71,7 @@ export class StoryService {
 			this.storyModel.create({
 				category,
 				story_image_url: `${requestHeadersHostUrl}/story/${imageFileName}`,
-				user_id: id,
+				userId: id,
 			}),
 			this.fileStorageService.graphqlSaveFileToStorage(image, fullImagePath),
 		]);
@@ -76,9 +80,7 @@ export class StoryService {
 	}
 
 	async getStory(id: string): Promise<StoryModel> {
-		return (await this.storyModel.findById(
-			id
-		)) as unknown as Promise<StoryModel>;
+		return (await this.storyModel.findById(id)) as unknown as StoryModel;
 	}
 
 	@TryCatchWrapper()

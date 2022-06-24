@@ -6,39 +6,39 @@ type Query {
 }
 
 type Mutation {
-	createStory(story: CreateStoryInput!, storyImage: Upload!): Story!
+	createStory(story: Create_Story_Input!, storyImage: Upload!): Story!
 
-	updateStory(id: ID!, story: UpdateStoryInput!, storyImage: Upload): Story!
+	updateStory(id: ID!, story: Update_Story_Input!, storyImage: Upload): Story!
 
-	deleteStory(story: DeleteStoryInput!): Story_Status!
+	deleteStory(story: Delete_Story_Input!): Story_Status!
 }
 
 input GetStoryInput {
 	id: String!
 }
 
-input CreateStoryInput {
+input Create_Story_Input {
 	category: [Interest_And_Bio_And_Category_Input!]!
 }
 
-input UpdateStoryInput {
+input Update_Story_Input {
 	category: [Interest_And_Bio_And_Category_Input]
 }
 
-input DeleteStoryInput {
+input Delete_Story_Input {
 	id: String!
 }
 
 type Story {
-	_id: String!
+	id: String!
 
-	story_image_url: String!
+	storyImageUrl: String!
 
 	category: [Interest_And_Bio_And_Category]!
 
-	created_at: Date!
+	createdAt: Date!
 
-	user_id: ID!
+	userId: ID!
 }
 
 type Story_Status {

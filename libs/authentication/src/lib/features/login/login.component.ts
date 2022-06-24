@@ -1,17 +1,20 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
-import {  Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { tap, take } from 'rxjs/operators';
-
 
 import { FormService } from '@auth/core/data-access/services/form.service';
 import {
 	Login,
 	LoginWithGoogle,
-} from '@auth/core/data-access/store/auth.action';
-import { IAuthStateModel } from '@auth/core/data-access/store/auth.model';
-import { SharedService, UnsubscribeOnDestroyAdapter,environment } from '@persona/shared';
+} from '@auth/core/data-access/state/auth.action';
+import { IAuthStateModel } from '@auth/core/data-access/state/auth.model';
+import {
+	SharedService,
+	UnsubscribeOnDestroyAdapter,
+	environment,
+} from '@persona/shared';
 
 @Component({
 	selector: 'lib-login',
@@ -23,7 +26,7 @@ export class LoginComponent
 	extends UnsubscribeOnDestroyAdapter
 	implements OnInit
 {
-	login="Login"
+	login = 'Login';
 	hide = true;
 
 	@Select('auth')

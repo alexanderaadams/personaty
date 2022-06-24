@@ -34,7 +34,7 @@ export class ForgotPasswordService {
 		if (!user) throw new NotFoundException();
 
 		const authToken: string = await this.myJWTService.signToken(
-			{ id: user._id.toString(), email: user.email },
+			{ id: user.id, email: user.email },
 			{
 				expiresIn: '1h',
 			}
@@ -79,12 +79,12 @@ export class ForgotPasswordService {
 			this.myJWTService.signToken({
 				email: user.email,
 			}),
-			HashingService.hashingPassword(password),
+			HashingService.messageDigest(password),
 		]);
 
 		// const updateUser = (await this.userService
 		// 	.updateUser(
-		// 		user._id.toString(),
+		// 		user.id,
 		// 		{ password: hashedPassword, updatedAt: Date.now() },
 		// 		{
 		// 			new: true,

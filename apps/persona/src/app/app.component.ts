@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngxs/store';
-import { SharedService } from '@persona/shared';
 import { BehaviorSubject } from 'rxjs';
-import { GetCsrfToken } from './core/data-access/store/app.action';
+
+import { SharedService } from '@persona/shared';
+
+import { AppService } from './app.service';
 
 @Component({
 	selector: 'persona-root',
@@ -11,10 +12,13 @@ import { GetCsrfToken } from './core/data-access/store/app.action';
 })
 export class AppComponent implements OnInit {
 	executingLoader$!: BehaviorSubject<boolean>;
-	constructor(private store: Store, public sharedService: SharedService) {}
+	constructor(
+		private appService: AppService,
+		public sharedService: SharedService
+	) {}
 
 	ngOnInit(): void {
-		this.store.dispatch(new GetCsrfToken());
+		this.appService.getCsrfToken();
 
 		this.executingLoader$ = this.sharedService.executingLoader$;
 	}

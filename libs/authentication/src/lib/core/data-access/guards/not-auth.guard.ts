@@ -3,7 +3,7 @@ import { CanActivate, UrlTree, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 
 import { Observable } from 'rxjs';
-import { AuthState } from '../store/auth.state';
+import { AuthState } from '../state/auth.state';
 
 import { FormService } from '../services/form.service';
 import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
@@ -28,13 +28,11 @@ export class NotAuthGuard
 		| UrlTree
 		| Observable<boolean | UrlTree>
 		| Promise<boolean | UrlTree> {
-		const authenticated: boolean = this.store.selectSnapshot(
-			AuthState.isAuthenticated
-		);
+		// const authenticated: boolean = this.store.selectSnapshot(
+		// 	AuthState.isAuthenticated
+		// );
 
 		this.formService.checkIfAlreadyAuthenticated();
-
-		if (authenticated) return this.router.navigate(['']);
 
 		return true;
 

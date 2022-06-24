@@ -73,7 +73,11 @@ export class AuthController {
 		const authToken = await this.myJWTService.verifyToken(req?.cookies.auth);
 
 		if (authToken)
-			return { status: 'CORRECTLY_AUTHENTICATED', authenticated: true };
+			return {
+				status: 'CORRECTLY_AUTHENTICATED',
+				authenticated: true,
+				userId: authToken.id,
+			};
 
 		return { status: 'NOT_AUTHENTICATED', authenticated: false };
 	}

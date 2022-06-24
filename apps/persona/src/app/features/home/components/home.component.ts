@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Select, Store } from '@ngxs/store';
+
+import { GetUser } from '@features/profile/data-access/state/profile.action';
+import { AuthState } from '@persona/authentication';
 
 @Component({
 	selector: 'persona-home',
@@ -7,9 +11,16 @@ import { Router } from '@angular/router';
 	styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
-	constructor(private readonly router: Router) {}
+	@Select(AuthState.userId)
+	userId!: string;
+
+	constructor(private readonly router: Router, private readonly store: Store) {}
 
 	logout() {
 		this.router.navigate(['auth', 'logout']);
+	}
+
+	getUser() {
+		this.store.dispatch(new GetUser(this.userId ?? ''));
 	}
 }

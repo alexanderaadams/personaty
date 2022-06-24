@@ -4,7 +4,7 @@
 		class="d-flex justify-content-center align-items-center vh-100">
 		<div class="col-sm-8 col-md-6">
 			<form
-				class="row justify-content-center align-items-center p-4 shadow br-04 border-grey-blue box-shadow-and-border"
+				class="row justify-content-center align-items-center p-4 shadow border-radius-4 border-grey-blue box-shadow-and-border"
 				(ngSubmit)="onSubmit()"
 				type="submit"
 				[formGroup]="storyForm"
@@ -26,16 +26,16 @@
 						(click)="storyImageInput.click()">
 						<mat-icon>attach_file</mat-icon>
 					</button>
-
+					<!--
 					<p class="row justify-content-center align-items-center">
 						{{ fileName || 'No file uploaded yet.' }}
-					</p>
+					</p> -->
 				</div>
 
 				<mat-chip-list #chipList aria-label="Category selection" class="p-5">
 					<mat-chip
 						style.background-color="  {{ category.color }}"
-						*ngFor="let category of categories"
+						*ngFor="let category of chips"
 						(removed)="remove(category)">
 						{{ category.text }}
 						<button matChipRemove>

@@ -7,10 +7,10 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { UpdateStoryInput } from '@core/models/graphql.schema';
+import { Update_Story_Input } from '@core/models/graphql.schema';
 import { InterestAndBioAndCategory } from '@core/models/interest-and-bio-and-category';
 
-export class UpdateStoryDto extends UpdateStoryInput {
+export class UpdateStoryDto extends Update_Story_Input {
 	@IsArray()
 	@ValidateNested({ each: true, always: true })
 	@ArrayMinSize(1)

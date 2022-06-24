@@ -2,9 +2,9 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 
-import { AuthState } from '@auth/core/data-access/store/auth.state';
+import { AuthState } from '@auth/core/data-access/state/auth.state';
 import { FormService } from '@auth/core/data-access/services/form.service';
-import { Logout } from '@auth/core/data-access/store/auth.action';
+import { Logout } from '@auth/core/data-access/state/auth.action';
 import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
 @Component({

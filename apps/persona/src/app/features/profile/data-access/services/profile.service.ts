@@ -2,35 +2,61 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { map } from 'rxjs';
+import { catchError, map, Observable } from 'rxjs';
 
-import { GET_USER_INFO } from '../graphql/profile.gql.schema';
-import { IProfileStateModel } from '../store/profile.model';
+import { GET_USER_INFO, UPDATE_PROFILE } from '../graphql/profile.gql.schema';
+import { IProfileStateModel } from '../state/profile.model';
+import { IUpdateProfile } from '../../interfaces/update-profile.interface';
+import { CheckLocalStorageCache, SharedService } from '@persona/shared';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class ProfileService {
-	// BackendUrl = `${environment.BACKEND_URL}/api/v1`;
-
 	constructor(
 		private http: HttpClient,
-
-		private apollo: Apollo
+		private apollo: Apollo,
+		private sharedService: SharedService
 	) {}
 
-	getUserInfo(id: string) {
+	@CheckLocalStorageCache()
+	getUser(id: string): Observable<IProfileStateModel> {
 		return this.apollo
-			.watchQuery({
+			.query({
 				query: GET_USER_INFO,
 				variables: {
 					id,
 				},
-				// errorPolicy: 'all',
 			})
-			.valueChanges.pipe(
+			.pipe(
+				catchError((error) => error),
 				map(({ data }: any) => {
 					return data.getUser as IProfileStateModel;
+				})
+			);
+	}
+
+	updateProfile(updateProfile: IUpdateProfile) {
+		this.sharedService.executingLoader$.next(true);
+
+		const { profilePicture, profileCover, ...user } = updateProfile;
+
+		return this.apollo
+			.mutate({
+				mutation: UPDATE_PROFILE,
+				variables: {
+					user,
+					profilePicture,
+					profileCover,
+				},
+				context: {
+					useMultipart: true,
+				},
+			})
+			.pipe(
+				catchError((error) => error),
+				map(({ data }: any) => {
+					return data.updateProfile as IProfileStateModel;
 				})
 			);
 	}

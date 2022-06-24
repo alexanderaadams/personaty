@@ -16,7 +16,7 @@ import { NodemailerService } from './nodemailer.service';
 					host: environment.NODEMAILER_EMAIL_HOST,
 					port: environment.NODEMAILER_EMAIL_PORT,
 					// secure: environment.NODEMAILER_SECURE_EMAIL_SERVICE,
-					requireTLS: environment.NODEMAILER_SECURE_EMAIL_SERVICE,
+					requireTLS: environment.production,
 					auth: {
 						user: environment.NODEMAILER_EMAIL_USER,
 						pass: environment.NODEMAILER_EMAIL_PASSWORD,

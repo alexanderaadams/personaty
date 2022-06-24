@@ -3,17 +3,22 @@ import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { ProfileComponent } from './profile.component';
+import { ShowProfileComponent } from './show-profile/show-profile.component';
 import { AngularMaterialModule } from '@persona/shared';
+import { UpdateProfileComponent } from './update-profile/update-profile.component';
 
 const routes: Routes = [
 	{
-		path: '',
-		component: ProfileComponent,
+		path: ':id/update',
+		component: UpdateProfileComponent,
+	},
+	{
+		path: ':id',
+		component: ShowProfileComponent,
 	},
 ];
 @NgModule({
-	declarations: [ProfileComponent],
+	declarations: [ShowProfileComponent, UpdateProfileComponent],
 
 	imports: [
 		CommonModule,

@@ -7,20 +7,20 @@ import { gql } from 'apollo-angular';
 // `;
 
 export const CREATE_STORY = gql`
-	mutation ($story: CreateStoryInput!, $storyImage: Upload!) {
+	mutation ($story: Create_Story_Input!, $storyImage: Upload!) {
 		createStory(story: $story, storyImage: $storyImage) {
 			_id
 
-			story_image_url
+			storyImageUrl
 
 			category {
 				text
 				color
 			}
 
-			created_at
+			createdAt
 
-			user_id
+			userId
 		}
 	}
 `;
@@ -30,7 +30,7 @@ export const GET_STORY = gql`
 		getStory(id: $id) {
 			title
 			description
-			user_id
+			userId
 			category
 		}
 	}

@@ -44,6 +44,8 @@ export class UserResolver {
 		@Context('req') req: Request,
 		@Args('profilePicture', { type: () => GraphQLUpload })
 		profilePicture: TImage,
+		@Args('profileCover', { type: () => GraphQLUpload })
+		profileCover: TImage,
 		@Args('user', {
 			type: () => UpdateUserDto,
 		})
@@ -52,6 +54,7 @@ export class UserResolver {
 		return await this.userService.updateUser({
 			authToken: req.cookies.auth,
 			profilePicture,
+			profileCover,
 			attrs,
 		});
 	}

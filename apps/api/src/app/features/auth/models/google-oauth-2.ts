@@ -3,7 +3,7 @@ import { IsBoolean, IsString, IsNotEmpty } from 'class-validator';
 export class GoogleOauth2 {
 	@IsString()
 	@IsNotEmpty()
-	_id: string;
+	id: string;
 
 	@IsString()
 	@IsNotEmpty()

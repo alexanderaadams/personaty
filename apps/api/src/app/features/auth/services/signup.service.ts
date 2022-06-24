@@ -75,7 +75,7 @@ export class SignupService {
 
 		const [user, hashedPassword] = await Promise.all([
 			this.injectedMongooseModelsService.userModel.findOne({ email }).exec(),
-			HashingService.hashingPassword(password),
+			HashingService.messageDigest(password),
 		]);
 
 		if (user) throw new ConflictException('User already exists');
@@ -88,7 +88,7 @@ export class SignupService {
 			})) as unknown as ExposedUserModel;
 
 		const authToken = await this.myJWTService.signToken({
-			id: newUser._id.toString(),
+			id: newUser.id,
 			email,
 		});
 
@@ -96,7 +96,7 @@ export class SignupService {
 
 		// ]);
 		await this.fileStorageService.makeDirectoryIfDoesNotExist({
-			idFolderPath: join(process.cwd(), 'upload', newUser._id.toString()),
+			idFolderPath: join(process.cwd(), 'upload', newUser.id),
 			folderType: ['images', 'videos'],
 			folderName: ['story', 'profile'],
 		});

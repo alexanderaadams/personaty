@@ -1,28 +1,24 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
-import { catchError, map, retry, tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+
+import { catchError, map, retry, take } from 'rxjs/operators';
+
+import { environment, SharedService } from '@persona/shared';
 
 import {
 	ILoginCredentials,
 	IConfirmForgotPasswordCredentials,
 	ISignupCredentials,
-	IUserAvailableRequest,
-} from '../store/auth.model';
+} from '../state/auth.model';
 import {
 	SEND_FORGOT_PASSWORD_EMAIL,
-	IS_AUTHENTICATED,
-	IS_AVAILABLE,
 	LOGIN,
 	LOGOUT,
 	CONFIRM_FORGOT_PASSWORD,
 	SIGNUP,
 } from '../graphql/auth.gql.schema';
-import { environment } from '@persona/shared';
-import { SharedService } from '@persona/shared';
-import { EMPTY } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 
 @Injectable({
 	providedIn: 'root',
@@ -37,25 +33,6 @@ export class AuthService {
 		private sharedService: SharedService,
 		private http: HttpClient
 	) {}
-
-	userAvailable(value: IUserAvailableRequest) {
-		this.sharedService.executingLoader$.next(true);
-		return this.apollo
-			.watchQuery({
-				query: IS_AVAILABLE,
-				variables: {
-					findUser: value,
-				},
-			})
-			.valueChanges.pipe(
-				catchError(() => {
-					return EMPTY;
-				}),
-				map(({ data }: any) => {
-					return data.isAvailable;
-				})
-			);
-	}
 
 	signup(credentials: ISignupCredentials) {
 		this.sharedService.executingLoader$.next(true);
@@ -72,10 +49,11 @@ export class AuthService {
 				}),
 				map(({ data }: any) => {
 					return {
-						status: data?.signup?.status,
-						authenticated: data?.signup?.authenticated,
+						status: data?.signup.status,
+						authenticated: data?.signup.authenticated,
 					};
-				})
+				}),
+				take(1)
 			);
 	}
 
@@ -94,15 +72,16 @@ export class AuthService {
 				}),
 				map(({ data }: any) => {
 					return {
-						status: data?.login?.status,
-						authenticated: data?.login?.authenticated,
+						status: data?.login.status,
+						authenticated: data?.login.authenticated,
 					};
-				})
+				}),
+				take(1)
 			);
 	}
 
-	loginWithGoogle() {
-		this.ngZone.run(() => {
+	get loginWithGoogle() {
+		return this.ngZone.run(() => {
 			if (this.isBrowser) {
 				const newWindow = window.open(
 					`${environment.BACKEND_URL}/${environment.BACKEND_BASE_URL}/auth/login-with-google`,
@@ -136,10 +115,11 @@ export class AuthService {
 				}),
 				map(({ data }: any) => {
 					return {
-						status: data?.sendForgotPasswordEmail?.status,
-						authenticated: data?.sendForgotPasswordEmail?.authenticated,
+						status: data?.sendForgotPasswordEmail.status,
+						authenticated: data?.sendForgotPasswordEmail.authenticated,
 					};
-				})
+				}),
+				take(1)
 			);
 	}
 
@@ -158,15 +138,16 @@ export class AuthService {
 				}),
 				map(({ data }: any) => {
 					return {
-						status: data?.confirmForgotPassword?.status,
-						authenticated: data?.confirmForgotPassword?.authenticated,
+						status: data?.confirmForgotPassword.status,
+						authenticated: data?.confirmForgotPassword.authenticated,
 					};
 				}),
+				take(1),
 				retry({ count: 1, delay: 200, resetOnSuccess: true })
 			);
 	}
 
-	logout() {
+	get logout() {
 		this.sharedService.executingLoader$.next(true);
 		return this.apollo
 			.query({
@@ -179,15 +160,16 @@ export class AuthService {
 				}),
 				map(({ data }: any) => {
 					return {
-						status: data?.logout?.status,
-						authenticated: data?.logout?.authenticated,
+						status: data?.logout.status,
+						authenticated: data?.logout.authenticated,
 					};
 				}),
+				take(1),
 				retry({ count: 1, delay: 200, resetOnSuccess: true })
 			);
 	}
 
-	isAuthenticated() {
+	get isAuthenticated() {
 		return this.http
 			.get(
 				`${environment.BACKEND_URL}/${environment.BACKEND_BASE_URL}/auth/is-authenticated`,
@@ -197,25 +179,8 @@ export class AuthService {
 				catchError((error: any) => {
 					return error;
 				}),
-				tap((res) => {
-					console.log(res);
-				})
+				take(1),
+				retry({ count: 1, delay: 200, resetOnSuccess: true })
 			);
-		// return this.apollo
-		// 	.query({
-		// 		query: IS_AUTHENTICATED,
-		// 	})
-		// 	.pipe(
-		// 		catchError((error: any) => {
-		// 			return error;
-		// 		}),
-		// 		map(({ data }: any) => {
-		// 			return {
-		// 				status: data?.isAuthenticated?.status,
-		// 				authenticated: data?.isAuthenticated?.authenticated,
-		// 			};
-		// 		}),
-		// 		retry({ count: 1, delay: 200, resetOnSuccess: true })
-		// 	);
 	}
 }

@@ -28,7 +28,6 @@ import { UserService } from '../user/user.service';
 	environment.THROTTLER_DEFAULT_TRYING_RATE_LIMIT,
 	environment.THROTTLER_DEFAULT_TIME_TO_LIVE_LIMIT
 )
-// @UseFilters(GqlAllHttpExceptionFilter)
 @Resolver('auth')
 export class AuthResolver {
 	constructor(
@@ -80,7 +79,7 @@ export class AuthResolver {
 	async login(
 		@Args('user', { type: () => LoginDto }) login: LoginDto,
 		@Context('res') res: Response
-	) {
+	): Promise<AuthenticationStatus> {
 		const user = await this.loginService.credentialLogin(
 			login.email,
 			login.password
@@ -95,7 +94,11 @@ export class AuthResolver {
 				path: '/',
 			});
 
-		return { status: 'LOGGED_IN_SUCCESSFULLY', authenticated: true };
+		return {
+			status: 'LOGGED_IN_SUCCESSFULLY',
+			authenticated: true,
+			userId: user.user.id,
+		};
 	}
 
 	@Query(() => AuthenticationStatus, {
@@ -107,22 +110,6 @@ export class AuthResolver {
 		res.clearCookie('auth', { httpOnly: true });
 
 		return { status: 'LOGGED_OUT_SUCCESSFULLY', authenticated: false };
-	}
-
-	@Query(() => AuthenticationStatus, {
-		name: 'isAuthenticated',
-		description:
-			'Check if the user is Authenticated (Logged in and has working authToken)',
-	})
-	async isAuthenticated(
-		@Context('req') req: Request
-	): Promise<AuthenticationStatus> {
-		const authToken = await this.myJWTService.verifyToken(req?.cookies.auth);
-
-		if (authToken)
-			return { status: 'CORRECTLY_AUTHENTICATED', authenticated: true };
-
-		return { status: 'NOT_AUTHENTICATED', authenticated: false };
 	}
 
 	@Mutation(() => sendForgotPasswordEmailDto, {
@@ -166,6 +153,7 @@ export class AuthResolver {
 				secure: environment.COOKIE_ATTRIBUTE_SECURE,
 				path: '/',
 			});
+
 		return {
 			status: 'PASSWORD_UPDATED_SUCCESSFULLY',
 			authenticated: true,

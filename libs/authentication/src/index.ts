@@ -1,7 +1,7 @@
 export * from './lib/features/auth.module';
-export * from './lib/core/data-access/store/auth.model';
-export * from './lib/core/data-access/store/auth.action';
-export * from './lib/core/data-access/store/auth.state';
+export * from './lib/core/data-access/state/auth.model';
+export * from './lib/core/data-access/state/auth.action';
+export * from './lib/core/data-access/state/auth.state';
 export * from './lib/core/data-access/services/form.service';
 
 // NOTE the shared folder must refactored to a standalone library

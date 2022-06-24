@@ -6,7 +6,7 @@ import { environment } from '@environment';
 export type UserDocument = User & Document;
 
 @Schema()
-export class User  {
+export class User {
 	@Prop({ type: String, select: false })
 	googleId: string;
 
@@ -84,7 +84,6 @@ export class User  {
 
 	@Prop({
 		type: { text: String, color: String },
-		default: { text: '', color: '#fff' },
 	})
 	bio: InterestAndBioAndCategory;
 
@@ -94,12 +93,20 @@ export class User  {
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-// UserSchema.virtual('stories', {
-// 	ref: 'Story', //The Model to use
-// 	localField: '_id', //Find in Model, where localField
-// 	foreignField: 'user_id', // is equal to foreignField
-// });
+UserSchema.virtual('stories', {
+	ref: 'Story', //The Model to use
+	localField: '_id', //Find in Model, where localField
+	foreignField: 'user_id', // is equal to foreignField
+});
+
+UserSchema.virtual('id').get(function () {
+	return this._id;
+});
+
+UserSchema.virtual('createdAt').get(function () {
+	return this.created_at;
+});
 
 // Set Object and Json property to true. Default is set to false
-// UserSchema.set('toObject', { virtuals: true });
-// UserSchema.set('toJSON', { virtuals: true });
+UserSchema.set('toObject', { virtuals: true });
+UserSchema.set('toJSON', { virtuals: true });

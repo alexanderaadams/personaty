@@ -15,7 +15,7 @@ import { HomeStateModel } from './home.model';
 
 		profilePicture: null,
 
-		created_at: null,
+		createdAt: null,
 
 		stories: null,
 

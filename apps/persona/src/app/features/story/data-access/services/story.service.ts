@@ -4,10 +4,10 @@ import { Apollo } from 'apollo-angular';
 import { catchError, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
-import { ICreateStory } from '../../model/create-story';
+import { ICreateStory } from '../../interfaces/create-story.interface';
 import { CREATE_STORY, GET_STORY } from '../graphql/story.gql.schema';
-import { IStoryStateModel } from '../store/story.model';
-import { environment, SharedService } from '@persona/shared';
+import { IStoryStateModel } from '../state/story.model';
+import { SharedService } from '@persona/shared';
 import { EMPTY } from 'rxjs';
 
 @Injectable({

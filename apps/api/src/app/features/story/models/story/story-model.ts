@@ -14,7 +14,7 @@ import { InterestAndBioAndCategory } from '@core/models/interest-and-bio-and-cat
 
 export class StoryModel extends Story {
 	@IsString()
-	_id: string;
+	id: string;
 
 	@IsArray()
 	@ValidateNested({ each: true, always: true })
@@ -24,12 +24,12 @@ export class StoryModel extends Story {
 	category: Array<InterestAndBioAndCategory>;
 
 	@IsString()
-	story_image_url: string;
+	storyImageUrl: string;
 
 	@IsDate()
 	@IsOptional()
-	created_at: Date;
+	createdAt: Date;
 
 	@IsString()
-	user_id: string;
+	userId: string;
 }

@@ -51,7 +51,6 @@ input Confirm_Forgot_Password_Input {
 	auth: String!
 }
 
-
 type Is_User_Available {
 	available: Boolean!
 }
@@ -60,4 +59,6 @@ type Authentication_Status {
 	status: String!
 
 	authenticated: Boolean
+
+	userId: ID
 }

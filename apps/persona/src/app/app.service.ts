@@ -1,23 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, catchError, retry } from 'rxjs/operators';
-import { EMPTY, Observable } from 'rxjs';
+import { catchError, retry, take } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
 
-import { environment, SharedService } from '@persona/shared';
-import { CsrfTokenModel } from './core/data-access/store/app.model';
+import { environment } from '@persona/shared';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class AppService {
-	constructor(
-		private http: HttpClient,
-		private readonly sharedService: SharedService
-	) {}
+	constructor(private http: HttpClient) {}
 
-	getCsrfToken(): Observable<CsrfTokenModel> {
-		return this.http
-			.get(
+	getCsrfToken(): void {
+		this.http
+			.head(
 				`${environment.BACKEND_URL}/${environment.BACKEND_BASE_URL}/csrf-token`,
 				{
 					withCredentials: true,
@@ -27,10 +23,9 @@ export class AppService {
 				catchError(() => {
 					return EMPTY;
 				}),
-				map(({ data }: any): CsrfTokenModel => {
-					return data.status as CsrfTokenModel;
-				})
-				// retry(1)
-			);
+				take(1),
+				retry(1)
+			)
+			.subscribe();
 	}
 }

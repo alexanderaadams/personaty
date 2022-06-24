@@ -17,34 +17,35 @@ import { CookieService } from 'ngx-cookie-service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
 import { environment } from '@persona/shared';
-import { ProfileState } from './features/profile/data-access/store/profile.state';
-import { StoryState } from './features/story/data-access/store/story.state';
 
 import { AngularMaterialModule } from '@persona/shared';
 import { AppShellRenderDirective } from '@core/directives/app-shell-render.directive';
-import { AuthState } from '@persona/authentication';
-
-import { XsrfInterceptor } from './core/data-access/interceptors/xsrf.interceptor';
-import { AppState } from './core/data-access/store/app.state';
+import { XsrfInterceptor } from '@core/data-access/interceptors/xsrf.interceptor';
 import { ProgressInterceptor } from '@core/data-access/interceptors/progress.interceptor';
+import { AuthState } from '@persona/authentication';
+import { StoryState } from './features/story/data-access/state/story.state';
+import { ProfileState } from './features/profile/data-access/state/profile.state';
+
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
 	declarations: [AppComponent, AppShellRenderDirective],
 	imports: [
-		BrowserModule.withServerTransition({ appId: 'serverApp' }),
+		BrowserModule.withServerTransition({ appId: 'persona' }),
 		BrowserAnimationsModule,
 		HttpClientModule,
 		ApolloModule,
 		AppRoutingModule,
 		ReactiveFormsModule,
 		AngularMaterialModule,
-		NgxsModule.forRoot([AuthState, ProfileState, StoryState, AppState], {
+		NgxsModule.forRoot([AuthState, ProfileState, StoryState], {
 			developmentMode: !environment.production,
 		}),
-		NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production }),
+		NgxsReduxDevtoolsPluginModule.forRoot({
+			disabled: environment.production,
+		}),
 		NgxsSelectSnapshotModule.forRoot(),
 		// NgxsStoragePluginModule.forRoot({
 		// 	key: 'auth',

@@ -1,0 +1,174 @@
+<div class="container-fluid">
+	<div
+		(click)="$event.stopPropagation()"
+		class="row justify-content-center align-items-center">
+		<form
+			style="cursor: auto"
+			class="col-12 d-flex flex-column justify-content-center gap-3"
+			(ngSubmit)="onSubmit()"
+			type="submit"
+			[formGroup]="profileForm"
+			enctype="multipart/form-data">
+			<div
+				cdkDropList
+				style="background-color: #fff; height: 17rem"
+				class="d-flex flex-column justify-content-center align-items-center position-relative my-2"
+				(click)="$event.stopPropagation()">
+				<div
+					matRipple
+					style="background-color: rgb(143, 34, 34)"
+					class="position-absolute top-0 w-100 h-75 overflow-hidden d-flex justify-content-center align-items-center cursor-pointer border-radius-2"
+					(change)="profileCoverSelected(profileCover)"
+					(click)="profileCover.click()">
+					<img
+						class="w-100"
+						*ngIf="profileCoverUrl"
+						[src]="profileCoverUrl"
+						alt="profile Cover" />
+
+					<input
+						#profileCover
+						type="file"
+						style="display: none; cursor: none" />
+
+					<mat-icon *ngIf="!profilePictureUrl">photo_camera</mat-icon>
+				</div>
+
+				<div
+					cdkDrag
+					matRipple
+					style="
+						background-color: rgb(102, 39, 39);
+						border-radius: 100%;
+						width: 9rem;
+						height: 9rem;
+					"
+					class="position-absolute bottom-0 overflow-hidden d-flex justify-content-center align-items-center cursor-pointer"
+					(change)="profilePictureSelected(profilePicture)"
+					(click)="profilePicture.click()">
+					<img
+						class="w-100 h-100"
+						*ngIf="profilePictureUrl"
+						[src]="profilePictureUrl"
+						alt="profile Picture" />
+
+					<input
+						#profilePicture
+						type="file"
+						style="display: none; cursor: none" />
+
+					<mat-icon *ngIf="!profilePictureUrl">camera</mat-icon>
+				</div>
+			</div>
+
+			<div class="container my-5">
+				<div class="row gap-4">
+					<mat-form-field
+						class="cursor-pointer"
+						appearance="standard"
+						(click)="$event.stopPropagation()">
+						<mat-label>Bio</mat-label>
+						<textarea
+							style="height: 4rem"
+							matInput
+							placeholder="Bio"
+							[formControlName]="'bio'"></textarea>
+
+						<mat-error
+							*ngIf="profileForm?.['controls']?.['bio']?.['errors']?.['minlength']">
+							Bio must be at least
+							{{ profileForm?.['controls']?.['bio']?.['errors']?.['minlength']?.requiredLength	?? '10' }}
+							characters.
+						</mat-error>
+
+						<mat-error
+							*ngIf="profileForm?.['controls']?.['bio']?.['errors']?.['maxlength']">
+							Bio must be maximum
+							{{ profileForm?.['controls']?.['bio']?.['errors']?.['maxlength']?.requiredLength	?? '50' }}
+							characters.
+						</mat-error>
+					</mat-form-field>
+
+					<mat-chip-list #chipList aria-label="Interests">
+						<mat-chip
+							style.background-color="  {{ interest.color }}"
+							class="ion-color-dark"
+							*ngFor="let interest of chips"
+							(removed)="remove(interest)">
+							{{ interest.text }}
+							<button matChipRemove>
+								<mat-icon>cancel</mat-icon>
+							</button>
+						</mat-chip>
+
+						<mat-form-field class="cursor-pointer w-100" appearance="standard">
+							<mat-label>Interest</mat-label>
+							<input
+								matInput
+								[formControlName]="'interests'"
+								spellcheck="true"
+								placeholder="Add new Interest..."
+								[matChipInputFor]="chipList"
+								[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+								[matChipInputAddOnBlur]="addOnBlur"
+								(matChipInputTokenEnd)="add($event)" />
+						</mat-form-field>
+					</mat-chip-list>
+
+					<mat-form-field class="cursor-pointer" appearance="standard">
+						<mat-label>Username</mat-label>
+						<input
+							matInput
+							placeholder="Username"
+							[formControlName]="'username'" />
+
+						<mat-error
+							*ngIf="profileForm?.['controls']?.['username']?.['errors']?.['nonUniqueUsername']">
+							Username has already been taken
+						</mat-error>
+						<mat-error
+							*ngIf="profileForm?.['controls']?.['username']?.['errors']?.['pattern']">
+							Username must be only with numbers and characters
+						</mat-error>
+					</mat-form-field>
+
+					<mat-form-field class="cursor-pointer" appearance="standard">
+						<mat-label>Display Name</mat-label>
+						<input matInput placeholder="Display Name" />
+
+						<mat-error
+							*ngIf="profileForm?.['controls']?.['fullName']?.['errors']">
+							Display name is not correct
+						</mat-error>
+					</mat-form-field>
+
+					<mat-chip-list
+						class="d-flex justify-content-center align-items-center"
+						aria-label="Sex">
+						<mat-chip
+							[selected]="'female' === sex.value"
+							color="primary"
+							(click)="sex.next('female')"
+							class="cursor-pointer">
+							Female
+						</mat-chip>
+						<mat-chip
+							[selected]="'male' === sex.value"
+							(click)="sex.next('male')"
+							color="accent">
+							Male
+						</mat-chip>
+					</mat-chip-list>
+
+					<button
+						class="fs-5 py-1"
+						mat-raised-button
+						[color]="sex.value === 'female' ? 'primary' : 'accent'"
+						type="submit">
+						Post
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

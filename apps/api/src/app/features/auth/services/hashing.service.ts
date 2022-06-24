@@ -9,12 +9,12 @@ const scrypt = promisify(_scrypt);
 @Injectable()
 export class HashingService {
 	@TryCatchWrapper()
-	static async hashingPassword(password: string): Promise<string> {
+	static async messageDigest(sentence: string): Promise<string> {
 		// Hash the users password
 		// Generate a salt
 		const salt: string = randomBytes(32).toString('hex');
 		// Hash the salt and the password together
-		const hash: Buffer = (await scrypt(password, salt, 32)) as Buffer;
+		const hash: Buffer = (await scrypt(sentence, salt, 32)) as Buffer;
 		// Join the hashed result and the salt together
 		return salt + '.' + hash.toString('hex');
 	}

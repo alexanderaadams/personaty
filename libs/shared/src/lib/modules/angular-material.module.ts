@@ -13,6 +13,8 @@ import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatRippleModule } from '@angular/material/core';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { MY_DATE_FORMATS } from '../my-date-formats';
 
@@ -32,6 +34,8 @@ import { MY_DATE_FORMATS } from '../my-date-formats';
 		MatSnackBarModule,
 		MatProgressBarModule,
 		MatProgressSpinnerModule,
+		MatRippleModule,
+		DragDropModule,
 	],
 	exports: [
 		MatButtonModule,
@@ -48,6 +52,8 @@ import { MY_DATE_FORMATS } from '../my-date-formats';
 		MatSnackBarModule,
 		MatProgressBarModule,
 		MatProgressSpinnerModule,
+		MatRippleModule,
+		DragDropModule,
 	],
 	providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }],
 })

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 
 import { environment } from '@environment';
@@ -45,10 +45,11 @@ export class NodemailerService {
 					authTokenURL,
 				},
 			})
-			.then(() => {
-				// console.log('res', res);
+			.then((res) => {
+				console.log('res', res);
 			})
 			.catch((err) => {
+				console.error(err);
 				return err;
 			});
 	}

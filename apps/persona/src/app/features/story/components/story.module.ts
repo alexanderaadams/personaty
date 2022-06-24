@@ -4,22 +4,22 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { CreateStoryComponent } from './create-story/create-story.component';
-import { ReadStoryComponent } from './read-story/read-story.component';
+import { ShowStoryComponent } from './show-story/show-story.component';
 import { AngularMaterialModule } from '@persona/shared';
 
 const routes: Routes = [
 	{
-		path: '',
+		path: 'create',
 		component: CreateStoryComponent,
 	},
 	{
 		path: ':id',
-		component: ReadStoryComponent,
+		component: ShowStoryComponent,
 	},
 ];
 
 @NgModule({
-	declarations: [ReadStoryComponent, CreateStoryComponent],
+	declarations: [ShowStoryComponent, CreateStoryComponent],
 
 	imports: [
 		CommonModule,
