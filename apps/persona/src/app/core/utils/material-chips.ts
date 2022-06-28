@@ -3,7 +3,7 @@ import randomColor from 'randomcolor';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
-export class UpdateMaterialChip<T> extends UnsubscribeOnDestroyAdapter {
+export class MaterialChips<T> extends UnsubscribeOnDestroyAdapter {
 	readonly separatorKeysCodes: readonly [13, 188] = [ENTER, COMMA] as const;
 	addOnBlur = true;
 	chips: Array<T> = [];

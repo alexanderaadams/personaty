@@ -4,8 +4,8 @@ import {
 	AsyncValidator,
 	ValidationErrors,
 } from '@angular/forms';
-import { map, catchError } from 'rxjs/operators';
-import { from, Observable, of, EMPTY, throwError } from 'rxjs';
+import { map, catchError, switchMap } from 'rxjs/operators';
+import { Observable, of, EMPTY } from 'rxjs';
 
 import { SharedService } from '@persona/shared';
 
@@ -18,8 +18,9 @@ export class UniqueUsername implements AsyncValidator {
 	validate = (
 		control: AbstractControl
 	): Observable<ValidationErrors | null> => {
-		console.log(control);
 		const { value } = control;
+
+		if (!value) return of(null);
 
 		return this.sharedService.checkUserAvailable({ username: value }).pipe(
 			catchError((err) => {
@@ -32,10 +33,12 @@ export class UniqueUsername implements AsyncValidator {
 				// 	return from(of({ noConnection: true }));
 				// }
 			}),
-			map((value) => {
-				if (value?.available) return null;
-
-				return of(control.setErrors({ nonUniqueUsername: true }));
+			switchMap((value) => {
+				console.log(value);
+				if (value?.available) return of(null);
+				console.log(value);
+				// control.setErrors({ nonUniqueUsername: true });
+				return of({ nonUniqueUsername: true });
 			})
 		);
 	};

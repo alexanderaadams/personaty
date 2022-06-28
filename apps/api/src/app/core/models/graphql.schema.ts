@@ -101,9 +101,9 @@ export abstract class IMutation {
 
     abstract deleteStory(story: Delete_Story_Input): Story_Status | Promise<Story_Status>;
 
-    abstract updateUser(user: Update_User_Input, profilePicture?: Nullable<Upload>, profileCover?: Nullable<Upload>): User | Promise<User>;
+    abstract updateUser(user?: Nullable<Update_User_Input>, profilePicture?: Nullable<Upload>, profileCover?: Nullable<Upload>): User | Promise<User>;
 
-    abstract deleteUser(confirmDeleteUser: Confirm_Delete_User_Input): User_Status | Promise<User_Status>;
+    abstract deleteUser(confirmDeleteUser: Confirm_Delete_User_Input): Authentication_Status | Promise<Authentication_Status>;
 }
 
 export class Is_User_Available {
@@ -139,13 +139,8 @@ export class User {
     createdAt: Date;
     birthDate: string;
     gender: string;
-    stories: Nullable<Story>[];
     bio?: Nullable<Interest_And_Bio_And_Category>;
     interests: Nullable<Interest_And_Bio_And_Category>[];
-}
-
-export class User_Status {
-    status: string;
 }
 
 export type Upload = any;

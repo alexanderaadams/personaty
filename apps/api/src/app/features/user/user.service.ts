@@ -1,3 +1,4 @@
+import { BehaviorSubject } from 'rxjs';
 import { HttpException, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 
@@ -8,14 +9,13 @@ import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 import { FileStorageService } from '@core/services/file-storage.service';
 import { ExposedUserModel } from '@core/models/exposed-user-model';
 import { GoogleOauth2 } from '@features/auth/models/google-oauth-2';
+import { IImage } from '@modules/image/utils/interfaces/image.interface';
 
 import { UserModel } from './models/user/user.model';
-import { ExposedUserModelSensitiveInformation } from './models/exposed-user-model-sensitive-information';
 import { ICreateUser } from './interfaces/create-user.interface';
-import { User, UserDocument } from './models/user/user.schema';
+import { UserDocument } from './models/user/user.schema';
 import { IUpdateUser } from './interfaces/update-user.interface';
-import { environment } from '@environment';
-import { InjectModel } from '@nestjs/mongoose';
+import { IExposedUserModelSensitiveInformation } from './interfaces/exposed-user-model-sensitive-information.interface';
 
 @Injectable()
 export class UserService {
@@ -25,12 +25,12 @@ export class UserService {
 		private readonly injectedMongooseModelsService: InjectedMongooseModelsService,
 		private readonly myJWTService: MyJWTService,
 		private readonly imageService: ImageService,
-		private readonly fileStorageService: FileStorageService // @InjectModel(User.name, environment.DATABASE_CONNECTION_NAME) // public readonly userModel: Model<UserDocument>
+		private readonly fileStorageService: FileStorageService
 	) {
 		this.userModel = this.injectedMongooseModelsService.userModel;
 	}
 
-	// @TryCatchWrapper()
+	@TryCatchWrapper()
 	async createUser(
 		user: ICreateUser | GoogleOauth2
 	): Promise<ExposedUserModel> {
@@ -43,7 +43,7 @@ export class UserService {
 
 	@TryCatchWrapper()
 	async findUserById(id: string): Promise<UserModel | null> {
-		const user = await this.userModel.findById(id).populate('stories').exec();
+		const user = await this.userModel.findById(id).exec();
 
 		if (!user) return null;
 
@@ -60,17 +60,17 @@ export class UserService {
 	}
 
 	@TryCatchWrapper()
-	async getExposedUserModelSensitiveInformation(
+	async getIExposedUserModelSensitiveInformation(
 		payload: object
-	): Promise<ExposedUserModelSensitiveInformation | null> {
+	): Promise<IExposedUserModelSensitiveInformation | null> {
 		const user = await this.userModel
 			.findOne(payload)
-			.select('_id password role')
+			.select('id password role')
 			.exec();
 
 		if (!user) return null;
 
-		return user as unknown as Promise<ExposedUserModelSensitiveInformation>;
+		return user as unknown as Promise<IExposedUserModelSensitiveInformation>;
 	}
 
 	@TryCatchWrapper()
@@ -85,37 +85,70 @@ export class UserService {
 
 		const { id } = await this.myJWTService.verifyToken(authToken);
 
-		const user = await this.userModel
+		const checkedProfilePictureLegitimacy = new BehaviorSubject<IImage | null>(
+			null
+		);
+
+		const checkedProfileCoverLegitimacy = new BehaviorSubject<IImage | null>(
+			null
+		);
+
+		const user = (await this.userModel.findById(
+			id
+		)) as unknown as ExposedUserModel;
+
+		if (!user) throw new HttpException('Content Not Found', 203);
+
+		if (profilePicture) {
+			checkedProfilePictureLegitimacy.next(
+				await this.imageService.checkImageLegitimacy(
+					profilePicture,
+					id,
+					'profile'
+				)
+			);
+
+			Promise.all([
+				this.fileStorageService.removeFile(user.id, user.profilePicture),
+				this.fileStorageService.graphqlSaveFileToStorage(
+					checkedProfilePictureLegitimacy.value?.image,
+					checkedProfilePictureLegitimacy.value?.fullImagePath ?? ''
+				),
+			]);
+		}
+
+		if (profileCover) {
+			checkedProfileCoverLegitimacy.next(
+				await this.imageService.checkImageLegitimacy(
+					profileCover,
+					id,
+					'profile'
+				)
+			);
+
+			Promise.all([
+				this.fileStorageService.removeFile(user.id, user.profileCover),
+				this.fileStorageService.graphqlSaveFileToStorage(
+					checkedProfileCoverLegitimacy.value?.image,
+					checkedProfileCoverLegitimacy.value?.fullImagePath ?? ''
+				),
+			]);
+		}
+
+		return this.userModel
 			.findByIdAndUpdate(
 				id,
-				{ ...attrs, updatedAt: Date.now() },
+				{
+					...attrs,
+					updatedAt: Date.now(),
+					profilePicture: checkedProfilePictureLegitimacy.value?.imageFileName,
+					profileCover: checkedProfileCoverLegitimacy.value?.imageFileName,
+				},
 				{
 					new: true,
 				}
 			)
-			.exec();
-
-		if (!user) throw new HttpException('Content Not Found', 203);
-
-		const [checkProfilePictureLegitimacy, checkProfileCoverLegitimacy] =
-			await Promise.all([
-				this.imageService.checkImageLegitimacy(profilePicture, id, 'profile'),
-				this.imageService.checkImageLegitimacy(profileCover, id, 'profile'),
-			]);
-
-		Promise.all([
-			this.fileStorageService.graphqlSaveFileToStorage(
-				checkProfilePictureLegitimacy.image,
-				checkProfilePictureLegitimacy.fullImagePath
-			),
-
-			this.fileStorageService.graphqlSaveFileToStorage(
-				checkProfileCoverLegitimacy.image,
-				checkProfileCoverLegitimacy.fullImagePath
-			),
-		]);
-
-		return user as unknown as Promise<ExposedUserModel>;
+			.exec() as unknown as Promise<ExposedUserModel>;
 	}
 
 	@TryCatchWrapper()

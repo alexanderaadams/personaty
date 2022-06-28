@@ -10,19 +10,22 @@ import {
 	rm,
 } from 'fs';
 import sharp = require('sharp');
+import { glob } from 'glob';
 
 // import { FileUpload } from 'graphql-upload';
-import type { FileUpload } from 'graphql-upload/processRequest.js';
 // import { finished } from 'stream/promises';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const finished = require('stream').promises;
-// import * as mmm from 'mmmagic';
+// const { finished } = require('stream');
 import { join } from 'path';
-import { TryCatchWrapper } from '../utils/error-handling/try-catch-wrapper';
 import { Readable } from 'stream';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// const { fileTypeFromBuffer } = require('file-type');
+// import { fileTypeFromBuffer } from 'file-type';
 
+import type { FileUpload } from 'graphql-upload/processRequest.js';
+
+import { TryCatchWrapper } from '../utils/error-handling/try-catch-wrapper';
+// import * as mmm from 'mmmagic';
+// import { promisify } from 'util';
+import path = require('path');
 // const Magic = mmm.Magic;
 
 interface IImageDirectory {
@@ -36,7 +39,7 @@ export class FileStorageService {
 	// constructor(){}
 
 	@TryCatchWrapper()
-	async stream2buffer(stream): Promise<Buffer> {
+	async convertStreamToBuffer(stream: any): Promise<Buffer> {
 		return new Promise((resolve, reject) => {
 			const _buf: any[] = [];
 
@@ -49,40 +52,42 @@ export class FileStorageService {
 	@TryCatchWrapper()
 	async graphqlSaveFileToStorage(
 		file: FileUpload,
-		fullFilePath: string
+		filePath: string
 	): Promise<void> {
 		const streamFile: ReadStream = file.createReadStream();
 
-		const stream2buffer = await this.stream2buffer(streamFile);
+		const convertedStreamToBuffer = await this.convertStreamToBuffer(
+			streamFile
+		);
 
-		const convertImage2JpegAsBuffer: Buffer = await sharp(stream2buffer)
+		const convertImage2JpegAsBuffer: Buffer = await sharp(
+			convertedStreamToBuffer
+		)
 			.jpeg()
 			.toBuffer();
 
 		const buffer2stream = Readable.from(convertImage2JpegAsBuffer);
 
-		const out: WriteStream = createWriteStream(fullFilePath);
+		const out: WriteStream = createWriteStream(filePath);
 
 		buffer2stream.pipe(out).on('error', (err) => {
 			throw new HttpException('Something went wrong', 500);
 		});
 
-		finished(out);
+		// finished(out);
 	}
 
 	@TryCatchWrapper()
-	async isFileExtensionSafe(fileName: string, regex: RegExp): Promise<boolean> {
-		const fileExtensionType: boolean = regex.test(fileName);
-
-		return fileExtensionType;
-	}
-
-	@TryCatchWrapper()
-	async isMimeTypeSafe<T>(
+	async isFileTypeSafe<T>(
 		file: Buffer,
+		fileName: string,
 		validFileMimeType: Array<T>
 	): Promise<boolean> {
 		// const magic = new Magic(mmm.MAGIC_MIME_TYPE);
+
+		const fileExtensionType = path.extname(fileName);
+
+		if (!fileExtensionType.match(/\.(jpeg|png|webp)$/i)) return false;
 
 		// const bitmap = function (file: Buffer): Promise<any> {
 		// 	return new Promise(function (resolve, reject): void {
@@ -97,7 +102,7 @@ export class FileStorageService {
 		// };
 
 		// const isFileMimeTypeLegit: boolean = validFileMimeType.includes(
-		// 	(await bitmap(file))?.mime as unknown as T
+		// 	(await bitmap(file)) as unknown as T
 		// );
 
 		return true;
@@ -130,11 +135,11 @@ export class FileStorageService {
 	}
 
 	@TryCatchWrapper()
-	async removeDirectoryIfDoesExist(idFolderPath: string) {
-		stat(idFolderPath, (err: any, stats: Stats) => {
+	async removeDirectoryIfDoesExist(UserFolderId: string) {
+		stat(UserFolderId, (err: any, stats: Stats) => {
 			if (!err) {
 				rm(
-					idFolderPath,
+					UserFolderId,
 					{ force: true, recursive: true },
 					(err: NodeJS.ErrnoException | null) => {
 						//
@@ -147,9 +152,27 @@ export class FileStorageService {
 	}
 
 	@TryCatchWrapper()
-	async removeFile(fullFilePath: string): Promise<void> {
-		unlink(fullFilePath, (): void => {
-			return;
+	async removeFile(UserFolderId: string, filename: string): Promise<void> {
+		const fileFolderPath = join(
+			process.cwd(),
+			'upload',
+			UserFolderId,
+			'**',
+			filename
+		);
+
+		// options is optional
+		glob(fileFolderPath, function (err, files: Array<string>) {
+			// files is an array of filenames.
+			// If the `nonull` option is set, and nothing
+			// was found, then files is ["**/*.js"]
+			// er is an error object or null.
+			if (!err)
+				files.forEach((file) =>
+					unlink(file, (): void => {
+						//
+					})
+				);
 		});
 	}
 }

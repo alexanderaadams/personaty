@@ -4,16 +4,17 @@ import {
 	ChangeDetectorRef,
 } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { IInterestAndBioAndCategory } from '@features/story/data-access/state/story.model';
-import { UpdateMaterialChip } from '@core/utils/update-material-chip';
+import { MaterialChips } from '@core/utils/material-chips';
 import { CheckImageService } from '@core/services/check-image.service';
 import { UniqueUsername } from '@core/services/unique-username.service';
 import { UpdateProfile } from '../../data-access/state/profile.action';
-import { IUpdateProfile } from '../../interfaces/update-profile.interface';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { IUpdateProfile } from '@features/profile/interfaces/update-profile.interface';
+import { SharedService } from '@persona/shared';
 
 @Component({
 	selector: 'persona-update-profile',
@@ -21,35 +22,42 @@ import { IUpdateProfile } from '../../interfaces/update-profile.interface';
 	styleUrls: ['./update-profile.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UpdateProfileComponent extends UpdateMaterialChip<IInterestAndBioAndCategory> {
+export class UpdateProfileComponent extends MaterialChips<IInterestAndBioAndCategory> {
 	profileCoverUrl!: string | ArrayBuffer | null | undefined;
 	profilePictureUrl!: string | ArrayBuffer | null | undefined;
-	sex = new BehaviorSubject<'female' | 'male' | null>(null);
-	isProfilePictureMimeTypeLegitimate = new BehaviorSubject(true);
-	isProfileCoverMimeTypeLegitimate = new BehaviorSubject(true);
+	selectedSex = new BehaviorSubject<'female' | 'male' | null>(null);
+	isProfilePictureMimeTypeLegitimate = new BehaviorSubject(false);
+	isProfileCoverMimeTypeLegitimate = new BehaviorSubject(false);
+	color = '#000f20';
 
 	profileForm: FormGroup = new FormGroup({
 		profilePicture: new FormControl('', []),
 		profileCover: new FormControl('', []),
-		bio: new FormControl('', [Validators.maxLength(50)]),
-		interests: new FormControl('', []),
 		username: new FormControl(
 			'',
 			[Validators.pattern(/^[a-zA-Z0-9]*$/i)],
 			[this.uniqueUsername.validate]
 		),
-		fullName: new FormControl('', [Validators.pattern(/^[a-z ,.'-]+$/i)]),
-		sex: new FormControl('', [Validators.pattern(/'female'|'male'/)]),
+		bio: new FormControl('', [Validators.maxLength(100)]),
+		interests: new FormControl('', []),
+		fullName: new FormControl('', [Validators.pattern(/^[a-zA-Z ,.'-]*$/i)]),
+		sex: new FormControl('', []),
 	});
 
 	constructor(
-		private activatedRoute: ActivatedRoute,
+		// private maximumInterests: MaximumInterests,
 		private readonly store: Store,
 		private readonly checkImageService: CheckImageService,
 		private uniqueUsername: UniqueUsername,
-		private readonly cdref: ChangeDetectorRef
+		private readonly cdref: ChangeDetectorRef,
+		private _snackBar: MatSnackBar,
+		private readonly sharedService: SharedService
 	) {
 		super();
+	}
+
+	get executingLoader$() {
+		return this.sharedService.executingLoader$;
 	}
 
 	profileCoverSelected(imageInput: any): void {
@@ -64,8 +72,18 @@ export class UpdateProfileComponent extends UpdateMaterialChip<IInterestAndBioAn
 			};
 
 			this.isProfileCoverMimeTypeLegitimate.next(
-				this.checkImageService.mimeType(imageInput)
+				this.checkImageService.isImageMimeTypeValid(imageInput)
 			);
+
+			if (!this.isProfileCoverMimeTypeLegitimate.value) {
+				this._snackBar.open('Please Upload Correct Cover Photo', '', {
+					verticalPosition: 'top',
+					duration: 3000,
+					panelClass: 'snack-bar-danger',
+				});
+				this.profileForm.setErrors({ valid: false });
+				return;
+			}
 
 			this.profileForm.controls['profileCover'].setValue(
 				imageInput.files[0] as File
@@ -85,37 +103,67 @@ export class UpdateProfileComponent extends UpdateMaterialChip<IInterestAndBioAn
 			};
 
 			this.isProfilePictureMimeTypeLegitimate.next(
-				this.checkImageService.mimeType(imageInput)
+				this.checkImageService.isImageMimeTypeValid(imageInput)
 			);
-			// File Preview
-			console.log(imageInput, this.profilePictureUrl);
+
+			if (!this.isProfilePictureMimeTypeLegitimate.value) {
+				this._snackBar.open('Please Upload Correct Profile Photo', '', {
+					verticalPosition: 'top',
+					duration: 3000,
+					panelClass: 'snack-bar-danger',
+				});
+				this.profileForm.setErrors({ valid: false });
+				return;
+			}
 
 			this.profileForm.controls['profilePicture'].setValue(
 				imageInput.files[0] as File
 			);
+			console.log(this.profileForm.value);
 		}
 	}
 
 	onSubmit() {
-
-		this.profileForm.controls['interests'].setValue(this.chips);
-
-		if (
-			!this.isProfileCoverMimeTypeLegitimate.value ||
-			!this.isProfilePictureMimeTypeLegitimate.value
-		) {
-			return this.profileForm.setErrors({ invalid: true });
+		if (this.profileForm.errors) {
+			console.log(this.profileForm);
+			this.profileForm.valid;
+			return;
 		}
 
-		const updateProfile: Record<string, unknown> = {};
-
 		for (const key in this.profileForm.value) {
-			if (this.profileForm.value[key] === '' || !this.chips.length)
+			if (this.profileForm.value[key] === '')
 				delete this.profileForm.value[key];
 		}
 
-		console.log(this.profileForm.value);
+		const updateProfile = {};
 
-		this.store.dispatch(new UpdateProfile(updateProfile));
+		Object.assign(updateProfile, this.profileForm.value);
+
+		if (this.chips.length)
+			Object.assign(updateProfile, { interests: this.chips });
+
+		// if (this.chips.length > 10) {
+		// 	this.profileForm.controls['interests'].setErrors({ valid: false });
+		// 	return;
+		// }
+
+		if (this.profileForm.controls['bio'].value)
+			Object.assign(updateProfile, {
+				bio: {
+					text: this.profileForm.controls['bio'],
+					color: this.color,
+				},
+			});
+
+		console.log(
+			'updateProfile',
+			updateProfile,
+			'profileForm',
+			this.profileForm.value
+		);
+
+		console.log(Object.keys(updateProfile).length);
+		if (Object.keys(updateProfile).length)
+			this.store.dispatch(new UpdateProfile(updateProfile as IUpdateProfile));
 	}
 }

@@ -1,1 +1,1 @@
-export const validImageMimeType = 'image/png , image/jpeg';
+export const validImageMimeType = ['image/png', 'image/jpeg', 'image/webp'];

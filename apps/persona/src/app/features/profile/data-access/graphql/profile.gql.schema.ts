@@ -3,6 +3,8 @@ import { gql } from 'apollo-angular';
 export const GET_USER_INFO = gql`
 	query ($id: ID!) {
 		getUser(id: $id) {
+			id
+
 			fullName
 
 			username
@@ -20,21 +22,13 @@ export const GET_USER_INFO = gql`
 				text
 				color
 			}
-
-			stories {
-				_id
-				title
-				description
-				createdAt
-				photo
-			}
 		}
 	}
 `;
 
 export const UPDATE_PROFILE = gql`
 	mutation (
-		$user: Update_User_Input!
+		$user: Update_User_Input
 		$profilePicture: Upload
 		$profileCover: Upload
 	) {
@@ -43,11 +37,15 @@ export const UPDATE_PROFILE = gql`
 			profilePicture: $profilePicture
 			profileCover: $profileCover
 		) {
+			id
+
 			fullName
 
 			username
 
 			profilePicture
+
+			profileCover
 
 			createdAt
 

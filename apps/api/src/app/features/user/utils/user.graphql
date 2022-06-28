@@ -1,4 +1,5 @@
 scalar Date
+scalar Upload
 
 type Query {
 	getUser(id: ID!): User!
@@ -6,12 +7,14 @@ type Query {
 
 type Mutation {
 	updateUser(
-		user: Update_User_Input!
+		user: Update_User_Input
 		profilePicture: Upload
 		profileCover: Upload
 	): User!
 
-	deleteUser(confirmDeleteUser: Confirm_Delete_User_Input!): User_Status!
+	deleteUser(
+		confirmDeleteUser: Confirm_Delete_User_Input!
+	): Authentication_Status!
 }
 
 input Confirm_Delete_User_Input {
@@ -59,13 +62,7 @@ type User {
 
 	gender: String!
 
-	stories: [Story]!
-
 	bio: Interest_And_Bio_And_Category
 
 	interests: [Interest_And_Bio_And_Category]!
-}
-
-type User_Status {
-	status: String!
 }

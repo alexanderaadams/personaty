@@ -41,6 +41,9 @@ export class ProfileService {
 
 		const { profilePicture, profileCover, ...user } = updateProfile;
 
+		console.log(profilePicture, user);
+
+		updateProfile;
 		return this.apollo
 			.mutate({
 				mutation: UPDATE_PROFILE,
@@ -56,7 +59,7 @@ export class ProfileService {
 			.pipe(
 				catchError((error) => error),
 				map(({ data }: any) => {
-					return data.updateProfile as IProfileStateModel;
+					return data.updateUser;
 				})
 			);
 	}

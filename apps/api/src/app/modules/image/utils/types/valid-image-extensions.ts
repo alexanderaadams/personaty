@@ -1,1 +1,1 @@
-export type TValidImageExtensions = 'png' | 'jpg' | 'jpeg';
+export type TValidImageExtensions = 'png' | 'webp' | 'jpeg';

@@ -4,8 +4,7 @@
 		<a
 			class="col-4 p-2"
 			mat-button
-			[routerLink]="['/', 'profile', userId]"
-			(click)="getUser()"
+			[routerLink]="['/', 'profile', userId | async]"
 			><mat-icon class="mx-2">home</mat-icon> <span>Profile</span></a
 		>
 	</div>

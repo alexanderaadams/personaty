@@ -5,7 +5,7 @@ import { AuthGuard } from './core/data-access/guards/auth.guard';
 const routes: Routes = [
 	{
 		path: 'profile',
-		// canActivate: [AuthGuard],
+		canActivate: [AuthGuard],
 		loadChildren: () =>
 			import('./features/profile/components/profile.module').then(
 				(m) => m.ProfileModule

@@ -61,7 +61,7 @@ async function bootstrap(): Promise<void> {
 		'/graphql',
 		graphqlUploadExpress({
 			maxFileSize: 500000,
-			maxFiles: 1,
+			maxFiles: 2,
 		})
 	);
 

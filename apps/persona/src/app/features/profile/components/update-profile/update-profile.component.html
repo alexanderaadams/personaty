@@ -21,7 +21,7 @@
 					(change)="profileCoverSelected(profileCover)"
 					(click)="profileCover.click()">
 					<img
-						class="w-100"
+						class="w-100 object-fit-cover"
 						*ngIf="profileCoverUrl"
 						[src]="profileCoverUrl"
 						alt="profile Cover" />
@@ -31,7 +31,9 @@
 						type="file"
 						style="display: none; cursor: none" />
 
-					<mat-icon *ngIf="!profilePictureUrl">photo_camera</mat-icon>
+					<mat-icon *ngIf="!isProfileCoverMimeTypeLegitimate.value"
+						>photo_camera</mat-icon
+					>
 				</div>
 
 				<div
@@ -47,7 +49,7 @@
 					(change)="profilePictureSelected(profilePicture)"
 					(click)="profilePicture.click()">
 					<img
-						class="w-100 h-100"
+						class="w-100 h-100 object-fit-cover"
 						*ngIf="profilePictureUrl"
 						[src]="profilePictureUrl"
 						alt="profile Picture" />
@@ -57,7 +59,9 @@
 						type="file"
 						style="display: none; cursor: none" />
 
-					<mat-icon *ngIf="!profilePictureUrl">camera</mat-icon>
+					<mat-icon *ngIf="!isProfilePictureMimeTypeLegitimate.value"
+						>camera</mat-icon
+					>
 				</div>
 			</div>
 
@@ -69,6 +73,11 @@
 						(click)="$event.stopPropagation()">
 						<mat-label>Bio</mat-label>
 						<textarea
+							[(colorPicker)]="color"
+							cpOutputFormat="hex"
+							cpAlphaChannel="disabled"
+							cpPosition="bottom"
+							[style.background]="color"
 							style="height: 4rem"
 							matInput
 							placeholder="Bio"
@@ -112,6 +121,11 @@
 								[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
 								[matChipInputAddOnBlur]="addOnBlur"
 								(matChipInputTokenEnd)="add($event)" />
+
+							<mat-error
+								*ngIf="!profileForm?.['controls']?.['interests']?.['errors']?.['valid']">
+								Interests must be less than 10
+							</mat-error>
 						</mat-form-field>
 					</mat-chip-list>
 
@@ -137,7 +151,7 @@
 						<input matInput placeholder="Display Name" />
 
 						<mat-error
-							*ngIf="profileForm?.['controls']?.['fullName']?.['errors']">
+							*ngIf="profileForm?.['controls']?.['fullName']?.['errors']?.['pattern']">
 							Display name is not correct
 						</mat-error>
 					</mat-form-field>
@@ -146,24 +160,25 @@
 						class="d-flex justify-content-center align-items-center"
 						aria-label="Sex">
 						<mat-chip
-							[selected]="'female' === sex.value"
+							[selected]="'female' === selectedSex.value"
 							color="primary"
-							(click)="sex.next('female')"
+							(click)="selectedSex.next('female')"
 							class="cursor-pointer">
 							Female
 						</mat-chip>
 						<mat-chip
-							[selected]="'male' === sex.value"
-							(click)="sex.next('male')"
+							[selected]="'male' === selectedSex.value"
+							(click)="selectedSex.next('male')"
 							color="accent">
 							Male
 						</mat-chip>
 					</mat-chip-list>
 
 					<button
+						[disabled]="this.executingLoader$ | async"
 						class="fs-5 py-1"
 						mat-raised-button
-						[color]="sex.value === 'female' ? 'primary' : 'accent'"
+						[color]="selectedSex.value === 'female' ? 'primary' : 'accent'"
 						type="submit">
 						Post
 					</button>

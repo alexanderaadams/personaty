@@ -21,10 +21,12 @@ export class ProgressInterceptor implements HttpInterceptor {
 	): Observable<HttpEvent<unknown>> {
 		return next.handle(request).pipe(
 			catchError((error) => {
+				console.log(error);
 				this.sharedService.executingLoader$.next(false);
 				return error;
 			}),
 			tap((response: any) => {
+				console.log(response);
 				if (response instanceof HttpResponse)
 					this.sharedService.executingLoader$.next(false);
 			})

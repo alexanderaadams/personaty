@@ -61,7 +61,6 @@ export class StoryService {
 				context: {
 					useMultipart: true,
 				},
-				// errorPolicy: 'all',
 			})
 			.pipe(
 				catchError(() => {

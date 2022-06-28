@@ -14,7 +14,7 @@ export function TryCatchWrapper() {
 			try {
 				return await originalMethod.apply(this, args);
 			} catch (error) {
-				// console.log(error);
+				console.log(error);
 				let statusCode: number | null = null;
 				let message: string | null = null;
 				if (error?.message == 'jwt must be provided') {

@@ -1,1 +1,1 @@
-export type TValidImageMimeType = 'image/png' | 'image/jpg' | 'image/jpeg';
+export type TValidImageMimeType = 'image/png' | 'image/jpeg' | 'image/webp';

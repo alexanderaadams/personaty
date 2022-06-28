@@ -14,8 +14,8 @@ import { UpdateUserDto } from './models/dto/update-user.dto';
 import { UserModel } from './models/user/user.model';
 import { UserService } from './user.service';
 import { TImage } from '@modules/image/utils/types/image.type';
-import { UserStatus } from './models/user-status';
 import { ConfirmDeleteUser } from './models/dto/confirm-delete-user.dto';
+import { AuthenticationStatus } from '../auth/models/authentication-status';
 
 @UseGuards(
 	environment.production ? GqlThrottlerBehindProxyGuard : GqlThrottlerGuard,
@@ -59,7 +59,7 @@ export class UserResolver {
 		});
 	}
 
-	@Mutation(() => UserStatus, {
+	@Mutation(() => AuthenticationStatus, {
 		name: 'deleteUser',
 		description: 'Create Story',
 	})

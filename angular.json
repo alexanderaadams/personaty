@@ -1,11 +1,11 @@
 {
-  "version": 2,
-  "projects": {
-    "api": "apps/api",
-    "authentication": "libs/authentication",
-    "keys": "libs/keys",
-    "persona": "apps/persona",
-    "persona-e2e": "apps/persona-e2e",
-    "shared": "libs/shared"
-  }
+	"version": 2,
+	"projects": {
+		"api": "apps/api",
+		"authentication": "libs/authentication",
+		"keys": "libs/keys",
+		"persona": "apps/persona",
+		"persona-e2e": "apps/persona-e2e",
+		"shared": "libs/shared"
+	}
 }

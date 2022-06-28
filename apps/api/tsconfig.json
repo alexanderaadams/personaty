@@ -12,6 +12,7 @@
 	],
 	"compilerOptions": {
 		"baseUrl": "../../",
+		//
 		"paths": {
 			//	Local paths
 			"@core/*": ["apps/api/src/app/core/*"],

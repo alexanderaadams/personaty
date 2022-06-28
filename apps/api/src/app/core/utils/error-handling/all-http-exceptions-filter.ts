@@ -27,9 +27,12 @@ export class AllHttpExceptionsFilter
 
 		const ctx = host.switchToHttp();
 
-		const httpStatus = checkInstanceofHttpException
+		let httpStatus: number = checkInstanceofHttpException
 			? exception?.getStatus() ?? exception?.['response'].statusCode
 			: HttpStatus.INTERNAL_SERVER_ERROR;
+
+		if ((exception?.message as string).includes('max file uploads exceeded'))
+			httpStatus = 413;
 
 		const httpMessage = checkInstanceofError
 			? exception?.message

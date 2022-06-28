@@ -1,41 +1,22 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, UrlTree, Router } from '@angular/router';
-import { Store } from '@ngxs/store';
-
+import { CanActivate, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthState } from '../state/auth.state';
 
 import { FormService } from '../services/form.service';
-import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 
 @Injectable({
 	providedIn: 'root',
 })
-export class NotAuthGuard
-	extends UnsubscribeOnDestroyAdapter
-	implements CanActivate
-{
-	constructor(
-		private store: Store,
-		private router: Router,
-		private formService: FormService
-	) {
-		super();
-	}
+export class NotAuthGuard implements CanActivate {
+	constructor(private formService: FormService) {}
 
 	canActivate():
 		| boolean
 		| UrlTree
 		| Observable<boolean | UrlTree>
 		| Promise<boolean | UrlTree> {
-		// const authenticated: boolean = this.store.selectSnapshot(
-		// 	AuthState.isAuthenticated
-		// );
-
 		this.formService.checkIfAlreadyAuthenticated();
 
 		return true;
-
-		// return this.router.navigate(['']);
 	}
 }

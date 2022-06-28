@@ -70,5 +70,5 @@ export class UpdateUserDto extends Update_User_Input {
 	@Type(() => InterestAndBioAndCategory)
 	@IsNotEmpty()
 	@IsOptional()
-	interests?: Array<InterestAndBioAndCategory>;
+	interests: Array<InterestAndBioAndCategory>;
 }

@@ -5,6 +5,8 @@ export const environment = {
 
 	PROJECT_NAME: 'Persona',
 
+	PROJECT_NAME_Shortcut: 'PSN',
+
 	//uuidv5
 	V5_NAMESPACE_CUSTOM: 'e2d571b9-4338-5548-ab01-a66903c65aad',
 	V5_NAME: 'persona',

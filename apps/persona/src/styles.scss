@@ -19,6 +19,10 @@ body {
 	height: 100%;
 }
 
+.object-fit-cover {
+	object-fit: cover !important;
+}
+
 .link {
 	text-decoration: none;
 	background-color: transparent;

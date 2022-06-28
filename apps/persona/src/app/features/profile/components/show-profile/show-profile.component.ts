@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { Store, Actions } from '@ngxs/store';
+import { Store, Actions, Select } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { FormService } from '@persona/authentication';
@@ -19,12 +19,13 @@ export class ShowProfileComponent
 	extends UnsubscribeOnDestroyAdapter
 	implements OnInit
 {
+	@Select('profile')
+	user$!: Observable<IProfileStateModel>;
+
 	backendUrl: string = environment.BACKEND_URL;
 	createStory = new BehaviorSubject(false);
 
-	user$!: Observable<IProfileStateModel>;
-
-	id = this.activatedRoute.snapshot.params['id'];
+	userId = this.activatedRoute.snapshot.params['userId'];
 
 	constructor(
 		private store: Store,
@@ -38,11 +39,11 @@ export class ShowProfileComponent
 	}
 
 	ngOnInit(): void {
-		this.store.dispatch(new GetUser(this.id));
+		this.store.dispatch(new GetUser(this.userId));
 	}
 
 	onCreateStory() {
-		this.router.navigate(['story', this.id]);
+		this.router.navigate(['story', this.userId]);
 		// this.createStory.next(true);
 	}
 

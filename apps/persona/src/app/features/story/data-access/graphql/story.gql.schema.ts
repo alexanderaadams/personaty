@@ -9,7 +9,7 @@ import { gql } from 'apollo-angular';
 export const CREATE_STORY = gql`
 	mutation ($story: Create_Story_Input!, $storyImage: Upload!) {
 		createStory(story: $story, storyImage: $storyImage) {
-			_id
+			id
 
 			storyImageUrl
 

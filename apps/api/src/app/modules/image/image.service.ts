@@ -1,65 +1,43 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { join } from 'path';
-import { readFile, ReadStream } from 'fs';
+import { readFile } from 'fs';
 // import { FileUpload, Upload } from 'graphql-upload';
 import type { FileUpload } from 'graphql-upload/processRequest.js';
 import type { Upload } from 'graphql-upload/processRequest.js';
 import { v5 as uuidv5 } from 'uuid';
-import path = require('path');
 
 import { environment } from '@environment';
 import { FileStorageService } from '@core/services/file-storage.service';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 
-import { TValidImageMimeType } from './utils/types/valid-image-mime.type';
 import { TImage } from './utils/types/image.type';
-// import { TValidImageExtensions } from './utils/types/valid-image-extensions';
-import { IImage } from './utils/image.interface';
+import { IImage } from './utils/interfaces/image.interface';
+import { TValidImageMimeType } from './utils/types/valid-image-mime.type';
 
 @Injectable()
 export class ImageService {
 	constructor(private fileStorageService: FileStorageService) {}
 
 	@TryCatchWrapper()
-	async getImage(imageId: string): Promise<boolean> {
-		const imagesFolderPath: string = join(process.cwd(), 'upload');
-
-		const fullImagePath: string = join(imagesFolderPath + '/' + imageId);
-
-		const DoesImageExist = function (): Promise<unknown> {
-			return new Promise(function (resolve, reject): void {
-				readFile(fullImagePath, 'utf8', function (err, data): void {
-					if (err) reject(err);
-					else resolve(data);
-				});
-			});
-		};
-
-		if (await DoesImageExist()) return true;
-
-		throw new HttpException('File Does Not Exist', 404);
-	}
-
-	@TryCatchWrapper()
-	async isMimeTypeSafe(readStream: ReadStream): Promise<boolean> {
-		const validImageMimeType: Array<TValidImageMimeType> = [
-			'image/png',
-			'image/jpeg',
-		];
-
-		const readBuffer: Buffer = await this.fileStorageService.stream2buffer(
-			readStream
+	async getImage(userId, pictureName: string) {
+		const filePath = join(
+			process.cwd(),
+			'upload',
+			userId,
+			'image',
+			pictureName
 		);
 
-		if (
-			!(await this.fileStorageService.isMimeTypeSafe<TValidImageMimeType>(
-				readBuffer,
-				validImageMimeType
-			))
-		)
-			return false;
+		const DoesImageExist = await new Promise(function (resolve, reject): void {
+			readFile(filePath, 'utf8', function (err, data): void {
+				if (err) reject(err);
+				else resolve(data);
+			});
+		});
 
-		return true;
+		if (DoesImageExist) return DoesImageExist;
+
+		throw new HttpException('File Does Not Exist', 404);
 	}
 
 	@TryCatchWrapper()
@@ -69,31 +47,38 @@ export class ImageService {
 		folderToStore: 'story' | 'profile'
 	): Promise<IImage> {
 		const image: FileUpload = (await (graphqlImage as Upload)
-			.promise) as FileUpload;
+			?.promise) as FileUpload;
 
-		const myRegex = /.(jpeg|png)$/gi;
+		const validImageMimeType: Array<TValidImageMimeType> = [
+			'image/png',
+			'image/jpeg',
+			'image/webp',
+		];
 
-		const checkedFileExtensionIfNotSafe: boolean =
-			await this.fileStorageService.isFileExtensionSafe(
-				image.filename,
-				myRegex
+		if (!image)
+			throw new HttpException('File must be a png, jpeg ,webp' ?? 'Error', 400);
+
+		const readBuffer: Buffer =
+			await this.fileStorageService.convertStreamToBuffer(
+				image.createReadStream()
 			);
 
-		if (!checkedFileExtensionIfNotSafe) {
-			throw new HttpException('File must be a png, jpeg' ?? 'Error', 400);
-		}
+		const checkedFileTypeIfNotSafe =
+			await this.fileStorageService.isFileTypeSafe<TValidImageMimeType>(
+				readBuffer,
+				image.filename,
+				validImageMimeType
+			);
 
-		if (!(await this.isMimeTypeSafe(image.createReadStream())))
-			throw new HttpException('File must be a png, jpg/jpeg', 400);
+		if (!checkedFileTypeIfNotSafe)
+			throw new HttpException('File must be a png, jpeg, webp' ?? 'Error', 400);
 
-		// const fileExtension: string = path.extname(
-		// 	image.filename
-		// ) as TValidImageExtensions;
-
-		const imageFileName = `${environment.PROJECT_NAME}_${Date.now()}_${uuidv5(
+		const imageFileName = `${
+			environment.PROJECT_NAME_Shortcut
+		}_${Date.now()}_${uuidv5(
 			environment.V5_NAME,
 			environment.V5_NAMESPACE_CUSTOM
-		)}.jpeg`;
+		).replaceAll('-', '')}.jpeg`;
 
 		const fullImagePath: string = join(
 			process.cwd(),

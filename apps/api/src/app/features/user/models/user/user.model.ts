@@ -78,11 +78,11 @@ export class UserModel extends User {
 	stories: Array<StoryModel>;
 
 	@IsObject()
+	@Type((): typeof InterestAndBioAndCategory => InterestAndBioAndCategory)
 	bio: InterestAndBioAndCategory;
 
 	@IsArray()
 	@ValidateNested({ each: true, always: true })
-	@ArrayMinSize(2)
 	@ArrayMaxSize(25)
 	@Type((): typeof InterestAndBioAndCategory => InterestAndBioAndCategory)
 	interests: Array<InterestAndBioAndCategory>;

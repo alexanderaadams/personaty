@@ -65,27 +65,15 @@ export class ProfileState {
 
 	@Action(UpdateProfile)
 	updateProfile(ctx: StateContext<IProfileStateModel>, action: UpdateProfile) {
-		if (action.payload === 'profile')
-			return this.localStorageService
-				.getItem(action.payload as 'profile')
-				.pipe(
-					tap((cache) => {
-						ctx.patchState(cache);
-					}),
-					take(1)
-				)
-				.subscribe();
-
 		return this.profileService
 			.updateProfile(action.payload as IUpdateProfile)
 			.pipe(take(1))
 			.subscribe({
-				next: (res: IProfileStateModel) => {
+				next: (res: any) => {
 					ctx.patchState(res);
-					// this.updateMyStorageEngineService('auth', res);
 				},
 				error: () => {
-					// ctx.setState();
+					// ctx.
 				},
 			});
 	}

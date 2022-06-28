@@ -2,7 +2,6 @@ import {
 	IsOptional,
 	IsArray,
 	ArrayMaxSize,
-	ArrayMinSize,
 	ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -13,7 +12,6 @@ import { InterestAndBioAndCategory } from '@core/models/interest-and-bio-and-cat
 export class UpdateStoryDto extends Update_Story_Input {
 	@IsArray()
 	@ValidateNested({ each: true, always: true })
-	@ArrayMinSize(1)
 	@ArrayMaxSize(25)
 	@Type(() => InterestAndBioAndCategory)
 	@IsOptional()
