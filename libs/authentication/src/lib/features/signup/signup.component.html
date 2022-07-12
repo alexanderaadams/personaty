@@ -1,6 +1,6 @@
 <ion-content>
 	<lib-form>
-		<ion-grid id="form" class="shadow border-4ion-padding">
+		<ion-grid id="form" class="shadow border-radius-1 ion-padding">
 			<ion-row
 				class="ion-justify-content-center ion-align-items-center ion-margin">
 				<ion-title size="large" class="ion-text-center ion-padding fs-2"
@@ -80,8 +80,8 @@
 							<ion-header>
 								<ion-toolbar>
 									<ion-row
-										class="ion-justify-content-center ion-align-items-center">
-										<ion-button fill="clear" (click)="cancel()"
+										class="ion-justify-content-center ion-align-items-center ion-padding-start ion-padding-end">
+										<ion-button color="light" fill="clear" (click)="cancel()"
 											>Cancel</ion-button
 										>
 
@@ -90,6 +90,7 @@
 										}}</ion-title>
 
 										<ion-button
+											color="light"
 											fill="clear"
 											(click)="confirm(dateTime)"
 											[strong]="true"

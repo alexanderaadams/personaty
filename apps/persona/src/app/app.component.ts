@@ -16,7 +16,10 @@ import { AppService } from './app.service';
 export class AppComponent implements OnInit {
 	@Select(AuthState.userId)
 	userId$!: Observable<string>;
-	// executingLoader$!: BehaviorSubject<boolean>;
+
+	@Select(AuthState.isAuthenticated)
+	authenticated$!: Observable<boolean>;
+
 
 	constructor(
 		private readonly appService: AppService,

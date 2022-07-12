@@ -22,28 +22,17 @@
 	color: var(--ion-color-danger);
 }
 
-// @import './themes/utlities.css';
-
 body {
 	font-family: Roboto, 'Helvetica Neue', sans-serif;
 	font-size: clamp(105%, calc(100% + 0.5vw), 150%);
 	color: currentColor;
 }
 
-// button {
-// 	font-family: inherit;
-// }
-
-// html,
-// body {
-// 	height: 100%;
-// }
-
 .object-fit-cover {
 	object-fit: cover !important;
 }
 
-.link {
+.no-link {
 	text-decoration: none;
 	background-color: transparent;
 }
@@ -60,55 +49,8 @@ body {
 	border-radius: 4rem;
 }
 
-.border-grey-blue {
-	border: 0.1rem solid var(--ion-color-medium);
-}
-
 .vh-25 {
 	height: 25vh;
-}
-
-.text-dark {
-	color: var(--ion-color-dark) !important;
-}
-
-.text-light {
-	color: var(--ion-color-light-shade) !important;
-}
-
-.bg-unknown {
-	background-color: var(--ion-color-danger-shade) !important;
-}
-
-.ion-color-dark {
-	color: var(--ion-color-dark) !important;
-}
-
-.dark-primary-bg {
-	background-color: #262c38;
-}
-
-.darker-primary-bg {
-	background-color: #1a1e27;
-}
-
-.snack-bar-danger {
-	background-color: var(--ion-color-danger-shade) !important;
-}
-
-.snack-bar-success {
-	background-color: var(--ion-color-success-shade) !important;
-}
-
-.box-shadow-and-border {
-	@media (min-width: 575px) {
-		border-radius: 0.8rem;
-	}
-
-	@media (max-width: 575px) {
-		box-shadow: none !important;
-		border: 0;
-	}
 }
 
 .cursor-pointer {
