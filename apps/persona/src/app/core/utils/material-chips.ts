@@ -1,11 +1,8 @@
-import { MatChipInputEvent } from '@angular/material/chips';
 import randomColor from 'randomcolor';
-import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 import { IonInput } from '@ionic/angular';
 
-export class MaterialChips<T> extends UnsubscribeOnDestroyAdapter {
-	readonly separatorKeysCodes: readonly [13, 188] = [ENTER, COMMA] as const;
+export class IonicChips<T> extends UnsubscribeOnDestroyAdapter {
 	addOnBlur = true;
 	chips: Array<T> = [];
 

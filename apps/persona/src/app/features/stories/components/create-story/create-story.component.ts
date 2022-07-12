@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Store } from '@ngxs/store';
 
 import { CreateStory } from '@features/stories/data-access/state/stories.action';
-import { MaterialChips } from '@core/utils/material-chips';
+import { IonicChips } from '@core/utils/material-chips';
 import { ImageService } from '@core/services/image.service';
 
 import { IInterestAndBioAndCategory } from '../../data-access/state/stories.model';
@@ -15,7 +15,7 @@ import { IInterestAndBioAndCategory } from '../../data-access/state/stories.mode
 	templateUrl: './create-story.component.html',
 	styleUrls: ['./create-story.component.scss'],
 })
-export class CreateStoryComponent extends MaterialChips<IInterestAndBioAndCategory> {
+export class CreateStoryComponent extends IonicChips<IInterestAndBioAndCategory> {
 	id: string = this.activatedRoute.snapshot.params['id'];
 	checkedMimeType!: BehaviorSubject<boolean>;
 
