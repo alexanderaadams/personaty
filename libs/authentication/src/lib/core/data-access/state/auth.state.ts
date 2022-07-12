@@ -34,7 +34,7 @@ export class AuthState {
 	}
 
 	@Selector()
-	static userId(state: IAuthStateModel) {
+	static userId(state: IAuthStateModel): string | null | undefined {
 		return state.userId;
 	}
 
@@ -117,7 +117,7 @@ export class AuthState {
 			},
 			error: () => {
 				ctx.patchState({
-					status: `FAILED_TO_CONFIRM_FORGOT_PASSWORD`,
+					status: 'FAILED_TO_CONFIRM_FORGOT_PASSWORD',
 					authenticated: false,
 				});
 			},
@@ -132,7 +132,7 @@ export class AuthState {
 			},
 			error: () => {
 				ctx.patchState({
-					status: `EITHER_LOGGED_OUT_ALREADY_OR_INTERNET_PROBLEM`,
+					status: 'EITHER_LOGGED_OUT_ALREADY_OR_INTERNET_PROBLEM',
 					authenticated: null,
 				});
 			},

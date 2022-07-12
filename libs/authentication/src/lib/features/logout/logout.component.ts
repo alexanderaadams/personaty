@@ -1,11 +1,7 @@
-import { Observable, BehaviorSubject } from 'rxjs';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Select } from '@ngxs/store';
-
-import { AuthState } from '@auth/core/data-access/state/auth.state';
 import { FormService } from '@auth/core/data-access/services/form.service';
 import { Logout } from '@auth/core/data-access/state/auth.action';
-import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
+import { take } from 'rxjs/operators';
 
 @Component({
 	selector: 'lib-signout',
@@ -13,24 +9,17 @@ import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
 	styleUrls: ['./logout.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LogoutComponent
-	extends UnsubscribeOnDestroyAdapter
-	implements OnInit
-{
-	@Select(AuthState.isAuthenticated)
-	isAuthenticated$!: Observable<boolean>;
-
-	constructor(private formService: FormService) {
-		super();
-	}
+export class LogoutComponent implements OnInit {
+	constructor(private formService: FormService) {}
 
 	ngOnInit() {
-		this.subs.sink = this.formService
+		this.formService
 			.followAuthenticationStatus(
 				Logout,
 				'Failed to Logout',
 				'Logged out successfully'
 			)
+			.pipe(take(1))
 			.subscribe();
 
 		this.formService.goAuthenticate(new Logout());

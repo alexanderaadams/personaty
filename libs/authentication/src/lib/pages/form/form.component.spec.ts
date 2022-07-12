@@ -1,24 +1,23 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { FormComponent } from './form.component';
 
-import { InputComponent } from './form.component';
+describe('FormComponent', () => {
+	let component: FormComponent;
+	let fixture: ComponentFixture<FormComponent>;
 
-describe('InputComponent', () => {
-	let component: InputComponent;
-	let fixture: ComponentFixture<InputComponent>;
-
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
-			declarations: [InputComponent],
+			declarations: [FormComponent],
 		}).compileComponents();
 	}));
 
-	beforeEach(() => {
-		fixture = TestBed.createComponent(InputComponent);
+	beforeEach(waitForAsync(() => {
+		fixture = TestBed.createComponent(FormComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
-	});
+	}));
 
-	it('should create', () => {
+	it('should create', waitForAsync(() => {
 		expect(component).toBeTruthy();
-	});
+	}));
 });

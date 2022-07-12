@@ -13,7 +13,7 @@ import sharp = require('sharp');
 import { glob } from 'glob';
 
 // import { FileUpload } from 'graphql-upload';
-// import { finished } from 'stream/promises';
+import { finished } from 'stream/promises';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 // const { finished } = require('stream');
 import { join } from 'path';
@@ -74,7 +74,7 @@ export class FileStorageService {
 			throw new HttpException('Something went wrong', 500);
 		});
 
-		// finished(out);
+		finished(out);
 	}
 
 	@TryCatchWrapper()

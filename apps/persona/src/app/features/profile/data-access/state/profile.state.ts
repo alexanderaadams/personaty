@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { tap, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { Action, State, StateContext, Selector } from '@ngxs/store';
 
 import { GetUser, UpdateProfile } from './profile.action';
@@ -22,6 +22,8 @@ import { LocalStorageService } from '@persona/shared';
 
 		bio: null,
 
+		locale: null,
+
 		interests: null,
 
 		email: null,
@@ -32,13 +34,13 @@ import { LocalStorageService } from '@persona/shared';
 
 		createdAt: null,
 
-		stories: null,
+		sex: null,
 	},
 })
 @Injectable()
 export class ProfileState {
 	@Selector()
-	static profile(profile: IProfileStateModel) {
+	static value(profile: IProfileStateModel) {
 		return profile;
 	}
 

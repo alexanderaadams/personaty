@@ -2,14 +2,16 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import randomColor from 'randomcolor';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { UnsubscribeOnDestroyAdapter } from '@persona/shared';
+import { IonInput } from '@ionic/angular';
 
 export class MaterialChips<T> extends UnsubscribeOnDestroyAdapter {
 	readonly separatorKeysCodes: readonly [13, 188] = [ENTER, COMMA] as const;
 	addOnBlur = true;
 	chips: Array<T> = [];
 
-	async add(event: MatChipInputEvent): Promise<void> {
-		const value: string = (event.value ?? '').trim();
+	async add(event: IonInput): Promise<void> {
+		console.log(event);
+		const value: string | undefined = event.value?.toString().trim();
 
 		// Add our fruit
 		if (value) {
@@ -24,7 +26,8 @@ export class MaterialChips<T> extends UnsubscribeOnDestroyAdapter {
 		}
 
 		// Clear the input value
-		event.chipInput?.clear();
+		event.clearOnEdit = true;
+		event.value = '';
 	}
 
 	remove(category: T): void {

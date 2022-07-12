@@ -11,6 +11,9 @@ export class ExposedUserModel extends User {
 	username: string;
 
 	@Expose()
+	fullName: string;
+
+	@Expose()
 	email: string;
 
 	@Expose()
@@ -23,7 +26,7 @@ export class ExposedUserModel extends User {
 	stories: Array<StoryModel>;
 
 	@Expose()
-	gender: 'female' | 'male' | 'other';
+	sex: 'female' | 'male' | 'other';
 
 	@Expose()
 	locale: string;

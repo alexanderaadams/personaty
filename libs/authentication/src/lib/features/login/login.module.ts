@@ -5,7 +5,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { LoginComponent } from './login.component';
 import { FormModule } from '../../pages/form/form.module';
-import { LoginMaterialModule } from './utils/login-material.module';
+import { IonicModule } from '@ionic/angular';
+import { ContinueWithModule } from '../../pages/continue-with/continue-with.module';
+import { SwitchFormModule } from '../../pages/switch-form/switch-form.module';
 
 const routes: Routes = [
 	{
@@ -21,7 +23,9 @@ const routes: Routes = [
 		RouterModule.forChild(routes),
 		ReactiveFormsModule,
 		FormModule,
-		LoginMaterialModule,
+		IonicModule,
+		ContinueWithModule,
+		SwitchFormModule,
 	],
 })
 export class LoginModule {}

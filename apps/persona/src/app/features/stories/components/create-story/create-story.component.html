@@ -1,0 +1,79 @@
+<div class="container">
+	<div
+		(click)="$event.stopPropagation()"
+		class="d-flex ion-justify-content-center ion-align-items-center vh-100">
+		<div class="col-sm-8 col-md-6">
+			<form
+				class="row ion-justify-content-center ion-align-items-center p-4 shadow border-radius-4 border-grey-blue box-shadow-and-border"
+				(ngSubmit)="onSubmit()"
+				type="submit"
+				[formGroup]="storyForm"
+				enctype="multipart/form-data">
+				<div
+					(click)="$event.stopPropagation()"
+					class="row flex-column ion-justify-content-center ion-align-items-center">
+					<input
+						#storyImageInput
+						type="file"
+						class="file-input"
+						(change)="storyImageSelected(storyImageInput)" />
+					<!-- [accept]="validStoryMimeType" -->
+					<button
+						mat-mini-fab
+						color="primary"
+						type="button"
+						class="row ion-justify-content-center ion-align-items-center"
+						(click)="storyImageInput.click()">
+						<mat-icon>attach_file</mat-icon>
+					</button>
+					<!--
+					<p class="row ion-justify-content-center ion-align-items-center">
+						{{ fileName || 'No file uploaded yet.' }}
+					</p> -->
+				</div>
+
+				<!-- <mat-chip-list #chipList aria-label="Category selection" class="p-5">
+					<mat-chip
+						style.background-color="  {{ category.color }}"
+						*ngFor="let category of chips"
+						(removed)="remove(category)">
+						{{ category.text }}
+						<button matChipRemove>
+							<mat-icon>cancel</mat-icon>
+						</button>
+					</mat-chip>
+					<input
+						class="story-category"
+						formControlName="'category'"
+						spellcheck="true"
+						placeholder="New Category..."
+						[matChipInputFor]="chipList"
+						[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+						[matChipInputAddOnBlur]="addOnBlur"
+						(matChipInputTokenEnd)="add($event)" />
+				</mat-chip-list> -->
+
+				<div class="row ion-justify-content-center ion-align-items-center">
+					<div class="row">
+						<button
+							class="fs-5 py-1"
+							mat-raised-button
+							color="primary"
+							type="submit">
+							Post
+						</button>
+					</div>
+				</div>
+			</form>
+
+			<!-- <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Description</mat-label>
+        <input
+            spellcheck="true"
+            matInput
+            placeholder="Write your story's description here"
+        />
+    </mat-form-field> -->
+		</div>
+	</div>
+</div>

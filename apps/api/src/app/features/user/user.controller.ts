@@ -1,13 +1,13 @@
-import { Controller, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Res, UseGuards } from '@nestjs/common';
 
 import { TokenAuthGuard } from '@core/guards/is-auth.guard';
-import { UserService } from './user.service';
+import { ImageService } from '@modules/image/image.service';
 
 @Controller('user')
 @UseGuards(TokenAuthGuard)
 // @Serialize(UserDto)
 export class UserController {
-	constructor(private usersService: UserService) {}
+	constructor(private imageService: ImageService) {}
 
 	// @Get(':id')
 	// async findUser(@Param('id') id: string) {

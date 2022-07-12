@@ -1,0 +1,27 @@
+<ion-row
+	class="ion-justify-content-center ion-align-items-center ion-activatable ripple-parent">
+	<ion-ripple-effect> </ion-ripple-effect>
+	<ion-button
+		class="wh-auto"
+		fill="clear"
+		aria-hidden="true"
+		aria-label="Login with google"
+		(click)="loginWithGoogle()">
+		<ion-icon class="icon" name="logo-google"></ion-icon>
+		<!-- <svg class="icon">
+								<use xlink:href="../../assets/sprite.svg#google"></use>
+							</svg> -->
+	</ion-button>
+</ion-row>
+<ion-row class="ion-justify-content-center ion-align-items-center">
+	<p class="fs-6" style="margin: 0; padding: 0; width: max-content">
+		{{ sentence }}
+	</p>
+
+	<ion-button
+		fill="clear"
+		style="margin: 0; padding: 0; text-decoration: underline"
+		[routerLink]="['/', 'auth', switchToForm]"
+		>{{ switchToForm }}</ion-button
+	>
+</ion-row>

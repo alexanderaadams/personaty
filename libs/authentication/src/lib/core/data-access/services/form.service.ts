@@ -8,7 +8,7 @@ import {
 	Store,
 } from '@ngxs/store';
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { take, takeUntil, tap } from 'rxjs/operators';
 
@@ -22,13 +22,13 @@ export class FormService {
 	@Select('auth')
 	isAuthenticated$!: Observable<IAuthStateModel>;
 
-	formValue$: BehaviorSubject<unknown | null> = new BehaviorSubject<
-		unknown | null
-	>('');
+	value$: BehaviorSubject<unknown | null> = new BehaviorSubject<unknown | null>(
+		null
+	);
 
 	constructor(
 		private readonly actions$: Actions,
-		private readonly _snackBar: MatSnackBar,
+		private readonly toastController: ToastController,
 		private readonly router: Router,
 		private readonly store: Store
 	) {}
@@ -59,8 +59,8 @@ export class FormService {
 
 	followAuthenticationStatus(
 		action: ActionType,
-		snackBarFailedMessage: string,
-		snackBarSuccessMessage: string
+		toastFailedMessage: string,
+		toastSuccessMessage: string
 	) {
 		return this.actions$.pipe(
 			ofActionCompleted(action),
@@ -73,25 +73,43 @@ export class FormService {
 							}
 
 							if (authenticated) {
-								this.formValue$.next('');
+								this.value$.next(null);
 								this.router.navigate(['']);
-								this._snackBar.open(snackBarSuccessMessage, '', {
-									duration: 3000,
-									panelClass: 'snack-bar-success',
-								});
+								this.toastController
+									.create({
+										message: toastSuccessMessage,
+										duration: 3000,
+										color: 'success',
+										animated: true,
+										position: 'bottom',
+										cssClass: 'w-50',
+									})
+									.then((toast: any) => toast.present());
 							}
 
 							if (authenticated === false && status !== 'NOT_AUTHENTICATED')
-								this._snackBar.open(snackBarFailedMessage, '', {
-									duration: 3000,
-									panelClass: 'snack-bar-danger',
-								});
+								this.toastController
+									.create({
+										message: toastFailedMessage,
+										duration: 3000,
+										color: 'danger',
+										animated: true,
+										position: 'bottom',
+										cssClass: 'w-50',
+									})
+									.then((toast) => toast.present());
 
 							if (status === 'SENT_SIGNUP_EMAIL_SUCCESSFULLY') {
-								this._snackBar.open(snackBarSuccessMessage, '', {
-									duration: 3000,
-									panelClass: 'snack-bar-success',
-								});
+								this.toastController
+									.create({
+										message: toastSuccessMessage,
+										duration: 3000,
+										color: 'success',
+										animated: true,
+										position: 'bottom',
+										cssClass: 'w-50',
+									})
+									.then((toast) => toast.present());
 							}
 
 							if (
@@ -99,10 +117,16 @@ export class FormService {
 								status === 'EITHER_LOGGED_OUT_ALREADY_OR_INTERNET_PROBLEM' ||
 								status === 'FORGOT_PASSWORD_EMAIL_SENT_SUCCESSFULLY'
 							) {
-								this._snackBar.open(snackBarSuccessMessage, '', {
-									duration: 3000,
-									panelClass: 'snack-bar-success',
-								});
+								this.toastController
+									.create({
+										message: toastSuccessMessage,
+										duration: 3000,
+										color: 'success',
+										animated: true,
+										position: 'bottom',
+										cssClass: 'w-50',
+									})
+									.then((toast) => toast.present());
 								this.router.navigate(['auth', 'login']);
 							}
 							if (status === 'PASSWORD_UPDATED_SUCCESSFULLY') {

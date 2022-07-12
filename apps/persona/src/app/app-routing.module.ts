@@ -20,7 +20,7 @@ const routes: Routes = [
 		path: 'story',
 		canActivate: [AuthGuard],
 		loadChildren: () =>
-			import('./features/story/components/story.module').then(
+			import('./features/stories/components/stories.module').then(
 				(m) => m.StoryModule
 			),
 	},
@@ -31,6 +31,7 @@ const routes: Routes = [
 			import('./features/home/components/home.module').then(
 				(m) => m.HomeModule
 			),
+		pathMatch: 'full',
 	},
 	{
 		path: '**',
@@ -38,6 +39,7 @@ const routes: Routes = [
 			import('./pages/not-found/components/not-found.module').then(
 				(m) => m.NotFoundModule
 			),
+		pathMatch: 'full',
 	},
 ];
 

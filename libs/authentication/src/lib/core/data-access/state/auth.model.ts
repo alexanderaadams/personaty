@@ -1,7 +1,7 @@
 export interface IAuthStateModel {
 	status: string | null;
 	authenticated: boolean | null;
-	userId: string | null;
+	userId?: string | null;
 }
 
 export interface ISignupCredentials {
@@ -11,7 +11,7 @@ export interface ISignupCredentials {
 }
 
 export interface ILoginCredentials {
-	username: string;
+	email: string;
 	password: string;
 }
 

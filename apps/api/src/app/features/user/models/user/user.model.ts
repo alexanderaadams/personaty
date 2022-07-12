@@ -1,5 +1,4 @@
 import {
-	IsEnum,
 	IsDateString,
 	IsEmail,
 	IsString,
@@ -8,14 +7,14 @@ import {
 	IsObject,
 	IsOptional,
 	ArrayMaxSize,
-	ArrayMinSize,
-	ValidateNested,
 	IsNotEmpty,
+	IsEnum,
+	ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import { ERole } from '@core/enums/role.enum';
-import { EGender } from '@core/enums/gender.enum';
+import { ESex } from '@core/enums/sex.enum';
 import { User } from '@core/models/graphql.schema';
 import { StoryModel } from '@features/story/models/story/story-model';
 import { InterestAndBioAndCategory } from '@core/models/interest-and-bio-and-category';
@@ -50,6 +49,10 @@ export class UserModel extends User {
 	@IsNotEmpty()
 	locale: string;
 
+	@IsEnum(ESex)
+	@IsNotEmpty()
+	sex: string;
+
 	@IsString()
 	@IsOptional()
 	profilePicture?: string;
@@ -61,10 +64,6 @@ export class UserModel extends User {
 	@IsDateString()
 	@IsNotEmpty()
 	birthDate: string;
-
-	@IsEnum(EGender)
-	@IsNotEmpty()
-	gender: string;
 
 	@IsEnum(ERole)
 	@IsNotEmpty()

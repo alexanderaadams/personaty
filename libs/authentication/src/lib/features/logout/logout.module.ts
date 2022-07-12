@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { LogoutComponent } from './logout.component';
 import { FormModule } from '../../pages/form/form.module';
-
+import { IonicModule } from '@ionic/angular';
 
 const routes: Routes = [
 	{
@@ -21,6 +21,7 @@ const routes: Routes = [
 		RouterModule.forChild(routes),
 		ReactiveFormsModule,
 		FormModule,
+		IonicModule,
 	],
 })
 export class LogoutModule {}

@@ -1,5 +1,9 @@
-<div class="container vh-100">
-	<h1 class="row justify-content-center align-items-center">
-		Oops....Page not found!
-	</h1>
-</div>
+<ion-content>
+	<ion-row
+		class="ion-page ion-justify-content-center ion-align-items-center vw-100 vh-100">
+		<ion-button slots="icon-only" fill="clear" [routerLink]="['']">
+			<ion-icon class="icon" name="navigate"></ion-icon>
+		</ion-button>
+		<h1>Oops....Page not found!</h1>
+	</ion-row>
+</ion-content>

@@ -1,106 +1,103 @@
-<lib-form>
-	<ng-container id="form">
-		<h1 class="col-12 h1 text-center fs-2 my-4">Login</h1>
-		<form
-			(ngSubmit)="onSubmit()"
-			class="row justify-content-center align-items-center gap-2"
-			[formGroup]="authForm">
-			<mat-form-field appearance="fill">
-				<mat-label>Email</mat-label>
-
-				<input
-					matInput
-					class="row justify-content-center align-items-center"
-					name="email"
-					label="Email"
-					placeholder="Email"
-					type="email"
-					[formControlName]="'email'"
-					autocomplete="email" />
-
-				<mat-error *ngIf="authForm?.['controls']?.['email']?.['invalid']">
-					Please Enter Correct Email
-				</mat-error>
-			</mat-form-field>
-
-			<mat-form-field appearance="fill" class="mb-1">
-				<mat-label>Password</mat-label>
-				<input
-					matInput
-					name="password"
-					label="Password"
-					[type]="hide ? 'password' : 'text'"
-					aria-label="password"
-					[formControlName]="'password'"
-					autocomplete="current-password" />
-
-				<mat-icon matSuffix (click)="hide = !hide">{{
-					hide ? 'visibility_off' : 'visibility'
-				}}</mat-icon>
-
-				<mat-hint>Password must be at least 8 characters. </mat-hint>
-
-				<mat-error *ngIf="authForm?.['controls']?.['password']?.['invalid']">
-					Password must be at least
-					{{ authForm?.['controls']?.['password']?.['errors']?.['minlength']?.requiredLength	?? '8' }}
-					characters.
-				</mat-error>
-			</mat-form-field>
-
-			<div class="w-100 row justify-content-center align-items-center">
-				<a
-					mat-button
-					class="col-12 link m-2 text-light d-flex justify-content-center align-items-center"
-					[routerLink]="['/', 'auth', 'reset-password']"
-					>Forgot password?</a
+<ion-content>
+	<lib-form>
+		<ion-grid id="form" class="shadow border-4 ion-padding">
+			<ion-row
+				class="ion-justify-content-center ion-align-items-center ion-margin">
+				<ion-title size="large" class="ion-text-center ion-padding fs-2"
+					>Login</ion-title
 				>
-			</div>
-			<div class="row justify-content-center align-items-center">
-				<button
-					[disabled]="sharedService.executingLoader$ | async"
-					class="p-2 mb-3 fs-5"
-					mat-raised-button
-					color="primary"
-					type="submit">
-					Login
-				</button>
-			</div>
-		</form>
+			</ion-row>
+			<ion-row class="ion-justify-content-center ion-align-items-center">
+				<form (ngSubmit)="onSubmit()" [formGroup]="authForm">
+					<ion-item>
+						<ion-label position="floating">Email</ion-label>
 
-		<div class="d-flex justify-content-center align-items-center gap-3 m-2">
-			<mat-divider class="hr w-25"> </mat-divider>
-			<span class="d-block text-center text-light">Continue With</span>
-			<mat-divider class="hr w-25"> </mat-divider>
-		</div>
-	</ng-container>
-	<ng-container id="below-form">
-		<div
-			class="d-flex justify-content-center align-items-center align-items-center gap-2">
-			<button
-				class="row justify-content-around bg-transparent p-3"
-				aria-hidden="true"
-				aria-label="Login with google"
-				mat-flat-button
-				(click)="loginWithGoogle()">
-				<svg class="icon">
-					<use xlink:href="../../assets/sprite.svg#google"></use>
-				</svg>
-			</button>
-		</div>
-		<div class="row justify-content-center align-items-center gap-2 m-3">
-			<p
-				class="col-sm-4 col-md-2 text-light text-end"
-				style="margin: 0; padding: 0; width: max-content">
-				Don't you have an account?
-			</p>
+						<ion-input
+							name="email"
+							label="Email"
+							placeholder="Email"
+							type="email"
+							formControlName="email"
+							autocomplete="email"></ion-input>
+					</ion-item>
+					<ion-item lines="none">
+						<ion-label
+							class="fs-error"
+							color="danger"
+							*ngIf="showErrors('email')">
+							Please Enter Correct Email
+						</ion-label>
+					</ion-item>
 
-			<a
-				mat-button
-				class="col-2 link text-left"
-				style="margin: 0; padding: 0; text-decoration: underline"
-				[routerLink]="['/', 'auth', 'signup']"
-				>signup</a
-			>
-		</div>
-	</ng-container>
-</lib-form>
+					<ion-item>
+						<ion-label position="floating">Password</ion-label>
+						<ion-row class="w-100 ion-justify-content-between">
+							<ion-input
+								name="password"
+								label="Password"
+								[type]="hide ? 'password' : 'text'"
+								aria-label="password"
+								formControlName="password"
+								autocomplete="current-password">
+							</ion-input>
+							<ion-button slots="icon-only" fill="clear" (click)="hide = !hide">
+								<ion-icon
+									name="add-circle"
+									[name]="hide ? 'eye-off' : 'eye'"></ion-icon>
+							</ion-button>
+						</ion-row>
+					</ion-item>
+
+					<ion-item lines="none">
+						<ion-label
+							class="fs-error"
+							color="medium"
+							*ngIf="!showErrors('password')"
+							>Password must be at least 8 characters.
+						</ion-label>
+
+						<ion-label
+							class="fs-error"
+							color="danger"
+							*ngIf="showErrors('password')">
+							Password must be at least
+							{{ authForm?.['controls']?.['password']?.['errors']?.['minlength']?.requiredLength	?? '8' }}
+							characters.
+						</ion-label>
+					</ion-item>
+
+					<ion-row
+						class="ion-justify-content-center ion-align-items-center"
+						[routerLink]="['/', 'auth', 'reset-password']">
+						<ion-button color="medium" fill="clear">
+							Forgot password?
+						</ion-button>
+					</ion-row>
+					<ion-row
+						class="ion-justify-content-center ion-align-items-center ion-activatable ripple-parent">
+						<ion-ripple-effect></ion-ripple-effect>
+						<ion-button
+							size="large"
+							[disabled]="sharedService.executingLoader$ | async"
+							class="ion-padding-top ion-padding-bottom w-100"
+							color="primary"
+							type="submit">
+							<ion-spinner
+								*ngIf="sharedService.executingLoader$ | async"></ion-spinner>
+							<span *ngIf="(sharedService.executingLoader$ | async) !== true">
+								Login
+							</span>
+						</ion-button>
+					</ion-row>
+				</form>
+			</ion-row>
+			<lib-continue-with></lib-continue-with>
+			<ng-container id="below-form">
+				<lib-switch-form
+					sentence="Don't you have an account?"
+					switchToForm="signup">
+				</lib-switch-form>
+			</ng-container>
+		</ion-grid>
+	</lib-form>
+</ion-content>

@@ -62,7 +62,7 @@ export class Update_User_Input {
     fullName?: Nullable<string>;
     email?: Nullable<string>;
     password?: Nullable<string>;
-    gender?: Nullable<string>;
+    sex?: Nullable<string>;
     birthDate?: Nullable<Date>;
     locale?: Nullable<string>;
     bio?: Nullable<Interest_And_Bio_And_Category_Input>;
@@ -138,7 +138,7 @@ export class User {
     profileCover?: Nullable<string>;
     createdAt: Date;
     birthDate: string;
-    gender: string;
+    sex: string;
     bio?: Nullable<Interest_And_Bio_And_Category>;
     interests: Nullable<Interest_And_Bio_And_Category>[];
 }

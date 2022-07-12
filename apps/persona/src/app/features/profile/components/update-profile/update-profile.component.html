@@ -1,189 +1,216 @@
-<div class="container-fluid">
-	<div
-		(click)="$event.stopPropagation()"
-		class="row justify-content-center align-items-center">
-		<form
-			style="cursor: auto"
-			class="col-12 d-flex flex-column justify-content-center gap-3"
-			(ngSubmit)="onSubmit()"
-			type="submit"
-			[formGroup]="profileForm"
-			enctype="multipart/form-data">
-			<div
-				cdkDropList
-				style="background-color: #fff; height: 17rem"
-				class="d-flex flex-column justify-content-center align-items-center position-relative my-2"
-				(click)="$event.stopPropagation()">
-				<div
-					matRipple
-					style="background-color: rgb(143, 34, 34)"
-					class="position-absolute top-0 w-100 h-75 overflow-hidden d-flex justify-content-center align-items-center cursor-pointer border-radius-2"
-					(change)="profileCoverSelected(profileCover)"
-					(click)="profileCover.click()">
-					<img
-						class="w-100 object-fit-cover"
-						*ngIf="profileCoverUrl"
-						[src]="profileCoverUrl"
-						alt="profile Cover" />
+<ion-header>
+	<ion-toolbar>
+		<ion-row class="ion-justify-content-center ion-align-items-center">
+			<ion-button fill="back" (click)="goBack()"
+				><ion-icon name="arrow-back"></ion-icon
+			></ion-button>
 
-					<input
-						#profileCover
-						type="file"
-						style="display: none; cursor: none" />
+			<ion-title class="ion-text-center">Edit profile</ion-title>
 
-					<mat-icon *ngIf="!isProfileCoverMimeTypeLegitimate.value"
-						>photo_camera</mat-icon
-					>
-				</div>
+			<ion-button fill="clear" (click)="onSubmit()" [strong]="true"
+				>Save</ion-button
+			>
+		</ion-row>
+	</ion-toolbar>
+</ion-header>
 
-				<div
-					cdkDrag
-					matRipple
-					style="
-						background-color: rgb(102, 39, 39);
-						border-radius: 100%;
-						width: 9rem;
-						height: 9rem;
-					"
-					class="position-absolute bottom-0 overflow-hidden d-flex justify-content-center align-items-center cursor-pointer"
-					(change)="profilePictureSelected(profilePicture)"
-					(click)="profilePicture.click()">
-					<img
-						class="w-100 h-100 object-fit-cover"
-						*ngIf="profilePictureUrl"
-						[src]="profilePictureUrl"
-						alt="profile Picture" />
+<ion-content *ngIf="user$ | async as user">
+	<form
+		style="cursor: auto"
+		type="submit"
+		[formGroup]="profileForm"
+		enctype="multipart/form-data">
+		<ion-grid>
+			<ion-row class="ion-justify-content-center ion-align-items-center">
+				<ion-col size="9" (click)="$event.stopPropagation()">
+					<ion-row
+						class="flex-column ion-justify-content-center ion-align-content-center ion-margin-bottom">
+						<ion-row
+							style="background-color: rgb(12, 105, 60); height: 40vh"
+							class="flex-column ion-justify-content-center ion-align-items-center position-relative ion-margin-top"
+							(click)="$event.stopPropagation()">
+							<ion-row
+								style="background-color: rgb(143, 34, 34)"
+								class="cursor-pointer position-absolute top-0 w-100 h-75 overflow-hidden ion-justify-content-center ion-align-items-center border-radius-1"
+								(change)="profileCover(profileCoverInput)"
+								(click)="profileCoverInput.click()">
+								<ion-img
+									class="w-100 object-fit-cover"
+									[src]="(profileCoverUrl$ | async) ?? svg"
+									alt="profile Cover"></ion-img>
 
-					<input
-						#profilePicture
-						type="file"
-						style="display: none; cursor: none" />
+								<input
+									#profileCoverInput
+									type="file"
+									style="display: none; cursor: none" />
 
-					<mat-icon *ngIf="!isProfilePictureMimeTypeLegitimate.value"
-						>camera</mat-icon
-					>
-				</div>
-			</div>
+								<ion-icon
+									style="width: 2rem; height: 2rem"
+									color="primary"
+									name="camera"></ion-icon>
+							</ion-row>
 
-			<div class="container my-5">
-				<div class="row gap-4">
-					<mat-form-field
-						class="cursor-pointer"
-						appearance="standard"
-						(click)="$event.stopPropagation()">
-						<mat-label>Bio</mat-label>
-						<textarea
-							[(colorPicker)]="color"
-							cpOutputFormat="hex"
-							cpAlphaChannel="disabled"
-							cpPosition="bottom"
-							[style.background]="color"
-							style="height: 4rem"
-							matInput
-							placeholder="Bio"
-							[formControlName]="'bio'"></textarea>
+							<ion-row
+								class="cursor-pointer position-absolute bottom-0 overflow-hidden ion-justify-content-center ion-align-items-center"
+								(change)="profilePicture(profilePictureInput)"
+								(click)="profilePictureInput.click()">
+								<ion-avatar style="width: 9rem; height: 9rem">
+									<ion-img
+										class="w-100 h-100 object-fit-cover"
+										[src]="(profilePictureUrl$ | async) ?? svg"
+										alt="profile Picture"></ion-img>
+								</ion-avatar>
+								<ion-icon
+									class="position-absolute"
+									color="primary"
+									style="width: 2rem; height: 2rem"
+									name="camera"></ion-icon>
 
-						<mat-error
-							*ngIf="profileForm?.['controls']?.['bio']?.['errors']?.['minlength']">
-							Bio must be at least
-							{{ profileForm?.['controls']?.['bio']?.['errors']?.['minlength']?.requiredLength	?? '10' }}
-							characters.
-						</mat-error>
+								<input
+									#profilePictureInput
+									type="file"
+									style="display: none; cursor: none" />
+							</ion-row>
+						</ion-row>
+					</ion-row>
 
-						<mat-error
-							*ngIf="profileForm?.['controls']?.['bio']?.['errors']?.['maxlength']">
-							Bio must be maximum
-							{{ profileForm?.['controls']?.['bio']?.['errors']?.['maxlength']?.requiredLength	?? '50' }}
-							characters.
-						</mat-error>
-					</mat-form-field>
+					<ion-col size="12">
+						<ion-item (click)="$event.stopPropagation()">
+							<span
+								class="w-100 border-radius-1 ion-padding"
+								[style.background]="color">
+								<ion-label position="floating">Bio</ion-label>
+								<ion-input
+									(click)="changeColor()"
+									style="height: 4rem"
+									placeholder="Bio"
+									spellcheck="true"
+									maxlength="100"
+									formControlName="bio"
+									[value]="user.bio?.text"></ion-input>
+							</span>
+						</ion-item>
+						<ion-item lines="none">
+							<ion-label
+								*ngIf="profileForm?.['controls']?.['bio']?.['errors']?.['minlength']">
+								Bio must be at least
+								{{ profileForm?.['controls']?.['bio']?.['errors']?.['minlength']?.requiredLength	?? '10' }}
+								characters.
+							</ion-label>
 
-					<mat-chip-list #chipList aria-label="Interests">
-						<mat-chip
+							<ion-label
+								color="danger"
+								*ngIf="profileForm?.['controls']?.['bio']?.['errors']?.['maxlength']">
+								Bio must be maximum
+								{{ profileForm?.['controls']?.['bio']?.['errors']?.['maxlength']?.requiredLength	?? '50' }}
+								characters.
+							</ion-label>
+						</ion-item>
+					</ion-col>
+
+					<ion-col size="12">
+						<ion-chip
+							aria-label="Interest"
 							style.background-color="  {{ interest.color }}"
 							class="ion-color-dark"
-							*ngFor="let interest of chips"
-							(removed)="remove(interest)">
-							{{ interest.text }}
-							<button matChipRemove>
-								<mat-icon>cancel</mat-icon>
-							</button>
-						</mat-chip>
+							*ngFor="let interest of chips">
+							<ion-label>
+								{{ interest.text }}
+							</ion-label>
+							<ion-button
+								slots="icon-only"
+								fill="clear"
+								(click)="remove(interest)">
+								<ion-icon name="close"></ion-icon>
+							</ion-button>
+						</ion-chip>
 
-						<mat-form-field class="cursor-pointer w-100" appearance="standard">
-							<mat-label>Interest</mat-label>
-							<input
-								matInput
-								[formControlName]="'interests'"
-								spellcheck="true"
-								placeholder="Add new Interest..."
-								[matChipInputFor]="chipList"
-								[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-								[matChipInputAddOnBlur]="addOnBlur"
-								(matChipInputTokenEnd)="add($event)" />
-
-							<mat-error
-								*ngIf="!profileForm?.['controls']?.['interests']?.['errors']?.['valid']">
+						<ion-item class="ion-margin-top">
+							<ion-label position="floating">Interest</ion-label>
+							<ion-row class="w-100 ion-justify-content-between">
+								<ion-input
+									#interest
+									spellcheck="true"
+									placeholder="Add new Interest...">
+								</ion-input>
+								<ion-button slots="end" fill="clear" (click)="add(interest)">
+									<ion-icon class="vw-2" name="add-circle"></ion-icon>
+								</ion-button>
+							</ion-row>
+						</ion-item>
+						<ion-item lines="none">
+							<ion-label
+								class="fs-error"
+								color="danger"
+								*ngIf="profileForm?.['controls']?.['interests']?.['errors']?.['invalid']">
 								Interests must be less than 10
-							</mat-error>
-						</mat-form-field>
-					</mat-chip-list>
+							</ion-label>
+						</ion-item>
+					</ion-col>
+					<ion-col size="12">
+						<ion-item>
+							<ion-label position="floating">Username</ion-label>
+							<ion-input
+								placeholder="Username"
+								formControlName="username"></ion-input>
+						</ion-item>
+						<ion-item lines="none">
+							<ion-label
+								class="fs-error"
+								color="danger"
+								*ngIf="profileForm?.['controls']?.['username']?.['errors']?.['nonUniqueUsername']">
+								Username has already been taken
+							</ion-label>
+							<ion-label
+								class="fs-error"
+								color="danger"
+								*ngIf="profileForm?.['controls']?.['username']?.['errors']?.['pattern']">
+								Username must be only with numbers and characters
+							</ion-label>
+						</ion-item>
+					</ion-col>
 
-					<mat-form-field class="cursor-pointer" appearance="standard">
-						<mat-label>Username</mat-label>
-						<input
-							matInput
-							placeholder="Username"
-							[formControlName]="'username'" />
+					<ion-col size="12">
+						<ion-item>
+							<ion-label position="floating">Display Name</ion-label>
+							<ion-input
+								formControlName="fullName"
+								placeholder="Display Name"></ion-input>
+						</ion-item>
+						<ion-item lines="none">
+							<ion-label
+								class="fs-error"
+								color="danger"
+								*ngIf="profileForm?.['controls']?.['fullName']?.['errors']?.['pattern']">
+								Display name is not correct
+							</ion-label>
+						</ion-item>
+					</ion-col>
 
-						<mat-error
-							*ngIf="profileForm?.['controls']?.['username']?.['errors']?.['nonUniqueUsername']">
-							Username has already been taken
-						</mat-error>
-						<mat-error
-							*ngIf="profileForm?.['controls']?.['username']?.['errors']?.['pattern']">
-							Username must be only with numbers and characters
-						</mat-error>
-					</mat-form-field>
-
-					<mat-form-field class="cursor-pointer" appearance="standard">
-						<mat-label>Display Name</mat-label>
-						<input matInput placeholder="Display Name" />
-
-						<mat-error
-							*ngIf="profileForm?.['controls']?.['fullName']?.['errors']?.['pattern']">
-							Display name is not correct
-						</mat-error>
-					</mat-form-field>
-
-					<mat-chip-list
-						class="d-flex justify-content-center align-items-center"
-						aria-label="Sex">
-						<mat-chip
-							[selected]="'female' === selectedSex.value"
-							color="primary"
-							(click)="selectedSex.next('female')"
-							class="cursor-pointer">
+					<ion-col offset="4" class="ion-margin-bottom ion-padding">
+						<ion-chip
+							class="ion-padding"
+							outline="true"
+							aria-label="female"
+							[color]="
+								'female' === profileForm.value['sex'] ? 'primary' : 'medium'
+							"
+							(click)="this.profileForm.controls['sex'].patchValue('female')">
 							Female
-						</mat-chip>
-						<mat-chip
-							[selected]="'male' === selectedSex.value"
-							(click)="selectedSex.next('male')"
-							color="accent">
+						</ion-chip>
+						<ion-chip
+							class="ion-padding"
+							outline="true"
+							aria-label="male"
+							(click)="this.profileForm.controls['sex'].patchValue('male')"
+							[color]="
+								'male' === profileForm.value['sex'] ? 'primary' : 'medium'
+							">
 							Male
-						</mat-chip>
-					</mat-chip-list>
-
-					<button
-						[disabled]="this.executingLoader$ | async"
-						class="fs-5 py-1"
-						mat-raised-button
-						[color]="selectedSex.value === 'female' ? 'primary' : 'accent'"
-						type="submit">
-						Post
-					</button>
-				</div>
-			</div>
-		</form>
-	</div>
-</div>
+						</ion-chip>
+					</ion-col>
+				</ion-col>
+			</ion-row>
+		</ion-grid>
+	</form>
+</ion-content>

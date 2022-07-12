@@ -46,10 +46,10 @@ export class NodemailerService {
 				},
 			})
 			.then((res) => {
-				console.log('res', res);
+				// console.log('res', res);
 			})
 			.catch((err) => {
-				console.error(err);
+				// console.error(err);
 				return err;
 			});
 	}

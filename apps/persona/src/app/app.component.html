@@ -1,16 +1,38 @@
-<mat-progress-bar
+<ion-progress-bar
 	style="z-index: 200000"
 	*ngIf="executingLoader$ | async"
 	class="position-fixed top-0"
 	color="primary"
-	mode="indeterminate"
 	role="progressbar"
 	aria-label="progressbar">
-</mat-progress-bar>
+</ion-progress-bar>
 
-<div
+<ion-tabs style="z-index: 200000" class="position-fixed">
+	<ion-tab-bar slot="bottom">
+		<ion-tab-button
+			[routerLink]="['/', 'profile', userId$ | async]"
+			routerDirection="forward">
+			<ion-icon name="person"></ion-icon>
+			<ion-label>Profile</ion-label>
+		</ion-tab-button>
+
+		<ion-tab-button [routerLink]="['/']" routerDirection="root">
+			<ion-icon name="home"></ion-icon>
+			<ion-label>Home</ion-label>
+		</ion-tab-button>
+
+		<ion-tab-button
+			[routerLink]="['/', 'auth', 'logout']"
+			routerDirection="forward">
+			<ion-icon name="log-out"></ion-icon>
+			<ion-label>Logout</ion-label>
+		</ion-tab-button>
+	</ion-tab-bar>
+</ion-tabs>
+
+<!-- <div
 	style="background-color: #2921258c; z-index: 2000"
-	class="vh-100 vw-100 row justify-content-center align-items-center position-fixed"
+	class="vh-100 vw-100 row ion-justify-content-center ion-align-items-center position-fixed"
 	*personaAppShellRender>
 	<h1
 		style="
@@ -18,9 +40,9 @@
 			font-size: calc(3rem + 4vw);
 			font-weight: 600;
 		"
-		class="text-center">
+		class="ion-text-center">
 		persona
 	</h1>
-</div>
+</div> -->
 
-<router-outlet></router-outlet>
+<ion-router-outlet></ion-router-outlet>

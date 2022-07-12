@@ -6,6 +6,7 @@ import { tap, take } from 'rxjs/operators';
 import { ConfirmForgotPassword } from '@auth/core/data-access/state/auth.action';
 import { MatchPassword } from '@auth/core/data-access/validators/match-password';
 import { FormService } from '@auth/core/data-access/services/form.service';
+import { SwitchFormComponent } from '../../pages/switch-form/switch-form.component';
 import {
 	SharedService,
 	UnsubscribeOnDestroyAdapter,
@@ -22,7 +23,8 @@ export class ConfirmNewPasswordComponent
 	extends UnsubscribeOnDestroyAdapter
 	implements OnInit
 {
-	hide = true;
+	hideNewPassword = true;
+	hideConfirmPassword = true;
 
 	authForm: FormGroup = new FormGroup(
 		{
@@ -44,8 +46,9 @@ export class ConfirmNewPasswordComponent
 	constructor(
 		private readonly matchPassword: MatchPassword,
 		private readonly activatedRoute: ActivatedRoute,
-		private formService: FormService,
-		public readonly sharedService: SharedService
+		private readonly formService: FormService,
+		public readonly sharedService: SharedService,
+		private readonly switchFormComponent: SwitchFormComponent
 	) {
 		super();
 	}
@@ -67,9 +70,9 @@ export class ConfirmNewPasswordComponent
 
 		const authToken: string = this.activatedRoute.snapshot.params['authToken'];
 
-		this.formService.formValue$.next(this.authForm.value);
+		this.formService.value$.next(this.authForm.value);
 
-		this.formService.formValue$
+		this.formService.value$
 			.pipe(
 				tap((value: unknown | null) => {
 					if (!value) {
@@ -86,6 +89,10 @@ export class ConfirmNewPasswordComponent
 				authToken,
 			})
 		);
+	}
+	showErrors(option: string) {
+		const formControl = this.authForm?.get(option) as FormControl;
+		return this.switchFormComponent.showErrors(formControl);
 	}
 	// inputFormControl(option: string): FormControl {
 	// 	return this.authForm?.get(option) as FormControl;

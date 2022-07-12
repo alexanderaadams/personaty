@@ -1,4 +1,0 @@
-
-#type Query {
-#	getImage(userId: ID!, pictureName: String)
-#}

@@ -10,16 +10,17 @@ import { MyJWTService } from '@modules/my-jwt/my-jwt.service';
 import { NodemailerService } from '@modules/mail/nodemailer.service';
 import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 import { ExposedUserModel } from '@core/models/exposed-user-model';
-import { UserModel } from '@features/user/models/user/user.model';
 
 import { HashingService } from './hashing.service';
+import { InjectedMongooseModelsService } from '@modules/injected-mongoose-models/injected-mongoose-models.service';
 
 @Injectable()
 export class ForgotPasswordService {
 	constructor(
 		private readonly userService: UserService,
 		private readonly myJWTService: MyJWTService,
-		private readonly nodemailerService: NodemailerService
+		private readonly nodemailerService: NodemailerService,
+		private readonly injectedMongooseModelsService: InjectedMongooseModelsService
 	) {}
 
 	@TryCatchWrapper()
@@ -69,9 +70,10 @@ export class ForgotPasswordService {
 
 		const verifyToken = await this.myJWTService.verifyToken(authToken);
 
-		const user: UserModel | null = await this.userService.findUserById(
-			verifyToken.id
-		);
+		const user: ExposedUserModel | null =
+			await this.injectedMongooseModelsService.userModel.findById(
+				verifyToken.id
+			);
 
 		if (!user) throw new BadGatewayException('User Can Not Be Found');
 

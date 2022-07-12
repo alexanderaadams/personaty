@@ -60,11 +60,11 @@ export class User {
 		type: String,
 		enum: {
 			values: ['male', 'female', 'other'],
-			message: 'Gender is either: male, female, other',
+			message: 'sex is either: male, female, other',
 		},
 		default: 'other',
 	})
-	gender: string;
+	sex: string;
 
 	@Prop({
 		type: String,

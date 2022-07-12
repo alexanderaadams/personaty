@@ -1,4 +1,4 @@
-import { IInterestAndBioAndCategory } from '../../story/data-access/state/story.model';
+import { IInterestAndBioAndCategory } from '../../stories/data-access/state/stories.model';
 
 export interface IUpdateProfile {
 	profilePicture?: string;

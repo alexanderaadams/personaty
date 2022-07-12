@@ -1,115 +1,157 @@
-<lib-form>
-	<ng-container id="form">
-		<h1 class="col-12 h1 text-center fs-2 my-4">Signup</h1>
+<ion-content>
+	<lib-form>
+		<ion-grid id="form" class="shadow border-4ion-padding">
+			<ion-row
+				class="ion-justify-content-center ion-align-items-center ion-margin">
+				<ion-title size="large" class="ion-text-center ion-padding fs-2"
+					>Signup</ion-title
+				>
+			</ion-row>
+			<ion-row class="ion-justify-content-center ion-align-items-center">
+				<form (ngSubmit)="onSubmit()" [formGroup]="authForm">
+					<ion-item>
+						<ion-label position="floating">Email</ion-label>
 
-		<form
-			(ngSubmit)="onSubmit()"
-			class="row justify-content-center align-items-center gap-2"
-			[formGroup]="authForm">
-			<mat-form-field appearance="fill">
-				<mat-label>Email</mat-label>
-				<input
-					matInput
-					name="email"
-					label="Email"
-					spellcheck="true"
-					placeholder="Email"
-					type="email"
-					[formControlName]="'email'"
-					autocomplete="email" />
+						<ion-input
+							name="email"
+							label="Email"
+							placeholder="Email"
+							type="email"
+							formControlName="email"
+							autocomplete="email"></ion-input>
+					</ion-item>
+					<ion-item lines="none">
+						<ion-label
+							class="fs-error"
+							color="danger"
+							*ngIf="showErrors('email')">
+							Please Enter Correct Email
+						</ion-label>
+					</ion-item>
 
-				<mat-error *ngIf="authForm?.['controls']?.['email']?.['invalid']">
-					Please Enter Correct Email
-				</mat-error>
-			</mat-form-field>
+					<ion-item>
+						<ion-label position="floating">Password</ion-label>
 
-			<mat-form-field appearance="fill">
-				<mat-label>Password</mat-label>
-				<input
-					matInput
-					name="password"
-					label="Password"
-					[type]="hide ? 'password' : 'text'"
-					aria-label="password"
-					[formControlName]="'password'"
-					autocomplete="new-password" />
+						<ion-row class="w-100 ion-justify-content-between">
+							<ion-input
+								name="password"
+								label="Password"
+								[type]="hide ? 'password' : 'text'"
+								aria-label="password"
+								formControlName="password"
+								autocomplete="current-password">
+							</ion-input>
+							<ion-button slots="icon-only" fill="clear" (click)="hide = !hide">
+								<ion-icon
+									name="add-circle"
+									[name]="hide ? 'eye-off' : 'eye'"></ion-icon>
+							</ion-button>
+						</ion-row>
+					</ion-item>
 
-				<mat-icon matSuffix (click)="hide = !hide">{{
-					hide ? 'visibility_off' : 'visibility'
-				}}</mat-icon>
+					<ion-item lines="none">
+						<ion-label
+							class="fs-error"
+							color="medium"
+							*ngIf="!showErrors('password')"
+							>Password must be at least 8 characters.
+						</ion-label>
 
-				<mat-hint>Password must be at least 8 characters. </mat-hint>
+						<ion-label
+							class="fs-error"
+							color="danger"
+							*ngIf="showErrors('password')">
+							Password must be at least
+							{{ authForm?.['controls']?.['password']?.['errors']?.['minlength']?.requiredLength	?? '8' }}
+							characters.
+						</ion-label>
+					</ion-item>
 
-				<mat-error *ngIf="authForm?.['controls']?.['password']?.['invalid']">
-					Password must be at least
-					{{ authForm?.['controls']?.['password']?.['errors']?.['minlength']?.requiredLength ?? '8' }}
-					characters.
-				</mat-error>
-			</mat-form-field>
+					<ion-button
+						strong="true"
+						id="open-modal"
+						fill="clear"
+						expand="block"
+						>{{ birthDate.value }}</ion-button
+					>
 
-			<mat-form-field class="mb-4" appearance="fill">
-				<mat-label>Birthday</mat-label>
-				<input
-					min="1930-02-02"
-					max="2009-02-02"
-					matInput
-					name="Date"
-					label="Birthday"
-					[formControlName]="'birthDate'"
-					[matDatepicker]="picker"
-					autocomplete="bday" />
-				<mat-hint>YYYY-MM-DD</mat-hint>
-				<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-				<mat-datepicker touchUi #picker></mat-datepicker>
-			</mat-form-field>
+					<ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+						<ng-template>
+							<ion-header>
+								<ion-toolbar>
+									<ion-row
+										class="ion-justify-content-center ion-align-items-center">
+										<ion-button fill="clear" (click)="cancel()"
+											>Cancel</ion-button
+										>
 
-			<div class="row justify-content-center align-items-center">
-				<div class="row">
-					<button
-						[disabled]="sharedService.executingLoader$ | async"
-						class="p-2 mb-3 fs-5"
-						mat-raised-button
-						color="primary"
-						type="submit">
-						Signup
-					</button>
-				</div>
-			</div>
-		</form>
-	</ng-container>
-	<div class="d-flex justify-content-center align-items-center gap-3 m-2">
-		<mat-divider class="hr w-25"> </mat-divider>
-		<span class="d-block text-center text-gray">Continue With</span>
-		<mat-divider class="hr w-25"> </mat-divider>
-	</div>
-	<ng-container id="below-form">
-		<div
-			class="d-flex justify-content-center align-items-center align-items-center gap-2">
-			<button
-				class="row justify-content-around bg-transparent p-3"
-				aria-hidden="true"
-				aria-label="Login with google"
-				mat-flat-button
-				(click)="loginWithGoogle()">
-				<svg class="icon">
-					<use xlink:href="../../assets/sprite.svg#google"></use>
-				</svg>
-			</button>
-		</div>
-		<div class="row justify-content-center align-items-center gap-2 m-3">
-			<p
-				class="col-sm-4 col-md-2 text-gray text-end"
-				style="margin: 0; padding: 0; width: max-content">
-				Do have an account?
-			</p>
+										<ion-title class="ion-text-center">{{
+											birthDate.value
+										}}</ion-title>
 
-			<a
-				mat-button
-				class="col-2 link text-left"
-				style="margin: 0; padding: 0; text-decoration: underline"
-				[routerLink]="['/', 'auth', 'login']"
-				>login</a
-			>
-		</div>
-	</ng-container>
-</lib-form>
+										<ion-button
+											fill="clear"
+											(click)="confirm(dateTime)"
+											[strong]="true"
+											>Confirm</ion-button
+										>
+									</ion-row>
+								</ion-toolbar>
+							</ion-header>
+							<ion-content class="ion-padding">
+								<ion-row
+									class="ion-justify-content-center ion-align-items-center">
+									<ion-datetime
+										#dateTime
+										presentation="date"
+										displayFormat="YYYY-MM-DD"
+										name="Date"
+										label="Birthday"
+										autocomplete="bday"
+										min="1930-02-02"
+										max="2009-02-02"></ion-datetime>
+								</ion-row>
+							</ion-content>
+						</ng-template>
+					</ion-modal>
+
+					<!-- <ion-item>
+						<ion-label>Birthday</ion-label>
+						<ion-datetime
+							name="Date"
+							label="Birthday"
+							autocomplete="bday"
+							formControlName="birthDate"
+							min="1930-02-02"
+							max="2009-02-02"></ion-datetime>
+					</ion-item>
+					<ion-item>
+						<ion-label>YYYY-MM-DD</ion-label>
+					</ion-item> -->
+
+					<ion-row
+						class="ion-justify-content-center ion-align-items-center ion-activatable ripple-parent">
+						<ion-ripple-effect></ion-ripple-effect>
+						<ion-button
+							size="large"
+							[disabled]="sharedService.executingLoader$ | async"
+							class="ion-padding-top ion-padding-bottom w-100"
+							color="primary"
+							type="submit">
+							<ion-spinner
+								*ngIf="sharedService.executingLoader$ | async"></ion-spinner>
+							<span *ngIf="(sharedService.executingLoader$ | async) !== true">
+								Signup
+							</span>
+						</ion-button>
+					</ion-row>
+				</form>
+			</ion-row>
+
+			<ng-container id="below-form">
+				<lib-switch-form sentence="Do have an account?" switchToForm="login">
+				</lib-switch-form>
+			</ng-container>
+		</ion-grid>
+	</lib-form>
+</ion-content>

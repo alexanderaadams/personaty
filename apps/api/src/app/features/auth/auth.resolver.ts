@@ -3,18 +3,18 @@ import { Response, Request } from 'express';
 import { Resolver, Query, Args, Mutation, Context } from '@nestjs/graphql';
 import { Throttle } from '@nestjs/throttler';
 
+
+import { TokenAuthGuard } from '@core/guards/is-auth.guard';
+import { GqlThrottlerBehindProxyGuard } from '@core/guards/throttler/gql-throttler-behind-proxy.guard';
+import { GqlThrottlerGuard } from '@core/guards/throttler/gql-throttler.guard';
+import { environment } from '@environment';
+import { FindUser } from '@core/models/find-user';
+
 import { IsUserAvailable } from './models/is-user-available';
 import { AuthenticationStatus } from './models/authentication-status';
 import { SignupDto } from './models/dto/signup.dto';
 import { LoginDto } from './models/dto/login.dto';
 import { sendForgotPasswordEmailDto } from './models/dto/forgot-password.dto';
-
-import { TokenAuthGuard } from '@core/guards/is-auth.guard';
-import { GqlThrottlerBehindProxyGuard } from '@core/guards/throttler/gql-throttler-behind-proxy.guard';
-import { GqlThrottlerGuard } from '@core/guards/throttler/gql-throttler.guard';
-import { MyJWTService } from '@modules/my-jwt/my-jwt.service';
-import { environment } from '@environment';
-import { FindUser } from '@core/models/find-user';
 import { ConfirmForgotPasswordDto } from './models/dto/confirm-forgot-password-with-token.dto';
 import { ForgotPasswordService } from './services/forgot-password.service';
 import { LoginService } from './services/login.service';
@@ -34,7 +34,6 @@ export class AuthResolver {
 		private readonly loginService: LoginService,
 		private readonly signupService: SignupService,
 		private readonly forgotPasswordService: ForgotPasswordService,
-		private readonly myJWTService: MyJWTService,
 		private readonly userService: UserService
 	) {}
 

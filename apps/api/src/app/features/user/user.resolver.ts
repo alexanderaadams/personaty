@@ -16,6 +16,7 @@ import { UserService } from './user.service';
 import { TImage } from '@modules/image/utils/types/image.type';
 import { ConfirmDeleteUser } from './models/dto/confirm-delete-user.dto';
 import { AuthenticationStatus } from '../auth/models/authentication-status';
+import { ExposedUserModel } from '@core/models/exposed-user-model';
 
 @UseGuards(
 	environment.production ? GqlThrottlerBehindProxyGuard : GqlThrottlerGuard,
@@ -26,17 +27,17 @@ import { AuthenticationStatus } from '../auth/models/authentication-status';
 export class UserResolver {
 	constructor(private readonly userService: UserService) {}
 
-	@Query(() => UserModel, {
+	@Query(() => ExposedUserModel, {
 		name: 'getUser',
 		description: 'Get User if exists',
 	})
 	async getUser(
 		@Args('id', { type: () => ID }) id: string
-	): Promise<UserModel | null> {
+	): Promise<ExposedUserModel | null> {
 		return await this.userService.findUserById(id);
 	}
 
-	@Mutation(() => UserModel, {
+	@Mutation(() => ExposedUserModel, {
 		name: 'updateUser',
 		description: 'Update User profile ',
 	})

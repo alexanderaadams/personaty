@@ -30,7 +30,7 @@ input Update_User_Input {
 
 	password: String
 
-	gender: String
+	sex: String
 
 	birthDate: Date
 
@@ -60,7 +60,7 @@ type User {
 
 	birthDate: String!
 
-	gender: String!
+	sex: String!
 
 	bio: Interest_And_Bio_And_Category
 

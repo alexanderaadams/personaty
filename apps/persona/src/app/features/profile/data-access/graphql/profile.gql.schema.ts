@@ -13,6 +13,10 @@ export const GET_USER_INFO = gql`
 
 			createdAt
 
+			locale
+
+			sex
+
 			bio {
 				text
 				color

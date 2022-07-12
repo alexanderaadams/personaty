@@ -1,12 +1,17 @@
-import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
-import { Store, Actions, Select } from '@ngxs/store';
+import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Store, Select } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { NavController } from '@ionic/angular';
+import { createAvatar } from '@dicebear/avatars';
+import * as style from '@dicebear/avatars-bottts-sprites';
 
-import { FormService } from '@persona/authentication';
 import { UnsubscribeOnDestroyAdapter, environment } from '@persona/shared';
+import { ProfileState } from '@features/profile/data-access/state/profile.state';
+import { StoriesState } from '@features/stories/data-access/state/stories.state';
+import { IStoriesStateModel } from '@features/stories/data-access/state/stories.model';
+import { ImageService } from '@core/services/image.service';
 
-import { ProfileService } from '../../data-access/services/profile.service';
 import { GetUser } from '../../data-access/state/profile.action';
 import { IProfileStateModel } from '../../data-access/state/profile.model';
 
@@ -14,40 +19,71 @@ import { IProfileStateModel } from '../../data-access/state/profile.model';
 	selector: 'persona-profile',
 	templateUrl: './show-profile.component.html',
 	styleUrls: ['./show-profile.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShowProfileComponent
 	extends UnsubscribeOnDestroyAdapter
 	implements OnInit
 {
-	@Select('profile')
+	@Select(ProfileState.value)
 	user$!: Observable<IProfileStateModel>;
+
+	svg = createAvatar(style, {
+		seed: 'custom-seed',
+		base64: true,
+		// ... and other options
+	});
+
+	@Select(StoriesState.value)
+	stories$!: Observable<Array<IStoriesStateModel>>;
 
 	backendUrl: string = environment.BACKEND_URL;
 	createStory = new BehaviorSubject(false);
+	profilePicture$ = new BehaviorSubject<
+		string | ArrayBuffer | null | undefined
+	>(null);
+	profileCover$ = new BehaviorSubject<string | ArrayBuffer | null | undefined>(
+		null
+	);
 
 	userId = this.activatedRoute.snapshot.params['userId'];
 
 	constructor(
-		private store: Store,
-		private activatedRoute: ActivatedRoute,
-		private actions$: Actions,
-		private profileService: ProfileService,
-		private router: Router,
-		private formService: FormService
+		private readonly store: Store,
+		private readonly activatedRoute: ActivatedRoute,
+		private readonly imageService: ImageService,
+		private readonly navCtrl: NavController
 	) {
 		super();
 	}
 
 	ngOnInit(): void {
 		this.store.dispatch(new GetUser(this.userId));
+
+		this.subs.sink = this.user$.subscribe((user) => {
+			this.svg = createAvatar(style, {
+				seed: user.fullName ?? 'custom-seed',
+				base64: true,
+				// ... and other options
+			});
+			console.log(this.svg);
+			if (user.profilePicture)
+				this.subs.sink = this.imageService
+					.getImage(this.userId, user.profilePicture)
+					.subscribe((image) => {
+						this.profilePicture$.next(image);
+					});
+
+			if (user.profileCover)
+				this.subs.sink = this.imageService
+					.getImage(this.userId, user.profileCover)
+					.subscribe((image) => {
+						this.profileCover$.next(image);
+					});
+		});
 	}
 
-	onCreateStory() {
-		this.router.navigate(['story', this.userId]);
-		// this.createStory.next(true);
-	}
-
-	onCancelStory() {
-		// this.createStory.next(false);
+	editProfile() {
+		this.navCtrl.navigateForward(['/', 'profile', this.userId, 'update']);
 	}
 }

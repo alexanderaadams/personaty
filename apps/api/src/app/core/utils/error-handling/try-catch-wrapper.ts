@@ -28,6 +28,7 @@ export function TryCatchWrapper() {
 						error?.message ??
 						'Something Went Wrong',
 					error?.response?.statusCode ??
+						error.statusCode ??
 						statusCode ??
 						error?.status ??
 						HttpStatus.INTERNAL_SERVER_ERROR

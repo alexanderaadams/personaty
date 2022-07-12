@@ -6,7 +6,6 @@ import { APP_FILTER } from '@nestjs/core';
 
 import { environment } from '@environment';
 import { NodemailerModule } from '@modules/mail/nodemailer.module';
-import { ImageModule } from '@modules/image/image.module';
 import { MyJWTModule } from '@modules/my-jwt/my-jwt.module';
 
 import { AuthModule } from './features/auth/auth.module';
@@ -37,7 +36,6 @@ import { InjectedMongooseModelsModule } from '@modules/injected-mongoose-models/
 		// NOTE The order of the routes is important for route handler
 		UnhandledRoutesModule,
 		NodemailerModule,
-		ImageModule,
 		MyJWTModule,
 		InjectedMongooseModelsModule,
 
@@ -75,8 +73,6 @@ import { InjectedMongooseModelsModule } from '@modules/injected-mongoose-models/
 })
 export class AppModule implements NestModule {
 	async configure(consumer: MiddlewareConsumer) {
-		await new Promise((resolve, reject) =>
-			resolve(consumer.apply(CsrfMiddleware).forRoutes('*'))
-		);
+		await Promise.resolve(consumer.apply(CsrfMiddleware).forRoutes('*'));
 	}
 }

@@ -49,8 +49,8 @@ export class ProfileService {
 				mutation: UPDATE_PROFILE,
 				variables: {
 					user,
-					profilePicture,
-					profileCover,
+					profilePicture: profilePicture ?? null,
+					profileCover: profileCover ?? null,
 				},
 				context: {
 					useMultipart: true,

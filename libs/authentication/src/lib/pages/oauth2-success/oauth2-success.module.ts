@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { Oauth2SuccessComponent } from './oauth2-success.component';
-import { AngularMaterialModule } from '@persona/shared';
+import { IonicModule } from '@ionic/angular';
 
 const routes: Routes = [
 	{
@@ -15,11 +15,6 @@ const routes: Routes = [
 
 @NgModule({
 	declarations: [Oauth2SuccessComponent],
-	imports: [
-		CommonModule,
-		RouterModule.forChild(routes),
-		ReactiveFormsModule,
-		AngularMaterialModule,
-	],
+	imports: [CommonModule, RouterModule.forChild(routes), IonicModule],
 })
 export class Oauth2SuccessModule {}

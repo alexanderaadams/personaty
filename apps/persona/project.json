@@ -26,12 +26,21 @@
 						"glob": "_redirects",
 						"input": "apps/persona/src",
 						"output": "/"
+					},
+					{
+						"glob": "**/*",
+						"input": "src/assets",
+						"output": "assets"
+					},
+					{
+						"glob": "**/*.svg",
+						"input": "node_modules/ionicons/dist/ionicons/svg",
+						"output": "./svg"
 					}
 				],
 				"styles": [
-					"apps/persona/src/app/core/themes/angular-material-custom-theme.scss",
-					"apps/persona/src/app/core/themes/variables.scss",
-					"apps/persona/src/styles.scss"
+					"apps/persona/src/themes/variables.scss",
+					"apps/persona/src/global.scss"
 				],
 				"scripts": [],
 				"serviceWorker": true,

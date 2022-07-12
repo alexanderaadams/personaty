@@ -16,31 +16,37 @@ import { NgxsSelectSnapshotModule } from '@ngxs-labs/select-snapshot';
 import { CookieService } from 'ngx-cookie-service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+
 // import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { environment } from '@persona/shared';
 
-import { AngularMaterialModule } from '@persona/shared';
 import { AppShellRenderDirective } from '@core/directives/app-shell-render.directive';
 import { XsrfInterceptor } from '@core/data-access/interceptors/xsrf.interceptor';
 import { ProgressInterceptor } from '@core/data-access/interceptors/progress.interceptor';
 import { AuthState } from '@persona/authentication';
-import { StoryState } from './features/story/data-access/state/story.state';
-import { ProfileState } from './features/profile/data-access/state/profile.state';
 
+import { StoriesState } from './features/stories/data-access/state/stories.state';
+import { ProfileState } from './features/profile/data-access/state/profile.state';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { RouteReuseStrategy } from '@angular/router';
 
 @NgModule({
 	declarations: [AppComponent, AppShellRenderDirective],
 	imports: [
 		BrowserModule.withServerTransition({ appId: 'persona' }),
 		BrowserAnimationsModule,
+		IonicModule.forRoot({
+			animated: true,
+			rippleEffect: true,
+		}),
 		HttpClientModule,
 		ApolloModule,
 		AppRoutingModule,
 		ReactiveFormsModule,
-		AngularMaterialModule,
-		NgxsModule.forRoot([AuthState, ProfileState, StoryState], {
+
+		NgxsModule.forRoot([AuthState, ProfileState, StoriesState], {
 			developmentMode: !environment.production,
 		}),
 		NgxsReduxDevtoolsPluginModule.forRoot({
@@ -66,7 +72,9 @@ import { AppRoutingModule } from './app-routing.module';
 			provide: APOLLO_OPTIONS,
 			useFactory: (httpLink: HttpLink) => {
 				return {
-					cache: new InMemoryCache(),
+					cache: new InMemoryCache({
+						addTypename: false,
+					}),
 					link: httpLink.create({
 						uri: `${environment.BACKEND_URL}/graphql`,
 						withCredentials: true,
@@ -88,6 +96,7 @@ import { AppRoutingModule } from './app-routing.module';
 			useClass: ProgressInterceptor,
 			multi: true,
 		},
+		{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
 	],
 	bootstrap: [AppComponent],
 })

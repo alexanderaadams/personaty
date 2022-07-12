@@ -1,7 +1,4 @@
-import {
-	IStoryStateModel,
-	IInterestAndBioAndCategory,
-} from '@features/story/data-access/state/story.model';
+import { IInterestAndBioAndCategory } from '@features/stories/data-access/state/stories.model';
 
 export interface IProfileStateModel {
 	id: string | null;
@@ -11,6 +8,8 @@ export interface IProfileStateModel {
 	profileCover: string | null;
 
 	bio: IInterestAndBioAndCategory | null;
+
+	locale: string | null;
 
 	birthDate: string | null;
 
@@ -24,5 +23,5 @@ export interface IProfileStateModel {
 
 	createdAt: Date | null;
 
-	stories: IStoryStateModel[] | null;
+	sex: 'female' | 'male' | 'other' | null;
 }

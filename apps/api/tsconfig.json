@@ -12,7 +12,7 @@
 	],
 	"compilerOptions": {
 		"baseUrl": "../../",
-		//
+		"lib": ["ES2021"],
 		"paths": {
 			//	Local paths
 			"@core/*": ["apps/api/src/app/core/*"],

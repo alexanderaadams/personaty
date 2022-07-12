@@ -10,6 +10,7 @@ import {
 	LoginWithGoogle,
 } from '@auth/core/data-access/state/auth.action';
 import { IAuthStateModel } from '@auth/core/data-access/state/auth.model';
+import { SwitchFormComponent } from '../../pages/switch-form/switch-form.component';
 import {
 	SharedService,
 	UnsubscribeOnDestroyAdapter,
@@ -28,6 +29,11 @@ export class LoginComponent
 {
 	login = 'Login';
 	hide = true;
+	followAuthenticationStatus = {
+		action: Login,
+		toastFailedMessage: 'Failed to Login',
+		toastSuccessMessage: 'Logged in successfully',
+	};
 
 	@Select('auth')
 	isAuthenticated$!: Observable<IAuthStateModel>;
@@ -43,9 +49,9 @@ export class LoginComponent
 	});
 
 	constructor(
-		private readonly store: Store,
 		private formService: FormService,
-		public readonly sharedService: SharedService
+		public readonly sharedService: SharedService,
+		public readonly switchFormComponent: SwitchFormComponent
 	) {
 		super();
 	}
@@ -58,15 +64,18 @@ export class LoginComponent
 				'Logged in successfully'
 			)
 			.subscribe();
+
+		console.log(this.authForm?.['controls']);
 	}
 
 	onSubmit() {
-		if (this.authForm?.invalid || !this.authForm.value)
+		console.log(this.authForm?.['controls']?.['email']);
+		if (this.authForm.invalid || !this.authForm.value)
 			return this.authForm.setErrors({ invalid: true });
 
-		this.formService.formValue$.next(this.authForm.value);
+		this.formService.value$.next(this.authForm.value);
 
-		this.formService.formValue$
+		this.formService.value$
 			.pipe(
 				tap((value: unknown | null) => {
 					if (!value) {
@@ -80,15 +89,12 @@ export class LoginComponent
 		this.formService.goAuthenticate(new Login(this.authForm.value));
 	}
 
-	// inputFormControl(option: string): FormControl {
+	showErrors(option: string) {
+		const formControl = this.authForm?.get(option) as FormControl;
+		return this.switchFormComponent.showErrors(formControl);
+	}
+
+	// 	formControl(option: string): FormControl {
 	// 	return this.authForm?.get(option) as FormControl;
 	// }
-
-	loginWithGoogle() {
-		this.store.dispatch(new LoginWithGoogle());
-	}
-
-	loginWithFacebook() {
-		//
-	}
 }

@@ -5,7 +5,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { ConfirmNewPasswordComponent } from './confirm-new-password.component';
 import { FormModule } from '../../pages/form/form.module';
-import { ConfirmNewPasswordMaterialModule } from './utils/confirm-new-password-material.module';
+import { IonicModule } from '@ionic/angular';
+import { SwitchFormModule } from '../../pages/switch-form/switch-form.module';
 
 const routes: Routes = [
 	{
@@ -20,8 +21,9 @@ const routes: Routes = [
 		CommonModule,
 		RouterModule.forChild(routes),
 		ReactiveFormsModule,
-		ConfirmNewPasswordMaterialModule,
+		SwitchFormModule,
 		FormModule,
+		IonicModule,
 	],
 })
 export class ConfirmNewPasswordModule {}

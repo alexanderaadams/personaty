@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { join } from 'path';
-import { readFile } from 'fs';
+import { createReadStream, readFile, ReadStream, stat, Stats } from 'fs';
 // import { FileUpload, Upload } from 'graphql-upload';
 import type { FileUpload } from 'graphql-upload/processRequest.js';
 import type { Upload } from 'graphql-upload/processRequest.js';
@@ -13,31 +13,57 @@ import { TryCatchWrapper } from '@core/utils/error-handling/try-catch-wrapper';
 import { TImage } from './utils/types/image.type';
 import { IImage } from './utils/interfaces/image.interface';
 import { TValidImageMimeType } from './utils/types/valid-image-mime.type';
+import glob = require('glob');
 
 @Injectable()
 export class ImageService {
 	constructor(private fileStorageService: FileStorageService) {}
 
 	@TryCatchWrapper()
-	async getImage(userId, pictureName: string) {
+	async getImage(userId: string, pictureName: string) {
 		const filePath = join(
 			process.cwd(),
 			'upload',
 			userId,
-			'image',
+			'images',
+			'**',
 			pictureName
 		);
+		let image;
 
-		const DoesImageExist = await new Promise(function (resolve, reject): void {
-			readFile(filePath, 'utf8', function (err, data): void {
-				if (err) reject(err);
-				else resolve(data);
-			});
+		glob(filePath, function (err, files: Array<string>) {
+			if (!err) image = createReadStream(files[0]);
+
+			throw new HttpException('File Does Not Exist', 404);
 		});
+		// const DoesImageExist: ReadStream = await new Promise(function (
+		// 	resolve,
+		// 	reject
+		// ) {
+		// 	stat(filePath, (err: NodeJS.ErrnoException | null, stats: Stats) => {
+		// 		// If path to folder does not exist make the folders
+		// 		if (!err) {
+		// 			resolve(createReadStream(filePath));
+		// 		}
+		// 		reject(err);
+		// 	});
+		// });
 
-		if (DoesImageExist) return DoesImageExist;
+		// const DoesImageExist = Promise.resolve(createReadStream(filePath));
 
-		throw new HttpException('File Does Not Exist', 404);
+		// const DoesImageExist = await new Promise(function (resolve, reject): void {
+
+		// 	readFile(filePath, function (err, data): void {
+		// 		console.log(err, data);
+		// 		if (!err) resolve(data.toString('base64'));
+
+		// 		reject({ message: 'File Does Not Exist', statusCode: 404 });
+		// 	});
+		// });
+
+		// if (DoesImageExist) return DoesImageExist;
+
+		// throw new HttpException('File Does Not Exist', 404);
 	}
 
 	@TryCatchWrapper()

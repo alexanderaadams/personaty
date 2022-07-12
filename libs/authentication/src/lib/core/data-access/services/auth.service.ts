@@ -11,6 +11,7 @@ import {
 	ILoginCredentials,
 	IConfirmForgotPasswordCredentials,
 	ISignupCredentials,
+	IAuthStateModel,
 } from '../state/auth.model';
 import {
 	SEND_FORGOT_PASSWORD_EMAIL,
@@ -19,6 +20,7 @@ import {
 	CONFIRM_FORGOT_PASSWORD,
 	SIGNUP,
 } from '../graphql/auth.gql.schema';
+import { Observable } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
@@ -34,7 +36,7 @@ export class AuthService {
 		private http: HttpClient
 	) {}
 
-	signup(credentials: ISignupCredentials) {
+	signup(credentials: ISignupCredentials): Observable<IAuthStateModel> {
 		this.sharedService.executingLoader$.next(true);
 		return this.apollo
 			.mutate({
@@ -80,7 +82,7 @@ export class AuthService {
 			);
 	}
 
-	get loginWithGoogle() {
+	get loginWithGoogle(): void {
 		return this.ngZone.run(() => {
 			if (this.isBrowser) {
 				const newWindow = window.open(

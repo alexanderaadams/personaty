@@ -5,6 +5,7 @@ import { tap, take } from 'rxjs/operators';
 import { SendForgotPasswordEmail } from '@auth/core/data-access/state/auth.action';
 import { FormService } from '@auth/core/data-access/services/form.service';
 import { SharedService, UnsubscribeOnDestroyAdapter } from '@persona/shared';
+import { SwitchFormComponent } from '../../pages/switch-form/switch-form.component';
 
 @Component({
 	selector: 'lib-reset-password',
@@ -22,7 +23,8 @@ export class ResetPasswordComponent
 
 	constructor(
 		private formService: FormService,
-		public readonly sharedService: SharedService
+		public readonly sharedService: SharedService,
+		private readonly switchFormComponent: SwitchFormComponent
 	) {
 		super();
 	}
@@ -41,9 +43,9 @@ export class ResetPasswordComponent
 		if (this.authForm.invalid || !this.authForm.value)
 			return this.authForm.setErrors({ invalid: true });
 
-		this.formService.formValue$.next(this.authForm.value);
+		this.formService.value$.next(this.authForm.value);
 
-		this.formService.formValue$
+		this.formService.value$
 			.pipe(
 				tap((value: unknown | null) => {
 					if (!value) {
@@ -57,5 +59,10 @@ export class ResetPasswordComponent
 		this.formService.goAuthenticate(
 			new SendForgotPasswordEmail(this.authForm.value)
 		);
+	}
+
+	showErrors(option: string) {
+		const formControl = this.authForm?.get(option) as FormControl;
+		return this.switchFormComponent.showErrors(formControl);
 	}
 }

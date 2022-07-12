@@ -30,7 +30,7 @@ const routes: Routes = [
 	},
 	{
 		path: 'confirm-new-password/:authToken',
-		canActivate: [NotAuthGuard],
+		// canActivate: [NotAuthGuard],
 		loadChildren: () =>
 			import('./confirm-new-password/confirm-new-password.module').then(
 				(m) => m.ConfirmNewPasswordModule

@@ -11,7 +11,6 @@ import { ExposedUserModel } from '@core/models/exposed-user-model';
 import { GoogleOauth2 } from '@features/auth/models/google-oauth-2';
 import { IImage } from '@modules/image/utils/interfaces/image.interface';
 
-import { UserModel } from './models/user/user.model';
 import { ICreateUser } from './interfaces/create-user.interface';
 import { UserDocument } from './models/user/user.schema';
 import { IUpdateUser } from './interfaces/update-user.interface';
@@ -42,12 +41,12 @@ export class UserService {
 	}
 
 	@TryCatchWrapper()
-	async findUserById(id: string): Promise<UserModel | null> {
+	async findUserById(id: string): Promise<ExposedUserModel | null> {
 		const user = await this.userModel.findById(id).exec();
 
 		if (!user) return null;
 
-		return user as unknown as Promise<UserModel>;
+		return user as unknown as Promise<ExposedUserModel>;
 	}
 
 	@TryCatchWrapper()

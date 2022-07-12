@@ -1,0 +1,6 @@
+{
+	"appId": "persona",
+	"appName": "persona",
+	"bundledWebRuntime": false,
+	"webDir": "www"
+}
