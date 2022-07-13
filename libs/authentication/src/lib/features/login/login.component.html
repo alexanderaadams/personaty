@@ -1,9 +1,11 @@
 <ion-content>
 	<lib-form>
-		<ion-grid id="form" class="shadow border-radius-1 ion-padding">
+		<ion-grid id="form" class="ion-shadow-sm border-radius-1 ion-padding">
 			<ion-row
 				class="ion-justify-content-center ion-align-items-center ion-margin">
-				<ion-title size="large" class="ion-text-center ion-padding fs-2"
+				<ion-title
+					size="large"
+					class="ion-text-center ion-padding fs-2 position-relative"
 					>Login</ion-title
 				>
 			</ion-row>
@@ -40,10 +42,12 @@
 								formControlName="password"
 								autocomplete="current-password">
 							</ion-input>
-							<ion-button slots="icon-only" fill="clear" (click)="hide = !hide">
-								<ion-icon
-									name="add-circle"
-									[name]="hide ? 'eye-off' : 'eye'"></ion-icon>
+							<ion-button
+								size="medium"
+								slots="icon-only"
+								fill="clear"
+								(click)="hide = !hide">
+								<ion-icon [name]="hide ? 'eye-off' : 'eye'"></ion-icon>
 							</ion-button>
 						</ion-row>
 					</ion-item>
@@ -77,13 +81,15 @@
 						class="ion-justify-content-center ion-align-items-center ion-activatable ripple-parent">
 						<ion-ripple-effect></ion-ripple-effect>
 						<ion-button
-							size="large"
+							size="medium"
 							[disabled]="sharedService.executingLoader$ | async"
-							class="ion-padding-top ion-padding-bottom w-100"
+							class="ion-padding-top ion-padding-bottom w-100 h-100"
 							color="primary"
 							type="submit">
-							<ion-spinner
-								*ngIf="sharedService.executingLoader$ | async"></ion-spinner>
+							<ng-container *ngIf="sharedService.executingLoader$ | async">
+								<span class="ion-margin-end"> Logging in </span>
+								<ion-spinner slot="end"></ion-spinner>
+							</ng-container>
 							<span *ngIf="(sharedService.executingLoader$ | async) !== true">
 								Login
 							</span>

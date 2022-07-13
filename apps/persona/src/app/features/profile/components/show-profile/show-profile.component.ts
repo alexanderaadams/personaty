@@ -66,7 +66,7 @@ export class ShowProfileComponent
 				base64: true,
 				// ... and other options
 			});
-			console.log(this.svg);
+
 			if (user.profilePicture)
 				this.subs.sink = this.imageService
 					.getImage(this.userId, user.profilePicture)

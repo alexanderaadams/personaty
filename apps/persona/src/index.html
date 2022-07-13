@@ -6,7 +6,15 @@
 		<base href="/" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content="Express who you are" />
-		<meta name="theme-color" content="#ff72aa" />
+		<meta
+			name="theme-color"
+			media="(prefers-color-scheme: light)"
+			content="#3880ff" />
+		<meta
+			name="theme-color"
+			media="(prefers-color-scheme: dark)"
+			content="#eb445a" />
+		<meta name="color-scheme" content="light dark" />
 		<meta name="robots" content="all" />
 		<link rel="manifest" href="./manifest.webmanifest" />
 
@@ -38,7 +46,7 @@
 			rel="stylesheet"
 			crossorigin /> -->
 	</head>
-	<body>
+	<body class="light">
 		<persona-root></persona-root>
 		<noscript
 			>Please enable JavaScript to continue using this application.</noscript

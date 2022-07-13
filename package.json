@@ -171,7 +171,6 @@
 		"webpack-node-externals": "^3.0.0"
 	},
 	"engines": {
-		"node": "18.x.x",
-		"npm": "8.x.x"
+		"node": "16.x.x"
 	}
 }

@@ -82,7 +82,6 @@ export class FormService {
 										color: 'success',
 										animated: true,
 										position: 'bottom',
-										cssClass: 'w-50',
 									})
 									.then((toast: any) => toast.present());
 							}
@@ -95,7 +94,6 @@ export class FormService {
 										color: 'danger',
 										animated: true,
 										position: 'bottom',
-										cssClass: 'w-50',
 									})
 									.then((toast) => toast.present());
 
@@ -107,7 +105,6 @@ export class FormService {
 										color: 'success',
 										animated: true,
 										position: 'bottom',
-										cssClass: 'w-50',
 									})
 									.then((toast) => toast.present());
 							}
@@ -124,7 +121,6 @@ export class FormService {
 										color: 'success',
 										animated: true,
 										position: 'bottom',
-										cssClass: 'w-50',
 									})
 									.then((toast) => toast.present());
 								this.router.navigate(['auth', 'login']);

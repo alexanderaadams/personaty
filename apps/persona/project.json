@@ -38,10 +38,7 @@
 						"output": "./svg"
 					}
 				],
-				"styles": [
-					"apps/persona/src/themes/variables.scss",
-					"apps/persona/src/global.scss"
-				],
+				"styles": ["apps/persona/src/global.scss"],
 				"scripts": [],
 				"serviceWorker": true,
 				"ngswConfigPath": "apps/persona/ngsw-config.json"

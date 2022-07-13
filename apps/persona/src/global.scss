@@ -1,96 +1,50 @@
 /* You can add global styles to this file, and also import other style files */
 // @import url('https://fonts.googleapis.com/css2?family=Chewy&display=swap');
 
-@import '~bootstrap/dist/css/bootstrap-utilities.css';
-
-// @import './themes/bootstrap-utilities.css';
-
+@use '../../../node_modules/bootstrap/dist/css/bootstrap-utilities.css';
+@use './themes/variables.scss';
+@use './themes/utilities.scss';
+// @use './themes/bootstrap-utilities.css';
 // http://ionicframework.com/docs/theming/
-@import '~@ionic/angular/css/core.css';
-@import '~@ionic/angular/css/normalize.css';
-@import '~@ionic/angular/css/structure.css';
-@import '~@ionic/angular/css/typography.css';
-@import '~@ionic/angular/css/display.css';
-
-@import '~@ionic/angular/css/padding.css';
-@import '~@ionic/angular/css/float-elements.css';
-@import '~@ionic/angular/css/text-alignment.css';
-@import '~@ionic/angular/css/text-transformation.css';
-@import '~@ionic/angular/css/flex-utils.css';
+@use '../../../node_modules/@ionic/angular/css/core.css';
+@use '../../../node_modules/@ionic/angular/css/normalize.css';
+@use '../../../node_modules/@ionic/angular/css/structure.css';
+@use '../../../node_modules/@ionic/angular/css/typography.css';
+@use '../../../node_modules/@ionic/angular/css/display.css';
+@use '../../../node_modules/@ionic/angular/css/padding.css';
+@use '../../../node_modules/@ionic/angular/css/float-elements.css';
+@use '../../../node_modules/@ionic/angular/css/text-alignment.css';
+@use '../../../node_modules/@ionic/angular/css/text-transformation.css';
+@use '../../../node_modules/@ionic/angular/css/flex-utils.css';
 
 .ion-invalid.ion-touched ion-label {
 	color: var(--ion-color-danger);
 }
 
 body {
-	font-family: Roboto, 'Helvetica Neue', sans-serif;
+	// font-family: Roboto, 'Helvetica Neue', sans-serif;
 	font-size: clamp(105%, calc(100% + 0.5vw), 150%);
-	color: currentColor;
+	color: var(--ion-text-color);
 }
 
-.object-fit-cover {
-	object-fit: cover !important;
+/* width */
+::-webkit-scrollbar {
+	width: 0.7rem;
 }
 
-.no-link {
-	text-decoration: none;
-	background-color: transparent;
-}
-
-.border-radius-1 {
+/* Track */
+::-webkit-scrollbar-track {
+	box-shadow: 0 0.1rem 0.2rem rgba(var(--ion-text-color-rgb), 0.1) !important;
 	border-radius: 1rem;
 }
 
-.border-radius-2 {
-	border-radius: 2rem;
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: rgba(var(--ion-color-primary-rgb), 0.8);
+	border-radius: 1rem;
 }
 
-.border-radius-4 {
-	border-radius: 4rem;
-}
-
-.vh-25 {
-	height: 25vh;
-}
-
-.cursor-pointer {
-	cursor: pointer !important;
-}
-
-.bg-medium {
-	background-color: var(--ion-color-medium) !important;
-}
-
-.fs-error {
-	font-size: 0.7rem !important;
-}
-
-.icon {
-	width: clamp(1.5rem, calc(1.175rem + 3vw), 3rem);
-	height: clamp(1.5rem, calc(1.175rem + 3vw), 3rem);
-	stroke-width: 0;
-	// stroke: var(--ion-color-light);
-	// fill: var(--ion-color-light);
-}
-.wh-auto {
-	width: clamp(3rem, calc(2.175rem + 5vw), 6rem);
-	height: clamp(3rem, calc(2.175rem + 5vw), 6rem);
-}
-
-.ripple-parent {
-	position: relative !important;
-	overflow: hidden;
-}
-
-.cursor-pointer {
-	cursor: pointer !important;
-}
-
-.vw-2 {
-	width: 2rem !important;
-	height: 2rem !important;
-}
-
-.z-index-20k {
-	z-index: 200000 !important;
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(var(--ion-color-primary-rgb), 1);
 }

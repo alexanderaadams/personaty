@@ -7,7 +7,6 @@ export class IonicChips<T> extends UnsubscribeOnDestroyAdapter {
 	chips: Array<T> = [];
 
 	async add(event: IonInput): Promise<void> {
-		console.log(event);
 		const value: string | undefined = event.value?.toString().trim();
 
 		// Add our fruit

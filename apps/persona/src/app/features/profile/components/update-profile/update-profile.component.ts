@@ -14,7 +14,7 @@ import { createAvatar } from '@dicebear/avatars';
 import * as style from '@dicebear/avatars-bottts-sprites';
 
 import { IInterestAndBioAndCategory } from '@features/stories/data-access/state/stories.model';
-import { IonicChips } from '@core/utils/material-chips';
+import { IonicChips } from '@core/utils/ionic-chips';
 import { UniqueUsername } from '@core/services/unique-username.service';
 import { IUpdateProfile } from '@features/profile/interfaces/update-profile.interface';
 import { ImageService } from '@core/services/image.service';

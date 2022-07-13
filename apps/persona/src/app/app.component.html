@@ -5,7 +5,13 @@
 	role="progressbar"
 	aria-label="progressbar">
 </ion-progress-bar>
+
 <ion-router-outlet></ion-router-outlet>
+
+<!-- <ion-tab-button role="button" (click)="changeTheme()">
+	<ion-icon *ngIf="iconType.value === 'light'" name="sunny"></ion-icon>
+	<ion-icon *ngIf="iconType.value === 'dark'" name="moon"></ion-icon>
+</ion-tab-button> -->
 
 <ion-tabs *ngIf="authenticated$ | async" class="position-fixed" role="tab">
 	<ion-tab-bar slot="bottom" role="tab">

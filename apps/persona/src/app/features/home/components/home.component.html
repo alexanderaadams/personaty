@@ -6,5 +6,58 @@
 		><ion-icon name="add"></ion-icon
 	></ion-fab-button>
 </ion-fab>
-<ion-content> </ion-content>
-<!-- [routerLink]="['/', 'profile', userId$ | async]"> -->
+<ion-menu side="start" content-id="main-content">
+	<ion-header>
+		<ion-toolbar *ngIf="user$ | async as user">
+			<ion-row class="ion-justify-content-center ion-align-items-center">
+				<ion-col size="6">
+					<ion-row
+						class="ion-justify-content-center ion-align-items-center ion-padding">
+						<ion-avatar class="ion-margin-bottom">
+							<ion-img [src]="(profilePicture$ | async) ?? svg"> </ion-img>
+						</ion-avatar>
+
+						<ion-title>{{ user.fullName }}</ion-title>
+					</ion-row>
+				</ion-col>
+			</ion-row>
+		</ion-toolbar>
+	</ion-header>
+	<ion-content>
+		<ion-list>
+			<ion-item>
+				<ion-button
+					class="w-100 h-100"
+					slots="``"
+					(click)="changeTheme()"
+					expand="large"
+					fill="clear">
+					<ion-icon *ngIf="iconType.value === 'light'" name="sunny"></ion-icon>
+					<ion-icon *ngIf="iconType.value === 'dark'" name="moon"></ion-icon>
+					<ion-label class="ion-padding-start">
+						{{ iconType.value }}
+					</ion-label>
+				</ion-button>
+			</ion-item>
+		</ion-list>
+	</ion-content>
+</ion-menu>
+
+<ion-header *ngIf="authenticated$ | async">
+	<ion-toolbar>
+		<ion-row class="ion-justify-content-center ion-align-items-center">
+			<ion-menu-button id="main-content"></ion-menu-button>
+
+			<ion-title class="ion-text-center">Persona</ion-title>
+
+			<ion-button
+				slots="end"
+				(click)="changeTheme()"
+				expand="large"
+				fill="clear">
+				<ion-icon *ngIf="iconType.value === 'light'" name="sunny"></ion-icon>
+				<ion-icon *ngIf="iconType.value === 'dark'" name="moon"></ion-icon>
+			</ion-button>
+		</ion-row>
+	</ion-toolbar>
+</ion-header>

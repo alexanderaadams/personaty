@@ -5,12 +5,6 @@
 // 	stroke: var(--ion-color-light);
 // 	fill: var(--ion-color-light);
 // }
-.shadow {
-	@media screen and (max-width: 576px) {
-		border-radius: 0;
-		box-shadow: none !important;
-	}
-}
 
 ion-modal {
 	--height: 65%;

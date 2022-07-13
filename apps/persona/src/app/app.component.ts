@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { createAvatar } from '@dicebear/avatars';
+import * as style from '@dicebear/avatars-bottts-sprites';
 
 import { SharedService } from '@persona/shared';
 import { AuthState } from '@persona/authentication';
@@ -19,7 +21,6 @@ export class AppComponent implements OnInit {
 
 	@Select(AuthState.isAuthenticated)
 	authenticated$!: Observable<boolean>;
-
 
 	constructor(
 		private readonly appService: AppService,

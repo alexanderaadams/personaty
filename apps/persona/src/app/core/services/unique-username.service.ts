@@ -34,9 +34,8 @@ export class UniqueUsername implements AsyncValidator {
 				// }
 			}),
 			switchMap((value) => {
-				console.log(value);
 				if (value?.available) return of(null);
-				console.log(value);
+
 				// control.setErrors({ nonUniqueUsername: true });
 				return of({ nonUniqueUsername: true });
 			})

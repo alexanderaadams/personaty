@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Store } from '@ngxs/store';
 
 import { CreateStory } from '@features/stories/data-access/state/stories.action';
-import { IonicChips } from '@core/utils/material-chips';
+import { IonicChips } from '@core/utils/ionic-chips';
 import { ImageService } from '@core/services/image.service';
 
 import { IInterestAndBioAndCategory } from '../../data-access/state/stories.model';

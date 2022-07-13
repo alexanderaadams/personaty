@@ -36,7 +36,7 @@ export class ImageController {
 		@Param('id') id: string,
 		@Res() res: Response
 	) {
-		console.log(id, pictureName);
+
 		// res.type('jpeg');
 		const filePath = join(
 			process.cwd(),
@@ -48,7 +48,7 @@ export class ImageController {
 		);
 
 		glob(filePath, function (err, files: Array<string>) {
-			console.log(err, files);
+	
 			if (files.length && !err) {
 				return res.sendFile(files[0]);
 			}
